@@ -1,11 +1,11 @@
-# LeagueCraft plugin: controls
+# LeagueCraft plugin: controls, third-person view and basic attack
 #
 # The plugin doesn't contain any champion logic. It decides *what* to cast from the key you
 # pressed, then runs the datapack's own function as you, so cooldowns, mana, crowd control and the
 # HUD keep working exactly as the datapack defines them.
 #
 # Default layout is League of Legends' WASD mode:
-#   left click = basic attack (handled by the datapack)
+#   left click = basic attack (a hitscan from the crosshair, see basic-attack below)
 #   right click = Q    shift = W    E / R = hotbar slots 3 / 4 (players rebind those keys)
 #   Q (drop) = summoner 1    F (swap hands) = summoner 2    number keys 1-4 = Q/W/E/R as well
 #
@@ -51,6 +51,32 @@ ability-items:
 cast-function: "_champion:abilities/use_%s"
 summoner-1-function: "_champion:spell/check"
 summoner-2-function: "_champion:spell/check_2"
+
+# Over-the-shoulder view while playing a champion. Needs the ShoulderCam shaders, which are part
+# of the LeagueCraft resource pack, and players in F5 (third person). Servers can't switch
+# perspective for them, so the key tip tells them to press F5.
+third-person:
+  enabled: true
+  # How far behind the player the camera sits (the minecraft:camera_distance attribute, vanilla 4).
+  # Vanilla still pulls the camera in at walls.
+  camera-distance: 3.0
+  # Must match TPS_SHOULDER and TPS_HEIGHT in the resource pack's
+  # assets/tpscam/shaders/include/camera.glsl, or shots won't go where the crosshair points.
+  shoulder: 0.8
+  height: 0.25
+  # Draw the crosshair at the end of the champion HUD (vanilla hides it in F5).
+  crosshair: true
+
+# Left click fires instantly along the crosshair, at most once per click. Until the Animated Java
+# attack animations exist, the result ("Shot hit Zombie (enemy) 12.3m") is shown in chat and
+# nothing is damaged. Set hitscan to false to go back to the datapack's own basic attack.
+basic-attack:
+  hitscan: true
+  # Range in blocks from the player's eye. Champions the datapack tags "melee" punch; the rest shoot.
+  melee-range: 3.5
+  ranged-range: 48.0
+  # Minimum ticks between attacks (20 ticks = 1 second).
+  cooldown-ticks: 10
 
 # Log every cast and the datapack's command output to the console.
 debug: false

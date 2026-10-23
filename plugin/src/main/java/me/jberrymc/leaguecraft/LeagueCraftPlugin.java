@@ -10,7 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * LeagueCraft's server-side helper. The datapack stays the source of truth for champion logic;
- * the plugin takes over the parts a datapack can only fake, starting with input.
+ * the plugin takes over the parts a datapack can only fake: input, the third-person view and the
+ * hitscan basic attack.
  */
 public final class LeagueCraftPlugin extends JavaPlugin {
     /** How often champions' hand slot and weapon copy are checked. */
@@ -20,6 +21,7 @@ public final class LeagueCraftPlugin extends JavaPlugin {
 
     static final String KEY_SETUP_TIP =
             "<gold><bold>LeagueCraft controls</bold></gold> <gray>(League's WASD layout)</gray>\n"
+            + "<gray>Press <white>F5</white> for the over-the-shoulder view. Aim with the crosshair.\n"
             + "<gray>Left click <white>attack</white> · Right click <white>Q</white> · Shift <white>W</white> · "
             + "<white>E</white>/<white>R</white> · Q <white>summoner 1</white> · F <white>summoner 2</white>\n"
             + "<gray>Minecraft can't tell the server about the E and R keys, so they go through hotbar slots 3 and 4. "
@@ -28,8 +30,10 @@ public final class LeagueCraftPlugin extends JavaPlugin {
             + "<gray>Number keys 1-4 also cast Q/W/E/R. <white>/lc keys</white> shows this again.";
 
     private volatile InputSettings settings;
+    private volatile CombatSettings combat;
     private Datapack datapack;
     private WeaponDisplay weapon;
+    private ThirdPerson thirdPerson;
     private final DevLog dev = new DevLog();
     private AbilityInputListener input;
     private NamespacedKey tipShown;
@@ -39,12 +43,17 @@ public final class LeagueCraftPlugin extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         settings = InputSettings.from(getConfig(), getLogger());
+        combat = CombatSettings.from(getConfig(), getLogger());
         datapack = new Datapack(getLogger(), () -> settings.debug());
         weapon = new WeaponDisplay(this);
+        thirdPerson = new ThirdPerson(datapack, getLogger());
         tipShown = new NamespacedKey(this, "key_tip_shown");
 
         input = new AbilityInputListener(datapack, weapon, dev, () -> settings, getLogger());
         getServer().getPluginManager().registerEvents(input, this);
+        getServer().getPluginManager().registerEvents(
+                new BasicAttackListener(input, dev, () -> settings, () -> combat), this);
+        getServer().getPluginManager().registerEvents(thirdPerson, this);
 
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
                 event -> LeagueCraftCommand.register(event.registrar(), this));
@@ -62,12 +71,19 @@ public final class LeagueCraftPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Don't leave weapon copies behind if the plugin is removed mid-game.
-        for (Player player : Bukkit.getOnlinePlayers()) weapon.remove(player);
+        // Don't leave weapon copies or a changed camera behind if the plugin is removed mid-game.
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            weapon.remove(player);
+            thirdPerson.remove(player);
+        }
     }
 
     InputSettings settings() {
         return settings;
+    }
+
+    CombatSettings combat() {
+        return combat;
     }
 
     Datapack datapack() {
@@ -81,6 +97,7 @@ public final class LeagueCraftPlugin extends JavaPlugin {
     void reload() {
         reloadConfig();
         settings = InputSettings.from(getConfig(), getLogger());
+        combat = CombatSettings.from(getConfig(), getLogger());
     }
 
     void setDebug(boolean debug) {
@@ -91,13 +108,16 @@ public final class LeagueCraftPlugin extends JavaPlugin {
 
     private void checkPlayers() {
         InputSettings config = settings;
+        CombatSettings combatConfig = combat;
         boolean labels = ++checks % LABEL_EVERY_N_CHECKS == 0;
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!input.canCast(player, config)) {
                 weapon.remove(player);
+                thirdPerson.remove(player);
                 continue;
             }
             weapon.apply(player);
+            thirdPerson.apply(player, combatConfig, labels);
             if (labels) datapack.writeLabels(player, config.hudLabels());
             if (config.firstTimeTip() && !player.getPersistentDataContainer().has(tipShown)) {
                 player.getPersistentDataContainer().set(tipShown, PersistentDataType.BYTE, (byte) 1);

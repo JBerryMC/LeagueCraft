@@ -1,6 +1,5 @@
 package me.jberrymc.leaguecraft;
 
-import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
@@ -37,6 +36,8 @@ import java.util.logging.Logger;
  * <p>While playing a champion the hand rests on hotbar key 8 (see {@link WeaponDisplay}). Hotbar
  * keys are buttons: the slot change is cancelled, so the client snaps back to 8 and pressing the
  * same key again casts again. The drop key and F never move items.
+ *
+ * <p>Left click (the basic attack) is handled by {@link BasicAttackListener}.
  *
  * <p>With /lc dev on, every input is echoed to the player's chat with the result (see {@link DevLog}).
  */
@@ -75,18 +76,11 @@ final class AbilityInputListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onClick(PlayerInteractEvent event) {
+    public void onRightClick(PlayerInteractEvent event) {
         // Right-clicking air arrives already cancelled (nothing to use), so no ignoreCancelled here.
         if (event.getHand() != EquipmentSlot.HAND) return;
         Player player = event.getPlayer();
         Action click = event.getAction();
-        if (click == Action.LEFT_CLICK_AIR || click == Action.LEFT_CLICK_BLOCK) {
-            if (datapack.isChampion(player)) {
-                dev.passthrough(player, "left click (" + (click == Action.LEFT_CLICK_AIR ? "air" : "block") + ")",
-                        "missed the attack target; basic attack only fires when you hit it");
-            }
-            return;
-        }
         if (click != Action.RIGHT_CLICK_AIR && click != Action.RIGHT_CLICK_BLOCK) return;
         InputSettings config = settings.get();
         String input = "right click (" + (click == Action.RIGHT_CLICK_AIR ? "air" : "block") + ")";
@@ -106,21 +100,6 @@ final class AbilityInputListener implements Listener {
         // summoner 1 when it's right-clicked. Right click is mapped by the plugin instead.
         if (isAttackTarget(event.getRightClicked())) event.setCancelled(true);
         perform(player, config.rightClick(), input, config);
-    }
-
-    /** Left click on an entity. The plugin doesn't handle it; dev mode only reports it. */
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onAttack(PrePlayerAttackEntityEvent event) {
-        Player player = event.getPlayer();
-        if (!dev.on(player) || !datapack.isChampion(player)) return;
-        String input = "left click (" + describe(event.getAttacked()) + ")";
-        if (event.isCancelled()) {
-            dev.ignored(player, input, "attack cancelled by another plugin");
-        } else if (isAttackTarget(event.getAttacked())) {
-            dev.passthrough(player, input, "basic attack (_champion:aa/check via advancement)");
-        } else {
-            dev.passthrough(player, input, "hit an entity directly, not the attack target");
-        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -188,7 +167,7 @@ final class AbilityInputListener implements Listener {
     }
 
     /** True if the player can cast; otherwise reports the reason in dev mode. */
-    private boolean ready(Player player, String input, InputSettings config) {
+    boolean ready(Player player, String input, InputSettings config) {
         String reason = whyNot(player, config);
         if (reason == null) return true;
         dev.ignored(player, input, reason);
@@ -228,7 +207,7 @@ final class AbilityInputListener implements Listener {
         return entity.getType() == EntityType.INTERACTION && entity.getScoreboardTags().contains("attack");
     }
 
-    private static String describe(Entity entity) {
+    static String describe(Entity entity) {
         if (isAttackTarget(entity)) return "attack target";
         return entity.getType().getKey().getKey().toLowerCase(Locale.ROOT);
     }

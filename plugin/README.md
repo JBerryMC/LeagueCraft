@@ -1,21 +1,21 @@
 # LeagueCraft plugin (Paper 26.3)
 
-This plugin is a server-side helper for the LeagueCraft datapack. The datapack still owns all the champion logic. The plugin takes over the jobs a datapack can only fake, starting with **input**: it gives LeagueCraft League of Legends' WASD controls.
+This plugin is a server-side helper for the LeagueCraft datapack. The datapack still owns all the champion logic. The plugin takes over the jobs a datapack can only fake: **input** (League of Legends' WASD controls), the **over-the-shoulder third-person view**, and a **hitscan basic attack** aimed with its crosshair. It's the first step towards a third-person hero fighter in the style of Marvel Rivals or Plants vs. Zombies: Garden Warfare.
 
 ## Install
 
-1. Put `LeagueCraft-0.3.1.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version; delete the old `plugins/LeagueCraft/config.yml` so the new one is written.
-2. Use the LeagueCraft 26.3 datapack from the same release. Its HUD has the summoner-spell label the plugin writes to.
+1. Put `LeagueCraft-0.4.0.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version; delete the old `plugins/LeagueCraft/config.yml` so the new one is written.
+2. Use the LeagueCraft 26.3 datapack and resource pack from the same commit. The HUD has the summoner-spell label and the crosshair slot the plugin writes to, and the resource pack carries the ShoulderCam shaders.
 3. Start the server. Run `/lc` to check that it shows **Datapack detected: yes**.
 
-It runs alongside ShoulderCam; they don't depend on each other.
+The ShoulderCam resource pack is now merged into the LeagueCraft resource pack; don't load it separately as well.
 
 ## Controls
 
 | Action | Key |
 |---|---|
 | Move | WASD |
-| Basic attack | Left click |
+| Basic attack | **Left click** (hitscan from the crosshair) |
 | Q | **Right click** (or 1) |
 | W | **Shift** (or 2) |
 | E | **E** once rebound (or 3) |
@@ -39,6 +39,33 @@ Until they do, the number keys 1–4 cast Q/W/E/R. Players get this tip in chat 
 - When the match ends or you stop being a champion, the weapon copy is removed.
 - The plugin never decides what an ability does. It runs the datapack's own functions (`_champion:abilities/use_q` … `use_r`, `_champion:spell/check`, `_champion:spell/check_2`) as that player. Cooldowns, mana, crowd control and the HUD work exactly as before.
 - Shift still crouches. In LeagueCraft that only slows you while the key is held, so tap it.
+
+## Third person
+
+With the LeagueCraft resource pack loaded, F5 becomes an over-the-shoulder camera (the ShoulderCam shaders shift the view 0.8 blocks right and 0.25 up). While a player plays a champion the plugin:
+
+- sets the camera 3 blocks back (the `minecraft:camera_distance` attribute; vanilla 4) and puts it back to vanilla afterwards
+- draws a crosshair in the middle of the screen, which vanilla hides in F5
+
+A server can't switch a player's perspective, so players press **F5** themselves. The key tip says so. The shaders shift the first-person view too, so play in F5 with this pack.
+
+**How the crosshair gets drawn.** ShoulderCam's text shader moves any GUI glyph in colour `#4E5C24` to the centre of the screen. The action bar would be the obvious place for it, but the champion HUD redraws the action bar every tick. So every HUD now ends with `lol:main crosshair.<uuid>` (like the key labels), the plugin writes the glyph there, and 14 px of negative space after it keeps the HUD from shifting.
+
+## Basic attack (hitscan)
+
+Left click fires instantly along the crosshair. Champions the datapack tags `melee` punch (3.5 blocks); everyone else shoots (48 blocks). For now the result is a chat message; the Animated Java attack animations and damage come later:
+
+> **Shot** hit **Zombie** (enemy) 12.3m · **Punch** missed (3.5m range)
+
+**Aiming.** The crosshair ray runs parallel to where the player looks, offset 0.8 right and 0.25 up from their eye. The shader only shifts the picture, so camera distance and wall clipping never change what the crosshair points at. Each attack does two traces:
+1. Along the crosshair ray, starting beside the eye so nothing between the camera and the player counts, to find what's under the crosshair.
+2. From the eye to that point. This is what actually hits, so a player can't shoot round a corner only the camera can see past.
+
+**Targets** follow the datapack's basic attack rules: anything except the `#minecraft:unvalid` entity types and entities tagged `unvalid`, plus structure interactions (tag `lol.structure`: turrets and Nexus). Allies (same scoreboard team) are hit too and reported as "(ally)".
+
+**Inputs.** Left click on air, on a block and on an entity all fire; one click fires once even though Minecraft can report it twice. Hitting an entity in vanilla reach is cancelled, so neither vanilla melee damage nor the datapack's old "attack" interaction basic attack fires. The arm swing the client plays when you press drop isn't counted as a click. Set `basic-attack.hitscan: false` to go back to the datapack's basic attack.
+
+`/lc dev` shows each attack's aim start and aim point next to what it hit.
 
 ## Config (`plugins/LeagueCraft/config.yml`)
 
@@ -68,10 +95,21 @@ ability-items: [minecraft:phantom_membrane]
 cast-function: "_champion:abilities/use_%s"
 summoner-1-function: "_champion:spell/check"
 summoner-2-function: "_champion:spell/check_2"
+third-person:
+  enabled: true
+  camera-distance: 3.0     # blocks behind the player (vanilla 4)
+  shoulder: 0.8            # must match TPS_SHOULDER in the resource pack's camera.glsl
+  height: 0.25             # must match TPS_HEIGHT
+  crosshair: true
+basic-attack:
+  hitscan: true            # false: the datapack's own basic attack
+  melee-range: 3.5         # champions tagged "melee"
+  ranged-range: 48.0
+  cooldown-ticks: 10
 debug: false
 ```
 
-Hotbar keys 7, 8 and 9 are reserved: the hand rests on 8 and the scroll wheel reaches 7 and 9. The plugin warns if the config maps them. Left click stays the datapack's basic attack. To test champions outside a match, set `require-match: false`.
+Hotbar keys 7, 8 and 9 are reserved: the hand rests on 8 and the scroll wheel reaches 7 and 9. The plugin warns if the config maps them. To test champions outside a match, set `require-match: false`.
 
 ## Commands
 
@@ -85,7 +123,9 @@ Hotbar keys 7, 8 and 9 are reserved: the hand rests on 8 and the scroll wheel re
 
 ## Tested
 
-Tested on Paper 26.3 build 214 with the LeagueCraft 26.3 datapack, playing Ezreal, with real key presses and mouse clicks from a 26.3 client.
+The third-person view and hitscan (0.4.0) haven't been tested in game yet. The camera math has unit tests (`ShoulderCameraTest`), and CI compiles the plugin against the Paper 26.3 API.
+
+Controls (0.3.x) were tested on Paper 26.3 build 214 with the LeagueCraft 26.3 datapack, playing Ezreal, with real key presses and mouse clicks from a 26.3 client.
 
 - **Hand position:** the hand moved to key 8 with the weapon copy. The weapon showed in first person, and no ability was highlighted on the HUD.
 - **Repeat presses:** pressing 1 twice cast Q twice. Pressing 3 twice reached the plugin both times, and the second E was refused by its cooldown.
@@ -97,11 +137,12 @@ Tested on Paper 26.3 build 214 with the LeagueCraft 26.3 datapack, playing Ezrea
 ## Building from source
 
 ```
-mvn package          # needs JDK 25; output: target/LeagueCraft-0.3.1.jar
+mvn package          # needs JDK 25; runs the tests; output: target/LeagueCraft-0.4.0.jar
 ```
 
 ## Where this goes next
 
-- **Basic attack without the interaction entity.** The datapack re-summons an invisible interaction entity in front of every champion, every tick, just to catch clicks. Paper click events can replace it, which removes an entity per player per tick.
-- **Aim.** Use ShoulderCam's aim API so skill shots go where the crosshair points in the over-the-shoulder view.
+- **Attack animations and damage.** Play an Animated Java animation per champion on left click, and deal the datapack's basic attack damage to what the hitscan hit.
+- **Drop the interaction entity.** With hitscan on, the datapack's per-tick "attack" interaction entity in front of every champion is no longer needed; removing it saves an entity per player per tick.
+- **Aim for abilities.** Point skill shots along the same crosshair ray.
 - **Minions.** Move the per-tick minion work, including the rig updates behind the lag you saw, into the plugin.

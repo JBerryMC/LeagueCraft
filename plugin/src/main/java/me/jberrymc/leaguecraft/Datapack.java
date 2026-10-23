@@ -76,6 +76,16 @@ final class Datapack {
         }
     }
 
+    /** Sets {@code lol:main crosshair.<uuid ints>}, which every champion HUD shows at its end. */
+    void writeCrosshair(Player player, String snbtText) {
+        Bukkit.dispatchCommand(silentSender, "data modify storage lol:main crosshair."
+                + uuidPath(player.getUniqueId()) + " set value " + snbtText);
+    }
+
+    void removeCrosshair(Player player) {
+        Bukkit.dispatchCommand(silentSender, "data remove storage lol:main crosshair." + uuidPath(player.getUniqueId()));
+    }
+
     private static final String SUMMONER_LABEL_STYLE =
             ",font:\"minecraft:custom/keybind_small\",bold:true,color:\"#ffd821\"";
 

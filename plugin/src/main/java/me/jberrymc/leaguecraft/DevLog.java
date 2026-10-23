@@ -5,6 +5,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -52,6 +53,25 @@ final class DevLog {
         if (!on(player)) return;
         send(player, "<dark_gray>[dev]</dark_gray> <white><input></white> <aqua>→ datapack: <reason>",
                 input, "", note);
+    }
+
+    /** A basic attack hitscan: where the crosshair ray started, what it aimed at, and what the shot hit. */
+    void shot(Player player, String input, Hitscan.Shot shot) {
+        if (!on(player)) return;
+        String result = switch (shot.kind()) {
+            case ENTITY -> shot.entity().getType().getKey().getKey();
+            case BLOCK -> "block " + shot.block().getType().getKey().getKey();
+            case MISS -> "nothing";
+        };
+        send(player, "<dark_gray>[dev]</dark_gray> <white><input></white> <gray>→</gray> <gold><action></gold> "
+                        + "<gray><reason>",
+                input, "hitscan " + result,
+                String.format(Locale.ROOT, "%.1fm of %.1f · aim from %s to %s", shot.distance(), shot.range(),
+                        format(shot.aimOrigin()), format(shot.aimPoint())));
+    }
+
+    private static String format(Vec3 v) {
+        return String.format(Locale.ROOT, "%.2f %.2f %.2f", v.x(), v.y(), v.z());
     }
 
     private static void send(Player player, String template, String input, String action, String other) {
