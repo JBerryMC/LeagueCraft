@@ -1,0 +1,94 @@
+{
+  "textures": {
+    "0": "minecraft:block/blue_wool",
+    "particle": "minecraft:block/blue_wool"
+  },
+  "elements": [
+    {
+      "from": [
+        8,
+        6.125,
+        7.25
+      ],
+      "to": [
+        9.5,
+        9.125,
+        8.75
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          5.75,
+          2.375,
+          7.25
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            7.25,
+            8,
+            11.25,
+            16
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            1.5,
+            8,
+            5.5,
+            16
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            2.5,
+            8,
+            6.5,
+            16
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            10.5,
+            7.25,
+            14.5,
+            15.25
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            16,
+            12,
+            12,
+            8
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            16,
+            2.5,
+            12,
+            6.5
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ],
+  "display": {
+    "head": {
+      "rotation": [
+        0,
+        180,
+        0
+      ]
+    }
+  }
+}

@@ -1,0 +1,249 @@
+{
+  "textures": {
+    "0": "minecraft:block/lc_item/annie/tibbers",
+    "2": "minecraft:block/lava_still",
+    "particle": "minecraft:block/lc_item/annie/tibbers"
+  },
+  "elements": [
+    {
+      "from": [
+        5.1,
+        7,
+        0.5
+      ],
+      "to": [
+        10.9,
+        10,
+        5.5
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8,
+          -16,
+          -1.5
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            8,
+            13.8,
+            11
+          ],
+          "texture": "#2"
+        },
+        "east": {
+          "uv": [
+            8,
+            8,
+            13,
+            11
+          ],
+          "texture": "#2"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            5.8,
+            3
+          ],
+          "texture": "#2"
+        },
+        "west": {
+          "uv": [
+            8,
+            11.5,
+            13,
+            14.5
+          ],
+          "texture": "#2"
+        },
+        "up": {
+          "uv": [
+            13.8,
+            13,
+            8,
+            8
+          ],
+          "texture": "#2"
+        },
+        "down": {
+          "uv": [
+            13.8,
+            8,
+            8,
+            13
+          ],
+          "texture": "#2"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        5,
+        1.5
+      ],
+      "to": [
+        13,
+        7,
+        9.5
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8,
+          -18,
+          5.5
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            8,
+            16,
+            10
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            8,
+            8,
+            16,
+            10
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            10,
+            2
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            8,
+            11.5,
+            16,
+            13.5
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            16,
+            16,
+            8,
+            8
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            16,
+            8,
+            8,
+            16
+          ],
+          "texture": "#0"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        5,
+        -0.5
+      ],
+      "to": [
+        11,
+        7,
+        1.5
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8,
+          -21,
+          5.5
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            8,
+            16,
+            10
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            8,
+            8,
+            10,
+            10
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            10,
+            8,
+            16,
+            10
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            14,
+            8,
+            16,
+            10
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            16,
+            10.5,
+            10,
+            8.5
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            16,
+            8,
+            10,
+            10
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ],
+  "display": {
+    "head": {
+      "rotation": [
+        0,
+        180,
+        0
+      ]
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "The Darkin Blade",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ability 1",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Aatrox slams his greatsword down, dealing physical damage.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "He can swing three times, each with a different area of effect.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                119001.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

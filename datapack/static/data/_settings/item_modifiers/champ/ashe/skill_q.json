@@ -1,0 +1,84 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Ranger's Focus",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ability 1",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Ashe builds up Focus by attacking.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "At maximum Focus, Ashe can cast Ranger's Focus to consume all stacks of Focus,",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "temporarily increasing her ",
+            "color": "gray",
+            "italic": false
+          },
+          {
+            "text": "Attack Speed",
+            "color": "yellow",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "and transforming her basic attack into a powerful flurry attack for the duration.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                115001.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_custom_data",
+      "tag": "{}"
+    },
+    {
+      "type": "minecraft:set_components",
+      "components": {
+        "minecraft:custom_model_data": {
+          "floats": [
+            9999.0
+          ]
+        }
+      }
+    }
+  ]
+}

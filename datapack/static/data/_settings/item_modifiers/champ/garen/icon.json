@@ -1,0 +1,72 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Garen",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "The Might of Demacia",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "A proud and noble warrior, Garen fights as one of the Dauntless Vanguard.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "He is popular among his fellows, and respected well enough by his enemies",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "not least as a scion of the prestigious Crownguard family, entrusted with defending Demacia and its...",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                110332.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+scoreboard players set @s aj.minion.super.rig_loaded 1
+execute unless score @s aj.minion.super.export_version = aj.minion.super.export_version aj.i at @s run function animated_java:minion.super/zzzzzzzz/mark_outdated_rig

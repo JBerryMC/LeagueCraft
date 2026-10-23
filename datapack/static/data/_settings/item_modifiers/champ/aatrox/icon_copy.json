@@ -1,0 +1,79 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Aatrox",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "The Darkin Blade",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Once honored defenders of Shurima against the Void,",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "Aatrox and his brethren would eventually become an even greater threat to Runeterra,",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "and were defeated only by cunning mortal sorcery.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "But after centuries of imprisonment, Aatrox was the first to find...",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                9999.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

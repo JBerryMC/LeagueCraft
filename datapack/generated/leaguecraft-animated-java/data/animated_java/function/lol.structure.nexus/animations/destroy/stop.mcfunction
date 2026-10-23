@@ -1,0 +1,2 @@
+execute if entity @s[tag=aj.lol.structure.nexus.root] run function animated_java:lol.structure.nexus/zzzzzzzz/animations/destroy/stop_as_root
+execute if entity @s[tag=!aj.lol.structure.nexus.root] run tellraw @a ["",{text:"["},{text:"Animated Java",color:"aqua"},{text:"] "},{text:"ERROR ☠",color:"red"},{text:" > ",color:"gray"},[{text:"The function",color:"yellow"},{text:" animated_java:lol.structure.nexus/animations/destroy/stop ",color:"blue"},{text:"must be run"},{text:" as ",color:"red"},{text:"the root entity!"}]]

@@ -1,0 +1,351 @@
+# _champion:dmg/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function calc.debuff {
+    scoreboard players operation temp dmg_physical.deal = @s dmg_physical.deal
+    scoreboard players operation temp dmg_physical.deal *= @s dmg_debuff
+    scoreboard players operation temp dmg_physical.deal /= 100 integer
+    scoreboard players operation @s dmg_physical.deal -= temp dmg_physical.deal
+
+    scoreboard players operation temp dmg_magic.deal = @s dmg_magic.deal
+    scoreboard players operation temp dmg_magic.deal *= @s dmg_debuff
+    scoreboard players operation temp dmg_magic.deal /= 100 integer
+    scoreboard players operation @s dmg_magic.deal -= temp dmg_magic.deal
+}
+
+function calc.healing {
+    scoreboard players operation temp healing = @s healing
+    scoreboard players operation empowered healing = @s healing
+
+    scoreboard players operation temp healing *= @s healnshield_power
+    scoreboard players operation temp healing /= 100 integer
+
+    scoreboard players operation empowered healing += temp healing
+
+    scoreboard players operation reduced healing = empowered healing
+    scoreboard players operation reduced healing /= 2 integer
+
+    execute if entity @s[team=red] unless score @e[team=red,tag=is_heal_target,limit=1,sort=nearest] wound matches 1.. run scoreboard players operation @e[team=red,tag=is_heal_target,limit=1,sort=nearest] hp.left += @s healing
+    execute if entity @s[team=red] if score @e[team=red,tag=is_heal_target,limit=1,sort=nearest] wound matches 1.. run scoreboard players operation @e[team=red,tag=is_heal_target,limit=1,sort=nearest,scores={hp.percentage=..99}] hp.left += reduced healing
+
+    execute if entity @s[team=blue] unless score @e[team=blue,tag=is_heal_target,limit=1,sort=nearest] wound matches 1.. run scoreboard players operation @e[team=blue,tag=is_heal_target,limit=1,sort=nearest] hp.left += @s healing
+    execute if entity @s[team=blue] if score @e[team=blue,tag=is_heal_target,limit=1,sort=nearest] wound matches 1.. run scoreboard players operation @e[team=blue,tag=is_heal_target,limit=1,sort=nearest] hp.left += reduced healing
+
+    tellraw @a[scores={.debug=1..}] [{selector:"@s",color:"gray"}," has healed ",{score:{name:"empowered",objective:"healing"},color:"green"},"HP"]
+
+    execute if entity @s[team=red] run tag @e[team=red,tag=is_heal_target,limit=1,sort=nearest] remove is_heal_target
+    execute if entity @s[team=blue] run tag @e[team=blue,tag=is_heal_target,limit=1,sort=nearest] remove is_heal_target
+    execute if entity @s[team=red] if entity @e[team=red,tag=is_heal_target] run function _champion:dmg/calc.healing
+    execute if entity @s[team=blue] if entity @e[team=blue,tag=is_heal_target] run function _champion:dmg/calc.healing
+}
+
+function calc.magic {
+    execute store success score @s temp on attacker if entity @s[tag=!leona]
+    execute if score @s temp matches 1 if score @s leona.passive matches 1..2 run function leona:passive
+
+    scoreboard players operation @s magic_resist.base = @s magic_resist
+    scoreboard players operation 100 integer -= @s magic_resist.reduced
+    scoreboard players operation @s magic_resist *= 100 integer
+
+    scoreboard players set 100 integer 100
+
+    scoreboard players operation @s magic_resist /= 100 integer
+
+    scoreboard players set 100 integer 100
+
+    scoreboard players operation 100 integer += @s magic_resist
+    scoreboard players operation 10000 integer /= 100 integer
+
+    scoreboard players operation @s dmg_magic.taken = @s dmg_magic.raw
+    scoreboard players operation @s dmg_magic.taken *= 10000 integer
+
+    scoreboard players set 100 integer 100
+    scoreboard players set 10000 integer 10000
+    scoreboard players operation @s magic_resist = @s magic_resist.base
+    scoreboard players set @s magic_resist.reduced 0
+
+    scoreboard players operation @s dmg_magic.taken /= 100 integer
+
+    scoreboard players operation 100 integer -= @s dmg_reduction
+    scoreboard players operation @s dmg_magic.taken *= 100 integer
+    scoreboard players set 100 integer 100
+    scoreboard players operation @s dmg_magic.taken /= 100 integer
+
+    execute if entity @s[tag=leona.w] run function leona:skills/w.reduction
+
+    execute if score @s dmg_magic.taken matches 1.. run function _champion:dmg/calc.shield
+    #scoreboard players operation @s hp.left -= @s dmg_magic.taken
+
+    scoreboard players set @s dmg_magic.raw 0
+}
+
+function calc.physical {
+    execute store success score @s temp on attacker if entity @s[tag=!leona]
+    execute if score @s temp matches 1 if score @s leona.passive matches 1..2 run function leona:passive
+
+    scoreboard players operation @s armor.base = @s armor
+    scoreboard players operation 100 integer -= @s armor.reduced
+    scoreboard players operation @s armor *= 100 integer
+
+    scoreboard players set 100 integer 100
+
+    scoreboard players operation @s armor /= 100 integer
+
+    scoreboard players set 100 integer 100
+
+    scoreboard players operation 100 integer += @s armor
+    scoreboard players operation 10000 integer /= 100 integer
+
+    scoreboard players operation @s dmg_physical.taken = @s dmg_physical.raw
+    scoreboard players operation @s dmg_physical.taken *= 10000 integer
+
+    scoreboard players set 100 integer 100
+    scoreboard players set 10000 integer 10000
+    scoreboard players operation @s armor = @s armor.base
+    scoreboard players set @s armor.reduced 0
+
+    scoreboard players operation @s dmg_physical.taken /= 100 integer
+
+    scoreboard players operation 100 integer -= @s dmg_reduction
+    scoreboard players operation @s dmg_physical.taken *= 100 integer
+    scoreboard players set 100 integer 100
+    scoreboard players operation @s dmg_physical.taken /= 100 integer
+
+    execute if entity @s[tag=leona.w] run function leona:skills/w.reduction
+
+    execute if score @s dmg_physical.taken matches 1.. run function _champion:dmg/calc.shield
+    #scoreboard players operation @s hp.left -= @s dmg_physical.taken
+
+    scoreboard players set @s dmg_physical.raw 0
+}
+
+function calc.shield {
+    function _champion:dmg/taken/check
+
+    execute as @e[type=area_effect_cloud,tag=shield.all] run function _champion:dmg/taken/shield.all.physical
+    execute if score @s shield.all matches ..-1 run scoreboard players set @s shield.all 0
+
+    execute as @e[type=area_effect_cloud,tag=shield.all] run function _champion:dmg/taken/shield.all.magic
+    execute if score @s shield.all matches ..-1 run scoreboard players set @s shield.all 0
+
+    execute as @e[type=area_effect_cloud,tag=shield.all] run function _champion:dmg/taken/shield.all.true
+    execute if score @s shield.all matches ..-1 run scoreboard players set @s shield.all 0
+
+    tag @s[type=player] add update.shield_all
+}
+
+function calc.true {
+    execute store success score @s temp on attacker if entity @s[tag=!leona]
+    execute if score @s temp matches 1 if score @s leona.passive matches 1..2 run function leona:passive
+
+    scoreboard players operation @s dmg_true.taken = @s dmg_true.raw
+
+    execute if score @s dmg_true.taken matches 1.. run function _champion:dmg/calc.shield
+
+    scoreboard players set @s dmg_true.raw 0
+}
+
+function calc.vamp {
+    scoreboard players operation dmg_temp omnivamp *= @s omnivamp
+    scoreboard players operation dmg_temp omnivamp /= 100 integer
+
+    execute if score @s wound matches 1.. run scoreboard players operation dmg_temp omnivamp /= 2 integer
+    execute if score @s hp.left < @s hp.max run scoreboard players operation @s hp.left += dmg_temp omnivamp
+
+    tellraw @a[scores={.debug=1..}] [{selector:"@s",color:"gray"}," has lifestealed for ",{score:{name:"dmg_temp",objective:"omnivamp"},color:"green"},"HP with ",{score:{name:"@s",objective:"wound"},color:"dark_green"},"% wound applied"]
+
+    scoreboard players set dmg_temp omnivamp 0
+}
+
+dir shield {
+    function check_origin {
+        execute store success score @s temp on origin if entity @s[tag=remove.shield]
+        execute if score @s temp matches 1 on origin run tag @s remove remove.shield
+        execute if score @s temp matches 1 on passengers run kill @s
+        execute if score @s temp matches 1 run kill @s
+    }
+
+    function off {
+        scoreboard players operation shield temp = @s shield.all
+        execute if entity @s[tag=leesin.w] on origin run tag @s remove leesin.w.ally
+        execute if entity @s[tag=annie.e] on origin run tag @s remove annie.e.target
+        execute if entity @s[tag=malphite.passive] on origin run function malphite:skills/passive.end
+        execute if score @s shield.all matches 1.. on origin run scoreboard players operation @s shield.all -= shield temp
+        execute on origin run tag @s[type=player] add update.shield_all
+        execute on origin run function _champion:hp/percentage_shield_all
+        kill @s
+    }
+}
+
+dir taken {
+    function check {
+        ## Check for effects before damage champion
+
+        execute if entity @s[tag=yasuo,tag=full_p] at @s run function yasuo:skills/passive.trigger
+    }
+
+    function magic {
+        scoreboard players operation @s hp.left -= @s dmg_magic.taken
+        scoreboard players operation dmg_temp omnivamp = @s dmg_magic.taken
+
+        execute if entity @s[tag=champion] store success score @s temp on attacker if entity @s[tag=champion]
+        execute if entity @s[tag=champion] if score @s temp matches 1 on attacker if entity @s[team=red] positioned as @e[tag=blue,tag=lol.structure.tower,type=interaction,limit=1,sort=nearest,tag=!is_targeting_champion] positioned ~-20 ~-20 ~-20 if entity @s[dx=39,dz=39,dy=39] as @e[tag=blue,tag=lol.structure.tower,type=interaction,limit=1,sort=nearest,tag=!is_targeting_champion] run function _lol:structure/tower/target/change
+        execute if entity @s[tag=champion] if score @s temp matches 1 on attacker if entity @s[team=blue] positioned as @e[tag=red,tag=lol.structure.tower,type=interaction,limit=1,sort=nearest,tag=!is_targeting_champion] positioned ~-20 ~-20 ~-20 if entity @s[dx=39,dz=39,dy=39] as @e[tag=red,tag=lol.structure.tower,type=interaction,limit=1,sort=nearest,tag=!is_targeting_champion] run function _lol:structure/tower/target/change
+
+        execute if entity @s[tag=aatrox.p.red] as @p[tag=aatrox,team=red] at @s run function aatrox:skills/passive.heal
+        execute if entity @s[tag=garen] run scoreboard players set @s cd_p 8
+        execute if entity @s[tag=malphite] run scoreboard players set @s cd_p 8
+
+        execute on attacker if score @s omnivamp matches 1.. run function _champion:dmg/calc.vamp
+
+        execute if entity @s[tag=yone.e.mark,team=!red] store success score @s temp on attacker if entity @s[tag=yone,team=red]
+        execute if entity @s[tag=yone.e.mark,team=!red] if score @s temp matches 1 run scoreboard players operation @s yone.e.dmg += @s dmg_magic.taken
+
+        execute if entity @s[tag=yone.e.mark,team=!blue] store success score @s temp on attacker if entity @s[tag=yone,team=blue]
+        execute if entity @s[tag=yone.e.mark,team=!blue] if score @s temp matches 1 run scoreboard players operation @s yone.e.dmg += @s dmg_magic.taken
+
+        execute if score .world settings.show_dmg matches 1 at @s run function _animation:dmg/magic
+        execute if score .debug settings.show_stats matches 1 run tellraw @a [{selector:"@s",color:"gray"}," received ",{score:{name:"@s",objective:"dmg_magic.taken"},color:"aqua"}," magic damage"]
+
+        #execute if entity @s[tag=lol.structure] at @s run tellraw @a [{"selector":"@s","color":"gray"}," received ",{"score":{"name":"@s","objective":"dmg_magic.taken"},"color":"aqua"}," magic damage"]
+
+        execute if entity @s[tag=dummy] run function _lol:dummy/dmg_check
+        execute if entity @s[tag=lol.structure.tower] at @s run particle block{block_state:"cobblestone"} ~ ~3 ~ 1 1 1 1 50 force @a
+        execute if entity @s[tag=lol.structure.inhib] at @s run particle block{block_state:"cobblestone"} ~ ~ ~ 1 1 1 1 50 force @a
+        execute if entity @s[tag=lol.structure.nexus] at @s run particle block{block_state:"cobblestone"} ~ ~1.5 ~ 1 1 1 1 50 force @a
+
+        scoreboard players set @s dmg_magic.taken 0
+    }
+
+    function physical {
+        scoreboard players operation @s hp.left -= @s dmg_physical.taken
+        scoreboard players operation dmg_temp omnivamp = @s dmg_physical.taken
+        execute on attacker if score @s omnivamp matches 1.. run function _champion:dmg/calc.vamp
+
+        execute if entity @s[tag=champion] store success score @s temp on attacker if entity @s[tag=champion]
+        execute if entity @s[tag=champion] if score @s temp matches 1 on attacker if entity @s[team=red] positioned as @e[tag=blue,tag=lol.structure.tower,type=interaction,limit=1,sort=nearest,tag=!is_targeting_champion] positioned ~-20 ~-20 ~-20 if entity @s[dx=39,dz=39,dy=39] as @e[tag=blue,tag=lol.structure.tower,type=interaction,limit=1,sort=nearest,tag=!is_targeting_champion] run function _lol:structure/tower/target/change
+        execute if entity @s[tag=champion] if score @s temp matches 1 on attacker if entity @s[team=blue] positioned as @e[tag=red,tag=lol.structure.tower,type=interaction,limit=1,sort=nearest,tag=!is_targeting_champion] positioned ~-20 ~-20 ~-20 if entity @s[dx=39,dz=39,dy=39] as @e[tag=red,tag=lol.structure.tower,type=interaction,limit=1,sort=nearest,tag=!is_targeting_champion] run function _lol:structure/tower/target/change
+
+        execute if entity @s[tag=garen] run scoreboard players set @s cd_p 8
+        execute if entity @s[tag=malphite] run scoreboard players set @s cd_p 8
+
+        execute if entity @s[tag=yone.e.mark,team=!red] store success score @s temp on attacker if entity @s[tag=yone,team=red]
+        execute if entity @s[tag=yone.e.mark,team=!red] if score @s temp matches 1 run scoreboard players operation @s yone.e.dmg += @s dmg_physical.taken
+
+        execute if entity @s[tag=yone.e.mark,team=!blue] store success score @s temp on attacker if entity @s[tag=yone,team=blue]
+        execute if entity @s[tag=yone.e.mark,team=!blue] if score @s temp matches 1 run scoreboard players operation @s yone.e.dmg += @s dmg_physical.taken
+
+        execute if score .world settings.show_dmg matches 1 at @s run function _animation:dmg/physical
+        execute if score .debug settings.show_stats matches 1 run tellraw @a [{selector:"@s",color:"gray"}," received ",{score:{name:"@s",objective:"dmg_physical.taken"},color:"red"}," physical damage"]
+
+        execute if entity @s[tag=dummy] run function _lol:dummy/dmg_check
+
+        #execute if entity @s[tag=lol.structure] at @s run tellraw @a [{"selector":"@s","color":"gray"}," received ",{"score":{"name":"@s","objective":"dmg_physical.taken"},"color":"red"}," physical damage"]
+
+        execute if entity @s[tag=lol.structure.tower] at @s run particle block{block_state:"cobblestone"} ~ ~3 ~ 1 1 1 1 50 force @a
+        execute if entity @s[tag=lol.structure.inhib] at @s run particle block{block_state:"cobblestone"} ~ ~ ~ 1 1 1 1 50 force @a
+        execute if entity @s[tag=lol.structure.nexus] at @s run particle block{block_state:"cobblestone"} ~ ~1.5 ~ 1 1 1 1 50 force @a
+
+        scoreboard players set @s dmg_physical.taken 0
+    }
+
+    function shield.all.magic {
+        execute if entity @s[tag=annie.e] on origin if score @s dmg_magic.taken matches 1.. on attacker run tag @s add annie.e.target
+        execute if entity @s[tag=annie.e] on origin if score @s dmg_magic.taken matches 1.. if entity @s[team=red] if entity @e[tag=annie.e.target,team=!red] as @p[tag=annie,team=red] run function annie:skills/e.damage
+        execute if entity @s[tag=annie.e] on origin if score @s dmg_magic.taken matches 1.. if entity @s[team=blue] if entity @e[tag=annie.e.target,team=!blue] as @p[tag=annie,team=blue] run function annie:skills/e.damage
+
+        execute store result score @s dmg_magic.taken on origin run scoreboard players get @s dmg_magic.taken
+
+        scoreboard players operation shield temp = @s shield.all
+
+        execute on origin run scoreboard players operation @s shield.all -= shield temp
+
+        execute store result score shield temp run scoreboard players operation @s shield.all -= @s dmg_magic.taken
+
+        execute on origin run scoreboard players operation @s shield.all += shield temp
+
+        execute on origin run tellraw @a[scores={.debug=1..}] [{selector:"@s",color:"gray"}," has ",{score:{name:"@s",objective:"shield.all"},color:"white"}," shield"]
+
+        execute on origin if score @s shield.all matches 1.. run scoreboard players set @s dmg_magic.taken 0
+        execute on origin if score @s shield.all matches ..0 run scoreboard players operation @s dmg_magic.taken = @s shield.all
+        execute on origin if score @s shield.all matches ..-1 run scoreboard players operation @s dmg_magic.taken *= -1 integer
+
+        execute on origin run tellraw @a[scores={.debug=1..}] [{selector:"@s",color:"gray"}," has ",{score:{name:"@s",objective:"dmg_magic.taken"},color:"aqua"}," damage left"]
+
+        execute if score @s shield.all matches ..0 on passengers run kill @s
+    }
+
+    function shield.all.physical {
+        execute if entity @s[tag=annie.e] on origin if score @s dmg_physical.taken matches 1.. on attacker run tag @s add annie.e.target
+        execute if entity @s[tag=annie.e] on origin if score @s dmg_physical.taken matches 1.. if entity @s[team=red] if entity @e[tag=annie.e.target,team=!red] as @p[tag=annie,team=red] run function annie:skills/e.damage
+        execute if entity @s[tag=annie.e] on origin if score @s dmg_physical.taken matches 1.. if entity @s[team=blue] if entity @e[tag=annie.e.target,team=!blue] as @p[tag=annie,team=blue] run function annie:skills/e.damage
+
+        execute store result score @s dmg_physical.taken on origin run scoreboard players get @s dmg_physical.taken
+
+        scoreboard players operation shield temp = @s shield.all
+
+        execute on origin run scoreboard players operation @s shield.all -= shield temp
+
+        execute store result score shield temp run scoreboard players operation @s shield.all -= @s dmg_physical.taken
+
+        execute on origin run scoreboard players operation @s shield.all += shield temp
+
+        execute on origin run tellraw @a[scores={.debug=1..}] [{selector:"@s",color:"gray"}," has ",{score:{name:"@s",objective:"shield.all"},color:"white"}," shield"]
+
+        execute on origin if score @s shield.all matches 1.. run scoreboard players set @s dmg_physical.taken 0
+        execute on origin if score @s shield.all matches ..0 run scoreboard players operation @s dmg_physical.taken = @s shield.all
+        execute on origin if score @s shield.all matches ..-1 run scoreboard players operation @s dmg_physical.taken *= -1 integer
+
+        execute on origin run tellraw @a[scores={.debug=1..}] [{selector:"@s",color:"gray"}," has ",{score:{name:"@s",objective:"dmg_physical.taken"},color:"red"}," damage left"]
+
+        execute if score @s shield.all matches ..0 on passengers run kill @s
+    }
+
+    function shield.all.true {
+        execute if entity @s[tag=annie.e] on origin if score @s dmg_true.taken matches 1.. on attacker run tag @s add annie.e.target
+        execute if entity @s[tag=annie.e] on origin if score @s dmg_true.taken matches 1.. if entity @s[team=red] if entity @e[tag=annie.e.target,team=!red] as @p[tag=annie,team=red] run function annie:skills/e.damage
+        execute if entity @s[tag=annie.e] on origin if score @s dmg_true.taken matches 1.. if entity @s[team=blue] if entity @e[tag=annie.e.target,team=!blue] as @p[tag=annie,team=blue] run function annie:skills/e.damage
+
+        execute store result score @s dmg_true.taken on origin run scoreboard players get @s dmg_true.taken
+
+        scoreboard players operation shield temp = @s shield.all
+
+        execute on origin run scoreboard players operation @s shield.all -= shield temp
+
+        execute store result score shield temp run scoreboard players operation @s shield.all -= @s dmg_true.taken
+
+        execute on origin run scoreboard players operation @s shield.all += shield temp
+
+        execute on origin run tellraw @a[scores={.debug=1..}] [{selector:"@s",color:"gray"}," has ",{score:{name:"@s",objective:"shield.all"},color:"white"}," shield"]
+
+        execute on origin if score @s shield.all matches 1.. run scoreboard players set @s dmg_true.taken 0
+        execute on origin if score @s shield.all matches ..0 run scoreboard players operation @s dmg_true.taken = @s shield.all
+        execute on origin if score @s shield.all matches ..-1 run scoreboard players operation @s dmg_true.taken *= -1 integer
+
+        execute on origin run tellraw @a[scores={.debug=1..}] [{selector:"@s",color:"gray"}," has ",{score:{name:"@s",objective:"dmg_true.taken"},color:"red"}," damage left"]
+
+        execute if score @s shield.all matches ..0 on passengers run kill @s
+    }
+
+    function true {
+        scoreboard players operation @s hp.left -= @s dmg_true.taken
+        scoreboard players operation dmg_temp omnivamp = @s dmg_true.taken
+        execute on attacker if score @s omnivamp matches 1.. run function _champion:dmg/calc.vamp
+
+        execute if entity @s[tag=champion] store success score @s temp on attacker if entity @s[tag=champion]
+        execute if entity @s[tag=champion] if score @s temp matches 1 on attacker if entity @s[team=red] positioned as @e[tag=blue,tag=lol.structure.tower,type=interaction,limit=1,sort=nearest,tag=!is_targeting_champion] positioned ~-20 ~-20 ~-20 if entity @s[dx=39,dz=39,dy=39] as @e[tag=blue,tag=lol.structure.tower,type=interaction,limit=1,sort=nearest,tag=!is_targeting_champion] run function _lol:structure/tower/target/change
+        execute if entity @s[tag=champion] if score @s temp matches 1 on attacker if entity @s[team=blue] positioned as @e[tag=red,tag=lol.structure.tower,type=interaction,limit=1,sort=nearest,tag=!is_targeting_champion] positioned ~-20 ~-20 ~-20 if entity @s[dx=39,dz=39,dy=39] as @e[tag=red,tag=lol.structure.tower,type=interaction,limit=1,sort=nearest,tag=!is_targeting_champion] run function _lol:structure/tower/target/change
+
+        execute if entity @s[tag=garen] run scoreboard players set @s cd_p 8
+        execute if entity @s[tag=malphite] run scoreboard players set @s cd_p 8
+
+        execute if score .world settings.show_dmg matches 1 at @s run function _animation:dmg/true
+        execute if score .debug settings.show_stats matches 1 run tellraw @a [{selector:"@s",color:"gray"}," received ",{score:{name:"@s",objective:"dmg_true.taken"},color:"white"}," true damage"]
+
+        execute if entity @s[tag=dummy] run function _lol:dummy/dmg_check
+        execute if entity @s[tag=lol.structure.tower] at @s run particle block{block_state:"cobblestone"} ~ ~3 ~ 1 1 1 1 50 force @a
+        execute if entity @s[tag=lol.structure.inhib] at @s run particle block{block_state:"cobblestone"} ~ ~ ~ 1 1 1 1 50 force @a
+        execute if entity @s[tag=lol.structure.nexus] at @s run particle block{block_state:"cobblestone"} ~ ~1.5 ~ 1 1 1 1 50 force @a
+
+        scoreboard players set @s dmg_true.taken 0
+    }
+}

@@ -1,0 +1,280 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "entries": [
+      {
+        "threshold": 1001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/spell/barrier.shield"
+        }
+      },
+      {
+        "threshold": 9999,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/invis"
+        }
+      },
+      {
+        "threshold": 100001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/hair"
+        }
+      },
+      {
+        "threshold": 100002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/tornado"
+        }
+      },
+      {
+        "threshold": 100011,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/shield"
+        }
+      },
+      {
+        "threshold": 100101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/blade"
+        }
+      },
+      {
+        "threshold": 100311,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/tornado.eq"
+        }
+      },
+      {
+        "threshold": 100411,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/r.particle"
+        }
+      },
+      {
+        "threshold": 200001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/blindfold"
+        }
+      },
+      {
+        "threshold": 200111,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/q.sonic.mark"
+        }
+      },
+      {
+        "threshold": 200211,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/shield"
+        }
+      },
+      {
+        "threshold": 300001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/mask"
+        }
+      },
+      {
+        "threshold": 300002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/shadow"
+        }
+      },
+      {
+        "threshold": 300003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/shuriken"
+        }
+      },
+      {
+        "threshold": 400001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/hair"
+        }
+      },
+      {
+        "threshold": 400002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/soul"
+        }
+      },
+      {
+        "threshold": 400101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/blade1"
+        }
+      },
+      {
+        "threshold": 400111,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/blade2"
+        }
+      },
+      {
+        "threshold": 400211,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/shield"
+        }
+      },
+      {
+        "threshold": 500001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/cape"
+        }
+      },
+      {
+        "threshold": 600001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:vayne/glasses"
+        }
+      },
+      {
+        "threshold": 700001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/hair"
+        }
+      },
+      {
+        "threshold": 700211,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/essence"
+        }
+      },
+      {
+        "threshold": 800001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:jhin/mask"
+        }
+      },
+      {
+        "threshold": 800401,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:jhin/dummy"
+        }
+      },
+      {
+        "threshold": 900001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/hair"
+        }
+      },
+      {
+        "threshold": 900101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/hitbox_q1"
+        }
+      },
+      {
+        "threshold": 900102,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/hitbox_q2"
+        }
+      },
+      {
+        "threshold": 900103,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/hitbox_q3"
+        }
+      },
+      {
+        "threshold": 1000001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leona/hair"
+        }
+      },
+      {
+        "threshold": 1000201,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leona/shield"
+        }
+      },
+      {
+        "threshold": 1200001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/hair"
+        }
+      },
+      {
+        "threshold": 1300000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/shield"
+        }
+      },
+      {
+        "threshold": 1300001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/hair"
+        }
+      },
+      {
+        "threshold": 1400201,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lux/light_wand"
+        }
+      },
+      {
+        "threshold": 1400211,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lux/shield"
+        }
+      },
+      {
+        "threshold": 1500001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:annie/hair"
+        }
+      },
+      {
+        "threshold": 1500301,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:annie/shield"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "minecraft:item/iron_sword"
+    }
+  },
+  "oversized_in_gui": true
+}

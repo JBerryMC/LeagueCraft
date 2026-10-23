@@ -1,0 +1,13 @@
+execute if entity @s[tag=aj.minion.melee.bone.head] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[15f]}
+execute if entity @s[tag=aj.minion.melee.bone.body] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[16f]}
+execute if entity @s[tag=aj.minion.melee.bone.bone3] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[17f]}
+execute if entity @s[tag=aj.minion.melee.bone.bone4] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[18f]}
+execute if entity @s[tag=aj.minion.melee.bone.right_armor] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[19f]}
+execute if entity @s[tag=aj.minion.melee.bone.shield] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[20f]}
+execute if entity @s[tag=aj.minion.melee.bone.right_arm] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[21f]}
+execute if entity @s[tag=aj.minion.melee.bone.bone] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[22f]}
+execute if entity @s[tag=aj.minion.melee.bone.bone2] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[23f]}
+execute if entity @s[tag=aj.minion.melee.bone.left_armor] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[24f]}
+execute if entity @s[tag=aj.minion.melee.bone.weapon2] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[25f]}
+execute if entity @s[tag=aj.minion.melee.bone.right_hand] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[26f]}
+execute if entity @s[tag=aj.minion.melee.bone.left_arm] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[27f]}

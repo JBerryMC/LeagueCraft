@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "animated_java:aatrox/zzzzzzzz/tick",
+    "animated_java:lol.structure.tower/zzzzzzzz/tick",
+    "animated_java:lol.structure.nexus/zzzzzzzz/tick",
+    "animated_java:lol.structure.inhib/zzzzzzzz/tick",
+    "animated_java:annie/zzzzzzzz/tick",
+    "animated_java:minion.melee/zzzzzzzz/tick",
+    "animated_java:minion.caster/zzzzzzzz/tick",
+    "animated_java:minion.siege/zzzzzzzz/tick",
+    "animated_java:minion.super/zzzzzzzz/tick"
+  ]
+}

@@ -1,0 +1,1 @@
+function animated_java:minion.caster/zzzzzzzz/animations/idle/tick_animation

@@ -1,0 +1,17 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "item/lux/passive"
+    },
+    "display": {
+      "ground": {
+        "scale": [0,0,0]
+      },
+      "firstperson_lefthand": {
+        "scale": [0,0,0]
+      },
+      "thirdperson_lefthand": {
+        "scale": [0,0,0]
+      }
+    }
+}

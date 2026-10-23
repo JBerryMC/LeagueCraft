@@ -1,0 +1,77 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Spirit Cleave",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ability 2",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Cleaves forward, damaging all enemies in a cone.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "Grants a shield to Yone, the value is increased by the number of champions hit by the swipe.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "Spirit Cleave's cooldown scale with ",
+            "color": "gray",
+            "italic": false
+          },
+          {
+            "text": "Attack Speed",
+            "color": "yellow",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                114002.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

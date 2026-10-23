@@ -1,0 +1,148 @@
+# LeagueCraft plugin (Paper 26.3)
+
+This plugin is a server-side helper for the LeagueCraft datapack. The datapack still owns all the champion logic. The plugin takes over the jobs a datapack can only fake: **input** (League of Legends' WASD controls), the **over-the-shoulder third-person view**, and a **hitscan basic attack** aimed with its crosshair. It's the first step towards a third-person hero fighter in the style of Marvel Rivals or Plants vs. Zombies: Garden Warfare.
+
+## Install
+
+1. Put `LeagueCraft-0.4.0.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version; delete the old `plugins/LeagueCraft/config.yml` so the new one is written.
+2. Use the LeagueCraft 26.3 datapack and resource pack from the same commit. The HUD has the summoner-spell label and the crosshair slot the plugin writes to, and the resource pack carries the ShoulderCam shaders.
+3. Start the server. Run `/lc` to check that it shows **Datapack detected: yes**.
+
+The ShoulderCam resource pack is now merged into the LeagueCraft resource pack; don't load it separately as well.
+
+## Controls
+
+| Action | Key |
+|---|---|
+| Move | WASD |
+| Basic attack | **Left click** (hitscan from the crosshair) |
+| Q | **Right click** (or 1) |
+| W | **Shift** (or 2) |
+| E | **E** once rebound (or 3) |
+| R | **R** once rebound (or 4) |
+| Summoner spell 1 | **Q** (drop) |
+| Summoner spell 2 | **F** (swap hands) |
+
+That's League's WASD default layout. Minecraft only sends the server *actions*, not raw keys. Opening the inventory (E) is never sent, and R has no action at all. So E and R go through the "Hotbar Slot 3/4" actions, and each player sets them up once in **Options → Controls → Key Binds**:
+
+- **Inventory** → I (frees up E)
+- **Hotbar Slot 3** → E
+- **Hotbar Slot 4** → R
+
+Until they do, the number keys 1–4 cast Q/W/E/R. Players get this tip in chat the first time they play a champion, and any time with `/lc keys`. The HUD labels follow their binds: once Hotbar Slot 3 is on E, the label under E shows "E".
+
+**How it works**
+- While you play a champion, your hand rests on **hotbar key 8**, holding a copy of your weapon. The copy has your weapon's model and none of the ability data.
+- Every hotbar key is a button. The plugin cancels the slot change, the client snaps back to 8, and pressing the same key again casts again.
+- The scroll wheel can only move one slot from 8, to keys 7 or 9, and those are never mapped, so scrolling can't cast.
+- The drop key and F never move or throw items. F also works on the first press after picking a champion; the datapack alone ignores that one.
+- When the match ends or you stop being a champion, the weapon copy is removed.
+- The plugin never decides what an ability does. It runs the datapack's own functions (`_champion:abilities/use_q` … `use_r`, `_champion:spell/check`, `_champion:spell/check_2`) as that player. Cooldowns, mana, crowd control and the HUD work exactly as before.
+- Shift still crouches. In LeagueCraft that only slows you while the key is held, so tap it.
+
+## Third person
+
+With the LeagueCraft resource pack loaded, F5 becomes an over-the-shoulder camera (the ShoulderCam shaders shift the view 0.8 blocks right and 0.25 up). While a player plays a champion the plugin:
+
+- sets the camera 3 blocks back (the `minecraft:camera_distance` attribute; vanilla 4) and puts it back to vanilla afterwards
+- draws a crosshair in the middle of the screen, which vanilla hides in F5
+
+A server can't switch a player's perspective, so players press **F5** themselves. The key tip says so. The shaders shift the first-person view too, so play in F5 with this pack.
+
+**How the crosshair gets drawn.** ShoulderCam's text shader moves any GUI glyph in colour `#4E5C24` to the centre of the screen. The action bar would be the obvious place for it, but the champion HUD redraws the action bar every tick. So every HUD now ends with `lol:main crosshair.<uuid>` (like the key labels), the plugin writes the glyph there, and 14 px of negative space after it keeps the HUD from shifting.
+
+## Basic attack (hitscan)
+
+Left click fires instantly along the crosshair. Champions the datapack tags `melee` punch (3.5 blocks); everyone else shoots (48 blocks). For now the result is a chat message; the Animated Java attack animations and damage come later:
+
+> **Shot** hit **Zombie** (enemy) 12.3m · **Punch** missed (3.5m range)
+
+**Aiming.** The crosshair ray runs parallel to where the player looks, offset 0.8 right and 0.25 up from their eye. The shader only shifts the picture, so camera distance and wall clipping never change what the crosshair points at. Each attack does two traces:
+1. Along the crosshair ray, starting beside the eye so nothing between the camera and the player counts, to find what's under the crosshair.
+2. From the eye to that point. This is what actually hits, so a player can't shoot round a corner only the camera can see past.
+
+**Targets** follow the datapack's basic attack rules: anything except the `#minecraft:unvalid` entity types and entities tagged `unvalid`, plus structure interactions (tag `lol.structure`: turrets and Nexus). Allies (same scoreboard team) are hit too and reported as "(ally)".
+
+**Inputs.** Left click on air, on a block and on an entity all fire; one click fires once even though Minecraft can report it twice. Hitting an entity in vanilla reach is cancelled, so neither vanilla melee damage nor the datapack's old "attack" interaction basic attack fires. The arm swing the client plays when you press drop isn't counted as a click. Set `basic-attack.hitscan: false` to go back to the datapack's basic attack.
+
+`/lc dev` shows each attack's aim start and aim point next to what it hit.
+
+## Config (`plugins/LeagueCraft/config.yml`)
+
+Every mapping can be changed. Run `/lc reload` afterwards; no restart needed.
+
+```yaml
+keys:                      # actions: q, w, e, r, summoner-1, summoner-2, none
+  right-click: q
+  sneak: w
+  drop: summoner-1
+  swap-hands: summoner-2
+  hotbar-1: q
+  hotbar-2: w
+  hotbar-3: e
+  hotbar-4: r
+  hotbar-5: none           # free for later (items, recall ...)
+  hotbar-6: none
+hud-labels:                # "key.<control>" shows the player's own key; text is shown as written
+  q: "M2"
+  w: "SH"
+  e: "key.hotbar.3"
+  r: "key.hotbar.4"
+  summoner-1: "key.drop"
+first-time-tip: true
+require-match: true        # only while score _ingame (objective "game") is 1
+ability-items: [minecraft:phantom_membrane]
+cast-function: "_champion:abilities/use_%s"
+summoner-1-function: "_champion:spell/check"
+summoner-2-function: "_champion:spell/check_2"
+third-person:
+  enabled: true
+  camera-distance: 3.0     # blocks behind the player (vanilla 4)
+  shoulder: 0.8            # must match TPS_SHOULDER in the resource pack's camera.glsl
+  height: 0.25             # must match TPS_HEIGHT
+  crosshair: true
+basic-attack:
+  hitscan: true            # false: the datapack's own basic attack
+  melee-range: 3.5         # champions tagged "melee"
+  ranged-range: 48.0
+  cooldown-ticks: 10
+debug: false
+```
+
+Hotbar keys 7, 8 and 9 are reserved: the hand rests on 8 and the scroll wheel reaches 7 and 9. The plugin warns if the config maps them. To test champions outside a match, set `require-match: false`.
+
+## Commands
+
+| Command | Who | What |
+|---|---|---|
+| `/lc keys` | everyone | The controls and the one-time key bind setup |
+| `/lc` | everyone | Status: datapack detected, match running, current key mapping |
+| `/lc dev` | `leaguecraft.dev` (op) | Toggle dev mode: every input you make is echoed to your chat with what it did (cast, ignored and why, or handled by the datapack). Per player, off after a restart. From the console: `execute as <player> run lc dev` |
+| `/lc reload` | `leaguecraft.admin` (op) | Re-read config.yml |
+| `/lc debug on\|off` | `leaguecraft.admin` (op) | Log each cast to the console |
+
+## Tested
+
+The third-person view and hitscan (0.4.0) haven't been tested in game yet. The camera math has unit tests (`ShoulderCameraTest`), and CI compiles the plugin against the Paper 26.3 API.
+
+Controls (0.3.x) were tested on Paper 26.3 build 214 with the LeagueCraft 26.3 datapack, playing Ezreal, with real key presses and mouse clicks from a 26.3 client.
+
+- **Hand position:** the hand moved to key 8 with the weapon copy. The weapon showed in first person, and no ability was highlighted on the HUD.
+- **Repeat presses:** pressing 1 twice cast Q twice. Pressing 3 twice reached the plugin both times, and the second E was refused by its cooldown.
+- **Other inputs:** right click, Shift, 4, Q and F cast Q, W, R, Flash and Barrier.
+- **Scrolling:** scrolling three times cast nothing, and the hand stayed on 8.
+- **Match end:** after the match ended, the weapon copy was gone from slot 8.
+- **HUD and tip:** the HUD showed M2, SH, 3, 4, Q and F. The setup tip arrived once.
+
+## Building from source
+
+```
+mvn package          # needs JDK 25; runs the tests; output: target/LeagueCraft-0.4.0.jar
+```
+
+## Where this goes next
+
+- **Attack animations and damage.** Play an Animated Java animation per champion on left click, and deal the datapack's basic attack damage to what the hitscan hit.
+- **Drop the interaction entity.** With hitscan on, the datapack's per-tick "attack" interaction entity in front of every champion is no longer needed; removing it saves an entity per player per tick.
+- **Aim for abilities.** Point skill shots along the same crosshair ray.
+- **Minions.** Move the per-tick minion work, including the rig updates behind the lag you saw, into the plugin.

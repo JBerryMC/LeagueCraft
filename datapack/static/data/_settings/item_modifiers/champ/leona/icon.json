@@ -1,0 +1,72 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Leona",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "The Radiant Dawn",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Imbued with the fire of the sun, Leona is a holy warrior of the Solari ",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "who defends Mount Targon with her Zenith Blade and the Shield of Daybreak.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "Her skin shimmers with starfire while her eyes burn with the power of the celestial Aspect within her...",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                110330.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

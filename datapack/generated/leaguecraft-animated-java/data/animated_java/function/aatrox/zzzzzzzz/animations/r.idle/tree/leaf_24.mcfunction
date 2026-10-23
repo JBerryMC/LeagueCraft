@@ -1,0 +1,1 @@
+execute on passengers run function animated_java:aatrox/zzzzzzzz/animations/r.idle/tree/leaf_24_as_bone

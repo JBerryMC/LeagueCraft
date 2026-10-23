@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:copy_custom_data",
+  "source": "this",
+  "ops": [
+    {
+      "source": "UUID[0]",
+      "target": "uuid1",
+      "op": "replace"
+    },
+    {
+      "source": "UUID[1]",
+      "target": "uuid2",
+      "op": "replace"
+    },
+    {
+      "source": "UUID[2]",
+      "target": "uuid3",
+      "op": "replace"
+    },
+    {
+      "source": "UUID[3]",
+      "target": "uuid4",
+      "op": "replace"
+    }
+  ]
+}

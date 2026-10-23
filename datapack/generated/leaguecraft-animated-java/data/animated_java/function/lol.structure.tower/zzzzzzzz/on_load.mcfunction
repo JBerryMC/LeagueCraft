@@ -1,0 +1,2 @@
+scoreboard players set @s aj.lol.structure.tower.rig_loaded 1
+execute unless score @s aj.lol.structure.tower.export_version = aj.lol.structure.tower.export_version aj.i at @s run function animated_java:lol.structure.tower/zzzzzzzz/mark_outdated_rig

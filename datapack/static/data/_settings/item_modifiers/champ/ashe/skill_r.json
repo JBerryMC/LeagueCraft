@@ -1,0 +1,79 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Enchanted Crystal Arrow",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ultimate",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Ashe fires a missile of ice in a straight line.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "If the arrow collides with an enemy Champion, it deals damage and stuns the Champion,",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "stunning for longer the farther arrow has traveled.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "In addition, surrounding enemy units take damage and are slowed.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                115004.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

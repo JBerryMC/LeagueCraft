@@ -1,0 +1,1 @@
+execute if score @s aj.anim_time matches 0..90 run function animated_java:lol.structure.tower/zzzzzzzz/animations/destroy/tree/branch_0_90

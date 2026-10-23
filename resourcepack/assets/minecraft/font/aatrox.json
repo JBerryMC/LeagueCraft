@@ -1,0 +1,18 @@
+{
+  "providers": [
+      {
+           "type": "bitmap",
+           "file": "minecraft:item/yasuo/bg_default.png",
+           "ascent": 8,
+           "height": 9,
+           "chars": ["b"]
+      },
+      {
+           "type": "bitmap",
+           "file": "minecraft:item/aatrox/icon.png",
+           "ascent": -12,
+           "height": 42,
+           "chars": ["i"]
+      }
+  ]
+}

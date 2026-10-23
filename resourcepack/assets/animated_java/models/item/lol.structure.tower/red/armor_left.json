@@ -1,0 +1,18 @@
+{
+	"parent": "animated_java:item/lol.structure.tower/armor_left",
+	"textures": {
+		"0": "minecraft:block/smooth_stone",
+		"1": "minecraft:block/stone_bricks",
+		"2": "minecraft:block/red_concrete",
+		"3": "minecraft:block/fire_0",
+		"4": "minecraft:block/fire_1",
+		"5": "minecraft:block/black_concrete",
+		"6": "minecraft:block/cracked_stone_bricks",
+		"7": "minecraft:block/sea_lantern",
+		"8": "minecraft:block/gold_block",
+		"9": "minecraft:block/respawn_anchor_top",
+		"10": "minecraft:block/red_concrete",
+		"11": "minecraft:block/fire_0",
+		"12": "minecraft:block/fire_1"
+	}
+}

@@ -1,0 +1,10 @@
+execute if entity @s[tag=aj.lol.structure.inhib.bone.piece2] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[12f]}
+execute if entity @s[tag=aj.lol.structure.inhib.bone.piece5] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[13f]}
+execute if entity @s[tag=aj.lol.structure.inhib.bone.piece1] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[14f]}
+execute if entity @s[tag=aj.lol.structure.inhib.bone.piece4] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[15f]}
+execute if entity @s[tag=aj.lol.structure.inhib.bone.piece3] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[16f]}
+execute if entity @s[tag=aj.lol.structure.inhib.bone.deco] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[17f]}
+execute if entity @s[tag=aj.lol.structure.inhib.bone.deco2] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[18f]}
+execute if entity @s[tag=aj.lol.structure.inhib.bone.deco3] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[19f]}
+execute if entity @s[tag=aj.lol.structure.inhib.bone.deco4] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[20f]}
+execute if entity @s[tag=aj.lol.structure.inhib.bone.base2] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[21f]}

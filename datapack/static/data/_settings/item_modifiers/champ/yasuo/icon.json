@@ -1,0 +1,72 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Yasuo",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "The Unforgiven",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "An Ionian of deep resolve, Yasuo is an agile swordsman who wields the air itself against his enemies.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "As a proud young man, he was falsely accused of murdering his master",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "unable to prove his innocence, he was forced to slay his own brother in self...",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                110321.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

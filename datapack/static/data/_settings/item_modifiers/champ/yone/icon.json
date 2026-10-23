@@ -1,0 +1,79 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Yone",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "The Unforgotten",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "In life, he was Yone—half-brother of Yasuo, and renowned student of his village's sword school.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "But upon his death at the hands of his brother,",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "he found himself hunted by a malevolent entity of the spirit realm",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "and was forced to slay it with its own...",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                110324.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

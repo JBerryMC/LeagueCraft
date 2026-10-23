@@ -1,0 +1,1 @@
+execute if score @s aj.anim_time matches 0..320 run function animated_java:lol.structure.inhib/zzzzzzzz/animations/idle/tree/branch_0_320

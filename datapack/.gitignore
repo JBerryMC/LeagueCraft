@@ -1,0 +1,5 @@
+# Build output (regenerate with `mcb build`)
+/data/
+/.static-files.json
+/.mcb/
+node_modules/

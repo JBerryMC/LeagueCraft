@@ -1,0 +1,2 @@
+execute on passengers run function animated_java:minion.siege/zzzzzzzz/animations/aa/tree/leaf_20_as_bone
+execute unless entity @s[tag=aj.minion.siege.disable_command_keyframes] at @s run function animated_java:minion.siege/animations/idle/tween_play

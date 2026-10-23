@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:set_custom_model_data",
+  "floats": {
+    "values": [
+      {
+        "type": "minecraft:storage",
+        "storage": "lol:main",
+        "path": "temp.model"
+      }
+    ],
+    "mode": "replace_all"
+  }
+}

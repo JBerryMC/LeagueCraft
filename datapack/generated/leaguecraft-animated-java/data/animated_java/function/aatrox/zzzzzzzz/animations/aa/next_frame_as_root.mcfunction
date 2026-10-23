@@ -1,0 +1,1 @@
+function animated_java:aatrox/zzzzzzzz/animations/aa/tick_animation

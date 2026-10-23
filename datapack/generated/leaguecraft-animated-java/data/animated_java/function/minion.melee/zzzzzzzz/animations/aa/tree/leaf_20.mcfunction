@@ -1,0 +1,2 @@
+execute on passengers run function animated_java:minion.melee/zzzzzzzz/animations/aa/tree/leaf_20_as_bone
+execute unless entity @s[tag=aj.minion.melee.disable_command_keyframes] at @s run function animated_java:minion.melee/animations/idle/tween_play

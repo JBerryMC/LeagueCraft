@@ -1,0 +1,252 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "entries": [
+      {
+        "threshold": 9999,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/invis"
+        }
+      },
+      {
+        "threshold": 100000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/no_mana_lefthand"
+        }
+      },
+      {
+        "threshold": 100001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/armor"
+        }
+      },
+      {
+        "threshold": 100101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/armor"
+        }
+      },
+      {
+        "threshold": 200101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/weapon"
+        }
+      },
+      {
+        "threshold": 200201,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/shield_icon"
+        }
+      },
+      {
+        "threshold": 300101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/weapon"
+        }
+      },
+      {
+        "threshold": 400101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/blade1"
+        }
+      },
+      {
+        "threshold": 400102,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/blade2"
+        }
+      },
+      {
+        "threshold": 500001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/aa"
+        }
+      },
+      {
+        "threshold": 500011,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/weapon"
+        }
+      },
+      {
+        "threshold": 500101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/aa_q_active"
+        }
+      },
+      {
+        "threshold": 500301,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/hawk"
+        }
+      },
+      {
+        "threshold": 500401,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/ultimate"
+        }
+      },
+      {
+        "threshold": 600001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:vayne/passive.1"
+        }
+      },
+      {
+        "threshold": 600002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:vayne/passive.2"
+        }
+      },
+      {
+        "threshold": 600011,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:vayne/weapon"
+        }
+      },
+      {
+        "threshold": 700011,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/weapon"
+        }
+      },
+      {
+        "threshold": 700401,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/ultimate"
+        }
+      },
+      {
+        "threshold": 800001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:jhin/aa.weak"
+        }
+      },
+      {
+        "threshold": 800002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:jhin/aa.strong"
+        }
+      },
+      {
+        "threshold": 800011,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:jhin/weapon"
+        }
+      },
+      {
+        "threshold": 800101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:jhin/grenade"
+        }
+      },
+      {
+        "threshold": 800301,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:jhin/trap"
+        }
+      },
+      {
+        "threshold": 1000001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leona/offhand"
+        }
+      },
+      {
+        "threshold": 1100001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:soraka/aa"
+        }
+      },
+      {
+        "threshold": 1100301,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:soraka/star"
+        }
+      },
+      {
+        "threshold": 1200001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/offhand"
+        }
+      },
+      {
+        "threshold": 1200301,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/shield"
+        }
+      },
+      {
+        "threshold": 1200401,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/ultimate"
+        }
+      },
+      {
+        "threshold": 1300101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/offhand"
+        }
+      },
+      {
+        "threshold": 1300201,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/offhand_w"
+        }
+      },
+      {
+        "threshold": 1400401,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lux/ultimate"
+        }
+      },
+      {
+        "threshold": 1500401,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:annie/offhand"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "minecraft:item/carrot_on_a_stick"
+    }
+  },
+  "oversized_in_gui": true
+}

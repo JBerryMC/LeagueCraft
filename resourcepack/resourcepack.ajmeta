@@ -1,0 +1,50 @@
+{
+    "version": "0.4.6",
+    "projects": {
+        "dca55371-8e4b-5d56-83d9-3b6d73a0ee8d": {
+            "project_name": "aatrox_animation",
+            "file_list": [
+                "assets\\animated_java\\models\\item\\aatrox_animation\\horn1.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\horn5.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\horn4.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\edge.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\edge2.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\crystal.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\blade.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\blade4.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\blade3.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\blade2.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\crystal2.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\handle.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\head.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\heart.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\horn3.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\jacket.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\front.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\horn.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\side3.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\side2.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\front2.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\horn2.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\head2.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\left_arm2.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\left_arm.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\right_arm2.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\right_arm.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\left_wing.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\right_wing.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\torso.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\left_leg2.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\left_leg.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\right_leg2.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\right_leg.json",
+                "assets\\animated_java\\models\\item\\aatrox_animation\\torso2.json",
+                "assets\\animated_java\\textures\\item\\aatrox_animation\\blade.png",
+                "assets\\animated_java\\textures\\item\\aatrox_animation\\heart.png",
+                "assets\\animated_java\\textures\\item\\aatrox_animation\\aatrox.png",
+                "assets\\animated_java\\textures\\item\\aatrox_animation\\wing.png",
+                "assets\\minecraft\\models\\item\\animated_java_empty.json"
+            ]
+        }
+    }
+}

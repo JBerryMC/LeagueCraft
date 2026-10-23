@@ -1,0 +1,1 @@
+function animated_java:annie/zzzzzzzz/animations/rage.aa2/tick_animation

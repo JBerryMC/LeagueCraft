@@ -1,0 +1,2 @@
+execute as @e[type=minecraft:item_display,tag=aj.lol.structure.inhib.root] run function animated_java:lol.structure.inhib/zzzzzzzz/remove/as_root
+kill @e[tag=aj.lol.structure.inhib.rig_entity]

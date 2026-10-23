@@ -1,0 +1,1 @@
+execute if score @s aj.anim_time matches 0..10 run function animated_java:annie/zzzzzzzz/animations/rage.aa2/tree/branch_0_10

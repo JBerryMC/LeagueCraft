@@ -1,0 +1,1 @@
+execute if score @s aj.anim_time matches 0..40 run function animated_java:annie/zzzzzzzz/animations/skill/tree/branch_0_40

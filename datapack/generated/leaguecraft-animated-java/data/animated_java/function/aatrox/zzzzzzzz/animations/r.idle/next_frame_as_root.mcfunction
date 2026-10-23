@@ -1,0 +1,1 @@
+function animated_java:aatrox/zzzzzzzz/animations/r.idle/tick_animation

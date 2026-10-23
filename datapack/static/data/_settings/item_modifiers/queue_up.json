@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                100301.0
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "selector": "@s",
+        "italic": false
+      }
+    }
+  ]
+}

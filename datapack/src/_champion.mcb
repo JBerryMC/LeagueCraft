@@ -1,0 +1,1364 @@
+# _champion:  (converted from the 1.20.2 LeagueCraft datapack)
+
+function bar_display {
+    execute store result score @s pos_x1 on passengers as @s[tag=bar_owner] on origin run data get entity @s Pos[0] 1000
+    execute store result score @s pos_y1 on passengers as @s[tag=bar_owner] on origin run data get entity @s Pos[1] 1000
+    execute store result score @s pos_z1 on passengers as @s[tag=bar_owner] on origin run data get entity @s Pos[2] 1000
+
+    scoreboard players add @s pos_y1 1300
+    execute store success score @s pos_y2 on passengers as @s[tag=bar_owner] on origin if predicate _lol:is_flying
+    execute as @s[scores={pos_y2=1..}] run scoreboard players add @s pos_y1 500
+
+    execute store result entity @s Pos[0] double 0.001 run scoreboard players get @s pos_x1
+    execute store result entity @s Pos[1] double 0.001 run scoreboard players get @s pos_y1
+    execute store result entity @s Pos[2] double 0.001 run scoreboard players get @s pos_z1
+
+    execute store success score @s hp.percentage_old on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.bar.hp]
+    execute as @s[scores={hp.percentage_old=1..},tag=blue] run function _champion:hp/macro_dummy_blue
+    execute as @s[scores={hp.percentage_old=1..},tag=red] run function _champion:hp/macro_dummy_red
+    execute as @s[scores={hp.percentage_old=1..}] on passengers as @s[tag=bar_owner] on origin run tag @s remove update.bar.hp
+
+    execute store success score @s mana.percentage_old on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.bar.mana]
+    execute as @s[scores={mana.percentage_old=1..}] run function _champion:mana/macro_dummy
+    execute as @s[scores={mana.percentage_old=1..}] on passengers as @s[tag=bar_owner] on origin run tag @s remove update.bar.mana
+
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=remove.bar]
+    execute as @s[scores={temp=1..}] on passengers as @s[tag=bar_owner] on origin run tag @s remove remove.bar
+    execute as @s[scores={temp=1..}] on passengers run kill @s
+    execute as @s[scores={temp=1..}] run kill @s
+
+    execute store success score @s shield.all on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.shield_all]
+    execute as @s[scores={shield.all=1..}] run function _champion:hp/macro_shield_all
+    execute as @s[scores={shield.all=1..}] on passengers as @s[tag=bar_owner] on origin run tag @s remove update.shield_all
+
+    ## HIDE ON BUSH
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if score @s fx.invis matches 1..
+    execute if score @s temp matches 1 on passengers run data modify entity @s view_range set value 0.0
+    execute if score @s temp matches 0 if score .world settings.show_stats matches 1 on passengers run data modify entity @s view_range set value 1.0
+
+    ## ------------------------- MARKING -------------------------------
+
+    ### EZREAL W
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.mark.ezreal.w]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=ezreal.w.mark] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=ezreal.w.mark] run kill @s
+    execute if score @s temp matches 1 at @s run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[700211f]}}},Tags:["ezreal.w.mark","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:80,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if score @s temp matches 1 run ride @e[type=item_display,tag=temp,tag=ezreal.w.mark,limit=1,sort=nearest] mount @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove update.mark.ezreal.w
+
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=remove.mark.ezreal.w]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=ezreal.w.mark] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=ezreal.w.mark] run kill @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove remove.mark.ezreal.w
+
+    ## ------------------------- VISUAL FX -------------------------------
+
+    ### GAREN E - 1200101
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.fx.garen.e]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=garen.e.fx] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=garen.e.fx] run kill @s
+    execute if score @s temp matches 1 at @s run summon item_display ~ ~ ~ {interpolation_duration:5,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[1200101f]}}},Tags:["spin_lv_2","garen.e.fx","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:60,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if score @s temp matches 1 run ride @e[type=item_display,tag=temp,tag=garen.e.fx,limit=1,sort=nearest] mount @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove update.fx.garen.e
+
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=remove.fx.garen.e]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=garen.e.fx] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=garen.e.fx] run kill @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove remove.fx.garen.e
+
+    ## ------------------------- SHIELDING -------------------------------
+
+    ### ANNIE - 1500301
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.shield.annie]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=annie.e.shield] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=annie.e.shield] run kill @s
+    execute if score @s temp matches 1 at @s run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1500301f]}}},Tags:["annie.e.shield","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[-22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1500301f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1500301f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[45.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1500301f]}}}},{id:"area_effect_cloud",Duration:50,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if score @s temp matches 1 run ride @e[type=item_display,tag=temp,tag=annie.e.shield,limit=1,sort=nearest] mount @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove update.shield.annie
+
+    ### LUX - 1400211
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.shield.lux]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=lux.w.shield] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=lux.w.shield] run kill @s
+    execute if score @s temp matches 1 at @s run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1400211f]}}},Tags:["lux.w.shield","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[-22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1400211f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1400211f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[45.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1400211f]}}}},{id:"area_effect_cloud",Duration:50,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if score @s temp matches 1 run ride @e[type=item_display,tag=temp,tag=lux.w.shield,limit=1,sort=nearest] mount @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove update.shield.lux
+
+    ### MALPHITE - 1300001
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.shield.malphite]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=malphite.p.shield] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=malphite.p.shield] run kill @s
+    execute if score @s temp matches 1 at @s run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1300000f]}}},Tags:["malphite.p.shield","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[-22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1300000f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1300000f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[45.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1300000f]}}}},{id:"area_effect_cloud",Duration:20,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if score @s temp matches 1 run ride @e[type=item_display,tag=temp,tag=malphite.p.shield,limit=1,sort=nearest] mount @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove update.shield.malphite
+
+    ### LEONA - 1000201
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.shield.leona]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=leona.w.shield] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=leona.w.shield] run kill @s
+    execute if score @s temp matches 1 at @s run summon item_display ~ ~ ~ {billboard:"vertical",brightness:{sky:15,block:15},teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1000201f]}}},Tags:["leona.w.shield","temp","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:60,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if score @s temp matches 1 run ride @e[type=item_display,tag=temp,tag=leona.w.shield,limit=1,sort=nearest] mount @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove update.shield.leona
+
+    ### GAREN - 1200301
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.shield.garen]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=garen.w.shield] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=garen.w.shield] run kill @s
+    execute if score @s temp matches 1 at @s run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,Tags:["garen.w.shield","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1200301f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[120.0f,0.0f],item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1200301f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[-120.0f,0.0f],item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1200301f]}}}},{id:"area_effect_cloud",Duration:80,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if score @s temp matches 1 run ride @e[type=item_display,tag=temp,tag=garen.w.shield,limit=1,sort=nearest] mount @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove update.shield.garen
+
+    ### LEESIN - 200201
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.shield.leesin]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=leesin.w.shield] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=leesin.w.shield] run kill @s
+    execute if score @s temp matches 1 at @s run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[200211f]}}},Tags:["leesin.w.shield","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[200201f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[120.0f,0.0f],item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[200201f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[-120.0f,0.0f],item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[200201f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[-22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[200211f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[200211f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[45.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[200211f]}}}},{id:"area_effect_cloud",Duration:40,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if score @s temp matches 1 run ride @e[type=item_display,tag=temp,tag=leesin.w.shield,limit=1,sort=nearest] mount @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove update.shield.leesin
+
+    ### YONE - 400211
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.shield.yone]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=yone.w.shield] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=yone.w.shield] run kill @s
+    execute if score @s temp matches 1 at @s run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[400211f]}}},Tags:["yone.w.shield","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[-22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[400211f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[400211f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[45.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[400211f]}}}},{id:"area_effect_cloud",Duration:40,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if score @s temp matches 1 run ride @e[type=item_display,tag=temp,tag=yone.w.shield,limit=1,sort=nearest] mount @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove update.shield.yone
+
+    ### YASUO - 400211
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.shield.yasuo]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=yasuo.p.shield] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=yasuo.p.shield] run kill @s
+    execute if score @s temp matches 1 at @s run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1001f]}}},Tags:["yasuo.p.shield","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[-22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1001f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1001f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[45.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1001f]}}}},{id:"area_effect_cloud",Duration:40,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if score @s temp matches 1 run ride @e[type=item_display,tag=temp,tag=yasuo.p.shield,limit=1,sort=nearest] mount @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove update.shield.yasuo
+
+    ### SUMMONER SPELL | BARRIER - 100011
+    execute store success score @s temp on passengers as @s[tag=bar_owner] on origin if entity @s[tag=update.shield.barrier]
+    execute if score @s temp matches 1 on passengers if entity @s[tag=spell.barrier] on passengers run kill @s
+    execute if score @s temp matches 1 on passengers if entity @s[tag=spell.barrier] run kill @s
+    execute if score @s temp matches 1 at @s run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[100011f]}}},Tags:["spell.barrier","temp","lol.auto_clear"],Passengers:[{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[-22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[100011f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[100011f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[45.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[100011f]}}}},{id:"area_effect_cloud",Duration:40,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if score @s temp matches 1 run ride @e[type=item_display,tag=temp,tag=spell.barrier,limit=1,sort=nearest] mount @s
+    execute if score @s temp matches 1 on passengers as @s[tag=bar_owner] on origin run tag @s remove update.shield.barrier
+}
+
+function dead {
+    tag @s add dead
+    tag @s add remove.bar
+    tag @s add unvalid
+
+    scoreboard players set @s hp.left 0
+    scoreboard players set @s mana 0
+    function _game:announce/takedown/champion
+
+    ## Yone
+    execute if entity @s[tag=yone,team=red] as @e[tag=yone.e.body,tag=red] on passengers run kill @s
+    execute if entity @s[tag=yone,team=blue] as @e[tag=yone.e.body,tag=blue] on passengers run kill @s
+
+    ## Aatrox
+    execute on attacker if entity @s[tag=aatrox,scores={mana=1..}] at @s run function aatrox:skills/r.extend
+
+    execute if entity @s[tag=aatrox] on vehicle if entity @s[tag=aatrox.r] run function aatrox:skills/r.end
+
+    ## Annie
+    execute if entity @s[tag=annie,team=red] as @e[tag=annie.r,team=red,type=#can_aggro] run function annie:skills/r.revenge
+    execute if entity @s[tag=annie,team=blue] as @e[tag=annie.r,team=blue,type=#can_aggro] run function annie:skills/r.revenge
+
+    title @s times 0 20 0
+
+    function _champion:abilities/reload
+    scoreboard players set @s death_time 200
+    effect give @s blindness 13 0 true
+
+    gamemode spectator @s[tag=!e.soul]
+}
+
+function hud {
+    execute store result score @s status.hotbar run data get entity @s SelectedItemSlot
+
+    execute if score @s cd_q matches 0 run scoreboard players set @s status.q 1
+    execute if score @s cd_w matches 0 run scoreboard players set @s status.w 1
+    execute if score @s cd_e matches 0 run scoreboard players set @s status.e 1
+    execute if score @s cd_r matches 0 run scoreboard players set @s status.r 1
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 1 run scoreboard players set @s status.spell.1 1
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 2 run scoreboard players set @s status.spell.1 2
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 3 run scoreboard players set @s status.spell.1 3
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 4 run scoreboard players set @s status.spell.1 4
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 5 run scoreboard players set @s status.spell.1 5
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 6 run scoreboard players set @s status.spell.1 6
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 7 run scoreboard players set @s status.spell.1 7
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 8 run scoreboard players set @s status.spell.1 8
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 1 run scoreboard players set @s status.spell.2 1
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 2 run scoreboard players set @s status.spell.2 2
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 3 run scoreboard players set @s status.spell.2 3
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 4 run scoreboard players set @s status.spell.2 4
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 5 run scoreboard players set @s status.spell.2 5
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 6 run scoreboard players set @s status.spell.2 6
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 7 run scoreboard players set @s status.spell.2 7
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 8 run scoreboard players set @s status.spell.2 8
+
+    execute if score @s cd_q matches 1.. run scoreboard players set @s status.q 0
+    execute if score @s cd_w matches 1.. run scoreboard players set @s status.w 0
+    execute if score @s cd_e matches 1.. run scoreboard players set @s status.e 0
+    execute if score @s cd_r matches 1.. run scoreboard players set @s status.r 0
+    execute if score @s cd_spell.1 matches 1.. run scoreboard players set @s status.spell.1 0
+    execute if score @s cd_spell.2 matches 1.. run scoreboard players set @s status.spell.2 0
+
+    execute if score @s mana < @s mana_q run scoreboard players set @s status.q 8
+    execute if score @s mana < @s mana_w run scoreboard players set @s status.w 8
+    execute if score @s mana < @s mana_e run scoreboard players set @s status.e 8
+    execute if score @s mana < @s mana_r run scoreboard players set @s status.r 8
+
+    execute if entity @s[tag=cced] run scoreboard players set @s status.q 9
+    execute if entity @s[tag=cced] run scoreboard players set @s status.w 9
+    execute if entity @s[tag=cced] run scoreboard players set @s status.e 9
+    execute if entity @s[tag=cced] run scoreboard players set @s status.r 9
+    execute if entity @s[tag=cced] unless score @s spell.1 matches 3 run scoreboard players set @s status.spell.1 9
+    execute if entity @s[tag=cced] unless score @s spell.1 matches 3 run scoreboard players set @s status.spell.2 9
+
+    execute if entity @s[tag=r.animation] run scoreboard players set @s status.q 9
+    execute if entity @s[tag=r.animation] run scoreboard players set @s status.w 9
+    execute if entity @s[tag=r.animation] run scoreboard players set @s status.e 9
+    execute if entity @s[tag=r.animation] run scoreboard players set @s status.r 9
+    execute if entity @s[tag=r.animation] run scoreboard players set @s status.spell.1 9
+    execute if entity @s[tag=r.animation] run scoreboard players set @s status.spell.2 9
+
+    execute if entity @s[tag=e.animation] run scoreboard players set @s status.q 9
+    execute if entity @s[tag=e.animation] run scoreboard players set @s status.w 9
+    execute if entity @s[tag=e.animation] run scoreboard players set @s status.e 9
+    execute if entity @s[tag=e.animation] run scoreboard players set @s status.r 9
+    execute if entity @s[tag=e.animation] run scoreboard players set @s status.spell.1 9
+    execute if entity @s[tag=e.animation] run scoreboard players set @s status.spell.2 9
+
+    execute if score @s cc.root matches 1.. if score @s spell.1 matches 1 run scoreboard players set @s status.spell.1 9
+
+    ## 9	1
+    ## 8	3
+    ## 7	8
+    ## 6	21
+    ## 5	55
+    ## 4	144
+    ## 3	377
+    ## 2	987
+    ## 1	2584
+    ## -	-6765
+
+    execute if score @s cd_p matches 0..9 run scoreboard players set @s space.passive 779
+    execute if score @s cd_p matches 10..99 run scoreboard players set @s space.passive 789
+    execute if score @s cd_p matches 100..999 run scoreboard players set @s space.passive 889
+
+    execute if score @s cd_q matches 0..9 run scoreboard players set @s space.q 68
+    execute if score @s cd_q matches 10..99 run scoreboard players set @s space.q 7799
+    execute if score @s cd_q matches 100..999 run scoreboard players set @s space.q 789
+
+    execute if score @s cd_w matches 0..9 run scoreboard players set @s space.w 68
+    execute if score @s cd_w matches 10..99 run scoreboard players set @s space.w 7799
+    execute if score @s cd_w matches 100..999 run scoreboard players set @s space.w 789
+
+    execute if score @s cd_e matches 0..9 run scoreboard players set @s space.e 699
+    execute if score @s cd_e matches 10..99 run scoreboard players set @s space.e 779
+    execute if score @s cd_e matches 100..999 run scoreboard players set @s space.e 78
+
+    execute if score @s cd_r matches 0..9 run scoreboard players set @s space.r 6899
+    execute if score @s cd_r matches 10..99 run scoreboard players set @s space.r 7789
+    execute if score @s cd_r matches 100..999 run scoreboard players set @s space.r 788
+
+    execute if score @s cd_spell.1 matches 0..9 run scoreboard players set @s space.spell.1 7799
+    execute if score @s cd_spell.1 matches 10..99 run scoreboard players set @s space.spell.1 7899
+    execute if score @s cd_spell.1 matches 100..999 run scoreboard players set @s space.spell.1 8899
+
+    execute if score @s cd_spell.2 matches 0..9 run scoreboard players set @s space.spell.2 7799
+    execute if score @s cd_spell.2 matches 10..99 run scoreboard players set @s space.spell.2 7899
+    execute if score @s cd_spell.2 matches 100..999 run scoreboard players set @s space.spell.2 8899
+
+    execute if score @s hp.left matches 0..9 run scoreboard players set @s space.hp1 679
+    execute if score @s hp.left matches 10..99 run scoreboard players set @s space.hp1 68
+    execute if score @s hp.left matches 100..999 run scoreboard players set @s space.hp1 7799
+    execute if score @s hp.left matches 1000..9999 run scoreboard players set @s space.hp1 789
+    execute if score @s hp.left matches 10000..99999 run scoreboard players set @s space.hp1 88
+    execute if score @s hp.max matches 0..9 run scoreboard players set @s space.hp2 679
+    execute if score @s hp.max matches 10..99 run scoreboard players set @s space.hp2 68
+    execute if score @s hp.max matches 100..999 run scoreboard players set @s space.hp2 7799
+    execute if score @s hp.max matches 1000..9999 run scoreboard players set @s space.hp2 789
+    execute if score @s hp.max matches 10000..99999 run scoreboard players set @s space.hp2 88
+
+    execute if score @s mana matches 0..9 run scoreboard players set @s space.mana1 679
+    execute if score @s mana matches 10..99 run scoreboard players set @s space.mana1 68
+    execute if score @s mana matches 100..999 run scoreboard players set @s space.mana1 7799
+    execute if score @s mana matches 1000..9999 run scoreboard players set @s space.mana1 789
+    execute if score @s mana matches 10000..99999 run scoreboard players set @s space.mana1 88
+    execute if score @s mana.max matches 0..9 run scoreboard players set @s space.mana2 679
+    execute if score @s mana.max matches 10..99 run scoreboard players set @s space.mana2 68
+    execute if score @s mana.max matches 100..999 run scoreboard players set @s space.mana2 7799
+    execute if score @s mana.max matches 1000..9999 run scoreboard players set @s space.mana2 789
+    execute if score @s mana.max matches 10000..99999 run scoreboard players set @s space.mana2 88
+}
+
+function respawn {
+    tag @s remove dead
+    tag @s remove unvalid
+    scoreboard players operation @s hp.left = @s hp.max
+    execute unless entity @s[tag=!useEnergy,tag=!useMana] run scoreboard players operation @s mana = @s mana.max
+    gamemode adventure @s
+
+    title @s title {text:" "}
+
+    tp @s[team=red] 0 188 210 180 0
+    tp @s[team=blue] 0 188 -210 0 0
+
+    tag @s remove has_display_bar
+
+    effect give @s speed 20 4
+    effect give @s saturation infinite 0 true
+    effect give @s resistance infinite 127 true
+
+    execute if entity @s[tag=!has_display_bar] run summon block_display ~ ~ ~ {Tags:["temp","lol.bar_display"],Passengers:[{id:"area_effect_cloud",Tags:["bar_owner"],Duration:2147483647,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["mana","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["shield_all","stats_bar"],background:0,billboard:"vertical"}]}
+    execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[0.325,0.375,0.325]}}
+    execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=mana] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,0.0,0.0001]}}
+    execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=shield_all] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,0.0,0.0001]}}
+    execute if entity @s[tag=!has_display_bar] at @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] run data modify entity @e[tag=bar_owner,limit=1,sort=nearest] Owner set from entity @s UUID
+    execute if entity @s[tag=!has_display_bar,team=red] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] add red
+    execute if entity @s[tag=!has_display_bar,team=blue] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] add blue
+    execute if entity @s[tag=!has_display_bar] if score .world settings.show_stats matches 0 as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+    execute if entity @s[tag=!has_display_bar] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] remove temp
+}
+
+predicate aa {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "minecraft:type_specific/player": {
+            "looking_at": {
+                "minecraft:entity_type": "minecraft:interaction",
+                "minecraft:nbt": "{Tags:[\"attack\"]}"
+            }
+        }
+    }
+}
+
+predicate hold_e {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "minecraft:entity_type": "minecraft:player",
+        "minecraft:equipment": {
+            "mainhand": {
+                "predicates": {
+                    "minecraft:custom_data": "{skill_e:1,used:1}"
+                }
+            }
+        }
+    }
+}
+
+predicate hold_q {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "minecraft:entity_type": "minecraft:player",
+        "minecraft:equipment": {
+            "mainhand": {
+                "predicates": {
+                    "minecraft:custom_data": "{skill_q:1,used:1}"
+                }
+            }
+        }
+    }
+}
+
+predicate hold_r {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "minecraft:entity_type": "minecraft:player",
+        "minecraft:equipment": {
+            "mainhand": {
+                "predicates": {
+                    "minecraft:custom_data": "{skill_r:1,used:1}"
+                }
+            }
+        }
+    }
+}
+
+predicate hold_w {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "minecraft:entity_type": "minecraft:player",
+        "minecraft:equipment": {
+            "mainhand": {
+                "predicates": {
+                    "minecraft:custom_data": "{skill_w:1,used:1}"
+                }
+            }
+        }
+    }
+}
+
+predicate use_e {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "minecraft:equipment": {
+            "mainhand": {
+                "predicates": {
+                    "minecraft:custom_data": "{skill_e:1,used:0}"
+                }
+            }
+        }
+    }
+}
+
+predicate use_q {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "minecraft:equipment": {
+            "mainhand": {
+                "predicates": {
+                    "minecraft:custom_data": "{skill_q:1,used:0}"
+                }
+            }
+        }
+    }
+}
+
+predicate use_r {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "minecraft:equipment": {
+            "mainhand": {
+                "predicates": {
+                    "minecraft:custom_data": "{skill_r:1,used:0}"
+                }
+            }
+        }
+    }
+}
+
+predicate use_w {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "minecraft:equipment": {
+            "mainhand": {
+                "predicates": {
+                    "minecraft:custom_data": "{skill_w:1,used:0}"
+                }
+            }
+        }
+    }
+}
+
+loot_table default {
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "Q"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_q:1,used:1,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "W"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_w:1,used:1,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "E"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_e:1,used:1,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "R"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_r:1,used:1,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+loot_table reset {
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "Q"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_q:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "W"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_w:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "E"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_e:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "R"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_r:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+loot_table use_e {
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "Q"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_q:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "W"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_w:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "E"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_e:1,used:1,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "R"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_r:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+loot_table use_q {
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "Q"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_q:1,used:1,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "W"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_w:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "E"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_e:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "R"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_r:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+loot_table use_r {
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "Q"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_q:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "W"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_w:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "E"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_e:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "R"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_r:1,used:1,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+loot_table use_w {
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "Q"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_q:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "W"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_w:1,used:1,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "E"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_e:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:phantom_membrane",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_name",
+                            "entity": "this",
+                            "name": "R"
+                        },
+                        {
+                            "type": "minecraft:sequence",
+                            "functions": [
+                                {
+                                    "type": "minecraft:set_custom_data",
+                                    "tag": "{skill_r:1,used:0,kill_item:1}"
+                                },
+                                {
+                                    "type": "minecraft:set_components",
+                                    "components": {
+                                        "minecraft:custom_model_data": {
+                                            "floats": [
+                                                9999.0
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
+advancement aa {
+    "criteria": {
+        "requirement": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:interaction",
+                        "minecraft:nbt": "{Tags:[\"attack\"]}"
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "_champion:aa/check"
+    }
+}
+
+advancement spell {
+    "criteria": {
+        "requirement": {
+            "trigger": "minecraft:player_interacted_with_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:interaction",
+                        "minecraft:nbt": "{Tags:[\"attack\"]}"
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "_champion:spell/check"
+    }
+}

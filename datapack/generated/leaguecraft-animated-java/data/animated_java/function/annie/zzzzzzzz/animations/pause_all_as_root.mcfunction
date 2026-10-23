@@ -1,0 +1,9 @@
+function animated_java:annie/zzzzzzzz/animations/idle/pause_as_root
+function animated_java:annie/zzzzzzzz/animations/death/pause_as_root
+function animated_java:annie/zzzzzzzz/animations/walk/pause_as_root
+function animated_java:annie/zzzzzzzz/animations/aa/pause_as_root
+function animated_java:annie/zzzzzzzz/animations/rage.aa/pause_as_root
+function animated_java:annie/zzzzzzzz/animations/skill/pause_as_root
+function animated_java:annie/zzzzzzzz/animations/aa2/pause_as_root
+function animated_java:annie/zzzzzzzz/animations/rage.aa2/pause_as_root
+function animated_java:annie/zzzzzzzz/animations/spawn/pause_as_root

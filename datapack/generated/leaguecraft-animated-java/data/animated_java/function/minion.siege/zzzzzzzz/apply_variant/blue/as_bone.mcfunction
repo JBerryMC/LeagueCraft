@@ -1,0 +1,11 @@
+execute if entity @s[tag=aj.minion.siege.bone.head] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[2f]}
+execute if entity @s[tag=aj.minion.siege.bone.body] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[3f]}
+execute if entity @s[tag=aj.minion.siege.bone.right_hand] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[4f]}
+execute if entity @s[tag=aj.minion.siege.bone.left_arm] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[5f]}
+execute if entity @s[tag=aj.minion.siege.bone.left_hand] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[6f]}
+execute if entity @s[tag=aj.minion.siege.bone.right_arm] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[7f]}
+execute if entity @s[tag=aj.minion.siege.bone.wheel1] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[8f]}
+execute if entity @s[tag=aj.minion.siege.bone.wheel2] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[9f]}
+execute if entity @s[tag=aj.minion.siege.bone.body2] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[10f]}
+execute if entity @s[tag=aj.minion.siege.bone.wheel3] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[11f]}
+execute if entity @s[tag=aj.minion.siege.bone.cannon] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[12f]}

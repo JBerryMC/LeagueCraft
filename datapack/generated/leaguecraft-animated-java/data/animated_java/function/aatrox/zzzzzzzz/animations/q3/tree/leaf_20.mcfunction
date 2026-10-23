@@ -1,0 +1,2 @@
+execute on passengers run function animated_java:aatrox/zzzzzzzz/animations/q3/tree/leaf_20_as_bone
+execute unless entity @s[tag=aj.aatrox.disable_command_keyframes] at @s run function animated_java:aatrox/animations/r.idle/play

@@ -1,0 +1,1 @@
+execute on passengers run function animated_java:lol.structure.inhib/zzzzzzzz/animations/idle/tree/leaf_118_as_bone

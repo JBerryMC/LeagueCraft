@@ -1,0 +1,23 @@
+{
+	"credit": "Made with Blockbench",
+	"display": {
+		"gui": {
+			"rotation": [180, 0, 180],
+			"translation": [0.25, 3.75, 0],
+			"scale": [1.35938, 1.35938, 1.35938]
+		},
+		"head": {
+			"translation": [0, 6.5, 0],
+			"scale": [1.6, 1.6, 1.6]
+		}
+	},
+	"groups": [
+		{
+			"name": "soraka",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"nbt": "{}",
+			"children": []
+		}
+	]
+}

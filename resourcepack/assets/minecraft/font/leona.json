@@ -1,0 +1,11 @@
+{
+	"providers": [
+    {
+      "type": "bitmap",
+      "file": "minecraft:item/leona/icon.png",
+      "ascent": -12,
+      "height": 42,
+      "chars": ["i"]
+ }
+	]
+}

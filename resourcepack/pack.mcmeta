@@ -1,0 +1,13 @@
+{
+  "pack": {
+    "description": "vBETA.2.0\n@jberry367",
+    "min_format": [
+      97,
+      0
+    ],
+    "max_format": [
+      97,
+      99
+    ]
+  }
+}

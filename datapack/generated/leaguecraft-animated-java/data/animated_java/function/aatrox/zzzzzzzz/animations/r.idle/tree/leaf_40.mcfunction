@@ -1,0 +1,2 @@
+execute on passengers run function animated_java:aatrox/zzzzzzzz/animations/r.idle/tree/leaf_40_as_bone
+# [26.3] removed incomplete command from the original pack: execute unless entity @s[tag=aj.aatrox.disable_command_keyframes] at @s run

@@ -1,0 +1,72 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Soraka",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "The Star Child",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "A wanderer from the celestial dimensions beyond Mount Targon,",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "Soraka gave up her immortality to protect the mortal races from their own more violent instincts.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "She endeavors to spread the virtues of compassion and mercy to everyone she meets—even...",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                110331.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

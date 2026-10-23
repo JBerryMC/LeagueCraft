@@ -1,0 +1,94 @@
+{
+  "textures": {
+    "4": "minecraft:block/iron_block",
+    "particle": "minecraft:block/iron_block"
+  },
+  "elements": [
+    {
+      "from": [
+        7.25,
+        6.875,
+        6.5
+      ],
+      "to": [
+        8,
+        9.125,
+        8
+      ],
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            10,
+            8,
+            16
+          ],
+          "texture": "#4"
+        },
+        "east": {
+          "uv": [
+            3.5,
+            10,
+            7.5,
+            16
+          ],
+          "texture": "#4"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            10,
+            8.5,
+            16
+          ],
+          "texture": "#4"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            10,
+            8.5,
+            16
+          ],
+          "texture": "#4"
+        },
+        "up": {
+          "uv": [
+            2.5,
+            16,
+            0.5,
+            12
+          ],
+          "texture": "#4"
+        },
+        "down": {
+          "uv": [
+            15.75,
+            2.5,
+            13.75,
+            6.5
+          ],
+          "texture": "#4"
+        }
+      }
+    }
+  ],
+  "display": {
+    "head": {
+      "rotation": [
+        0,
+        180,
+        0
+      ]
+    }
+  }
+}

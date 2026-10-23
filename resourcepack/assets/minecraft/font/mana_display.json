@@ -1,0 +1,711 @@
+{
+    "providers": [
+            {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_0.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE000"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00000.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE001"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00001.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE002"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00002.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE003"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00003.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE004"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00004.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE005"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00005.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE006"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00006.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE007"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00007.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE008"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00008.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE009"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00009.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE010"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00010.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE011"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00011.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE012"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00012.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE013"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00013.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE014"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00014.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE015"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00015.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE016"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00016.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE017"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00017.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE018"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00018.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE019"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00019.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE020"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00020.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE021"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00021.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE022"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00022.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE023"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00023.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE024"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00024.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE025"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00025.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE026"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00026.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE027"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00027.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE028"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00028.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE029"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00029.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE030"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00030.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE031"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00031.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE032"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00032.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE033"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00033.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE034"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00034.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE035"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00035.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE036"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00036.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE037"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00037.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE038"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00038.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE039"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00039.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE040"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00040.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE041"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00041.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE042"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00042.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE043"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00043.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE044"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00044.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE045"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00045.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE046"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00046.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE047"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00047.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE048"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00048.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE049"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00049.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE050"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00050.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE051"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00051.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE052"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00052.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE053"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00053.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE054"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00054.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE055"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00055.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE056"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00056.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE057"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00057.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE058"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00058.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE059"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00059.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE060"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00060.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE061"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00061.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE062"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00062.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE063"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00063.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE064"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00064.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE065"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00065.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE066"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00066.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE067"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00067.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE068"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00068.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE069"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00069.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE070"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00070.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE071"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00071.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE072"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00072.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE073"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00073.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE074"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00074.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE075"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00075.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE076"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00076.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE077"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00077.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE078"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00078.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE079"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00079.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE080"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00080.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE081"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00081.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE082"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00082.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE083"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00083.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE084"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00084.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE085"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00085.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE086"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00086.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE087"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00087.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE088"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00088.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE089"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00089.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE090"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00090.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE091"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00091.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE092"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00092.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE093"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00093.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE094"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00094.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE095"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00095.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE096"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00096.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE097"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00097.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE098"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_00098.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE099"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:font/mana/mana_100.png",
+             "ascent": 210,
+             "height": 275,
+             "chars": ["\uE100"]
+           }
+  ]
+}

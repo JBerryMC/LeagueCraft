@@ -1,0 +1,6 @@
+# _champion:cc/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function cancel {
+    execute on vehicle run kill @s[tag=dash]
+    execute on vehicle run kill @s[tag=cc]
+}

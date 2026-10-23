@@ -1,0 +1,1 @@
+execute on passengers run function animated_java:lol.structure.nexus/zzzzzzzz/animations/destroy/tree/leaf_94_as_bone

@@ -1,0 +1,15 @@
+execute if entity @s[tag=aj.lol.structure.tower.bone.right_arm] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[2f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.left_arm] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[3f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.fire] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[4f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.staff] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[5f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.armor_left] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[6f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.armor_right] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[7f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.flag_right] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[8f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.flag_back] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[9f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.flag_front] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[10f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.flag_left] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[11f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.pillar] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[12f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.head2] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[13f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.head] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[14f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.torso] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[15f]}
+execute if entity @s[tag=aj.lol.structure.tower.bone.base] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[16f]}

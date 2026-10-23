@@ -1,0 +1,2 @@
+scoreboard players set @s aj.minion.caster.rig_loaded 1
+execute unless score @s aj.minion.caster.export_version = aj.minion.caster.export_version aj.i at @s run function animated_java:minion.caster/zzzzzzzz/mark_outdated_rig

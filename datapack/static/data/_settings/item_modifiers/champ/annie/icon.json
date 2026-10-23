@@ -1,0 +1,72 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Annie",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "The Dark Child",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Dangerous, yet disarmingly precocious, Annie is a child mage with immense pyromantic power.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "Even in the shadows of the mountains north of Noxus, she is a magical outlier.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "Her natural affinity for fire manifested early in life through unpredictable...",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                110335.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

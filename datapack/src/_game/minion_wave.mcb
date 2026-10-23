@@ -1,0 +1,54 @@
+# _game:minion_wave/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function check {
+    scoreboard players set intervals minion_wave 1000
+    scoreboard players add wave_count minion_wave 1
+
+    execute if score wave_count minion_wave matches 4 run scoreboard players set wave_count minion_wave 1
+    function _game:minion_wave/intervals
+}
+
+function intervals {
+    scoreboard players set unit_intervals minion_wave 40
+    scoreboard players add unit_count minion_wave 1
+
+    execute if score wave_count minion_wave matches 1..2 as @e[tag=lol.structure,type=interaction,tag=!super_spawn,tag=minion_origin] at @s run function _game:minion_wave/spawn/classic
+    execute if score wave_count minion_wave matches 3 as @e[tag=lol.structure,type=interaction,tag=!super_spawn,tag=minion_origin] at @s run function _game:minion_wave/spawn/cannon
+
+    execute as @e[tag=lol.structure.nexus,type=interaction,tag=super_spawn] at @s run function _game:minion_wave/spawn/super
+
+    execute if score unit_count minion_wave matches 8 run scoreboard players set unit_intervals minion_wave -1
+    execute if score unit_count minion_wave matches 8 run scoreboard players set unit_count minion_wave 0
+}
+
+dir spawn {
+    function cannon {
+        execute if score unit_count minion_wave matches 1 positioned ^ ^ ^6 if entity @s[tag=red] run function _lol:minion/siege/spawn.red
+        execute if score unit_count minion_wave matches 1 positioned ^ ^ ^6 if entity @s[tag=blue] run function _lol:minion/siege/spawn.blue
+
+        execute if score unit_count minion_wave matches 2..4 positioned ^ ^ ^6 if entity @s[tag=red] run function _lol:minion/melee/spawn.red
+        execute if score unit_count minion_wave matches 2..4 positioned ^ ^ ^6 if entity @s[tag=blue] run function _lol:minion/melee/spawn.blue
+
+        execute if score unit_count minion_wave matches 5..7 positioned ^ ^ ^6 if entity @s[tag=red] run function _lol:minion/caster/spawn.red
+        execute if score unit_count minion_wave matches 5..7 positioned ^ ^ ^6 if entity @s[tag=blue] run function _lol:minion/caster/spawn.blue
+    }
+
+    function classic {
+        execute if score unit_count minion_wave matches 1..3 positioned ^ ^ ^6 if entity @s[tag=red] run function _lol:minion/melee/spawn.red
+        execute if score unit_count minion_wave matches 1..3 positioned ^ ^ ^6 if entity @s[tag=blue] run function _lol:minion/melee/spawn.blue
+
+        execute if score unit_count minion_wave matches 4..6 positioned ^ ^ ^6 if entity @s[tag=red] run function _lol:minion/caster/spawn.red
+        execute if score unit_count minion_wave matches 4..6 positioned ^ ^ ^6 if entity @s[tag=blue] run function _lol:minion/caster/spawn.blue
+    }
+
+    function super {
+        execute if score unit_count minion_wave matches 1 positioned ^ ^ ^6 if entity @s[tag=red] run function _lol:minion/super/spawn.red
+        execute if score unit_count minion_wave matches 1 positioned ^ ^ ^6 if entity @s[tag=blue] run function _lol:minion/super/spawn.blue
+
+        execute if score unit_count minion_wave matches 2..4 positioned ^ ^ ^6 if entity @s[tag=red] run function _lol:minion/melee/spawn.red
+        execute if score unit_count minion_wave matches 2..4 positioned ^ ^ ^6 if entity @s[tag=blue] run function _lol:minion/melee/spawn.blue
+
+        execute if score unit_count minion_wave matches 5..7 positioned ^ ^ ^6 if entity @s[tag=red] run function _lol:minion/caster/spawn.red
+        execute if score unit_count minion_wave matches 5..7 positioned ^ ^ ^6 if entity @s[tag=blue] run function _lol:minion/caster/spawn.blue
+    }
+}

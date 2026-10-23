@@ -1,0 +1,1 @@
+execute on passengers run function animated_java:minion.caster/zzzzzzzz/apply_variant/blue/as_bone

@@ -1,0 +1,3 @@
+execute if score @s aj.aatrox.animation.q1.loop_mode = $aj.loop_mode.loop aj.i run function animated_java:aatrox/zzzzzzzz/animations/q1/end_loop
+execute if score @s aj.aatrox.animation.q1.loop_mode = $aj.loop_mode.once aj.i run function animated_java:aatrox/animations/q1/stop
+execute if score @s aj.aatrox.animation.q1.loop_mode = $aj.loop_mode.hold aj.i run function animated_java:aatrox/animations/q1/pause

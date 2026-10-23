@@ -1,0 +1,82 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Dragon's Rage",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ultimate",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Lee Sin performs a powerful roundhouse kick launching his target back, ",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "dealing physical damage to the target and any enemies they collide with.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "Enemies the target collides with are knocked ",
+            "color": "gray",
+            "italic": false
+          },
+          {
+            "text": "Airborne",
+            "color": "white",
+            "italic": false
+          },
+          {
+            "text": " for a short duration.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                112004.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+## CHAMPION
+aatrox : allay_spawn_egg
+annie : polar_bear_spawn_egg
+
+## STRUCTURE
+lol.structure.tower : blaze_spawn_egg
+lol.structure.inhib : ghast_spawn_egg
+lol.structure.nexus : axolotl_spawn_egg

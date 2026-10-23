@@ -1,0 +1,1 @@
+execute on passengers run function animated_java:lol.structure.tower/zzzzzzzz/animations/spawn/tree/leaf_73_as_bone

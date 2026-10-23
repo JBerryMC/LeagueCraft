@@ -1,0 +1,94 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Last Breath",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ultimate",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Blinks to an ",
+            "color": "gray",
+            "italic": false
+          },
+          {
+            "text": "Airborne",
+            "color": "white",
+            "italic": false
+          },
+          {
+            "text": " enemy champion, dealing physical damage and ",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "holding all Airborne enemies in the area in the air",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "Grants maximum Flow but resets all stacks of Gathering Storm.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "For a moderate time afterwards, Yasuo gain significant bonus ",
+            "color": "gray",
+            "italic": false
+          },
+          {
+            "text": "Armor Penetration.",
+            "color": "dark_red",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                111004.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

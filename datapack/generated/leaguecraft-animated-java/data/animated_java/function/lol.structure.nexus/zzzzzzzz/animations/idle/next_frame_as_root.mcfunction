@@ -1,0 +1,1 @@
+function animated_java:lol.structure.nexus/zzzzzzzz/animations/idle/tick_animation

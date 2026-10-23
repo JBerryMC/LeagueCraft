@@ -1,0 +1,1 @@
+function animated_java:lol.structure.nexus/zzzzzzzz/animations/spawn/tick_animation

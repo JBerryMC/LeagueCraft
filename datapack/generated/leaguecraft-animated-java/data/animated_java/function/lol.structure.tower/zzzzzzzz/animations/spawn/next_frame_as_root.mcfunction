@@ -1,0 +1,1 @@
+function animated_java:lol.structure.tower/zzzzzzzz/animations/spawn/tick_animation

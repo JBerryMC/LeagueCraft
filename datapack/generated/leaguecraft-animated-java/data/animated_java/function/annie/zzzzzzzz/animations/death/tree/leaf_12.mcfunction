@@ -1,0 +1,1 @@
+execute on passengers run function animated_java:annie/zzzzzzzz/animations/death/tree/leaf_12_as_bone

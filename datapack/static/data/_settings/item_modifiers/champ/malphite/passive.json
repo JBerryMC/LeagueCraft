@@ -1,0 +1,82 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Granite Shield",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Passive",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Malphite is shielded by a layer of rock up to 10% of his maximum Health",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "and increase his ",
+            "color": "gray",
+            "italic": false
+          },
+          {
+            "text": "Armor",
+            "color": "gold",
+            "italic": false
+          },
+          {
+            "text": "while the shield is up.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "If Malphite has not been hit for a few seconds, this effect recharges.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                123000.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

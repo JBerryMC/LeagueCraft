@@ -1,0 +1,1 @@
+execute on passengers run function animated_java:lol.structure.inhib/zzzzzzzz/animations/spawn/tree/leaf_70_as_bone

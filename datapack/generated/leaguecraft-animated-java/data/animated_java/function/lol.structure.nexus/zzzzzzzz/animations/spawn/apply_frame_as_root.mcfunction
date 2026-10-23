@@ -1,0 +1,1 @@
+execute if score @s aj.anim_time matches 0..163 run function animated_java:lol.structure.nexus/zzzzzzzz/animations/spawn/tree/branch_0_163

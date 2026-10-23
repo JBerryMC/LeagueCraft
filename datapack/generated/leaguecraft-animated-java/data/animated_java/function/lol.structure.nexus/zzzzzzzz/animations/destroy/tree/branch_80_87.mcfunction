@@ -1,0 +1,2 @@
+execute if score @s aj.anim_time matches 80 run function animated_java:lol.structure.nexus/zzzzzzzz/animations/destroy/tree/leaf_80
+execute if score @s aj.anim_time matches 81 run function animated_java:lol.structure.nexus/zzzzzzzz/animations/destroy/tree/leaf_81

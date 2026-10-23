@@ -1,0 +1,1 @@
+execute on passengers run function animated_java:annie/zzzzzzzz/animations/rage.aa2/tree/leaf_6_as_bone

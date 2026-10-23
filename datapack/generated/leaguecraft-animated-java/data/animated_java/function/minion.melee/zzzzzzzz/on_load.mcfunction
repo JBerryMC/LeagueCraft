@@ -1,0 +1,2 @@
+scoreboard players set @s aj.minion.melee.rig_loaded 1
+execute unless score @s aj.minion.melee.export_version = aj.minion.melee.export_version aj.i at @s run function animated_java:minion.melee/zzzzzzzz/mark_outdated_rig

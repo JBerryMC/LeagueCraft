@@ -1,0 +1,3 @@
+execute if score @s aj.lol.structure.inhib.animation.spawn.loop_mode = $aj.loop_mode.loop aj.i run function animated_java:lol.structure.inhib/zzzzzzzz/animations/spawn/end_loop
+execute if score @s aj.lol.structure.inhib.animation.spawn.loop_mode = $aj.loop_mode.once aj.i run function animated_java:lol.structure.inhib/animations/spawn/stop
+execute if score @s aj.lol.structure.inhib.animation.spawn.loop_mode = $aj.loop_mode.hold aj.i run function animated_java:lol.structure.inhib/animations/spawn/pause

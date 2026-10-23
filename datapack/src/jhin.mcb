@@ -1,0 +1,179 @@
+# jhin:  (converted from the 1.20.2 LeagueCraft datapack)
+
+function aa {
+    playsound jhin.sfx.aa master @a ~ ~ ~
+
+    execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.jhin","aa","homing","red","temp"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.jhin","aa","homing","blue","temp"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+}
+
+function hud {
+    $title @s actionbar ["",{translate:"space.-60"},{text:"i",font:"minecraft:jhin"},{translate:"space.16"},{score:{name:"@s",objective:"status.p"},font:"lol:jhin/p"},{translate:"space.5"},{score:{name:"@s",objective:"status.q"},font:"lol:jhin/q"},{translate:"space.6"},{score:{name:"@s",objective:"status.w"},font:"lol:jhin/w"},{translate:"space.6"},{score:{name:"@s",objective:"status.e"},font:"lol:jhin/e"},{translate:"space.6"},{score:{name:"@s",objective:"status.r"},font:"lol:jhin/r"},{translate:"space.9"},{score:{name:"@s",objective:"status.spell.1"},font:"minecraft:lol"},{translate:"space.5"},{score:{name:"@s",objective:"status.spell.2"},font:"minecraft:lol"},{translate:"space.-253"},{text:"M",font:"minecraft:lol"},{translate:"space.-274"},{score:{name:"@s",objective:"status.hotbar"},font:"minecraft:hotbar"},{translate:"space.-207"},{storage:"lol:main",nbt:"hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:hp_display"},{translate:"space.-252"},{storage:"lol:main",nbt:"mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:mana_display"},{translate:"space.-183"},{score:{name:"@s",objective:"cd_p"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.passive"},font:"space:default"},{score:{name:"@s",objective:"cd_q"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.q"},font:"space:default"},{score:{name:"@s",objective:"cd_w"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.w"},font:"space:default"},{score:{name:"@s",objective:"cd_e"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.e"},font:"space:default"},{score:{name:"@s",objective:"cd_r"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.r"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.1"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.1"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.2"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.2"},font:"space:default"},{translate:"space.-138"},{score:{name:"@s",objective:"space.hp1"},font:"space:default"},{score:{name:"@s",objective:"hp.left"},font:"minecraft:custom/hp"},{text:"/",font:"minecraft:custom/hp"},{score:{name:"@s",objective:"hp.max"},font:"minecraft:custom/hp"},{score:{name:"@s",objective:"space.hp2"},font:"space:default"},{translate:"space.-78"},{score:{name:"@s",objective:"space.mana1"},font:"space:default"},{score:{name:"@s",objective:"mana"},font:"minecraft:custom/mana"},{text:"/",font:"minecraft:custom/mana"},{score:{name:"@s",objective:"mana.max"},font:"minecraft:custom/mana"},{score:{name:"@s",objective:"space.mana2"},font:"space:default"},{translate:"space.-112"},{storage:"lol:main",nbt:"keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.24"},{storage:"lol:main",nbt:"keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.25"},{nbt:"keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",storage:"lol:main",interpret:true},{translate:"space.18"},{keybind:"key.swapOffhand",font:"minecraft:custom/keybind_small",bold:true,color:"#ffd821"},{storage:"lol:main",nbt:"crosshair.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true}]
+}
+
+function hud_display {
+    function _champion:hud
+    function jhin:hud with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+}
+
+function loop {
+    execute as @e[tag=jhin.aa,tag=!motion_checked,type=arrow] at @s run function jhin:skills/aa
+    execute as @e[tag=jhin.aa,type=armor_stand] at @s run function jhin:skills/aa.animation
+    #execute as @e[tag=jhin.aa,tag=!jhin.q.aa,type=armor_stand] at @s run function jhin:skills/aa
+    #execute as @e[tag=jhin.q.aa,type=armor_stand] at @s run function jhin:skills/aa.q.active
+
+    execute as @e[tag=jhin.q,type=armor_stand] at @s run function jhin:skills/q.animation
+
+    execute as @e[tag=jhin.w.cast,type=area_effect_cloud] at @s run function jhin:skills/w.cast
+    execute as @e[tag=jhin.w.root.cd,type=area_effect_cloud] at @s run function jhin:skills/w.root
+
+    execute as @e[tag=jhin.trap.homing,type=armor_stand] at @s unless block ~ ~-0.1 ~ #like_air run function jhin:skills/e.trap
+    execute as @e[tag=jhin.trap,type=armor_stand,team=red] at @s if entity @e[team=!red,type=!#unvalid,distance=..1.5] run function jhin:skills/trap.triggered
+    execute as @e[tag=jhin.trap,type=armor_stand,team=blue] at @s if entity @e[team=!blue,type=!#unvalid,distance=..1.5] run function jhin:skills/trap.triggered
+    execute as @e[tag=jhin.trap.animation,type=armor_stand] at @s run function jhin:skills/trap.animation
+
+    execute as @e[tag=jhin.r.cast,type=area_effect_cloud] at @s run function jhin:skills/r.cast
+    execute as @e[tag=jhin.r.dummy,type=armor_stand] at @s run function jhin:skills/r.animation
+    execute as @e[tag=jhin.r.shot,type=area_effect_cloud] at @s run function jhin:skills/r.shot.animation
+    execute as @e[tag=jhin.r.limit,type=area_effect_cloud] at @s run function jhin:skills/r.limit
+}
+
+function main {
+    # Cooldown
+    function jhin:hud_display
+
+    ## Item Handling
+    execute unless predicate _champion:slot/head run function jhin:item/headwear
+    execute unless predicate _champion:slot/offhand run function jhin:item/offhand
+
+    ## Re-use
+    execute if predicate _champion:hold_q if score @s use_ability matches 1.. run function _champion:abilities/use_q
+    execute if predicate _champion:hold_w if score @s use_ability matches 1.. run function _champion:abilities/use_w
+    execute if predicate _champion:hold_e if score @s use_ability matches 1.. run function _champion:abilities/use_e
+    execute if predicate _champion:hold_r if score @s use_ability matches 1.. run function _champion:abilities/use_r
+
+    ## First use
+    execute if predicate _champion:use_q run function _champion:abilities/use_q
+
+    execute if predicate _champion:use_w run function _champion:abilities/use_w
+
+    execute if predicate _champion:use_e run function _champion:abilities/use_e
+
+    execute if predicate _champion:use_r run function _champion:abilities/use_r
+}
+
+function passive {
+    execute if entity @s[team=red] if score @s jhin.aa.count matches ..3 unless entity @e[tag=jhin.aa.cd,tag=red] run function jhin:skills/aa.reload
+    execute if entity @s[team=red] if entity @e[tag=jhin.aa.reload,tag=red,nbt={Age:50}] run scoreboard players set @s jhin.aa.count 4
+
+    execute if entity @s[team=blue] if score @s jhin.aa.count matches ..3 unless entity @e[tag=jhin.aa.cd,tag=blue] run function jhin:skills/aa.reload
+    execute if entity @s[team=blue] if entity @e[tag=jhin.aa.reload,tag=blue,nbt={Age:50}] run scoreboard players set @s jhin.aa.count 4
+}
+
+function use_e {
+    scoreboard players set @s cd_e 7
+    scoreboard players remove @s mana 30
+
+    playsound minecraft:jhin.sfx.e master @a ~ ~ ~
+
+    execute if entity @s[team=red] run summon armor_stand ~ ~0.6 ~ {Invisible:1,Small:1,Invulnerable:1,Team:"red",Tags:["jhin.trap.homing"],equipment:{head:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800301f]}}}}}
+    execute if entity @s[team=red] as @e[team=red,tag=jhin.trap.homing,type=armor_stand,limit=1,sort=nearest] at @s run function jhin:skills/e.cast
+
+    execute if entity @s[team=blue] run summon armor_stand ~ ~0.6 ~ {Invisible:1,Small:1,Invulnerable:1,Team:"blue",Tags:["jhin.trap.homing"],equipment:{head:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800301f]}}}}}
+    execute if entity @s[team=blue] as @e[team=blue,tag=jhin.trap.homing,type=armor_stand,limit=1,sort=nearest] at @s run function jhin:skills/e.cast
+}
+
+function use_q {
+    scoreboard players set @s cd_q 5
+    scoreboard players remove @s mana 60
+    playsound minecraft:jhin.sfx.q master @a ~ ~ ~
+
+    execute if entity @s[team=red] rotated ~ 0 positioned ^ ^1 ^3 run tag @e[team=!red,distance=..3,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest] add jhin.q.target
+    execute if entity @s[team=red] run summon armor_stand ~ ~1.2 ~ {Invisible:1,Marker:1,Tags:["jhin.q","block_by_windwall","unvalid"],Team:"red",equipment:{head:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800101f]}}}}}
+
+    execute if entity @s[team=blue] rotated ~ 0 positioned ^ ^1 ^3 run tag @e[team=!blue,distance=..3,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest] add jhin.q.target
+    execute if entity @s[team=blue] run summon armor_stand ~ ~1.2 ~ {Invisible:1,Marker:1,Tags:["jhin.q","block_by_windwall","unvalid"],Team:"blue",equipment:{head:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800101f]}}}}}
+}
+
+function use_r {
+    scoreboard players set @s cd_r 60
+    scoreboard players remove @s mana 100
+    scoreboard players set @s rclick 0
+    scoreboard players set @s jhin.r.channel 220
+    scoreboard players set @s jhin.r.count 4
+    playsound minecraft:jhin.ultimate master @a ~ ~ ~
+    playsound minecraft:jhin.sfx.r master @a ~ ~ ~
+    playsound minecraft:jhin.sfx.r.channel master @a ~ ~ ~ 0.3
+
+    effect give @s speed 12 5 true
+    effect give @s resistance 12 127 true
+    attribute @s minecraft:gravity modifier add lol:jhin_hover -1 add_multiplied_total
+    effect give @s slow_falling 12 0 true
+    effect give @s invisibility 12 127 true
+
+    tag @s add r.animation
+    item replace entity @s armor.head with minecraft:air
+    item replace entity @s weapon.offhand with minecraft:air
+
+    execute if entity @s[team=red] if score .world lang matches 0 run bossbar add red.jhin.r {text:"Curtain Call"}
+    execute if entity @s[team=red] if score .world lang matches 1 run bossbar add red.jhin.r {text:"Sân Khấu Tử Thần"}
+    execute if entity @s[team=red] run bossbar set red.jhin.r max 220
+    execute if entity @s[team=red] run bossbar set red.jhin.r value 220
+    execute if entity @s[team=red] run bossbar set red.jhin.r players @s
+    execute if entity @s[team=red] run bossbar set red.jhin.r visible true
+
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:21,Tags:["red","jhin.r.cast","up"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:220,Tags:["red","jhin.r.cast","left"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:220,Tags:["red","jhin.r.cast","right"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run tp @e[tag=jhin.r.cast,tag=red,tag=up] ~ ~ ~ ~ 0
+    execute if entity @s[team=red] run tp @e[tag=jhin.r.cast,tag=red,tag=left] ^0.5 ^ ^ ~ 0
+    execute if entity @s[team=red] run tp @e[tag=jhin.r.cast,tag=red,tag=right] ^-0.5 ^ ^ ~ 0
+
+    execute if entity @s[team=red] run summon armor_stand ~ ~ ~ {Tags:["jhin.r.dummy"],Invisible:1,Marker:1,Team:"red",Pose:{LeftArm:[10.0f,0.0f,0.0f]},Passengers:[{id:"area_effect_cloud",Duration:220,Tags:["jhin.r.cd","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],equipment:{offhand:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800021f]}}},head:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[800401f]}}}}}
+    execute if entity @s[team=red] run data modify entity @e[tag=jhin.r.dummy,team=red,limit=1] Rotation[0] set from entity @s Rotation[0]
+    execute if entity @s[team=red] run data modify entity @e[tag=jhin.r.cd,tag=red,limit=1] Rotation[0] set from entity @s Rotation[0]
+
+    execute if entity @s[team=red] as @e[tag=jhin.r.dummy,team=red,limit=1] store result score @s rot.x run data get entity @s Rotation[0]
+
+    execute if entity @s[team=blue] if score .world lang matches 0 run bossbar add blue.jhin.r {text:"Curtain Call"}
+    execute if entity @s[team=blue] if score .world lang matches 1 run bossbar add blue.jhin.r {text:"Sân Khấu Tử Thần"}
+    execute if entity @s[team=blue] run bossbar set blue.jhin.r max 220
+    execute if entity @s[team=blue] run bossbar set blue.jhin.r value 220
+    execute if entity @s[team=blue] run bossbar set blue.jhin.r players @s
+    execute if entity @s[team=blue] run bossbar set blue.jhin.r visible true
+
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:21,Tags:["blue","jhin.r.cast","up"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:220,Tags:["blue","jhin.r.cast","left"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:220,Tags:["blue","jhin.r.cast","right"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run tp @e[tag=jhin.r.cast,tag=blue,tag=up] ~ ~ ~ ~ 0
+    execute if entity @s[team=blue] run tp @e[tag=jhin.r.cast,tag=blue,tag=left] ^0.5 ^ ^ ~ 0
+    execute if entity @s[team=blue] run tp @e[tag=jhin.r.cast,tag=blue,tag=right] ^-0.5 ^ ^ ~ 0
+
+    execute if entity @s[team=blue] run summon armor_stand ~ ~ ~ {Tags:["jhin.r.dummy"],Invisible:1,Marker:1,Team:"blue",Pose:{LeftArm:[10.0f,0.0f,0.0f]},Passengers:[{id:"area_effect_cloud",Duration:220,Tags:["jhin.r.cd","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],equipment:{offhand:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800021f]}}},head:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[800401f]}}}}}
+    execute if entity @s[team=blue] run data modify entity @e[tag=jhin.r.dummy,team=blue,limit=1] Rotation[0] set from entity @s Rotation[0]
+    execute if entity @s[team=blue] run data modify entity @e[tag=jhin.r.cd,tag=blue,limit=1] Rotation[0] set from entity @s Rotation[0]
+
+    execute if entity @s[team=blue] as @e[tag=jhin.r.dummy,team=blue,limit=1] store result score @s rot.x run data get entity @s Rotation[0]
+}
+
+function use_w {
+    scoreboard players set @s cd_w 12
+    scoreboard players remove @s mana 70
+    tag @s add w.animation
+
+    playsound minecraft:jhin.sfx.w master @a ~ ~ ~
+
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:16,Tags:["red","jhin.w.cast","mid"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:15,Tags:["red","jhin.w.cast","left"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:15,Tags:["red","jhin.w.cast","right"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run tp @e[tag=jhin.w.cast,tag=red] ~ ~ ~ ~ 0
+    execute if entity @s[team=red] run tp @e[tag=jhin.w.cast,tag=left,tag=red] ^-0.3 ^ ^ ~ 0
+    execute if entity @s[team=red] run tp @e[tag=jhin.w.cast,tag=right,tag=red] ^0.3 ^ ^ ~ 0
+
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:16,Tags:["blue","jhin.w.cast","mid"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:15,Tags:["blue","jhin.w.cast","left"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:15,Tags:["blue","jhin.w.cast","right"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run tp @e[tag=jhin.w.cast,tag=blue] ~ ~ ~ ~ 0
+    execute if entity @s[team=blue] run tp @e[tag=jhin.w.cast,tag=left,tag=blue] ^-0.3 ^ ^ ~ 0
+    execute if entity @s[team=blue] run tp @e[tag=jhin.w.cast,tag=right,tag=blue] ^0.3 ^ ^ ~ 0
+}

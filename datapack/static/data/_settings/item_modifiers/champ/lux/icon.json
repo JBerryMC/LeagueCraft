@@ -1,0 +1,79 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Lux",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "The Lady of Luminosity",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Luxanna Crownguard hails from Demacia,",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "an insular realm where magical abilities are viewed with fear and suspicion.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "Able to bend light to her will, she grew up dreading discovery and exile,",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "and was forced to keep her power secret, in order to preserve...",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                110334.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

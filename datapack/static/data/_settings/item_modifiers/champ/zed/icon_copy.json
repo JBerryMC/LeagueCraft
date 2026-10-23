@@ -1,0 +1,79 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Zed",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "The Master of Shadows",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Utterly ruthless and without mercy, Zed is the leader of the Order of Shadow",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "an organization he created with the intent of militarizing Ionia's magical",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "and martial traditions to drive out Noxian invaders.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "During the war, desperation led him to unlock...",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                9999.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

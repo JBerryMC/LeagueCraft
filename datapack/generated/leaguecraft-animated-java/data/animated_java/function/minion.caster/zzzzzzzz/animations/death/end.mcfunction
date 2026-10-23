@@ -1,0 +1,3 @@
+execute if score @s aj.minion.caster.animation.death.loop_mode = $aj.loop_mode.loop aj.i run function animated_java:minion.caster/zzzzzzzz/animations/death/end_loop
+execute if score @s aj.minion.caster.animation.death.loop_mode = $aj.loop_mode.once aj.i run function animated_java:minion.caster/animations/death/stop
+execute if score @s aj.minion.caster.animation.death.loop_mode = $aj.loop_mode.hold aj.i run function animated_java:minion.caster/animations/death/pause

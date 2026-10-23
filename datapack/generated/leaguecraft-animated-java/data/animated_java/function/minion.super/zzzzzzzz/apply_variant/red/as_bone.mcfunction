@@ -1,0 +1,10 @@
+execute if entity @s[tag=aj.minion.super.bone.left_foot] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[12f]}
+execute if entity @s[tag=aj.minion.super.bone.right_foot] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[13f]}
+execute if entity @s[tag=aj.minion.super.bone.left_armor] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[14f]}
+execute if entity @s[tag=aj.minion.super.bone.right_hand] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[15f]}
+execute if entity @s[tag=aj.minion.super.bone.right_arm] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[16f]}
+execute if entity @s[tag=aj.minion.super.bone.right_armor] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[17f]}
+execute if entity @s[tag=aj.minion.super.bone.left_hand] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[18f]}
+execute if entity @s[tag=aj.minion.super.bone.left_arm] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[19f]}
+execute if entity @s[tag=aj.minion.super.bone.head] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[20f]}
+execute if entity @s[tag=aj.minion.super.bone.body] run data modify entity @s item.components."minecraft:custom_model_data" set value {floats:[21f]}

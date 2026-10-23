@@ -1,0 +1,94 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Tempest / Cripple",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ability 3",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Tempest: ",
+            "color": "white",
+            "italic": false
+          },
+          {
+            "text": "Lee Sin smashes the ground, sending out a shockwave ",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "that deals magic damage and reveals enemy units hit.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "If Tempest hits an enemy, Lee Sin can cast Cripple.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Cripple: ",
+            "color": "white",
+            "italic": false
+          },
+          {
+            "text": "Lee Sin cripples nearby enemies damaged by Tempest, reducing their Movement Speed.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                112003.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
