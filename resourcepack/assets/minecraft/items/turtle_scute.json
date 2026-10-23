@@ -1,0 +1,70 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "entries": [
+      {
+        "threshold": 1000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/minion/caster_blue"
+        }
+      },
+      {
+        "threshold": 1001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/minion/caster_red"
+        }
+      },
+      {
+        "threshold": 1100,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/minion/melee_blue"
+        }
+      },
+      {
+        "threshold": 1101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/minion/melee_red"
+        }
+      },
+      {
+        "threshold": 1200,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/minion/siege_blue"
+        }
+      },
+      {
+        "threshold": 1201,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/minion/siege_red"
+        }
+      },
+      {
+        "threshold": 1300,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/minion/super_blue"
+        }
+      },
+      {
+        "threshold": 1301,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/minion/super_red"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "minecraft:item/turtle_scute"
+    }
+  },
+  "oversized_in_gui": true
+}

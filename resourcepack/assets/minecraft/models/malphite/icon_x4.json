@@ -1,0 +1,13 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "item/malphite/icon"
+	},
+	"display": {
+		"gui": {
+			"translation": [9, -9, 0],
+			"scale": [2.14, 2.14, 2.14]
+		}
+	}
+}

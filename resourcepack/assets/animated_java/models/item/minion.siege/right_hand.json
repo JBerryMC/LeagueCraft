@@ -1,0 +1,94 @@
+{
+  "textures": {
+    "1": "minecraft:block/anvil",
+    "particle": "minecraft:block/anvil"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        4,
+        7
+      ],
+      "to": [
+        9,
+        8,
+        9
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8,
+          6,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            2,
+            2,
+            6
+          ],
+          "texture": "#1"
+        },
+        "east": {
+          "uv": [
+            6,
+            2,
+            4,
+            6
+          ],
+          "texture": "#1"
+        },
+        "south": {
+          "uv": [
+            8,
+            2,
+            6,
+            6
+          ],
+          "texture": "#1"
+        },
+        "west": {
+          "uv": [
+            2,
+            2,
+            0,
+            6
+          ],
+          "texture": "#1"
+        },
+        "up": {
+          "uv": [
+            2,
+            2,
+            4,
+            0
+          ],
+          "texture": "#1"
+        },
+        "down": {
+          "uv": [
+            4,
+            0,
+            6,
+            2
+          ],
+          "texture": "#1"
+        }
+      }
+    }
+  ],
+  "display": {
+    "head": {
+      "rotation": [
+        0,
+        180,
+        0
+      ]
+    }
+  }
+}

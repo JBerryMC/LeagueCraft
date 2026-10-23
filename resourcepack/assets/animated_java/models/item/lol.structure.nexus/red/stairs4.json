@@ -1,0 +1,7 @@
+{
+	"parent": "animated_java:item/lol.structure.nexus/stairs4",
+	"textures": {
+		"2": "minecraft:block/red_concrete",
+		"13": "minecraft:block/red_stained_glass"
+	}
+}

@@ -1,0 +1,94 @@
+{
+  "textures": {
+    "6": "minecraft:block/cracked_stone_bricks",
+    "particle": "minecraft:block/cracked_stone_bricks"
+  },
+  "elements": [
+    {
+      "from": [
+        -1,
+        5.4375,
+        -1
+      ],
+      "to": [
+        5,
+        29.4375,
+        5
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          -4,
+          8.4375,
+          -4
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            0,
+            8,
+            16
+          ],
+          "texture": "#6"
+        },
+        "east": {
+          "uv": [
+            4,
+            0,
+            8,
+            16
+          ],
+          "texture": "#6"
+        },
+        "south": {
+          "uv": [
+            4,
+            0,
+            8,
+            16
+          ],
+          "texture": "#6"
+        },
+        "west": {
+          "uv": [
+            4,
+            0,
+            8,
+            16
+          ],
+          "texture": "#6"
+        },
+        "up": {
+          "uv": [
+            4,
+            0,
+            8,
+            4
+          ],
+          "texture": "#6"
+        },
+        "down": {
+          "uv": [
+            4,
+            0,
+            8,
+            4
+          ],
+          "texture": "#6"
+        }
+      }
+    }
+  ],
+  "display": {
+    "head": {
+      "rotation": [
+        0,
+        180,
+        0
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+	"providers": [
+    {
+      "type": "bitmap",
+      "file": "minecraft:item/lux/icon.png",
+      "ascent": -12,
+      "height": 42,
+      "chars": ["i"]
+ }
+	]
+}

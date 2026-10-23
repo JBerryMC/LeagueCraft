@@ -1,0 +1,32 @@
+{
+    "providers": [
+      {
+          "type": "bitmap",
+          "file": "minecraft:item/no_mana.png",
+          "ascent": -12,
+          "height": 22,
+          "chars": ["8"]
+        },
+        {
+          "type": "bitmap",
+          "file": "minecraft:item/disabled.png",
+          "ascent": -12,
+          "height": 22,
+          "chars": ["9"]
+        },
+        {
+          "type": "bitmap",
+          "file": "minecraft:item/malphite/skill_w_cd.png",
+          "ascent": -12,
+          "height": 22,
+          "chars": ["0"]
+        },
+        {
+          "type": "bitmap",
+          "file": "minecraft:item/malphite/skill_w.png",
+          "ascent": -12,
+          "height": 22,
+          "chars": ["1"]
+        }
+  ]
+}

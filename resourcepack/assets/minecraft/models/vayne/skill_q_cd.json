@@ -1,0 +1,6 @@
+{
+    "parent": "lol/mainhand",
+    "textures": {
+        "layer0": "item/vayne/skill_q_cd"
+    }
+}

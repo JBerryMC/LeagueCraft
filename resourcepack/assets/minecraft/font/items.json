@@ -1,0 +1,25 @@
+{
+    "providers": [
+        {
+             "type": "bitmap",
+             "file": "minecraft:item/disabled.png",
+             "ascent": -12,
+             "height": 22,
+             "chars": ["9"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:item/cooldown.png",
+             "ascent": -12,
+             "height": 22,
+             "chars": ["0"]
+           },
+           {
+             "type": "bitmap",
+             "file": "minecraft:item/items/infinity_edge.png",
+             "ascent": -12,
+             "height": 22,
+             "chars": ["1"]
+           }
+  ]
+}

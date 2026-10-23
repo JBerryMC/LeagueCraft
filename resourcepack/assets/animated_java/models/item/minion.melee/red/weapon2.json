@@ -1,0 +1,7 @@
+{
+	"parent": "animated_java:item/minion.melee/weapon2",
+	"textures": {
+		"0": "minecraft:block/red_wool",
+		"3": "minecraft:block/pink_wool"
+	}
+}

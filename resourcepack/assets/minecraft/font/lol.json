@@ -1,0 +1,195 @@
+{
+    "providers":
+    [
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/disabled.png",
+            "ascent": -12,
+            "height": 17,
+            "chars":
+            [
+                "9"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/cooldown.png",
+            "ascent": -12,
+            "height": 17,
+            "chars":
+            [
+                "0"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/spells/flash.png",
+            "ascent": -12,
+            "height": 17,
+            "chars":
+            [
+                "1"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/spells/barrier.png",
+            "ascent": -12,
+            "height": 17,
+            "chars":
+            [
+                "2"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/spells/cleanse.png",
+            "ascent": -12,
+            "height": 17,
+            "chars":
+            [
+                "3"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/spells/exhaust.png",
+            "ascent": -12,
+            "height": 17,
+            "chars":
+            [
+                "4"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/spells/smite.png",
+            "ascent": -12,
+            "height": 17,
+            "chars":
+            [
+                "5"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/spells/ghost.png",
+            "ascent": -12,
+            "height": 17,
+            "chars":
+            [
+                "6"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/spells/ignite.png",
+            "ascent": -12,
+            "height": 17,
+            "chars":
+            [
+                "7"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/spells/heal.png",
+            "ascent": -12,
+            "height": 17,
+            "chars":
+            [
+                "8"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/gui/gui_main.png",
+            "ascent": 210,
+            "height": 275,
+            "chars":
+            [
+                "M"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/logo.png",
+            "ascent": 64,
+            "height": 128,
+            "chars":
+            [
+                "L"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/black.png",
+            "ascent": 128,
+            "height": 256,
+            "chars":
+            [
+                "B"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/white.png",
+            "ascent": 128,
+            "height": 256,
+            "chars":
+            [
+                "W"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/right_click.png",
+            "ascent": -26,
+            "height": 7,
+            "chars":
+            [
+                "\uE001"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/menu/menu_0.png",
+            "ascent": 230,
+            "height": 512,
+            "chars":
+            [
+                "\uE002"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/menu/menu_1.png",
+            "ascent": 230,
+            "height": 512,
+            "chars":
+            [
+                "\uE003"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/menu/menu_2.png",
+            "ascent": 230,
+            "height": 512,
+            "chars":
+            [
+                "\uE004"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:item/menu/menu_3.png",
+            "ascent": 230,
+            "height": 512,
+            "chars":
+            [
+                "\uE005"
+            ]
+        }
+    ]
+}

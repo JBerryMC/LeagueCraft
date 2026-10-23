@@ -1,0 +1,196 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "entries": [
+      {
+        "threshold": 9999,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/invis"
+        }
+      },
+      {
+        "threshold": 100000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/no_mana"
+        }
+      },
+      {
+        "threshold": 100101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/blade"
+        }
+      },
+      {
+        "threshold": 200101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/weapon"
+        }
+      },
+      {
+        "threshold": 300101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/weapon"
+        }
+      },
+      {
+        "threshold": 300102,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/weapon_shadow"
+        }
+      },
+      {
+        "threshold": 400101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/blade1"
+        }
+      },
+      {
+        "threshold": 400102,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/blade2"
+        }
+      },
+      {
+        "threshold": 500101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/weapon"
+        }
+      },
+      {
+        "threshold": 500102,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/weapon_use"
+        }
+      },
+      {
+        "threshold": 600101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:vayne/weapon"
+        }
+      },
+      {
+        "threshold": 600102,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:vayne/weapon_use"
+        }
+      },
+      {
+        "threshold": 700101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/weapon"
+        }
+      },
+      {
+        "threshold": 700102,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/weapon_use"
+        }
+      },
+      {
+        "threshold": 800101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:jhin/weapon"
+        }
+      },
+      {
+        "threshold": 800102,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:jhin/weapon_use"
+        }
+      },
+      {
+        "threshold": 900101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/weapon"
+        }
+      },
+      {
+        "threshold": 1000101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leona/weapon"
+        }
+      },
+      {
+        "threshold": 1100101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:soraka/weapon"
+        }
+      },
+      {
+        "threshold": 1200101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/weapon"
+        }
+      },
+      {
+        "threshold": 1200102,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/weapon_full"
+        }
+      },
+      {
+        "threshold": 1200103,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/weapon_empty"
+        }
+      },
+      {
+        "threshold": 1300101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/weapon"
+        }
+      },
+      {
+        "threshold": 1300201,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/weapon_w"
+        }
+      },
+      {
+        "threshold": 1400101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lux/weapon"
+        }
+      },
+      {
+        "threshold": 1500101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:annie/weapon"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "minecraft:item/phantom_membrane"
+    }
+  },
+  "oversized_in_gui": true
+}

@@ -1,0 +1,952 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "entries": [
+      {
+        "threshold": 9999,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/invis"
+        }
+      },
+      {
+        "threshold": 100001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_previous"
+        }
+      },
+      {
+        "threshold": 100002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_next"
+        }
+      },
+      {
+        "threshold": 100003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_return"
+        }
+      },
+      {
+        "threshold": 100101,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/creeper_banner_pattern"
+        }
+      },
+      {
+        "threshold": 100102,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/golden_pickaxe"
+        }
+      },
+      {
+        "threshold": 100103,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/golden_chestplate"
+        }
+      },
+      {
+        "threshold": 100104,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/support_me"
+        }
+      },
+      {
+        "threshold": 100105,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/barrier"
+        }
+      },
+      {
+        "threshold": 100106,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/nether_star"
+        }
+      },
+      {
+        "threshold": 100201,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_hp"
+        }
+      },
+      {
+        "threshold": 100202,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_mana"
+        }
+      },
+      {
+        "threshold": 100203,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_cooldown"
+        }
+      },
+      {
+        "threshold": 100204,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_dummy_enemy"
+        }
+      },
+      {
+        "threshold": 100205,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_dummy_ally"
+        }
+      },
+      {
+        "threshold": 100206,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_dummy_clear"
+        }
+      },
+      {
+        "threshold": 100207,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_show_stats"
+        }
+      },
+      {
+        "threshold": 100208,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_show_dmg"
+        }
+      },
+      {
+        "threshold": 100210,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_tower_red"
+        }
+      },
+      {
+        "threshold": 100211,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_tower_blue"
+        }
+      },
+      {
+        "threshold": 100212,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_structure_rotate"
+        }
+      },
+      {
+        "threshold": 100213,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_structure_destroy_1"
+        }
+      },
+      {
+        "threshold": 100214,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_structure_rebuild_1"
+        }
+      },
+      {
+        "threshold": 100215,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_structure_remove_1"
+        }
+      },
+      {
+        "threshold": 100216,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_structure_destroy_all"
+        }
+      },
+      {
+        "threshold": 100217,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_structure_rebuild_all"
+        }
+      },
+      {
+        "threshold": 100218,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_structure_remove_all"
+        }
+      },
+      {
+        "threshold": 100301,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/button_champion"
+        }
+      },
+      {
+        "threshold": 100302,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/team_red"
+        }
+      },
+      {
+        "threshold": 100303,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/team_blue"
+        }
+      },
+      {
+        "threshold": 100304,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:gui/team_none"
+        }
+      },
+      {
+        "threshold": 100311,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/spell/flash"
+        }
+      },
+      {
+        "threshold": 100312,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/spell/barrier"
+        }
+      },
+      {
+        "threshold": 100313,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/spell/cleanse"
+        }
+      },
+      {
+        "threshold": 100314,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/spell/exhaust"
+        }
+      },
+      {
+        "threshold": 100315,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/spell/smite"
+        }
+      },
+      {
+        "threshold": 100316,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/spell/ghost"
+        }
+      },
+      {
+        "threshold": 100317,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/spell/ignite"
+        }
+      },
+      {
+        "threshold": 100318,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/spell/heal"
+        }
+      },
+      {
+        "threshold": 100321,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/icon"
+        }
+      },
+      {
+        "threshold": 100322,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/icon"
+        }
+      },
+      {
+        "threshold": 100323,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/icon"
+        }
+      },
+      {
+        "threshold": 100324,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/icon"
+        }
+      },
+      {
+        "threshold": 100325,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/icon"
+        }
+      },
+      {
+        "threshold": 100326,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:vayne/icon"
+        }
+      },
+      {
+        "threshold": 100327,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/icon"
+        }
+      },
+      {
+        "threshold": 100328,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:jhin/icon"
+        }
+      },
+      {
+        "threshold": 100329,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/icon"
+        }
+      },
+      {
+        "threshold": 100330,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leona/icon"
+        }
+      },
+      {
+        "threshold": 100331,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:soraka/icon"
+        }
+      },
+      {
+        "threshold": 100332,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/icon"
+        }
+      },
+      {
+        "threshold": 100333,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/icon"
+        }
+      },
+      {
+        "threshold": 100334,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lux/icon"
+        }
+      },
+      {
+        "threshold": 100335,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:annie/icon"
+        }
+      },
+      {
+        "threshold": 110321,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/icon_x4"
+        }
+      },
+      {
+        "threshold": 110322,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/icon_x4"
+        }
+      },
+      {
+        "threshold": 110323,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/icon_x4"
+        }
+      },
+      {
+        "threshold": 110324,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/icon_x4"
+        }
+      },
+      {
+        "threshold": 110325,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/icon_x4"
+        }
+      },
+      {
+        "threshold": 110326,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:vayne/icon_x4"
+        }
+      },
+      {
+        "threshold": 110327,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/icon_x4"
+        }
+      },
+      {
+        "threshold": 110328,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:jhin/icon_x4"
+        }
+      },
+      {
+        "threshold": 110329,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/icon_x4"
+        }
+      },
+      {
+        "threshold": 110330,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leona/icon_x4"
+        }
+      },
+      {
+        "threshold": 110331,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:soraka/icon_x4"
+        }
+      },
+      {
+        "threshold": 110332,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/icon_x4"
+        }
+      },
+      {
+        "threshold": 110333,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/icon_x4"
+        }
+      },
+      {
+        "threshold": 110334,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lux/icon_x4"
+        }
+      },
+      {
+        "threshold": 110335,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:annie/icon_x4"
+        }
+      },
+      {
+        "threshold": 111000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/passive"
+        }
+      },
+      {
+        "threshold": 111001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/skill_q"
+        }
+      },
+      {
+        "threshold": 111002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/skill_w"
+        }
+      },
+      {
+        "threshold": 111003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/skill_e"
+        }
+      },
+      {
+        "threshold": 111004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yasuo/skill_r"
+        }
+      },
+      {
+        "threshold": 112000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/passive"
+        }
+      },
+      {
+        "threshold": 112001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/skill_q"
+        }
+      },
+      {
+        "threshold": 112002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/skill_w"
+        }
+      },
+      {
+        "threshold": 112003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/skill_e"
+        }
+      },
+      {
+        "threshold": 112004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leesin/skill_r"
+        }
+      },
+      {
+        "threshold": 113000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/passive"
+        }
+      },
+      {
+        "threshold": 113001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/skill_q"
+        }
+      },
+      {
+        "threshold": 113002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/skill_w"
+        }
+      },
+      {
+        "threshold": 113003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/skill_e"
+        }
+      },
+      {
+        "threshold": 113004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:zed/skill_r"
+        }
+      },
+      {
+        "threshold": 114000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/passive"
+        }
+      },
+      {
+        "threshold": 114001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/skill_q"
+        }
+      },
+      {
+        "threshold": 114002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/skill_w"
+        }
+      },
+      {
+        "threshold": 114003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/skill_e"
+        }
+      },
+      {
+        "threshold": 114004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:yone/skill_r"
+        }
+      },
+      {
+        "threshold": 115000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/passive"
+        }
+      },
+      {
+        "threshold": 115001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/skill_q"
+        }
+      },
+      {
+        "threshold": 115002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/skill_w"
+        }
+      },
+      {
+        "threshold": 115003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/skill_e"
+        }
+      },
+      {
+        "threshold": 115004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ashe/skill_r"
+        }
+      },
+      {
+        "threshold": 117000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/passive"
+        }
+      },
+      {
+        "threshold": 117001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/skill_q"
+        }
+      },
+      {
+        "threshold": 117002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/skill_w"
+        }
+      },
+      {
+        "threshold": 117003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/skill_e"
+        }
+      },
+      {
+        "threshold": 117004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:ezreal/skill_r"
+        }
+      },
+      {
+        "threshold": 119000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/passive"
+        }
+      },
+      {
+        "threshold": 119001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/skill_q"
+        }
+      },
+      {
+        "threshold": 119002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/skill_w"
+        }
+      },
+      {
+        "threshold": 119003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/skill_e"
+        }
+      },
+      {
+        "threshold": 119004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/skill_r"
+        }
+      },
+      {
+        "threshold": 120000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leona/passive"
+        }
+      },
+      {
+        "threshold": 120001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leona/skill_q"
+        }
+      },
+      {
+        "threshold": 120002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leona/skill_w"
+        }
+      },
+      {
+        "threshold": 120003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leona/skill_e"
+        }
+      },
+      {
+        "threshold": 120004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:leona/skill_r"
+        }
+      },
+      {
+        "threshold": 121000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:soraka/passive"
+        }
+      },
+      {
+        "threshold": 121001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:soraka/skill_q"
+        }
+      },
+      {
+        "threshold": 121002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:soraka/skill_w"
+        }
+      },
+      {
+        "threshold": 121003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:soraka/skill_e"
+        }
+      },
+      {
+        "threshold": 121004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:soraka/skill_r"
+        }
+      },
+      {
+        "threshold": 122000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/passive"
+        }
+      },
+      {
+        "threshold": 122001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/skill_q"
+        }
+      },
+      {
+        "threshold": 122002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/skill_w"
+        }
+      },
+      {
+        "threshold": 122003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/skill_e"
+        }
+      },
+      {
+        "threshold": 122004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:garen/skill_r"
+        }
+      },
+      {
+        "threshold": 123000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/passive"
+        }
+      },
+      {
+        "threshold": 123001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/skill_q"
+        }
+      },
+      {
+        "threshold": 123002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/skill_w"
+        }
+      },
+      {
+        "threshold": 123003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/skill_e"
+        }
+      },
+      {
+        "threshold": 123004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:malphite/skill_r"
+        }
+      },
+      {
+        "threshold": 124000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lux/passive"
+        }
+      },
+      {
+        "threshold": 124001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lux/skill_q"
+        }
+      },
+      {
+        "threshold": 124002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lux/skill_w"
+        }
+      },
+      {
+        "threshold": 124003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lux/skill_e"
+        }
+      },
+      {
+        "threshold": 124004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lux/skill_r"
+        }
+      },
+      {
+        "threshold": 125000,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:annie/passive"
+        }
+      },
+      {
+        "threshold": 125001,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:annie/skill_q"
+        }
+      },
+      {
+        "threshold": 125002,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:annie/skill_w"
+        }
+      },
+      {
+        "threshold": 125003,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:annie/skill_e"
+        }
+      },
+      {
+        "threshold": 125004,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:annie/skill_r"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "minecraft:item/structure_void"
+    }
+  },
+  "oversized_in_gui": true
+}

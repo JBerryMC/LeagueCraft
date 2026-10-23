@@ -1,0 +1,17 @@
+{
+  "parent": "item/generated",
+    "display": {
+      "ground": {
+        "scale": [0,0,0]
+      },
+      "firstperson_righthand": {
+        "scale": [0,0,0]
+      },
+      "thirdperson_righthand": {
+        "scale": [0,0,0]
+      },
+      "gui": {
+        "scale": [0,0,0]
+      }
+    }
+}

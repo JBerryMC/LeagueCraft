@@ -1,0 +1,28 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "entries": [
+      {
+        "threshold": 9999,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:lol/invis"
+        }
+      },
+      {
+        "threshold": 400400,
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:aatrox/skill_r"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "minecraft:item/saddle"
+    }
+  },
+  "oversized_in_gui": true
+}
