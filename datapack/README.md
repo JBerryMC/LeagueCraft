@@ -86,7 +86,11 @@ mcb build        # or: mcb watch
 
 **Drop key casting.** In 1.20.2, pressing drop while holding an ability item re-cast it. That only worked because of an engine quirk: the dropped stack stayed in your hand with 0 items and still carried its NBT, so `_champion:hold_<x>` kept matching. From 1.20.5, empty stacks carry no data, so the drop key silently stopped casting. `_lol:loop` now starts with one extra line that puts the ability items back before the champion checks run. The drop key casts exactly as it did in 1.20.2; this was tested on both versions with real key presses.
 
-**Summoner spell 1 key label.** The HUD used to draw a fixed right-click icon under summoner spell 1. That label now comes from storage (`lol:main keybind.d.<uuid>`), the same way the Q/W/E/R labels always have, and `_champion:abilities/keybind/default` sets it to the same icon. On its own nothing looks different. The plugin writes its own key there. This is the only change that isn't part of the version update.
+**Summoner spell 1 key label.** The HUD used to draw a fixed right-click icon under summoner spell 1. That label now comes from storage (`lol:main keybind.d.<uuid>`), the same way the Q/W/E/R labels always have, and `_champion:abilities/keybind/default` sets it to the same icon. On its own nothing looks different. The plugin writes its own key there.
+
+**Crosshair slot.** Every champion HUD ends with `lol:main crosshair.<uuid>`, which is empty unless the plugin writes ShoulderCam's crosshair glyph there (zero width, so the HUD doesn't move). Without the plugin nothing changes.
+
+These two are the only changes that aren't part of the version update.
 
 **Area-effect-cloud timers.** 157 summon commands create area-effect clouds as timers and cooldowns. 1.20.2 drew no visible particles for them, but 26.3 gives potion-less clouds blue swirls. They now get `custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}`, which spawns nothing. `Radius` is left at its default because some `dx/dy/dz` selectors test against the cloud's hitbox.
 
