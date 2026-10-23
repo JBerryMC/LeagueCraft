@@ -1,0 +1,14 @@
+name: LeagueCraft
+version: '${project.version}'
+main: me.jberrymc.leaguecraft.LeagueCraftPlugin
+description: League-style controls for the LeagueCraft datapack
+author: JBerryMC
+api-version: '26.3'
+
+permissions:
+  leaguecraft.admin:
+    description: Allows /leaguecraft reload and /leaguecraft debug
+    default: op
+  leaguecraft.dev:
+    description: Allows /leaguecraft dev (echo every input to chat)
+    default: op
