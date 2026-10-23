@@ -1,0 +1,2 @@
+execute if entity @s[tag=aj.minion.melee.root] run function animated_java:minion.melee/zzzzzzzz/animations/death/resume_as_root
+execute if entity @s[tag=!aj.minion.melee.root] run tellraw @a ["",{text:"["},{text:"Animated Java",color:"aqua"},{text:"] "},{text:"ERROR ☠",color:"red"},{text:" > ",color:"gray"},[{text:"The function",color:"yellow"},{text:" animated_java:minion.melee/animations/death/resume ",color:"blue"},{text:"must be run"},{text:" as ",color:"red"},{text:"the root entity!"}]]

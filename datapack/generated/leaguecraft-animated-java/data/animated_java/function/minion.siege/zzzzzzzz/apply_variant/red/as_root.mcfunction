@@ -1,0 +1,1 @@
+execute on passengers run function animated_java:minion.siege/zzzzzzzz/apply_variant/red/as_bone

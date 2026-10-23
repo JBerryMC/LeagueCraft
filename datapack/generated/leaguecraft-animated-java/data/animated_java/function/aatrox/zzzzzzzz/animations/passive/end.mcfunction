@@ -1,0 +1,3 @@
+execute if score @s aj.aatrox.animation.passive.loop_mode = $aj.loop_mode.loop aj.i run function animated_java:aatrox/zzzzzzzz/animations/passive/end_loop
+execute if score @s aj.aatrox.animation.passive.loop_mode = $aj.loop_mode.once aj.i run function animated_java:aatrox/animations/passive/stop
+execute if score @s aj.aatrox.animation.passive.loop_mode = $aj.loop_mode.hold aj.i run function animated_java:aatrox/animations/passive/pause

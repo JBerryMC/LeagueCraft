@@ -1,0 +1,181 @@
+# yone:  (converted from the 1.20.2 LeagueCraft datapack)
+
+function aa {
+    execute if score @s yone.passive matches 0 run playsound yone.sfx.aa1 master @a ~ ~ ~
+    execute if score @s yone.passive matches 1 run playsound yone.sfx.aa2 master @a ~ ~ ~
+}
+
+function hud {
+    $title @s actionbar ["",{translate:"space.-60"},{text:"i",font:"minecraft:yone"},{translate:"space.16"},{score:{name:"@s",objective:"status.p"},font:"lol:yone/p"},{translate:"space.5"},{score:{name:"@s",objective:"status.q"},font:"lol:yone/q"},{translate:"space.6"},{score:{name:"@s",objective:"status.w"},font:"lol:yone/w"},{translate:"space.6"},{score:{name:"@s",objective:"status.e"},font:"lol:yone/e"},{translate:"space.6"},{score:{name:"@s",objective:"status.r"},font:"lol:yone/r"},{translate:"space.9"},{score:{name:"@s",objective:"status.spell.1"},font:"minecraft:lol"},{translate:"space.5"},{score:{name:"@s",objective:"status.spell.2"},font:"minecraft:lol"},{translate:"space.-253"},{text:"M",font:"minecraft:lol"},{translate:"space.-274"},{score:{name:"@s",objective:"status.hotbar"},font:"minecraft:hotbar"},{translate:"space.-207"},{storage:"lol:main",nbt:"hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:hp_display"},{translate:"space.-252"},{storage:"lol:main",nbt:"mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:mana_display"},{translate:"space.-183"},{score:{name:"@s",objective:"cd_p"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.passive"},font:"space:default"},{score:{name:"@s",objective:"cd_q"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.q"},font:"space:default"},{score:{name:"@s",objective:"cd_w"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.w"},font:"space:default"},{score:{name:"@s",objective:"cd_e"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.e"},font:"space:default"},{score:{name:"@s",objective:"cd_r"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.r"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.1"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.1"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.2"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.2"},font:"space:default"},{translate:"space.-138"},{score:{name:"@s",objective:"space.hp1"},font:"space:default"},{score:{name:"@s",objective:"hp.left"},font:"minecraft:custom/hp"},{text:"/",font:"minecraft:custom/hp"},{score:{name:"@s",objective:"hp.max"},font:"minecraft:custom/hp"},{score:{name:"@s",objective:"space.hp2"},font:"space:default"},{translate:"space.-78"},{score:{name:"@s",objective:"space.mana1"},font:"space:default"},{score:{name:"@s",objective:"mana"},font:"minecraft:custom/mana"},{text:"/",font:"minecraft:custom/mana"},{score:{name:"@s",objective:"mana.max"},font:"minecraft:custom/mana"},{score:{name:"@s",objective:"space.mana2"},font:"space:default"},{translate:"space.-112"},{storage:"lol:main",nbt:"keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.24"},{storage:"lol:main",nbt:"keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.25"},{nbt:"keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",storage:"lol:main",interpret:true},{translate:"space.18"},{keybind:"key.swapOffhand",font:"minecraft:custom/keybind_small",bold:true,color:"#ffd821"}]
+}
+
+function hud_display {
+    function _champion:hud
+
+    ## PASSIVE
+    execute if score @s yone.passive matches 0 run scoreboard players set @s status.p 0
+    execute if score @s yone.passive matches 1 run scoreboard players set @s status.p 1
+
+    ## Q
+    execute if score @s[tag=!full_q,tag=!cced,tag=!r.animation,tag=!e.animation] cd_q matches 0 run scoreboard players set @s status.q 1
+    execute if score @s[tag=full_q,tag=!cced,tag=!r.animation,tag=!e.animation] cd_q matches 0 run scoreboard players set @s status.q 2
+    execute if score @s[tag=!full_q,tag=!cced,tag=!r.animation,tag=!e.animation] cd_q matches 1.. run scoreboard players set @s status.q 0
+    execute if score @s[tag=full_q,tag=!cced,tag=!r.animation,tag=!e.animation] cd_q matches 1.. run scoreboard players set @s status.q 7
+
+    execute if entity @s[tag=full_q,tag=!cced,tag=!r.animation,tag=!e.animation] if score @s cc.root matches 1.. run scoreboard players set @s status.q 9
+
+    ## E
+
+    execute if entity @s[team=red,tag=e.soul] if entity @e[tag=yone.e.dash,tag=red] run scoreboard players set @s status.e 9
+    execute if entity @s[team=red,tag=e.soul,tag=!cced,tag=!r.animation] unless entity @e[tag=yone.e.dash,tag=red] run scoreboard players set @s status.e 2
+
+    execute if entity @s[team=blue,tag=e.soul] if entity @e[tag=yone.e.dash,tag=blue] run scoreboard players set @s status.e 9
+    execute if entity @s[team=blue,tag=e.soul,tag=!cced,tag=!r.animation] unless entity @e[tag=yone.e.dash,tag=blue] run scoreboard players set @s status.e 2
+
+    execute if entity @s[team=red] if entity @e[tag=yone.e.body,tag=red,tag=unbound.buffer] run tag @s add e.animation
+    execute if entity @s[team=blue] if entity @e[tag=yone.e.body,tag=blue,tag=unbound.buffer] run tag @s add e.animation
+
+    execute if score @s cc.root matches 1.. run scoreboard players set @s status.e 9
+
+    ## R
+    execute if score @s cc.root matches 1.. run scoreboard players set @s status.r 9
+
+    function yone:hud with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+}
+
+function loop {
+    execute as @e[tag=yone.q.stackcd,type=minecraft:area_effect_cloud] at @s run function yone:skills/q.stack
+    execute as @e[tag=yone.q.tornado,type=minecraft:item_display] at @s run function yone:skills/q.tornado.passive
+    execute as @e[tag=yone.q,type=minecraft:item_display] at @s run function yone:skills/q.dash
+
+    execute as @e[tag=yone.w.animation,type=minecraft:area_effect_cloud] at @s run function yone:skills/w.animation
+
+    execute as @e[tag=yone.e.dash,type=minecraft:item_display] at @s run function yone:skills/e.dash
+    execute as @e[tag=yone.unbound,type=minecraft:item_display] at @s run function yone:skills/e.unbound.dash
+    execute as @e[tag=yone.e.body,type=minecraft:item_display] at @s run function yone:skills/e.body
+
+    execute as @e[tag=yone.e.cd.particle,type=minecraft:area_effect_cloud] at @s run particle dust{color:[1,0,0],scale:1} ~ ~ ~ 0 0 0 1 1 force
+
+    execute as @e[tag=yone.e.cd.particle,type=minecraft:area_effect_cloud,tag=red] at @s run data modify entity @s Pos[1] set from entity @e[tag=yone.e.body,tag=red,limit=1] Pos[1]
+    execute as @e[tag=yone.e.cd.particle,type=minecraft:area_effect_cloud,tag=blue] at @s run data modify entity @s Pos[1] set from entity @e[tag=yone.e.body,tag=blue,limit=1] Pos[1]
+    execute as @e[tag=yone.e.mark,type=#has_health_bar] at @s anchored eyes run particle note ^ ^0.5 ^ 0 0 0 1 1 force
+
+    execute as @e[tag=yone.r.cast,type=minecraft:area_effect_cloud] at @s run function yone:skills/r.cast
+    execute as @e[tag=yone.r.particle,type=minecraft:area_effect_cloud] at @s run particle dust{color:[1,0,0],scale:1} ~ ~ ~ 0.1 0 0.1 1 2 force
+}
+
+function main {
+    # Cooldown
+    function yone:hud_display
+
+    ## Item Handling
+    execute unless predicate _champion:slot/head run function yone:item/headwear
+    execute unless predicate _champion:slot/offhand run function yone:item/offhand
+
+    ## Passive
+
+    ## Re-use
+    execute if predicate _champion:hold_q if score @s use_ability matches 1.. run function _champion:abilities/use_q
+    execute if predicate _champion:hold_w if score @s use_ability matches 1.. run function _champion:abilities/use_w
+    execute if predicate _champion:hold_e if score @s use_ability matches 1.. run function _champion:abilities/use_e
+    execute if predicate _champion:hold_r if score @s use_ability matches 1.. run function _champion:abilities/use_r
+
+    ## First use
+    execute if predicate _champion:use_q run function _champion:abilities/use_q
+
+    execute if predicate _champion:use_w run function _champion:abilities/use_w
+
+    execute if predicate _champion:use_e run function _champion:abilities/use_e
+
+    execute if predicate _champion:use_r run function _champion:abilities/use_r
+}
+
+function passive {
+    item replace entity @s weapon.offhand with air
+    tag @s add offhand_temp
+
+    execute if score @s yone.passive matches 0 run scoreboard players set @s dmg_magic.deal 0
+    execute if score @s yone.passive matches 0 run scoreboard players set @s status.weapon 400102
+
+    execute if score @s yone.passive matches 1 run scoreboard players set @s status.weapon 400101
+    execute if score @s yone.passive matches 1 run scoreboard players operation @s dmg_physical.deal /= 2 integer
+    execute if score @s yone.passive matches 1 run scoreboard players operation @s dmg_magic.deal = @s dmg_physical.deal
+
+    scoreboard players add @s yone.passive 1
+    execute if score @s yone.passive matches 2 run scoreboard players set @s yone.passive 0
+}
+
+function use_e {
+    function _champion:abilities/cooldown/e
+    playsound minecraft:yone.sfx.e master @a ~ ~ ~
+    scoreboard players set @s mana 100
+    scoreboard players set @s yone.passive 0
+    tag @s add e.soul
+
+    execute if entity @s[team=red] run summon minecraft:item_display ~ ~0.5 ~ {teleport_duration:1,Tags:["yone.e.dash","temp","red","dash","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:5,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=red] run summon minecraft:item_display ~ ~ ~ {item_display:"head",Tags:["yone.e.body","red","lol.auto_clear"],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[400002f]}}},Passengers:[{id:"area_effect_cloud",Duration:105,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute if entity @s[team=blue] run summon minecraft:item_display ~ ~0.5 ~ {teleport_duration:1,Tags:["yone.e.dash","temp","blue","dash","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:5,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run summon minecraft:item_display ~ ~ ~ {item_display:"head",Tags:["yone.e.body","blue","lol.auto_clear"],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[400002f]}}},Passengers:[{id:"area_effect_cloud",Duration:105,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    tp @e[tag=yone.e.dash,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ ~
+    execute as @e[tag=yone.e.dash,tag=temp,limit=1,sort=nearest] on passengers store result entity @s Rotation[0] float 1 on vehicle run data get entity @s Rotation[0] 1
+    execute at @e[tag=yone.e.dash,tag=temp,limit=1,sort=nearest] run data modify entity @e[tag=cd,limit=1,sort=nearest] Owner set from entity @s UUID
+    tag @e[tag=yone.e.dash,tag=temp,limit=1,sort=nearest] remove temp
+
+    execute if entity @s[team=red] run tp @e[tag=red,tag=yone.e.body,type=minecraft:item_display] ~ ~0.5 ~ ~ 0
+    execute if entity @s[team=blue] run tp @e[tag=blue,tag=yone.e.body,type=minecraft:item_display] ~ ~0.5 ~ ~ 0
+}
+
+function use_e2 {
+    scoreboard players set @s yone.passive 0
+
+    execute if entity @s[team=red] as @e[tag=yone.e.body,tag=red] on passengers run kill @s
+    execute if entity @s[team=blue] as @e[tag=yone.e.body,tag=blue] on passengers run kill @s
+}
+
+function use_q {
+    function _champion:abilities/cooldown/q_aa.spd
+    scoreboard players set @s channeling 5
+
+    execute if score @s[tag=full_q] stack_q matches 2 on vehicle run tag @s add full_q
+
+    execute if score @s[tag=full_q] stack_q matches 2 run function yone:skills/q.tornado.spawn
+
+    execute if score @s stack_q matches 0..1 anchored eyes positioned ^ ^ ^0.5 run function yone:skills/q.particle
+    execute if score @s stack_q matches 0..1 anchored eyes positioned ^ ^ ^1.5 run function yone:skills/q.check
+
+    execute if score @s stack_q matches 0..1 run playsound yone.sfx.q0 master @a ~ ~ ~
+    execute if score @s[tag=full_q] stack_q matches 2 run playsound yone.sfx.q1 master @a ~ ~ ~
+
+    execute if score @s[tag=!full_q] stack_q matches 2 run scoreboard players set @s stack_q 0
+}
+
+function use_r {
+    function _champion:abilities/cooldown/r
+
+    playsound minecraft:yone.sfx.r master @a ~ ~ ~
+    scoreboard players set @s channeling 20
+    tag @s add r.animation
+
+    execute if entity @s[team=red] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["yone.r.cast","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["yone.r.animation","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    execute if entity @s[team=blue] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["yone.r.cast","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["yone.r.animation","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    tp @e[tag=yone.r.cast,limit=1,sort=nearest] ~ ~ ~ ~ 0
+}
+
+function use_w {
+    function _champion:abilities/cooldown/w_aa.spd
+    scoreboard players set @s channeling 5
+
+    playsound minecraft:yone.sfx.w master @a ~ ~ ~
+
+    execute if entity @s[team=red] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:5,Tags:["yone.w.animation","red","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:5,Tags:["yone.w.animation","blue","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    tp @e[tag=yone.w.animation,limit=1,sort=nearest,tag=temp] ~ ~0.75 ~ ~60 ~
+    data modify entity @e[tag=yone.w.animation,limit=1,sort=nearest,tag=temp] Owner set from entity @s UUID
+    tag @e[tag=yone.w.animation,tag=temp,limit=1,sort=nearest] remove temp
+}

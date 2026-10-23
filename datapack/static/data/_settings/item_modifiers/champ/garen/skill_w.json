@@ -1,0 +1,90 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Courage",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ability 2",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Garen receives a shield and Crowd Control Immunity for a brief moment",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "followed by a lesser amount of .",
+            "color": "gray",
+            "italic": false
+          },
+          {
+            "text": "Damage Reduction",
+            "color": "white",
+            "italic": false
+          },
+          {
+            "text": " and bonus ",
+            "color": "gray",
+            "italic": false
+          },
+          {
+            "text": "Armor ",
+            "color": "gold",
+            "italic": false
+          },
+          {
+            "text": "Magic Resist",
+            "color": "dark_aqua",
+            "italic": false
+          },
+          {
+            "text": " for a longer duration.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                122002.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+execute if entity @s[tag=aj.annie.animation.idle] run function animated_java:annie/zzzzzzzz/animations/idle/tick
+execute if entity @s[tag=aj.annie.animation.death] run function animated_java:annie/zzzzzzzz/animations/death/tick
+execute if entity @s[tag=aj.annie.animation.walk] run function animated_java:annie/zzzzzzzz/animations/walk/tick
+execute if entity @s[tag=aj.annie.animation.aa] run function animated_java:annie/zzzzzzzz/animations/aa/tick
+execute if entity @s[tag=aj.annie.animation.rage.aa] run function animated_java:annie/zzzzzzzz/animations/rage.aa/tick
+execute if entity @s[tag=aj.annie.animation.skill] run function animated_java:annie/zzzzzzzz/animations/skill/tick
+execute if entity @s[tag=aj.annie.animation.aa2] run function animated_java:annie/zzzzzzzz/animations/aa2/tick
+execute if entity @s[tag=aj.annie.animation.rage.aa2] run function animated_java:annie/zzzzzzzz/animations/rage.aa2/tick
+execute if entity @s[tag=aj.annie.animation.spawn] run function animated_java:annie/zzzzzzzz/animations/spawn/tick

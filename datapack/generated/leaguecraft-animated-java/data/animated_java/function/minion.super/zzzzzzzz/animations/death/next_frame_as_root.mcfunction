@@ -1,0 +1,1 @@
+function animated_java:minion.super/zzzzzzzz/animations/death/tick_animation

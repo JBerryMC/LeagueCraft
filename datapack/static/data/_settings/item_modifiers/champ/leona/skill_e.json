@@ -1,0 +1,72 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Zenith Blade",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ability 3",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Leona projects a solar image of her sword, dealing magic damage to all enemies in a line.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "When the image fades, the last enemy champion struck",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "will be briefly immobilized and Leona will dash to them.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                120003.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

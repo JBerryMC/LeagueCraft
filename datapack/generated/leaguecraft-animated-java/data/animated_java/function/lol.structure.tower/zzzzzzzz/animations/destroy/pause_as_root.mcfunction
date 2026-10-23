@@ -1,0 +1,1 @@
+tag @s remove aj.lol.structure.tower.animation.destroy

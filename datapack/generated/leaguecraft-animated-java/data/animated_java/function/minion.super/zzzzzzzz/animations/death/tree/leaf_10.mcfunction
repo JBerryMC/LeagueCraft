@@ -1,0 +1,1 @@
+execute on passengers run function animated_java:minion.super/zzzzzzzz/animations/death/tree/leaf_10_as_bone

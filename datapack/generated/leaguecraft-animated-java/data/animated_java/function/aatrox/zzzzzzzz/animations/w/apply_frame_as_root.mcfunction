@@ -1,0 +1,1 @@
+execute if score @s aj.anim_time matches 0..15 run function animated_java:aatrox/zzzzzzzz/animations/w/tree/branch_0_15

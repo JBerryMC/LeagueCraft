@@ -1,0 +1,2 @@
+scoreboard players set @s aj.lol.structure.nexus.rig_loaded 1
+execute unless score @s aj.lol.structure.nexus.export_version = aj.lol.structure.nexus.export_version aj.i at @s run function animated_java:lol.structure.nexus/zzzzzzzz/mark_outdated_rig

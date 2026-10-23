@@ -1,0 +1,3 @@
+execute if score @s aj.annie.animation.spawn.loop_mode = $aj.loop_mode.loop aj.i run function animated_java:annie/zzzzzzzz/animations/spawn/end_loop
+execute if score @s aj.annie.animation.spawn.loop_mode = $aj.loop_mode.once aj.i run function animated_java:annie/animations/spawn/stop
+execute if score @s aj.annie.animation.spawn.loop_mode = $aj.loop_mode.hold aj.i run function animated_java:annie/animations/spawn/pause

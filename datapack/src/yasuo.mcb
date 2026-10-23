@@ -1,0 +1,204 @@
+# yasuo:  (converted from the 1.20.2 LeagueCraft datapack)
+
+function aa {
+    playsound yasuo.sfx.aa master @a ~ ~ ~
+}
+
+function hud {
+    $title @s actionbar ["",{translate:"space.-60"},{text:"i",font:"minecraft:yasuo"},{translate:"space.16"},{score:{name:"@s",objective:"status.p"},font:"lol:yasuo/p"},{translate:"space.5"},{score:{name:"@s",objective:"status.q"},font:"lol:yasuo/q"},{translate:"space.6"},{score:{name:"@s",objective:"status.w"},font:"lol:yasuo/w"},{translate:"space.6"},{score:{name:"@s",objective:"status.e"},font:"lol:yasuo/e"},{translate:"space.6"},{score:{name:"@s",objective:"status.r"},font:"lol:yasuo/r"},{translate:"space.9"},{score:{name:"@s",objective:"status.spell.1"},font:"minecraft:lol"},{translate:"space.5"},{score:{name:"@s",objective:"status.spell.2"},font:"minecraft:lol"},{translate:"space.-253"},{text:"M",font:"minecraft:lol"},{translate:"space.-274"},{score:{name:"@s",objective:"status.hotbar"},font:"minecraft:hotbar"},{translate:"space.-207"},{storage:"lol:main",nbt:"hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:hp_display"},{translate:"space.-252"},{storage:"lol:main",nbt:"mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:mana_display"},{translate:"space.-183"},{score:{name:"@s",objective:"cd_p"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.passive"},font:"space:default"},{score:{name:"@s",objective:"cd_q"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.q"},font:"space:default"},{score:{name:"@s",objective:"cd_w"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.w"},font:"space:default"},{score:{name:"@s",objective:"cd_e"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.e"},font:"space:default"},{score:{name:"@s",objective:"cd_r"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.r"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.1"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.1"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.2"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.2"},font:"space:default"},{translate:"space.-138"},{score:{name:"@s",objective:"space.hp1"},font:"space:default"},{score:{name:"@s",objective:"hp.left"},font:"minecraft:custom/hp"},{text:"/",font:"minecraft:custom/hp"},{score:{name:"@s",objective:"hp.max"},font:"minecraft:custom/hp"},{score:{name:"@s",objective:"space.hp2"},font:"space:default"},{translate:"space.-78"},{score:{name:"@s",objective:"space.mana1"},font:"space:default"},{score:{name:"@s",objective:"mana"},font:"minecraft:custom/mana"},{text:"/",font:"minecraft:custom/mana"},{score:{name:"@s",objective:"mana.max"},font:"minecraft:custom/mana"},{score:{name:"@s",objective:"space.mana2"},font:"space:default"},{translate:"space.-112"},{storage:"lol:main",nbt:"keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.24"},{storage:"lol:main",nbt:"keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.25"},{nbt:"keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",storage:"lol:main",interpret:true},{translate:"space.18"},{keybind:"key.swapOffhand",font:"minecraft:custom/keybind_small",bold:true,color:"#ffd821"}]
+}
+
+function hud_display {
+    function _champion:hud
+
+    ## Q
+    execute if entity @s[tag=!full_p] run scoreboard players set @s status.p 0
+    execute if entity @s[tag=full_p] run scoreboard players set @s status.p 1
+    execute if score @s[tag=!full_q,tag=!cced,tag=!r.animation] cd_q matches 0 run scoreboard players set @s status.q 1
+    execute if score @s[tag=full_q,tag=!cced,tag=!r.animation] cd_q matches 0 run scoreboard players set @s status.q 2
+    execute if score @s[tag=!full_q,tag=!cced,tag=!r.animation] cd_q matches 1.. run scoreboard players set @s status.q 0
+    execute if score @s[tag=full_q,tag=!cced,tag=!r.animation] cd_q matches 1.. run scoreboard players set @s status.q 7
+
+    ## E
+    execute if score @s cc.root matches 1.. run scoreboard players set @s status.e 9
+
+    ## R
+    execute if score @s[tag=!cced,team=red,tag=!r.animation] cd_r matches 0 if entity @e[tag=champion,distance=..20,tag=champion,tag=airborne,team=!red,tag=!unvalid,type=!#unvalid] run scoreboard players set @s status.r 1
+    execute if score @s[tag=!cced,team=red,tag=!r.animation] cd_r matches 0 unless entity @e[tag=champion,distance=..20,tag=champion,tag=airborne,team=!red,tag=!unvalid,type=!#unvalid] run scoreboard players set @s status.r 0
+
+    execute if score @s[tag=!cced,team=blue,tag=!r.animation] cd_r matches 0 if entity @e[tag=champion,distance=..20,tag=champion,tag=airborne,team=!blue,tag=!unvalid,type=!#unvalid] run scoreboard players set @s status.r 1
+    execute if score @s[tag=!cced,team=blue,tag=!r.animation] cd_r matches 0 unless entity @e[tag=champion,distance=..20,tag=champion,tag=airborne,team=!blue,tag=!unvalid,type=!#unvalid] run scoreboard players set @s status.r 0
+
+    execute if score @s cc.root matches 1.. run scoreboard players set @s status.r 9
+
+    function yasuo:hud with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+}
+
+function loop {
+    execute as @e[tag=yasuo.q.stackcd,type=minecraft:area_effect_cloud] at @s run function yasuo:skills/q.stack
+    execute as @e[tag=yasuo.q.tornado,type=minecraft:item_display] at @s run function yasuo:skills/q.tornado.passive
+
+    execute as @e[tag=yasuo.w.passive,type=minecraft:area_effect_cloud] at @s run function yasuo:skills/w.passive
+
+    execute as @e[tag=yasuo.e,type=minecraft:item_display] at @s run function yasuo:skills/e.dash
+    execute as @e[tag=yasuo.e.particle,type=minecraft:area_effect_cloud] at @s run function yasuo:skills/e.dash_q.particle
+    #execute as @e[tag=yasuo.e.tornado,type=minecraft:item_display] at @s run function yasuo:skills/e.dash_q.tornado
+
+    execute as @e[tag=yasuo.r.lock,type=minecraft:area_effect_cloud] at @s run function yasuo:skills/r.animation
+    execute as @e[tag=yasuo.r.particle,type=minecraft:armor_stand] at @s run function yasuo:skills/r.particle
+}
+
+function main {
+    ## Cooldown
+    function yasuo:hud_display
+
+    ## Item Handling
+    execute unless predicate _champion:slot/head run function yasuo:item/headwear
+    execute unless predicate _champion:slot/offhand run function yasuo:item/offhand
+
+    ## Passive
+    function yasuo:passive
+
+    ## Re-use
+    execute if predicate _champion:hold_q if score @s use_ability matches 1.. run function _champion:abilities/use_q
+    execute if predicate _champion:hold_w if score @s use_ability matches 1.. run function _champion:abilities/use_w
+    execute if predicate _champion:hold_e if score @s use_ability matches 1.. run function _champion:abilities/use_e
+    execute if predicate _champion:hold_r if score @s use_ability matches 1.. run function _champion:abilities/use_r
+
+    ## First use
+    execute if predicate _champion:use_q run function _champion:abilities/use_q
+
+    execute if predicate _champion:use_w run function _champion:abilities/use_w
+
+    execute if predicate _champion:use_e run function _champion:abilities/use_e
+
+    execute if predicate _champion:use_r run function _champion:abilities/use_r
+    execute if entity @s[tag=yasuo.r.buff,team=red] unless entity @e[tag=yasuo.r.buff,tag=red] run function yasuo:skills/r.buff.end
+    execute if entity @s[tag=yasuo.r.buff,team=blue] unless entity @e[tag=yasuo.r.buff,tag=blue] run function yasuo:skills/r.buff.end
+    execute as @s unless entity @s[nbt={SelectedItem:{id:"minecraft:phantom_membrane"}}] run function yasuo:set_item
+}
+
+function passive {
+    execute store result score .x pos_x1 run data get entity @s Pos[0] 100.0
+    execute store result score .z pos_z1 run data get entity @s Pos[2] 100.0
+
+    scoreboard players operation .vx pos_y1 = .x pos_x1
+    scoreboard players operation .vx pos_y1 -= @s pos_x1
+    scoreboard players operation .vz pos_y1 = .z pos_z1
+    scoreboard players operation .vz pos_y1 -= @s pos_z1
+    scoreboard players set .v pos_y1 0
+    execute unless score .vx pos_y1 matches 0 run scoreboard players set .v pos_y1 1
+    execute unless score .vz pos_y1 matches 0 run scoreboard players set .v pos_y1 1
+
+    execute if score .v pos_y1 matches 0 run scoreboard players set @s pos_y1 1
+    execute unless score .v pos_y1 matches 0 run scoreboard players set @s pos_y1 2
+
+    execute if score @s pos_y1 matches 2 run scoreboard players add @s mana 1
+    execute if score @s mana matches 500.. run scoreboard players set @s mana 500
+    execute if score @s mana matches 500.. run tag @s[tag=!full_p] add full_p
+
+    scoreboard players operation @s pos_x1 = .x pos_x1
+    scoreboard players operation @s pos_z1 = .z pos_z1
+}
+
+function use_e {
+    function _champion:abilities/cooldown/e
+    playsound minecraft:yasuo.sfx.e master @a ~ ~ ~
+
+    execute if entity @s[team=red] run tag @e[tag=temp_target,team=!red,type=!#unvalid] add yasuo.e.target
+    execute if entity @s[team=red] run summon minecraft:item_display ~ ~0.5 ~ {teleport_duration:1,interpolation_duration:10,Tags:["yasuo.e","temp","red","dash","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute if entity @s[team=red] facing entity @e[tag=temp_target,limit=1,sort=nearest,team=!red,type=!#unvalid] feet run tp @e[tag=yasuo.e,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ ~-2
+
+    execute if entity @s[team=blue] run tag @e[tag=temp_target,team=!blue,type=!#unvalid] add yasuo.e.target
+    execute if entity @s[team=blue] run summon minecraft:item_display ~ ~0.5 ~ {teleport_duration:1,interpolation_duration:10,Tags:["yasuo.e","temp","blue","dash","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute if entity @s[team=blue] facing entity @e[tag=temp_target,limit=1,sort=nearest,team=!blue,type=!#unvalid] feet run tp @e[tag=yasuo.e,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ ~-2
+
+    execute as @e[tag=yasuo.e,tag=temp,limit=1,sort=nearest] on passengers store result entity @s Rotation[0] float 1 on vehicle run data get entity @s Rotation[0] 1
+    execute at @e[tag=yasuo.e,tag=temp,limit=1,sort=nearest] run data modify entity @e[tag=cd,limit=1,sort=nearest] Owner set from entity @s UUID
+    tag @e[tag=yasuo.e,tag=temp,limit=1,sort=nearest] remove temp
+}
+
+function use_e.check {
+    execute if entity @s[team=red] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[dx=0,team=!red,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=!temp_target] add temp_target
+
+    execute if entity @s[team=red] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[dx=0,team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target] at @s run function yasuo:use_e
+
+    execute if entity @s[team=red] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[dx=0,team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest] remove temp_target
+
+    execute if entity @s[team=blue] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[dx=0,team=!blue,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=!temp_target] add temp_target
+
+    execute if entity @s[team=blue] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[dx=0,team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target] at @s run function yasuo:use_e
+
+    execute if entity @s[team=blue] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[dx=0,team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest] remove temp_target
+
+    execute if entity @s[distance=..6] if score @s cd_e matches 0 positioned ^ ^ ^0.1 run function yasuo:use_e.check
+    #particle flame ~ ~ ~ 0 0 0 0 1 force
+}
+
+function use_q {
+    function _champion:abilities/cooldown/q_aa.spd
+    scoreboard players set @s channeling 5
+
+    execute if data entity @s RootVehicle.Entity{Tags:["yasuo.e"]} on vehicle run tag @s add q_buffer
+    execute if data entity @s RootVehicle.Entity{Tags:["yasuo.e"]} if score @s[tag=full_q] stack_q matches 2 on vehicle run tag @s add full_q
+
+    execute unless data entity @s RootVehicle.Entity{Tags:["yasuo.e"]} if score @s[tag=full_q] stack_q matches 2 run function yasuo:skills/q.tornado.spawn
+
+    execute unless data entity @s RootVehicle.Entity{Tags:["yasuo.e"]} if score @s stack_q matches 0..1 anchored eyes positioned ^ ^ ^0.5 run function yasuo:skills/q.particle
+    execute unless data entity @s RootVehicle.Entity{Tags:["yasuo.e"]} if score @s stack_q matches 0..1 anchored eyes positioned ^ ^ ^1.5 run function yasuo:skills/q.check
+
+    execute unless data entity @s RootVehicle.Entity{Tags:["yasuo.e"]} if score @s stack_q matches 0..1 run playsound yasuo.sfx.q0 master @a ~ ~ ~
+    execute unless data entity @s RootVehicle.Entity{Tags:["yasuo.e"]} if score @s[tag=full_q] stack_q matches 2 run playsound yasuo.sfx.q1 master @a ~ ~ ~
+
+    execute unless data entity @s RootVehicle.Entity{Tags:["yasuo.e"]} if score @s[tag=!full_q] stack_q matches 2 run scoreboard players set @s stack_q 0
+}
+
+function use_r {
+    function _champion:abilities/cooldown/r
+
+    playsound minecraft:yasuo.ultimate master @a ~ ~ ~
+    playsound minecraft:yasuo.sfx.r master @a ~ ~ ~
+    scoreboard players set @s mana 500
+    scoreboard players set @s stack_q 0
+    tag @s add r.animation
+    effect give @s minecraft:levitation 1 0 true
+    effect give @s speed 1 1 true
+
+    execute if entity @s[team=red] run tag @e[tag=champion,tag=airborne,distance=..20,team=!red,type=!#unvalid] add yasuo.r.target
+    execute if entity @s[team=red] run scoreboard players set @e[tag=airborne,tag=yasuo.r.target,team=!red,type=!#unvalid] cc.airborne 20
+    execute if entity @s[team=red] as @e[tag=airborne,tag=yasuo.r.target,team=!red,type=!#unvalid] on vehicle run data modify entity @s NoGravity set value 1
+    execute if entity @s[team=red] as @e[tag=airborne,tag=yasuo.r.target,team=!red,type=!#unvalid] on vehicle run data modify entity @s Age set value 5980
+    execute if entity @s[team=red] as @e[tag=airborne,limit=1,sort=nearest,team=!red] at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["yasuo.r.lock","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run data modify entity @e[tag=yasuo.r.lock,type=minecraft:area_effect_cloud,tag=red,limit=1,sort=nearest] Owner set from entity @s UUID
+    execute as @e[tag=yasuo.r.lock,type=minecraft:area_effect_cloud,tag=red] at @s facing entity @p[tag=r.animation,team=red,tag=yasuo] eyes rotated ~ 0 run tp @s ~ ~ ~ ~ ~
+
+    execute if entity @s[team=blue] run tag @e[tag=champion,tag=airborne,distance=..20,team=!blue,type=!#unvalid] add yasuo.r.target
+    execute if entity @s[team=blue] run scoreboard players set @e[tag=airborne,tag=yasuo.r.target,team=!blue,type=!#unvalid] cc.airborne 20
+    execute if entity @s[team=blue] as @e[tag=airborne,tag=yasuo.r.target,team=!blue,type=!#unvalid] on vehicle run data modify entity @s NoGravity set value 1
+    execute if entity @s[team=blue] as @e[tag=airborne,tag=yasuo.r.target,team=!blue,type=!#unvalid] on vehicle run data modify entity @s Age set value 5980
+    execute if entity @s[team=blue] as @e[tag=airborne,limit=1,sort=nearest,team=!blue] at @s run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["yasuo.r.lock","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run data modify entity @e[tag=yasuo.r.lock,type=minecraft:area_effect_cloud,tag=blue,limit=1,sort=nearest] Owner set from entity @s UUID
+    execute as @e[tag=yasuo.r.lock,type=minecraft:area_effect_cloud,tag=blue] at @s facing entity @p[tag=r.animation,team=blue,tag=yasuo] eyes rotated ~ 0 run tp @s ~ ~ ~ ~ ~
+}
+
+function use_w {
+    function _champion:abilities/cooldown/w
+
+    playsound minecraft:yasuo.sfx.w master @a ~ ~ ~
+    execute if entity @s[team=red] rotated ~ 0 run summon minecraft:area_effect_cloud ^ ^ ^2 {Duration:80,Tags:["yasuo.w.passive","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] rotated ~ 0 run summon minecraft:area_effect_cloud ^ ^ ^2 {Duration:80,Tags:["yasuo.w.passive","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    tp @e[tag=yasuo.w.passive,limit=1,sort=nearest] ^ ^ ^2 ~ 0
+}
+
+tag entity_types block_by_windwall {
+    minecraft:arrow
+    minecraft:spectral_arrow
+    minecraft:snowball
+    minecraft:small_fireball
+    minecraft:fireball
+    minecraft:wither_skull
+    minecraft:shulker_bullet
+}

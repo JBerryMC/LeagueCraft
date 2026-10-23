@@ -1,0 +1,3 @@
+execute if entity @s[tag=aj.lol.structure.nexus.animation.spawn] run function animated_java:lol.structure.nexus/zzzzzzzz/animations/spawn/tick
+execute if entity @s[tag=aj.lol.structure.nexus.animation.idle] run function animated_java:lol.structure.nexus/zzzzzzzz/animations/idle/tick
+execute if entity @s[tag=aj.lol.structure.nexus.animation.destroy] run function animated_java:lol.structure.nexus/zzzzzzzz/animations/destroy/tick

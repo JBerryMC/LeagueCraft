@@ -1,0 +1,657 @@
+# _lol:structure/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function rotate {
+    tp @s ~ ~ ~ ~90 0
+
+    execute if entity @s[tag=lol.structure.inhib] on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.inhib.root] store result entity @s Rotation[0] float 1 on vehicle run data get entity @s Rotation[0]
+    execute if entity @s[tag=lol.structure.nexus] on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.nexus.root] store result entity @s Rotation[0] float 1 on vehicle run data get entity @s Rotation[0]
+}
+
+dir inhib {
+    function destroy {
+        tag @s add is_destroyed
+        tag @s remove has_a_target
+        scoreboard players set @s cc.stun 0
+
+        execute at @s if entity @s[tag=red,tag=minion_origin] run tag @e[tag=lol.structure.nexus,type=interaction,tag=red,tag=!minion_origin,tag=!is_destroyed,limit=1,sort=nearest] add minion_origin
+        execute at @s if entity @s[tag=blue,tag=minion_origin] run tag @e[tag=lol.structure.nexus,type=interaction,tag=blue,tag=!minion_origin,tag=!is_destroyed,limit=1,sort=nearest] add minion_origin
+        tag @s remove minion_origin
+
+        function _game:announce/takedown/inhib
+
+        execute if entity @s[tag=red] run tag @e[tag=lol.structure.nexus,tag=blue,type=interaction] add super_spawn
+        execute if entity @s[tag=blue] run tag @e[tag=lol.structure.nexus,tag=red,type=interaction] add super_spawn
+
+        execute at @s run particle explosion ~ ~ ~ 2 2 2 1 20 force
+        execute at @s run particle cloud ~ ~ ~ 2 2 2 0.2 50 force
+
+        execute on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.inhib.root] run function animated_java:lol.structure.inhib/animations/destroy/play
+        execute on passengers run data merge entity @s[tag=hp] {transformation:{scale:[0.0,0.0,0.0]}}
+        data merge entity @s {width:0.0f,height:0.0f}
+
+        execute on passengers run tag @s[tag=lol.structure.entity] add untargettable
+        execute on passengers run data modify entity @s[tag=lol.structure.entity] Invulnerable set value 1
+
+        execute if entity @s[tag=blue] unless entity @e[tag=lol.structure.entity,team=blue,tag=inhib,tag=!untargettable] as @e[tag=lol.structure.nexus,tag=blue] run function _lol:structure/nexus/reveal
+        execute if entity @s[tag=red] unless entity @e[tag=lol.structure.entity,team=red,tag=inhib,tag=!untargettable] as @e[tag=lol.structure.nexus,tag=red] run function _lol:structure/nexus/reveal
+
+        scoreboard players set @s hp.left 1000000
+        scoreboard players set @s aa.spd 0
+        scoreboard players set @s aa.cd 0
+        scoreboard players set @s death_time 6000
+
+        execute at @s run fill ~-1 ~1 ~-1 ~1 ~2 ~1 air
+        execute at @s run setblock ^ ^ ^ barrier
+    }
+
+    function rebuild {
+        tag @s remove is_destroyed
+
+        execute if entity @s[tag=red] run tag @e[tag=lol.structure.nexus,tag=blue,type=interaction] remove super_spawn
+        execute if entity @s[tag=red] run tag @e[tag=lol.structure.nexus,tag=blue,type=interaction] remove minion_origin
+        execute if entity @s[tag=blue] run tag @e[tag=lol.structure.nexus,tag=red,type=interaction] remove super_spawn
+        execute if entity @s[tag=blue] run tag @e[tag=lol.structure.nexus,tag=red,type=interaction] remove minion_origin
+
+        tag @s add minion_origin
+
+        scoreboard players set @s death_time -1
+        execute at @s run fill ~-1 ~1 ~-1 ~1 ~2 ~1 barrier
+        execute at @s run setblock ^ ^ ^ light[level=12]
+
+        execute on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.inhib.root] run function animated_java:lol.structure.inhib/animations/spawn/play
+        execute on passengers run data merge entity @s[tag=hp] {transformation:{scale:[1.0,2.0,0.0]}}
+        data merge entity @s {width:5.0f,height:10.0f}
+
+        execute if entity @s[tag=blue] unless entity @e[tag=lol.structure.entity,team=blue,tag=inhib,tag=untargettable] as @e[tag=lol.structure.nexus,tag=blue] run function _lol:structure/nexus/reveal
+        execute if entity @s[tag=red] unless entity @e[tag=lol.structure.entity,team=red,tag=inhib,tag=untargettable] as @e[tag=lol.structure.nexus,tag=red] run function _lol:structure/nexus/reveal
+
+        execute on passengers run tag @s[tag=lol.structure.entity] remove untargettable
+        execute on passengers run data modify entity @s[tag=lol.structure.entity] Invulnerable set value 0
+        execute on passengers run effect give @s[tag=lol.structure.entity] resistance infinite 127 true
+
+        scoreboard players set @s hp.max 5000
+        scoreboard players operation @s hp.left = @s hp.max
+    }
+
+    function remove {
+        execute on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.inhib.root] run function animated_java:lol.structure.inhib/remove/this
+        execute on passengers run kill @s
+
+        fill ~-2 ~ ~-2 ~2 ~ ~2 air
+        fill ~-1 ~1 ~-1 ~1 ~2 ~1 air
+        setblock ^ ^ ^ air
+
+        kill @s
+    }
+
+    function spawn.blue {
+        execute align xyz positioned ~.5 ~.5 ~.5 run summon interaction ~ ~ ~ {CustomName:"Blue inhib",Tags:["has_health_bar","lol.structure.inhib","lol.structure","blue","temp"],width:5.0f,height:3.0f,Passengers:[{id:"silverfish",PersistenceRequired:1b,Silent:1,NoAI:1,active_effects:[{id:"invisibility",duration:-1,amplifier:0,show_particles:0b},{id:"resistance",duration:-1,amplifier:100,show_particles:0b}],CustomName:"Blue Inhibitor",Team:"blue",Tags:["unvalid","lol.structure.entity","inhib"]},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"}]}
+        execute if score .world settings.show_stats matches 0 as @e[tag=lol.structure.inhib,tag=temp] on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+
+        execute as @e[tag=lol.structure.inhib,tag=temp] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[1.0,2.0,0.0],translation:[0.0,0.0,0.0]}}
+
+        execute as @e[tag=lol.structure.inhib,tag=temp] at @s run fill ~-2 ~ ~-2 ~2 ~ ~2 barrier
+        execute as @e[tag=lol.structure.inhib,tag=temp] at @s run fill ~-1 ~1 ~-1 ~1 ~2 ~1 barrier
+        execute as @e[tag=lol.structure.inhib,tag=temp] at @s run setblock ^ ^ ^ light[level=12]
+
+        execute as @e[tag=lol.structure.inhib,tag=temp] at @s run function animated_java:lol.structure.inhib/summon
+        execute as @e[tag=lol.structure.inhib,tag=temp] run ride @e[type=#animated_java:root,tag=aj.lol.structure.inhib.root,limit=1,sort=nearest] mount @s
+        execute as @e[tag=lol.structure.inhib,tag=temp] on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.inhib.root] run function animated_java:lol.structure.inhib/animations/spawn/play
+        execute as @e[tag=lol.structure.inhib,tag=temp] on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.inhib.root] run function animated_java:lol.structure.inhib/apply_variant/blue
+
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] attack_damage 0
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] armor 20
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] magic_resist 0
+
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] armor.pen 0
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] magic_resist.pen 0
+
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] aa.cd 0
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] aa.spd 0
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] aa.range 0
+
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] hp.regen 15
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] hp.max 4000
+        scoreboard players operation @e[tag=lol.structure.inhib,tag=temp] hp.left = @e[tag=lol.structure.inhib,tag=temp] hp.max
+
+        tag @e[tag=lol.structure.inhib,tag=temp] remove temp
+    }
+
+    function spawn.red {
+        execute align xyz positioned ~.5 ~.5 ~.5 run summon interaction ~ ~ ~ {CustomName:"Red Inhibitor",Tags:["has_health_bar","lol.structure.inhib","lol.structure","red","temp"],width:5.0f,height:3.0f,Passengers:[{id:"silverfish",PersistenceRequired:1b,Silent:1,NoAI:1,active_effects:[{id:"invisibility",duration:-1,amplifier:0,show_particles:0b},{id:"resistance",duration:-1,amplifier:100b,show_particles:0b}],CustomName:"Red Inhibitor",Team:"red",Tags:["unvalid","lol.structure.entity","inhib"]},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"}]}
+        execute if score .world settings.show_stats matches 0 as @e[tag=lol.structure.inhib,tag=temp] on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+
+        execute as @e[tag=lol.structure.inhib,tag=temp] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[1.0,2.0,0.0],translation:[0.0,0.0,0.0]}}
+
+        execute as @e[tag=lol.structure.inhib,tag=temp] at @s run fill ~-2 ~ ~-2 ~2 ~ ~2 barrier
+        execute as @e[tag=lol.structure.inhib,tag=temp] at @s run fill ~-1 ~1 ~-1 ~1 ~2 ~1 barrier
+        execute as @e[tag=lol.structure.inhib,tag=temp] at @s run setblock ^ ^ ^ light[level=12]
+
+        execute as @e[tag=lol.structure.inhib,tag=temp] at @s run function animated_java:lol.structure.inhib/summon
+        execute as @e[tag=lol.structure.inhib,tag=temp] run ride @e[type=#animated_java:root,tag=aj.lol.structure.inhib.root,limit=1,sort=nearest] mount @s
+        execute as @e[tag=lol.structure.inhib,tag=temp] on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.inhib.root] run function animated_java:lol.structure.inhib/animations/spawn/play
+        execute as @e[tag=lol.structure.inhib,tag=temp] on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.inhib.root] run function animated_java:lol.structure.inhib/apply_variant/red
+
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] attack_damage 0
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] armor 20
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] magic_resist 0
+
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] armor.pen 0
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] magic_resist.pen 0
+
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] aa.cd 0
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] aa.spd 0
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] aa.range 0
+
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] hp.regen 15
+        scoreboard players set @e[tag=lol.structure.inhib,tag=temp] hp.max 4000
+        scoreboard players operation @e[tag=lol.structure.inhib,tag=temp] hp.left = @e[tag=lol.structure.inhib,tag=temp] hp.max
+
+        tag @e[tag=lol.structure.inhib,tag=temp] remove temp
+    }
+}
+
+dir nexus {
+    function destroy {
+        tag @s add is_destroyed
+        tag @s remove has_a_target
+        scoreboard players set @s cc.stun 0
+
+        execute at @s run playsound structure.nexus.destroy master @a ~ ~ ~ 2 1 1
+
+        execute at @s run particle flash{color:[1.0f,1.0f,1.0f,1.0f]} ~ ~ ~ 2 2 2 1 20 force
+        execute at @s run particle cloud ~ ~ ~ 2 2 2 0.2 50 force
+
+        execute on passengers run tag @s[tag=lol.structure.entity] add untargettable
+        execute on passengers run data modify entity @s[tag=lol.structure.entity] Invulnerable set value 1
+
+        execute on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.nexus.root] run function animated_java:lol.structure.nexus/animations/destroy/play
+        execute on passengers run data merge entity @s[tag=hp] {transformation:{scale:[0.0,0.0,0.0]}}
+        data merge entity @s {width:0.0f,height:0.0f}
+
+        scoreboard players set @s hp.left 1000000
+        scoreboard players set @s aa.spd 0
+        scoreboard players set @s aa.cd 0
+
+        execute at @s run fill ~-2 ~2 ~-2 ~2 ~5 ~2 air
+        execute at @s run setblock ~ ~-1 ~ air
+
+        execute at @s run function _game:game/endgame_animation
+    }
+
+    function rebuild {
+        tag @s remove is_destroyed
+
+        execute at @s run fill ~-2 ~2 ~-2 ~2 ~5 ~2 barrier
+        execute at @s run setblock ~ ~-1 ~ beacon
+
+        execute on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.nexus.root] run function animated_java:lol.structure.nexus/animations/spawn/play
+        execute on passengers run data merge entity @s[tag=hp] {transformation:{scale:[1.0,2.0,0.0]}}
+        data merge entity @s {width:10.0f,height:5.0f}
+
+        execute on passengers run tag @s[tag=lol.structure.entity] remove untargettable
+        execute on passengers run data modify entity @s[tag=lol.structure.entity] Invulnerable set value 0
+        execute on passengers run effect give @s[tag=lol.structure.entity] resistance infinite 127 true
+
+        scoreboard players set @s hp.max 5000
+        scoreboard players operation @s hp.left = @s hp.max
+    }
+
+    function remove {
+        execute on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.nexus.root] run function animated_java:lol.structure.nexus/remove/this
+        execute on passengers run kill @s
+
+        fill ~-4 ~ ~-4 ~4 ~1 ~4 air
+        fill ~-2 ~2 ~-2 ~2 ~5 ~2 air
+        fill ~-1 ~ ~-1 ~1 ~ ~1 air
+        fill ~-1 ~-2 ~-1 ~1 ~-2 ~1 air
+        setblock ~ ~-1 ~ air
+        setblock ~ ~ ~ air
+
+        kill @s
+    }
+
+    function reveal {
+        execute on passengers run tag @s[tag=lol.structure.entity] remove untargettable
+        execute on passengers run data modify entity @s[tag=lol.structure.entity] Invulnerable set value 0
+
+        scoreboard players set @s dmg_reduction 0
+    }
+
+    function spawn.blue {
+        execute align xyz positioned ~.5 ~.5 ~.5 run summon interaction ~ ~ ~ {CustomName:"Blue nexus",Tags:["has_health_bar","lol.structure.nexus","lol.structure","blue","temp"],width:9.0f,height:5.0f,Passengers:[{id:"silverfish",Invulnerable:1,PersistenceRequired:1b,Silent:1,NoAI:1,active_effects:[{id:"invisibility",duration:-1,amplifier:0,show_particles:0b},{id:"resistance",duration:-1,amplifier:100,show_particles:0b}],CustomName:"Blue Nexus",Team:"blue",Tags:["untargettable","unvalid","lol.structure.entity"]},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"}]}
+        execute if score .world settings.show_stats matches 0 as @e[tag=lol.structure.nexus,tag=temp] on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+
+        execute as @e[tag=lol.structure.nexus,tag=temp] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[1.0,2.0,0.0],translation:[0.0,2.0,0.0]}}
+
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run fill ~-4 ~ ~-4 ~4 ~1 ~4 barrier
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run fill ~-2 ~2 ~-2 ~2 ~5 ~2 barrier
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run fill ~-1 ~ ~-1 ~1 ~ ~1 light[level=15]
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run fill ~-1 ~-2 ~-1 ~1 ~-2 ~1 iron_block
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run setblock ~ ~-1 ~ beacon
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run setblock ~ ~ ~ blue_stained_glass_pane
+
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run function animated_java:lol.structure.nexus/summon
+        execute as @e[tag=lol.structure.nexus,tag=temp] run ride @e[type=#animated_java:root,tag=aj.lol.structure.nexus.root,limit=1,sort=nearest] mount @s
+        execute as @e[tag=lol.structure.nexus,tag=temp] on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.nexus.root] run function animated_java:lol.structure.nexus/animations/spawn/play
+        execute as @e[tag=lol.structure.nexus,tag=temp] on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.nexus.root] run function animated_java:lol.structure.nexus/apply_variant/blue
+
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] attack_damage 0
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] armor 0
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] magic_resist 0
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] dmg_reduction 100
+
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] armor.pen 0
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] magic_resist.pen 0
+
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] aa.cd 0
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] aa.spd 0
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] aa.range 0
+
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] hp.regen 20
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] hp.max 5500
+        scoreboard players operation @e[tag=lol.structure.nexus,tag=temp] hp.left = @e[tag=lol.structure.nexus,tag=temp] hp.max
+
+        tag @e[tag=lol.structure.nexus,tag=temp] remove temp
+    }
+
+    function spawn.red {
+        execute align xyz positioned ~.5 ~.5 ~.5 run summon interaction ~ ~ ~ {CustomName:"Red Nexus",Tags:["has_health_bar","lol.structure.nexus","lol.structure","red","temp"],width:9.0f,height:5.0f,Passengers:[{id:"silverfish",Invulnerable:1,PersistenceRequired:1b,Silent:1,NoAI:1,active_effects:[{id:"invisibility",duration:-1,amplifier:0,show_particles:0b},{id:"resistance",duration:-1,amplifier:100,show_particles:0b}],CustomName:"Red Nexus",Team:"red",Tags:["untargettable","unvalid","lol.structure.entity"]},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"}]}
+        execute if score .world settings.show_stats matches 0 as @e[tag=lol.structure.nexus,tag=temp] on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+
+        execute as @e[tag=lol.structure.nexus,tag=temp] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[1.0,2.0,0.0],translation:[0.0,2.0,0.0]}}
+
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run fill ~-4 ~ ~-4 ~4 ~1 ~4 barrier
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run fill ~-2 ~2 ~-2 ~2 ~5 ~2 barrier
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run fill ~-1 ~ ~-1 ~1 ~ ~1 light[level=15]
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run fill ~-1 ~-2 ~-1 ~1 ~-2 ~1 iron_block
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run setblock ~ ~-1 ~ beacon
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run setblock ~ ~ ~ red_stained_glass_pane
+
+        execute as @e[tag=lol.structure.nexus,tag=temp] at @s run function animated_java:lol.structure.nexus/summon
+        execute as @e[tag=lol.structure.nexus,tag=temp] run ride @e[type=#animated_java:root,tag=aj.lol.structure.nexus.root,limit=1,sort=nearest] mount @s
+        execute as @e[tag=lol.structure.nexus,tag=temp] on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.nexus.root] run function animated_java:lol.structure.nexus/animations/spawn/play
+        execute as @e[tag=lol.structure.nexus,tag=temp] on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.nexus.root] run function animated_java:lol.structure.nexus/apply_variant/red
+
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] attack_damage 0
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] armor 0
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] magic_resist 0
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] dmg_reduction 100
+
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] armor.pen 0
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] magic_resist.pen 0
+
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] aa.cd 0
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] aa.spd 0
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] aa.range 0
+
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] hp.regen 20
+        scoreboard players set @e[tag=lol.structure.nexus,tag=temp] hp.max 5500
+        scoreboard players operation @e[tag=lol.structure.nexus,tag=temp] hp.left = @e[tag=lol.structure.nexus,tag=temp] hp.max
+
+        tag @e[tag=lol.structure.nexus,tag=temp] remove temp
+    }
+
+    function unreveal {
+        execute on passengers run tag @s[tag=lol.structure.entity] add untargettable
+        execute on passengers run data modify entity @s[tag=lol.structure.entity] Invulnerable set value 1
+
+        scoreboard players set @s dmg_reduction 100
+    }
+}
+
+dir tower {
+    function beam {
+        particle crit ~ ~ ~ 0 0 0 0 1 force @a
+        execute unless entity @s[distance=..1] positioned ^ ^ ^1 run function _lol:structure/tower/beam
+    }
+
+    function destroy {
+        tag @s add is_destroyed
+        tag @s remove has_a_target
+        scoreboard players set @s cc.stun 0
+
+        execute at @s if entity @s[tag=red,tag=minion_origin] run tag @e[tag=lol.structure,type=interaction,tag=red,tag=!minion_origin,tag=!is_destroyed,limit=1,sort=nearest] add minion_origin
+        execute at @s if entity @s[tag=blue,tag=minion_origin] run tag @e[tag=lol.structure,type=interaction,tag=blue,tag=!minion_origin,tag=!is_destroyed,limit=1,sort=nearest] add minion_origin
+        tag @s remove minion_origin
+
+        function _game:announce/takedown/turret
+        execute at @s if entity @s[tag=red] positioned ~-11 ~-0.5 ~-11 run tag @e[tag=red_tower.temp_target,dx=21,dz=21,dy=20] remove red_tower.temp_target
+        execute at @s if entity @s[tag=red] positioned ~-11 ~-0.5 ~-11 run tag @e[tag=red_tower.is_in_range,dx=21,dz=21,dy=20] remove red_tower.is_in_range
+        execute at @s if entity @s[tag=red] positioned ~-11 ~-0.5 ~-11 run tag @e[tag=red_tower.target,dx=21,dz=21,dy=20] remove red_tower.target
+
+        execute at @s if entity @s[tag=blue] positioned ~-11 ~-0.5 ~-11 run tag @e[tag=blue_tower.temp_target,dx=21,dz=21,dy=20] remove blue_tower.temp_target
+        execute at @s if entity @s[tag=blue] positioned ~-11 ~-0.5 ~-11 run tag @e[tag=blue_tower.is_in_range,dx=21,dz=21,dy=20] remove blue_tower.is_in_range
+        execute at @s if entity @s[tag=blue] positioned ~-11 ~-0.5 ~-11 run tag @e[tag=blue_tower.target,dx=21,dz=21,dy=20] remove blue_tower.target
+
+        execute at @s run particle explosion ~ ~5 ~ 2 2 2 1 20 force
+        execute at @s run particle cloud ~ ~5 ~ 2 2 2 0.2 50 force
+
+        execute on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.tower.root] run function animated_java:lol.structure.tower/animations/destroy/play
+        execute on passengers run data merge entity @s[tag=hp] {transformation:{scale:[0.0,0.0,0.0]}}
+        data merge entity @s {width:0.0f,height:0.0f}
+
+        execute on passengers run tag @s[tag=lol.structure.entity] add untargettable
+        execute on passengers run data modify entity @s[tag=lol.structure.entity] Invulnerable set value 1
+
+        scoreboard players set @s hp.left 1000000
+        scoreboard players set @s aa.spd 0
+        scoreboard players set @s aa.cd 0
+
+        execute at @s run fill ~-1 ~1 ~-1 ~1 ~9 ~1 air
+        execute at @s run fill ^3 ^6 ^-1 ^-3 ^8 ^1 air
+        execute at @s run setblock ^ ^8 ^1 air
+        execute at @s run fill ^-1 ^10 ^1 ^-2 ^11 ^2 air
+    }
+
+    function main {
+        ## CHECK FOR TARGET
+        execute if entity @s[tag=!has_target,tag=red] positioned ~-20 ~-20 ~-20 if entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39] run function _lol:structure/tower/target/check
+        execute if entity @s[tag=!has_target,tag=blue] positioned ~-20 ~-20 ~-20 if entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39] run function _lol:structure/tower/target/check
+
+        ## ATTACK TARGET
+        execute if entity @s[tag=has_target] run function _lol:structure/tower/target/attack
+
+        ## TARGET is CHAMPION
+        execute if entity @s[tag=has_target] store success score @s temp on passengers as @s[tag=tower.target] on origin if entity @s[tag=champion]
+        execute if score @s temp matches 1 run tag @s add is_targeting_champion
+
+        ## CLEAR TARGET
+
+        ### Target disappear
+        execute if entity @s[tag=has_target] store success score @s temp on passengers as @s[tag=tower.target] on origin if entity @s[tag=unvalid]
+        execute if score @s temp matches 1 run function _lol:structure/tower/target/clear
+
+        ### Target leaves the area
+        execute if entity @s[tag=has_target] store success score @s temp positioned ~-20 ~-20 ~-20 on passengers as @s[tag=tower.target] on origin unless entity @s[dx=39,dz=39,dy=39]
+        execute if score @s temp matches 1 run function _lol:structure/tower/target/clear
+    }
+
+    function rebuild {
+        tag @s remove is_destroyed
+
+        execute at @s run fill ~-1 ~1 ~-1 ~1 ~9 ~1 barrier
+        execute at @s run fill ^3 ^6 ^-1 ^-3 ^8 ^1 barrier
+        execute at @s run setblock ^ ^8 ^1 light[level=15]
+        execute at @s run fill ^-1 ^10 ^1 ^-2 ^11 ^2 light[level=15]
+
+        execute on passengers run tag @s[tag=lol.structure.entity] remove untargettable
+        execute on passengers run data modify entity @s[tag=lol.structure.entity] Invulnerable set value 0
+        execute on passengers run effect give @s[tag=lol.structure.entity] resistance infinite 127 true
+
+        execute on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.tower.root] run function animated_java:lol.structure.tower/animations/spawn/play
+        execute on passengers run data merge entity @s[tag=hp] {transformation:{scale:[1.0,2.0,0.0]}}
+        data merge entity @s {width:5.0f,height:10.0f}
+
+        scoreboard players set @s hp.max 5000
+        scoreboard players operation @s hp.left = @s hp.max
+    }
+
+    function remove {
+        execute on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.tower.root] run function animated_java:lol.structure.tower/remove/this
+        execute on passengers run kill @s
+
+        execute at @s run fill ~-2 ~ ~-2 ~2 ~ ~2 air
+        execute at @s run fill ~-1 ~1 ~-1 ~1 ~9 ~1 air
+        execute at @s run fill ^3 ^6 ^-1 ^-3 ^8 ^1 air
+        execute at @s run setblock ^ ^8 ^1 air
+        execute at @s run fill ^-1 ^10 ^1 ^-2 ^11 ^2 air
+        kill @s
+    }
+
+    function rotate {
+        fill ^3 ^6 ^-1 ^-3 ^8 ^1 air
+        setblock ^ ^8 ^1 air
+        fill ^-1 ^10 ^1 ^-2 ^11 ^2 air
+
+        execute rotated ~90 0 run fill ^3 ^6 ^-1 ^-3 ^8 ^1 barrier
+        execute rotated ~90 0 run setblock ^ ^8 ^1 light[level=15]
+        execute rotated ~90 0 run fill ^-1 ^10 ^1 ^-2 ^11 ^2 light[level=15]
+
+        tp @s ~ ~ ~ ~90 0
+
+        execute on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.tower.root] store result entity @s Rotation[0] float 1 on vehicle run data get entity @s Rotation[0]
+    }
+
+    function shot {
+        scoreboard players set @s aa.cd 30
+
+        execute if entity @s[tag=red] run summon area_effect_cloud ~ ~ ~ {Duration:2147483647,Tags:["tower.shot","temp","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[tag=blue] run summon area_effect_cloud ~ ~ ~ {Duration:2147483647,Tags:["tower.shot","temp","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+        scoreboard players operation @e[tag=tower.shot,tag=temp,limit=1,sort=nearest,type=area_effect_cloud] attack_damage = @s attack_damage
+        scoreboard players operation @e[tag=tower.shot,tag=temp,limit=1,sort=nearest,type=area_effect_cloud] armor.pen = @s armor.pen
+
+        scoreboard players operation temp aa.spd = @s aa.spd
+        scoreboard players operation temp aa.spd *= 40 integer
+        scoreboard players operation temp aa.spd *= @s attack_damage
+        scoreboard players operation temp aa.spd /= 100 integer
+        scoreboard players operation @e[tag=tower.shot,tag=temp,limit=1,sort=nearest] attack_damage += temp aa.spd
+        scoreboard players add @s aa.spd 1
+
+        execute on passengers as @s[tag=tower.target] on origin run data modify entity @e[tag=tower.shot,tag=temp,limit=1,sort=nearest,type=area_effect_cloud] Owner set from entity @s UUID
+        tag @e[tag=tower.shot,tag=temp,limit=1,sort=nearest,type=area_effect_cloud] remove temp
+    }
+
+    function shot.find_target {
+        execute if entity @s[tag=red] run particle dust{color:[1,0,0],scale:1} ~ ~ ~ 0.1 0.1 0.1 1 20 force @a
+        execute if entity @s[tag=blue] run particle dust{color:[0,0.5,1],scale:1} ~ ~ ~ 0.1 0.1 0.1 1 20 force @a
+
+        execute store success score @s temp on origin if entity @s[tag=lol.minion,tag=minion.melee]
+        execute if score @s temp matches 1 on origin run scoreboard players operation temp attack_damage = @s hp.max
+        execute if score @s temp matches 1 run scoreboard players operation temp attack_damage *= 45 integer
+        execute if score @s temp matches 1 run scoreboard players operation temp attack_damage /= 100 integer
+        execute if score @s temp matches 1 run scoreboard players operation @s attack_damage = temp attack_damage
+
+        execute store success score @s temp on origin if entity @s[tag=lol.minion,tag=minion.caster]
+        execute if score @s temp matches 1 on origin run scoreboard players operation temp attack_damage = @s hp.max
+        execute if score @s temp matches 1 run scoreboard players operation temp attack_damage *= 70 integer
+        execute if score @s temp matches 1 run scoreboard players operation temp attack_damage /= 100 integer
+        execute if score @s temp matches 1 run scoreboard players operation @s attack_damage = temp attack_damage
+
+        execute store success score @s temp on origin if entity @s[tag=lol.minion,tag=minion.siege]
+        execute if score @s temp matches 1 on origin run scoreboard players operation temp attack_damage = @s hp.max
+        execute if score @s temp matches 1 run scoreboard players operation temp attack_damage *= 10 integer
+        execute if score @s temp matches 1 run scoreboard players operation temp attack_damage /= 100 integer
+        execute if score @s temp matches 1 run scoreboard players operation @s attack_damage = temp attack_damage
+
+        execute store success score @s temp on origin if entity @s[tag=lol.minion,tag=minion.super]
+        execute if score @s temp matches 1 on origin run scoreboard players operation temp attack_damage = @s hp.max
+        execute if score @s temp matches 1 run scoreboard players operation temp attack_damage *= 7 integer
+        execute if score @s temp matches 1 run scoreboard players operation temp attack_damage /= 100 integer
+        execute if score @s temp matches 1 run scoreboard players operation @s attack_damage = temp attack_damage
+
+        execute store success score @s temp on origin positioned ~-0.5 ~-0.5 ~-0.5 if entity @s[dx=0]
+        execute if score @s temp matches 1 if entity @s[tag=red] on origin at @s run damage @s[tag=!unvalid] 4 _lol:dmg_physical by @e[tag=lol.structure.entity,team=red,limit=1,sort=nearest]
+        execute if score @s temp matches 1 if entity @s[tag=blue] on origin at @s run damage @s[tag=!unvalid] 4 _lol:dmg_physical by @e[tag=lol.structure.entity,team=blue,limit=1,sort=nearest]
+        execute if score @s temp matches 1 run scoreboard players operation temp dmg_physical.raw = @s attack_damage
+        execute if score @s temp matches 1 run scoreboard players operation temp armor.pen = @s armor.pen
+        execute if score @s temp matches 1 on origin run scoreboard players operation @s[tag=!unvalid] dmg_physical.raw = temp dmg_physical.raw
+        execute if score @s temp matches 1 on origin run scoreboard players operation @s[tag=!unvalid] armor.reduced = temp armor.pen
+        execute if score @s temp matches 1 run kill @s
+
+        execute if score @s temp matches 0 on origin run tag @s add temp_owner
+        execute if score @s temp matches 0 facing entity @e[tag=temp_owner,limit=1,sort=nearest] feet rotated ~ ~-5 run tp @s ^ ^ ^0.75
+        execute if score @s temp matches 0 on origin run tag @s remove temp_owner
+
+        execute store success score @s temp if data entity @s Owner
+        execute if score @s temp matches 0 run kill @s
+    }
+
+    function spawn.blue {
+        execute align xyz positioned ~.5 ~.5 ~.5 run summon interaction ~ ~ ~ {CustomName:"Blue Tower",Tags:["has_health_bar","lol.structure.tower","lol.structure","blue","temp"],width:5.0f,height:10.0f,Passengers:[{id:"silverfish",PersistenceRequired:1b,Silent:1,NoAI:1,active_effects:[{id:"invisibility",duration:-1,amplifier:0,show_particles:0b},{id:"resistance",duration:-1,amplifier:100b,show_particles:0b}],CustomName:"Blue Tower",Team:"blue",Tags:["unvalid","lol.structure.entity"]},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"}]}
+        execute if score .world settings.show_stats matches 0 as @e[tag=lol.structure.tower,tag=temp] on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+
+        execute as @e[tag=lol.structure.tower,tag=temp] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[1.0,2.0,0.0],translation:[0.0,6.5,0.0]}}
+
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run fill ~-2 ~ ~-2 ~2 ~ ~2 barrier
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run fill ~-1 ~1 ~-1 ~1 ~9 ~1 barrier
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run fill ^3 ^6 ^-1 ^-3 ^8 ^1 barrier
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run setblock ^ ^8 ^1 light[level=15]
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run fill ^-1 ^10 ^1 ^-2 ^11 ^2 light[level=15]
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run setblock ^ ^ ^1 light[level=15]
+
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run function animated_java:lol.structure.tower/summon
+        execute as @e[tag=lol.structure.tower,tag=temp] run ride @e[type=#animated_java:root,tag=aj.lol.structure.tower.root,limit=1,sort=nearest] mount @s
+        execute as @e[tag=lol.structure.tower,tag=temp] on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.tower.root] run function animated_java:lol.structure.tower/animations/spawn/play
+
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] attack_damage 200
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] armor 100
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] magic_resist 100
+
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] armor.pen 30
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] magic_resist.pen 0
+
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] aa.cd 0
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] aa.spd 0
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] aa.range 40
+
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] hp.regen 0
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] hp.max 5000
+        scoreboard players operation @e[tag=lol.structure.tower,tag=temp] hp.left = @e[tag=lol.structure.tower,tag=temp] hp.max
+
+        tag @e[tag=lol.structure.tower,tag=temp] remove temp
+    }
+
+    function spawn.red {
+        execute align xyz positioned ~.5 ~.5 ~.5 run summon interaction ~ ~ ~ {CustomName:"Red Tower",Tags:["has_health_bar","lol.structure.tower","lol.structure","red","temp"],width:5.0f,height:10.0f,Passengers:[{id:"silverfish",PersistenceRequired:1b,Silent:1,NoAI:1,active_effects:[{id:"invisibility",duration:-1,amplifier:0,show_particles:0b},{id:"resistance",duration:-1,amplifier:100b,show_particles:0b}],CustomName:"Red Tower",Team:"red",Tags:["unvalid","lol.structure.entity"]},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"}]}
+        execute if score .world settings.show_stats matches 0 as @e[tag=lol.structure.tower,tag=temp] on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+
+        execute as @e[tag=lol.structure.tower,tag=temp] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[1.0,2.0,0.0],translation:[0.0,6.5,0.0]}}
+
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run fill ~-2 ~ ~-2 ~2 ~ ~2 barrier
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run fill ~-1 ~1 ~-1 ~1 ~9 ~1 barrier
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run fill ^3 ^6 ^-1 ^-3 ^8 ^1 barrier
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run setblock ^ ^8 ^1 light[level=15]
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run fill ^-1 ^10 ^1 ^-2 ^11 ^2 light[level=15]
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run setblock ^ ^ ^1 light[level=15]
+
+        execute as @e[tag=lol.structure.tower,tag=temp] at @s run function animated_java:lol.structure.tower/summon/red
+        execute as @e[tag=lol.structure.tower,tag=temp] run ride @e[type=#animated_java:root,tag=aj.lol.structure.tower.root,limit=1,sort=nearest] mount @s
+        execute as @e[tag=lol.structure.tower,tag=temp] on passengers as @s[type=#animated_java:root,tag=aj.lol.structure.tower.root] run function animated_java:lol.structure.tower/animations/spawn/play
+
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] attack_damage 200
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] armor 100
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] magic_resist 100
+
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] armor.pen 30
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] magic_resist.pen 0
+
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] aa.cd 0
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] aa.spd 0
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] aa.range 40
+
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] hp.regen 0
+        scoreboard players set @e[tag=lol.structure.tower,tag=temp] hp.max 5000
+        scoreboard players operation @e[tag=lol.structure.tower,tag=temp] hp.left = @e[tag=lol.structure.tower,tag=temp] hp.max
+
+        tag @e[tag=lol.structure.tower,tag=temp] remove temp
+    }
+
+    function stun {
+        tag @s add is_stunned
+
+        execute positioned ^ ^10 ^ unless entity @e[tag=particle.stun,limit=1,sort=nearest,distance=..1] run summon area_effect_cloud ~ ~ ~ {Duration:999999,Tags:["particle.stun"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute positioned ^ ^10 ^ as @e[tag=particle.stun,limit=1,sort=nearest] rotated as @s run tp @s ~ ~ ~ ~20 ~
+        execute positioned ^ ^10 ^ as @e[tag=particle.stun,limit=1,sort=nearest] at @s run particle crit ^ ^ ^1 0.1 0.1 0.1 0 5 force
+
+        execute if score @s cc.stun matches 0 run tag @s remove is_stunned
+        execute if score @s cc.stun matches 0 positioned ^ ^10 ^ run kill @e[tag=particle.stun,limit=1,sort=nearest]
+    }
+
+    dir target {
+        function attack {
+            execute on passengers as @s[tag=tower.target] on origin run scoreboard players set @s fx.sight 2
+
+            #execute positioned ^-1.5 ^10.5 ^1.5 run summon area_effect_cloud ~ ~ ~ {Duration:1,Tags:["lol.tower_beam"]}
+            execute positioned ^-1.5 ^10.5 ^1.5 on passengers as @s[tag=tower.target] on origin facing entity @s feet run function _lol:structure/tower/beam
+
+            execute if score @s aa.cd matches 0 on passengers if entity @s[tag=lol.animation,tag=ready_to_attack] on vehicle positioned ^-1.5 ^10.5 ^1.5 run function _lol:structure/tower/shot
+        }
+
+        function change {
+            function _lol:structure/tower/target/clear
+
+            tag @s add has_target
+            tag @s add is_targeting_champion
+            execute at @s run summon area_effect_cloud ~ ~ ~ {Tags:["tower.target"],Duration:999999,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+            ride @e[tag=tower.target,limit=1,sort=nearest,type=area_effect_cloud] mount @s
+
+            ## RED TOWER
+            execute if entity @s[tag=red] if entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s armor 50
+            execute if entity @s[tag=red] if entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s magic_resist 50
+
+            execute if entity @s[tag=red] unless entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s armor 100
+            execute if entity @s[tag=red] unless entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s magic_resist 100
+
+            execute if entity @s[tag=red] on passengers as @s[tag=tower.target] at @s run data modify entity @s Owner set from entity @e[team=!red,type=#has_health_bar,tag=!unvalid,tag=champion,limit=1,sort=nearest] UUID
+
+            ## BLUE TOWER
+            execute if entity @s[tag=blue] if entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s armor 50
+            execute if entity @s[tag=blue] if entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s magic_resist 50
+
+            execute if entity @s[tag=blue] unless entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s armor 100
+            execute if entity @s[tag=blue] unless entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s magic_resist 100
+
+            execute if entity @s[tag=blue] on passengers as @s[tag=tower.target] at @s run data modify entity @s Owner set from entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,tag=champion,limit=1,sort=nearest] UUID
+
+            ## ALERT SOUND
+            execute on passengers as @s[tag=tower.target] on origin at @s run playsound structure.tower.target master @s ~ ~ ~
+        }
+
+        function check {
+            tag @s add has_target
+            execute at @s run summon area_effect_cloud ~ ~ ~ {Tags:["tower.target"],Duration:999999,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+            execute at @s run ride @e[tag=tower.target,limit=1,sort=nearest,type=area_effect_cloud] mount @s
+
+            ## RED TOWER
+            execute if entity @s[tag=red] if entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s armor 50
+            execute if entity @s[tag=red] if entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s magic_resist 50
+
+            execute if entity @s[tag=red] unless entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s armor 100
+            execute if entity @s[tag=red] unless entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s magic_resist 100
+
+            execute if entity @s[tag=red] on passengers as @s[tag=tower.target] unless data entity @s Owner if entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=is_pet] at @s run data modify entity @s Owner set from entity @e[team=!red,type=#has_health_bar,tag=!unvalid,tag=is_pet,limit=1,sort=nearest] UUID
+
+            execute if entity @s[tag=red] on passengers as @s[tag=tower.target] unless data entity @s Owner if entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=minion.super] at @s run data modify entity @s Owner set from entity @e[team=!red,type=#has_health_bar,tag=!unvalid,tag=minion.super,limit=1,sort=nearest] UUID
+
+            execute if entity @s[tag=red] on passengers as @s[tag=tower.target] unless data entity @s Owner if entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=minion.siege] at @s run data modify entity @s Owner set from entity @e[team=!red,type=#has_health_bar,tag=!unvalid,tag=minion.siege,limit=1,sort=nearest] UUID
+
+            execute if entity @s[tag=red] on passengers as @s[tag=tower.target] unless data entity @s Owner if entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=minion.melee] at @s run data modify entity @s Owner set from entity @e[team=!red,type=#has_health_bar,tag=!unvalid,tag=minion.melee,limit=1,sort=nearest] UUID
+
+            execute if entity @s[tag=red] on passengers as @s[tag=tower.target] unless data entity @s Owner if entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=minion.caster] at @s run data modify entity @s Owner set from entity @e[team=!red,type=#has_health_bar,tag=!unvalid,tag=minion.caster,limit=1,sort=nearest] UUID
+
+            execute if entity @s[tag=red] on passengers as @s[tag=tower.target] unless data entity @s Owner if entity @e[team=!red,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=champion] at @s run data modify entity @s Owner set from entity @e[team=!red,type=#has_health_bar,tag=!unvalid,tag=champion,limit=1,sort=nearest] UUID
+
+            ## BLUE TOWER
+            execute if entity @s[tag=blue] if entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s armor 50
+            execute if entity @s[tag=blue] if entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s magic_resist 50
+
+            execute if entity @s[tag=blue] unless entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s armor 100
+            execute if entity @s[tag=blue] unless entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=can_reduce_tower_armor] run scoreboard players set @s magic_resist 100
+
+            execute if entity @s[tag=blue] on passengers as @s[tag=tower.target] unless data entity @s Owner if entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=is_pet] at @s run data modify entity @s Owner set from entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,tag=is_pet,limit=1,sort=nearest] UUID
+
+            execute if entity @s[tag=blue] on passengers as @s[tag=tower.target] unless data entity @s Owner if entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=minion.super] at @s run data modify entity @s Owner set from entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,tag=minion.super,limit=1,sort=nearest] UUID
+
+            execute if entity @s[tag=blue] on passengers as @s[tag=tower.target] unless data entity @s Owner if entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=minion.siege] at @s run data modify entity @s Owner set from entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,tag=minion.siege,limit=1,sort=nearest] UUID
+
+            execute if entity @s[tag=blue] on passengers as @s[tag=tower.target] unless data entity @s Owner if entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=minion.melee] at @s run data modify entity @s Owner set from entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,tag=minion.melee,limit=1,sort=nearest] UUID
+
+            execute if entity @s[tag=blue] on passengers as @s[tag=tower.target] unless data entity @s Owner if entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=minion.caster] at @s run data modify entity @s Owner set from entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,tag=minion.caster,limit=1,sort=nearest] UUID
+
+            execute if entity @s[tag=blue] on passengers as @s[tag=tower.target] unless data entity @s Owner if entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,dx=39,dz=39,dy=39,tag=champion] at @s run data modify entity @s Owner set from entity @e[team=!blue,type=#has_health_bar,tag=!unvalid,tag=champion,limit=1,sort=nearest] UUID
+
+            ## ALERT SOUND
+            execute on passengers as @s[tag=tower.target] on origin at @s run playsound structure.tower.target master @s ~ ~ ~
+        }
+
+        function clear {
+            scoreboard players set @s aa.cd 20
+            scoreboard players set @s aa.spd 0
+            tag @s remove has_target
+            tag @s remove is_targeting_champion
+            execute on passengers as @s[tag=tower.target] run kill @s
+        }
+    }
+}

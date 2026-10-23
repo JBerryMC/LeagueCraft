@@ -1,0 +1,1 @@
+execute if entity @s[tag=aj.lol.structure.tower.bone.fire] run data modify entity @s {} merge value {transformation:[-1.1197916666666667f,0f,1.3713492802952133e-16f,-1.4765625000000002f,0f,0.9592691931079367f,0f,10.0078125f,-1.3713492802952133e-16f,0f,-1.1197916666666667f,1.5609374999999999f,0f,0f,0f,1f],start_interpolation:0}

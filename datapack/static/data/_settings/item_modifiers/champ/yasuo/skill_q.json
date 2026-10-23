@@ -1,0 +1,84 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Tempest Steel",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ability 1",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Thrusts forward, damaging all enemies in a line.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "On hit, grants a stack of Gathering Storm for a few seconds.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "At 2 stacks, Steel Tempest fires a whirlwind that knocks ",
+            "color": "gray",
+            "italic": false
+          },
+          {
+            "text": "Airborne.",
+            "color": "white",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "Tempest Steel is treated as a basic attack.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                111001.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

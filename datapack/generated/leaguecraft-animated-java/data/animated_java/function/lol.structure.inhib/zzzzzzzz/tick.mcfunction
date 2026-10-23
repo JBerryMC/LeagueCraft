@@ -1,0 +1,1 @@
+execute if entity @s[tag=aj.lol.structure.inhib.root] run function animated_java:lol.structure.inhib/zzzzzzzz/tick_as_root

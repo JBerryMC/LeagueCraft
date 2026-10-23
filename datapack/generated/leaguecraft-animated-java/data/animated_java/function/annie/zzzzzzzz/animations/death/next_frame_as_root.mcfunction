@@ -1,0 +1,1 @@
+function animated_java:annie/zzzzzzzz/animations/death/tick_animation

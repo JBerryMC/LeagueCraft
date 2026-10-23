@@ -1,0 +1,1 @@
+execute if entity @s[tag=aj.minion.super.root] run function animated_java:minion.super/zzzzzzzz/tick_as_root

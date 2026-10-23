@@ -1,0 +1,1 @@
+function animated_java:annie/zzzzzzzz/animations/walk/tick_animation

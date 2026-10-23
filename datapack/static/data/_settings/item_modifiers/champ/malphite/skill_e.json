@@ -1,0 +1,85 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Ground Slam",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ability 3",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Malphite slams the ground, sending out a shockwave that deals magic damage",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "based on his ",
+            "color": "gray",
+            "italic": false
+          },
+          {
+            "text": "Armor",
+            "color": "gold",
+            "italic": false
+          },
+          {
+            "text": " and reduces the ",
+            "color": "gray",
+            "italic": false
+          },
+          {
+            "text": "Attack Speed",
+            "color": "yellow",
+            "italic": false
+          },
+          {
+            "text": " of enemies for a short duration.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                123003.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

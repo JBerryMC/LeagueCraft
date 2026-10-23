@@ -1,0 +1,1 @@
+execute if entity @s[tag=aj.lol.structure.nexus.root] run function animated_java:lol.structure.nexus/zzzzzzzz/tick_as_root

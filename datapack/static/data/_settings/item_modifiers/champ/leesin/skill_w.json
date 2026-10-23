@@ -1,0 +1,94 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Safeguard / Iron Will",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ability 2",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Safeguard: ",
+            "color": "white",
+            "italic": false
+          },
+          {
+            "text": "Lee Sin rushes to target ally, shielding himself from damage.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "If the ally is a champion, they are also shielded.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "After using Safeguard, Lee Sin can cast Iron Will.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Iron Will: ",
+            "color": "white",
+            "italic": false
+          },
+          {
+            "text": "Lee Sin gains Omnivamp.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                112002.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

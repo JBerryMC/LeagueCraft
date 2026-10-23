@@ -1,0 +1,14 @@
+# jhin:item/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function headwear {
+    clear @s iron_sword[minecraft:custom_data~{lol_item:1}]
+    execute if score .world lang matches 0 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[800001f]},minecraft:custom_name={text:"Jhin",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+    execute if score .world lang matches 1 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[800001f]},minecraft:custom_name={text:"Jhin",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+}
+
+function offhand {
+    clear @s carrot_on_a_stick[minecraft:custom_data~{lol_item:1}]
+    tag @s remove offhand_temp
+
+    item replace entity @s weapon.offhand with minecraft:carrot_on_a_stick[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[9999f]},minecraft:custom_name={text:".",color:"#1b0c1b"},minecraft:custom_data={lol_item:1,kill_item:1,offhand:1}]
+}

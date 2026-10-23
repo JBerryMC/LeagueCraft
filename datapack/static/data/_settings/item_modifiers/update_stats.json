@@ -1,0 +1,145 @@
+{
+  "type": "minecraft:set_lore",
+  "entity": "this",
+  "lore": [
+    {
+      "text": " "
+    },
+    [
+      {
+        "text": "Attack Damage: ",
+        "color": "#FF511D",
+        "italic": false
+      },
+      {
+        "score": {
+          "name": "@s",
+          "objective": "attack_damage"
+        },
+        "color": "gray",
+        "italic": false
+      }
+    ],
+    [
+      {
+        "text": "Ability Power: ",
+        "color": "#1DCCFF",
+        "italic": false
+      },
+      {
+        "score": {
+          "name": "@s",
+          "objective": "ability_power"
+        },
+        "color": "gray",
+        "italic": false
+      }
+    ],
+    [
+      {
+        "text": "Attack Speed: ",
+        "color": "yellow",
+        "italic": false
+      },
+      {
+        "score": {
+          "name": "@s",
+          "objective": "aa.spd"
+        },
+        "color": "gray",
+        "italic": false
+      }
+    ],
+    [
+      {
+        "text": "Ability Haste: ",
+        "color": "white",
+        "italic": false
+      },
+      {
+        "score": {
+          "name": "@s",
+          "objective": "haste"
+        },
+        "color": "gray",
+        "italic": false
+      }
+    ],
+    [
+      {
+        "text": "Armor: ",
+        "color": "gold",
+        "italic": false
+      },
+      {
+        "score": {
+          "name": "@s",
+          "objective": "armor"
+        },
+        "color": "gray",
+        "italic": false
+      }
+    ],
+    [
+      {
+        "text": "Magic Resist: ",
+        "color": "dark_aqua",
+        "italic": false
+      },
+      {
+        "score": {
+          "name": "@s",
+          "objective": "magic_resist"
+        },
+        "color": "gray",
+        "italic": false
+      }
+    ],
+    [
+      {
+        "text": "Armor Penetration: ",
+        "color": "dark_red",
+        "italic": false
+      },
+      {
+        "score": {
+          "name": "@s",
+          "objective": "armor.pen"
+        },
+        "color": "gray",
+        "italic": false
+      }
+    ],
+    [
+      {
+        "text": "Magic Resist Penetration: ",
+        "color": "dark_purple",
+        "italic": false
+      },
+      {
+        "score": {
+          "name": "@s",
+          "objective": "magic_resist.pen"
+        },
+        "color": "gray",
+        "italic": false
+      }
+    ],
+    [
+      {
+        "text": "Omnivamp: ",
+        "color": "red",
+        "italic": false
+      },
+      {
+        "score": {
+          "name": "@s",
+          "objective": "omnivamp"
+        },
+        "color": "gray",
+        "italic": false
+      }
+    ]
+  ],
+  "mode": "replace_all"
+}

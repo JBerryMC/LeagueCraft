@@ -1,0 +1,196 @@
+# garen:  (converted from the 1.20.2 LeagueCraft datapack)
+
+function aa {
+    execute if entity @s[tag=!garen.q] run playsound garen.sfx.aa master @a ~ ~ ~
+    execute if entity @s[tag=garen.q] run playsound garen.sfx.q.aa master @a ~ ~ ~
+}
+
+function hud {
+    $title @s actionbar ["",{translate:"space.-60"},{text:"i",font:"minecraft:garen"},{translate:"space.16"},{score:{name:"@s",objective:"status.p"},font:"lol:garen/p"},{translate:"space.5"},{score:{name:"@s",objective:"status.q"},font:"lol:garen/q"},{translate:"space.6"},{score:{name:"@s",objective:"status.w"},font:"lol:garen/w"},{translate:"space.6"},{score:{name:"@s",objective:"status.e"},font:"lol:garen/e"},{translate:"space.6"},{score:{name:"@s",objective:"status.r"},font:"lol:garen/r"},{translate:"space.9"},{score:{name:"@s",objective:"status.spell.1"},font:"minecraft:lol"},{translate:"space.5"},{score:{name:"@s",objective:"status.spell.2"},font:"minecraft:lol"},{translate:"space.-253"},{text:"M",font:"minecraft:lol"},{translate:"space.-274"},{score:{name:"@s",objective:"status.hotbar"},font:"minecraft:hotbar"},{translate:"space.-207"},{storage:"lol:main",nbt:"hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:hp_display"},{translate:"space.-252"},{storage:"lol:main",nbt:"mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:mana_display"},{translate:"space.-183"},{score:{name:"@s",objective:"cd_p"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.passive"},font:"space:default"},{score:{name:"@s",objective:"cd_q"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.q"},font:"space:default"},{score:{name:"@s",objective:"cd_w"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.w"},font:"space:default"},{score:{name:"@s",objective:"cd_e"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.e"},font:"space:default"},{score:{name:"@s",objective:"cd_r"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.r"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.1"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.1"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.2"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.2"},font:"space:default"},{translate:"space.-138"},{score:{name:"@s",objective:"space.hp1"},font:"space:default"},{score:{name:"@s",objective:"hp.left"},font:"minecraft:custom/hp"},{text:"/",font:"minecraft:custom/hp"},{score:{name:"@s",objective:"hp.max"},font:"minecraft:custom/hp"},{score:{name:"@s",objective:"space.hp2"},font:"space:default"},{translate:"space.-78"},{score:{name:"@s",objective:"space.mana1"},font:"space:default"},{score:{name:"@s",objective:"mana"},font:"minecraft:custom/mana"},{text:"/",font:"minecraft:custom/mana"},{score:{name:"@s",objective:"mana.max"},font:"minecraft:custom/mana"},{score:{name:"@s",objective:"space.mana2"},font:"space:default"},{translate:"space.-112"},{storage:"lol:main",nbt:"keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.24"},{storage:"lol:main",nbt:"keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.25"},{nbt:"keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",storage:"lol:main",interpret:true},{translate:"space.18"},{keybind:"key.swapOffhand",font:"minecraft:custom/keybind_small",bold:true,color:"#ffd821"}]
+}
+
+function hud_display {
+    function _champion:hud
+
+    ## p
+    execute if score @s cd_p matches 0 run scoreboard players set @s status.p 1
+    execute if score @s cd_p matches 1.. run scoreboard players set @s status.p 0
+
+    ## Q
+    execute if entity @s[tag=garen.q] run scoreboard players set @s status.q 9
+
+    ## E
+    execute if entity @s[tag=garen.e] if score @s garen.e.duration matches 41.. run scoreboard players set @s status.e 9
+    execute if entity @s[tag=garen.e] if score @s garen.e.duration matches ..40 run scoreboard players set @s status.e 2
+
+    function garen:hud with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+}
+
+function loop {
+    execute as @e[tag=garen.e.particle,type=area_effect_cloud] at @s run function garen:skills/e.particle
+
+    execute as @e[tag=garen.r.fx,type=area_effect_cloud] at @s run function garen:skills/r.animation
+}
+
+function main {
+    ## HUD
+    function garen:hud_display
+
+    ## Item Handling
+    execute unless predicate _champion:slot/head run function garen:item/headwear
+    execute unless predicate _champion:slot/offhand run function garen:item/offhand
+
+    function garen:passive
+
+    ## Re-use
+    execute if predicate _champion:hold_q if score @s use_ability matches 1.. run function _champion:abilities/use_q
+    execute if predicate _champion:hold_w if score @s use_ability matches 1.. run function _champion:abilities/use_w
+    execute if predicate _champion:hold_e if score @s use_ability matches 1.. run function _champion:abilities/use_e
+    execute if predicate _champion:hold_r if score @s use_ability matches 1.. run function _champion:abilities/use_r
+
+    ## First use
+    execute if predicate _champion:use_q run function _champion:abilities/use_q
+
+    execute if predicate _champion:use_w run function _champion:abilities/use_w
+
+    execute if predicate _champion:use_e run function _champion:abilities/use_e
+
+    execute if predicate _champion:use_r run function _champion:abilities/use_r
+
+    ## Q
+    execute if entity @s[team=red,tag=garen.q] unless entity @e[tag=garen.q.cd,tag=red] run function garen:skills/q.end
+    execute if entity @s[team=blue,tag=garen.q] unless entity @e[tag=garen.q.cd,tag=blue] run function garen:skills/q.end
+
+    execute if entity @s[tag=garen.q] run particle dust{color:[0.7,1,1],scale:0.5} ^ ^0.5 ^ 0.1 0.5 0.1 1 50 force
+}
+
+function passive {
+    execute if score @s cd_p matches 0 if score @s hp.left < @s hp.max anchored eyes run particle happy_villager ^ ^-0.5 ^ 0.1 0.2 0.1 1 1 force
+}
+
+function use_e {
+    function _champion:abilities/cooldown/e
+    playsound minecraft:garen.sfx.e master @a ~ ~ ~
+
+    scoreboard players set @s status.weapon 1200103
+    scoreboard players set @s garen.e.duration 60
+    tag @s add garen.e
+    tag @s add update.fx.garen.e
+    scoreboard players set @s aa.cd 9999
+
+    # x = aa.spd - 10 / 2
+    # y = 7 + x
+    # z = 60 / y
+    # z = Duration
+
+    ## Attack speed scaling
+    scoreboard players operation temp aa.spd = @s aa.spd
+    scoreboard players remove temp aa.spd 10
+    scoreboard players operation temp aa.spd /= 2 integer
+
+    ## Spin how many times
+    scoreboard players add temp aa.spd 7
+    scoreboard players operation @s garen.e.count = @s garen.e.duration
+    scoreboard players operation @s garen.e.count /= temp aa.spd
+
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:60,Tags:["garen.e.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:60,Tags:["garen.e.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    execute if entity @s[team=red] run summon item_display ~ ~ ~ {Tags:["red","garen.e.cd","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:60,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=red] run function garen:skills/e.spin
+
+    execute if entity @s[team=blue] run summon item_display ~ ~ ~ {Tags:["blue","garen.e.cd","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:60,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run function garen:skills/e.spin
+}
+
+function use_q {
+    function _champion:abilities/cooldown/q
+    playsound minecraft:garen.sfx.q master @a ~ ~ ~
+
+    effect clear @s slowness
+    effect give @s speed 4 1 false
+    scoreboard players set @s aa.cd 0
+
+    tag @s add garen.q
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:72,Tags:["garen.q.cd","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:72,Tags:["garen.q.cd","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+}
+
+function use_r {
+    function _champion:abilities/cooldown/r
+
+    scoreboard players set @s channeling 10
+    playsound minecraft:garen.sfx.r master @a ~ ~ ~ 2
+    playsound minecraft:garen.ultimate master @a ~ ~ ~ 2
+    tag @s add r.animation
+
+    execute if entity @s[tag=garen.e,team=red] as @e[tag=garen.e.cd,tag=red] run function garen:skills/e.end
+
+    execute if entity @s[team=red] run summon item_display ~ ~ ~ {Tags:["red","garen.r","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=red] run tag @e[tag=garen.r.temp_target,team=!red] add garen.r.target
+    execute if entity @s[team=red] run scoreboard players set @e[tag=garen.r.target,team=!red] fx.sight 20
+    execute if entity @s[team=red] positioned as @e[tag=garen.r.target,team=!red,limit=1,sort=nearest] run summon item_display ~ ~20 ~ {teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1200401f]}}},Tags:["red","garen.r.fx","temp","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute if entity @s[tag=garen.e,team=blue] as @e[tag=garen.e.cd,tag=blue] run function garen:skills/e.end
+
+    execute if entity @s[team=blue] run summon item_display ~ ~ ~ {Tags:["blue","garen.r","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run tag @e[tag=garen.r.temp_target,team=!blue] add garen.r.target
+    execute if entity @s[team=blue] run scoreboard players set @e[tag=garen.r.target,team=!blue] fx.sight 20
+    execute if entity @s[team=blue] positioned as @e[tag=garen.r.target,team=!blue,limit=1,sort=nearest] run summon item_display ~ ~20 ~ {teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1200401f]}}},Tags:["blue","garen.r.fx","temp","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+}
+
+function use_r.check {
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 run tag @e[tag=champion,dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=!garen.r.temp_target] add garen.r.temp_target
+
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 if entity @e[tag=champion,dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,tag=garen.r.temp_target] at @s run function garen:use_r
+
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 run tag @e[tag=champion,dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,tag=garen.r.temp_target,limit=1,sort=nearest] remove garen.r.temp_target
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 run tag @e[tag=champion,dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=!garen.r.temp_target] add garen.r.temp_target
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 if entity @e[tag=champion,dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,tag=garen.r.temp_target] at @s run function garen:use_r
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 run tag @e[tag=champion,dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,tag=garen.r.temp_target,limit=1,sort=nearest] remove garen.r.temp_target
+
+    execute if entity @s[distance=..5] if score @s cd_r matches 0 positioned ^ ^ ^0.1 run function garen:use_r.check
+}
+
+function use_w {
+    function _champion:abilities/cooldown/w
+
+    playsound minecraft:garen.sfx.w master @a ~ ~ ~
+
+    tag @s add update.shield.garen
+    tag @s add garen.w
+
+    scoreboard players add @s dmg_reduction 30
+    scoreboard players add @s fx.cc_immune 15
+
+    scoreboard players operation garen.w.armor temp = @s armor
+    scoreboard players operation garen.w.armor temp *= 20 integer
+    scoreboard players operation garen.w.armor temp /= 100 integer
+
+    scoreboard players operation @s armor += garen.w.armor temp
+
+    scoreboard players operation garen.w.mr temp = @s magic_resist
+    scoreboard players operation garen.w.mr temp *= 20 integer
+    scoreboard players operation garen.w.mr temp /= 100 integer
+
+    scoreboard players operation @s magic_resist += garen.w.mr temp
+
+    execute if entity @s[team=red] run scoreboard players operation red.garen.w.armor temp = garen.w.armor temp
+    execute if entity @s[team=red] run scoreboard players operation red.garen.w.mr temp = garen.w.mr temp
+    execute if entity @s[team=red] run summon item_display ~ ~ ~ {Tags:["red","garen.w","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:80,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute if entity @s[team=blue] run scoreboard players operation blue.garen.w.armor temp = garen.w.armor temp
+    execute if entity @s[team=blue] run scoreboard players operation blue.garen.w.mr temp = garen.w.mr temp
+    execute if entity @s[team=blue] run summon item_display ~ ~ ~ {Tags:["blue","garen.w","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:80,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    summon area_effect_cloud ~ ~ ~ {Duration:999999,Tags:["shield.all","new"],Passengers:[{id:"area_effect_cloud",Tags:["cd"],Duration:15,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    data modify entity @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] Owner set from entity @s UUID
+    scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all = @s hp.max
+    scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all *= 8 integer
+    scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all /= 100 integer
+    scoreboard players operation @s shield.all += @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all
+    tag @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] remove new
+}

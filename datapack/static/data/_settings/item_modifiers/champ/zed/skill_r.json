@@ -1,0 +1,72 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Death Mark",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ultimate",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Zed becomes untargetable and dashes to an enemy champion, marking them.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "After 3 seconds the mark triggers, repeating a portion of ",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "all the damage Zed dealt to the target while they were marked.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                113004.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

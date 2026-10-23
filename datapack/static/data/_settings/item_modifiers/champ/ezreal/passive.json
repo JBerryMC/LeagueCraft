@@ -1,0 +1,68 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Rising Spell Force",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Passive",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Ezreal gains increasing ",
+            "color": "gray",
+            "italic": false
+          },
+          {
+            "text": "Attack Speed",
+            "color": "yellow",
+            "italic": false
+          },
+          {
+            "text": " each time he successfully hits a spell, stacking up to 5 times.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                117000.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

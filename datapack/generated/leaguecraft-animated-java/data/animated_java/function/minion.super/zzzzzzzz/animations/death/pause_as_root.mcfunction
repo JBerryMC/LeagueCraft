@@ -1,0 +1,1 @@
+tag @s remove aj.minion.super.animation.death

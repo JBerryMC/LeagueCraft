@@ -1,0 +1,3 @@
+execute if score @s aj.lol.structure.tower.animation.idle.loop_mode = $aj.loop_mode.loop aj.i run function animated_java:lol.structure.tower/zzzzzzzz/animations/idle/end_loop
+execute if score @s aj.lol.structure.tower.animation.idle.loop_mode = $aj.loop_mode.once aj.i run function animated_java:lol.structure.tower/animations/idle/stop
+execute if score @s aj.lol.structure.tower.animation.idle.loop_mode = $aj.loop_mode.hold aj.i run function animated_java:lol.structure.tower/animations/idle/pause

@@ -1,0 +1,101 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Sonic Wave / Resonating Strike",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Ability 1",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Sonic Wave: ",
+            "color": "white",
+            "italic": false
+          },
+          {
+            "text": "Lee Sin projects a discordant wave of sound to locate his enemies,",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "dealing physical damage to the first enemy it encounters",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "If Sonic Wave hits, Lee Sin can cast Resonating Strike for the next 3 seconds.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Resonating Strike: ",
+            "color": "white",
+            "italic": false
+          },
+          {
+            "text": "Lee Sin dashes to the enemy hit by Sonic Wave,",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "dealing physical damage based on the target's missing Health.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                112001.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

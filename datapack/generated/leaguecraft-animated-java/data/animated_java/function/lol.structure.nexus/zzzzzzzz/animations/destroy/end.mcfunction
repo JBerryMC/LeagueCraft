@@ -1,0 +1,3 @@
+execute if score @s aj.lol.structure.nexus.animation.destroy.loop_mode = $aj.loop_mode.loop aj.i run function animated_java:lol.structure.nexus/zzzzzzzz/animations/destroy/end_loop
+execute if score @s aj.lol.structure.nexus.animation.destroy.loop_mode = $aj.loop_mode.once aj.i run function animated_java:lol.structure.nexus/animations/destroy/stop
+execute if score @s aj.lol.structure.nexus.animation.destroy.loop_mode = $aj.loop_mode.hold aj.i run function animated_java:lol.structure.nexus/animations/destroy/pause

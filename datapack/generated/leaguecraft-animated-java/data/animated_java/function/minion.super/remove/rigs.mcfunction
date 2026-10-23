@@ -1,0 +1,1 @@
+execute as @e[type=minecraft:item_display,tag=aj.minion.super.root] run function animated_java:minion.super/zzzzzzzz/remove/as_root

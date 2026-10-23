@@ -1,0 +1,345 @@
+# _settings:move/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function language {
+    scoreboard players set @s settings.page 10
+    clear @s structure_void
+    function _settings:reset
+}
+
+function practice {
+    scoreboard players set @s settings.page 20
+    clear @s structure_void
+    function _settings:reset
+}
+
+function settings {
+    scoreboard players set @s settings.page 30
+
+    clear @s structure_void
+    function _settings:reset
+}
+
+function summoner {
+    scoreboard players set @s settings.page 30
+    clear @s structure_void
+    function _settings:reset
+}
+
+function support_me {
+    tellraw @s {text:"\n--- ❤ Support Me! ❤ ---",color:"red",bold:true}
+    tellraw @s {text:"► YouTube",color:"green",click_event:{action:"open_url",url:"https://www.youtube.com/jberry367"}}
+    tellraw @s {text:"► PlanetMinecraft",color:"green",click_event:{action:"open_url",url:"https://www.planetminecraft.com/member/jberry367"}}
+    tellraw @s {text:"► Facebook",color:"green",click_event:{action:"open_url",url:"https://www.facebook.com/profile.php?id=100092513667101"}}
+    tellraw @s {text:"► TikTok",color:"green",click_event:{action:"open_url",url:"https://www.tiktok.com/@jberry367"}}
+    tellraw @s {text:"► Discord",color:"green",click_event:{action:"open_url",url:"https://discord.gg/GHaZASpX4j"}}
+    tellraw @s {text:"--- ❤ Chè Rí ❤ ---",color:"red",bold:true}
+    tellraw @s {text:"\n"}
+
+    clear @s structure_void
+    function _settings:reset
+}
+
+function surrender {
+    execute if score _endgame game matches 0 if entity @s[team=red] as @e[tag=lol.structure.nexus,tag=red,type=interaction] at @s run function _lol:structure/nexus/destroy
+    execute if score _endgame game matches 0 if entity @s[team=blue] as @e[tag=lol.structure.nexus,tag=blue,type=interaction] at @s run function _lol:structure/nexus/destroy
+
+    clear @s structure_void
+    function _settings:reset
+}
+
+function uninstall {
+    execute if entity @s[tag=!admin] run tellraw @s {text:"Only ADMINS are allowed to use this settings!",color:"red"}
+    execute if entity @s[tag=!admin] run clear @s structure_void
+    execute if entity @s[tag=!admin] run function _settings:reset
+
+    execute if entity @s[tag=admin] run function _lol:uninstall
+}
+
+dir lang {
+    function eng {
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function vie {
+        clear @s structure_void
+        function _settings:reset
+    }
+}
+
+dir practice {
+    function dummy.1 {
+        execute if entity @s[team=red] at @s run function _lol:dummy/spawn.blue
+        execute if entity @s[team=blue] at @s run function _lol:dummy/spawn.red
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function dummy.2 {
+        execute if entity @s[team=red] at @s run function _lol:dummy/spawn.red
+        execute if entity @s[team=blue] at @s run function _lol:dummy/spawn.blue
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function dummy.3 {
+        function _lol:dummy/clear
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function reset_cd {
+        tag @s[scores={settings.refresh_cd=1..}] add temp
+        scoreboard players set @s[tag=!temp] settings.refresh_cd 1
+        scoreboard players set @s[tag=temp] settings.refresh_cd 0
+        tag @s remove temp
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function reset_hp {
+        tag @s[scores={settings.refresh_hp=1..}] add temp
+        scoreboard players set @s[tag=!temp] settings.refresh_hp 1
+        scoreboard players set @s[tag=temp] settings.refresh_hp 0
+        tag @s remove temp
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function reset_mana {
+        tag @s[scores={settings.refresh_mana=1..}] add temp
+        scoreboard players set @s[tag=!temp] settings.refresh_mana 1
+        scoreboard players set @s[tag=temp] settings.refresh_mana 0
+        tag @s remove temp
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function show_dmg {
+        execute if entity @s[tag=!admin] run tellraw @s {text:"Only ADMINS are allowed to use this settings!",color:"red"}
+
+        execute if entity @s[tag=admin] if score .world settings.show_dmg matches 1 run tag @s add temp
+
+        execute if entity @s[tag=admin,tag=!temp] run tellraw @a [{text:"[LeagueCraft] ",color:"gold"},{selector:"@s"},{text:" has turned on Damage Display"}]
+        execute if entity @s[tag=admin,tag=!temp] run scoreboard players set .world settings.show_dmg 1
+        execute if entity @s[tag=admin,tag=!temp] run execute as @e[type=text_display,tag=dmg_text] run data modify entity @s view_range set value 1.0
+
+        execute if entity @s[tag=admin,tag=temp] run tellraw @a [{text:"[LeagueCraft] ",color:"gold"},{selector:"@s"},{text:" has turned off Damage Display"}]
+        execute if entity @s[tag=admin,tag=temp] run scoreboard players set .world settings.show_dmg 0
+        execute if entity @s[tag=admin,tag=temp] run execute as @e[type=text_display,tag=dmg_text] run data modify entity @s view_range set value 0.0
+
+        tag @s remove temp
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function show_stats {
+        scoreboard players add .world settings.show_stats 1
+        execute if score .world settings.show_stats matches 2 run scoreboard players set .world settings.show_stats 0
+
+        #tellraw @a [{"text":"[LeagueCraft] ","color":"gold"},{"selector":"@s"},{"text":" has turned on Stats Display"}]
+        execute if score .world settings.show_stats matches 1 as @e[type=text_display,tag=stats_bar] run data modify entity @s view_range set value 1.0
+
+        #tellraw @a [{"text":"[LeagueCraft] ","color":"gold"},{"selector":"@s"},{"text":" has turned off Stats Display"}]
+        execute if score .world settings.show_stats matches 0 as @e[type=text_display,tag=stats_bar] run data modify entity @s view_range set value 0.0
+
+        clear @s structure_void
+        function _settings:reset
+    }
+}
+
+dir structure {
+    function destroy.1 {
+        execute at @s run tag @e[tag=lol.structure,sort=nearest,limit=1,tag=!is_destroyed] add mark_for_destroy
+
+        execute at @s as @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_destroy] if entity @s[tag=lol.structure.tower] at @s run function _lol:structure/tower/destroy
+        execute at @s as @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_destroy] if entity @s[tag=lol.structure.inhib] at @s run function _lol:structure/inhib/destroy
+        execute at @s as @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_destroy] if entity @s[tag=lol.structure.nexus] at @s run function _lol:structure/nexus/destroy
+
+        execute at @s run tag @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_destroy] remove mark_for_destroy
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function destroy.2 {
+        execute at @s as @e[tag=lol.structure,tag=!is_destroyed] if entity @s[tag=lol.structure.tower] at @s run function _lol:structure/tower/destroy
+        execute at @s as @e[tag=lol.structure,tag=!is_destroyed] if entity @s[tag=lol.structure.inhib] at @s run function _lol:structure/inhib/destroy
+        execute at @s as @e[tag=lol.structure,tag=!is_destroyed] if entity @s[tag=lol.structure.nexus] at @s run function _lol:structure/nexus/destroy
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function inhib.1 {
+        execute at @s store success score @s temp positioned ~-3 ~ ~-3 if entity @e[tag=lol.structure,dx=5,dz=5,dy=2]
+        execute if score @s temp matches 1 run tellraw @s [{text:"[LeagueCraft] ",color:"gold"},{text:"There is not enough space for this structure!"}]
+
+        execute if score @s temp matches 0 at @s run function _lol:structure/inhib/spawn.red
+        execute if score @s temp matches 0 run tellraw @a [{text:"[LeagueCraft] ",color:"gold"},{selector:"@s"},{text:" has spawned a Red Inhibitor"}]
+        execute if score @s temp matches 0 at @s run tp @s ~ ~3 ~
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function inhib.2 {
+        execute at @s store success score @s temp positioned ~-3 ~ ~-3 if entity @e[tag=lol.structure,dx=5,dz=5,dy=2]
+        execute if score @s temp matches 1 run tellraw @s [{text:"[LeagueCraft] ",color:"gold"},{text:"There is not enough space for this structure!"}]
+
+        execute if score @s temp matches 0 at @s run function _lol:structure/inhib/spawn.blue
+        execute if score @s temp matches 0 run tellraw @a [{text:"[LeagueCraft] ",color:"gold"},{selector:"@s"},{text:" has spawned a Blue Inhibitor"}]
+        execute if score @s temp matches 0 at @s run tp @s ~ ~3 ~
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function nexus.1 {
+        execute at @s store success score @s temp positioned ~-3 ~ ~-3 if entity @e[tag=lol.structure,dx=7,dz=7,dy=5]
+        execute if score @s temp matches 1 run tellraw @s [{text:"[LeagueCraft] ",color:"gold"},{text:"There is not enough space for this structure!"}]
+
+        execute if score @s temp matches 0 at @s run function _lol:structure/nexus/spawn.red
+        execute if score @s temp matches 0 run tellraw @a [{text:"[LeagueCraft] ",color:"gold"},{selector:"@s"},{text:" has spawned a Red Nexus"}]
+        execute if score @s temp matches 0 at @s run tp @s ~ ~6 ~
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function nexus.2 {
+        execute at @s store success score @s temp positioned ~-3 ~ ~-3 if entity @e[tag=lol.structure,dx=7,dz=7,dy=5]
+        execute if score @s temp matches 1 run tellraw @s [{text:"[LeagueCraft] ",color:"gold"},{text:"There is not enough space for this structure!"}]
+
+        execute if score @s temp matches 0 at @s run function _lol:structure/nexus/spawn.blue
+        execute if score @s temp matches 0 run tellraw @a [{text:"[LeagueCraft] ",color:"gold"},{selector:"@s"},{text:" has spawned a Blue Nexus"}]
+        execute if score @s temp matches 0 at @s run tp @s ~ ~6 ~
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function rebuild.1 {
+        execute at @s run tag @e[tag=lol.structure,sort=nearest,limit=1,tag=is_destroyed] add mark_for_rebuild
+
+        execute at @s as @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_rebuild] if entity @s[tag=lol.structure.tower] at @s run function _lol:structure/tower/rebuild
+        execute at @s as @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_rebuild] if entity @s[tag=lol.structure.inhib] at @s run function _lol:structure/inhib/rebuild
+        execute at @s as @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_rebuild] if entity @s[tag=lol.structure.nexus] at @s run function _lol:structure/nexus/rebuild
+
+        execute at @s run tag @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_rebuild] remove mark_for_rebuild
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function rebuild.2 {
+        execute at @s as @e[tag=lol.structure,tag=is_destroyed] if entity @s[tag=lol.structure.tower] at @s run function _lol:structure/tower/rebuild
+        execute at @s as @e[tag=lol.structure,tag=is_destroyed] if entity @s[tag=lol.structure.inhib] at @s run function _lol:structure/inhib/rebuild
+        execute at @s as @e[tag=lol.structure,tag=is_destroyed] if entity @s[tag=lol.structure.nexus] at @s run function _lol:structure/nexus/rebuild
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function remove.1 {
+        execute at @s run tag @e[tag=lol.structure,sort=nearest,limit=1] add mark_for_remove
+
+        execute at @s as @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_remove] if entity @s[tag=lol.structure.tower] at @s run function _lol:structure/tower/remove
+        execute at @s as @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_remove] if entity @s[tag=lol.structure.inhib] at @s run function _lol:structure/inhib/remove
+        execute at @s as @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_remove] if entity @s[tag=lol.structure.nexus] at @s run function _lol:structure/nexus/remove
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function remove.2 {
+        execute at @s as @e[tag=lol.structure] if entity @s[tag=lol.structure.tower] at @s run function _lol:structure/tower/remove
+        execute at @s as @e[tag=lol.structure] if entity @s[tag=lol.structure.inhib] at @s run function _lol:structure/inhib/remove
+        execute at @s as @e[tag=lol.structure] if entity @s[tag=lol.structure.nexus] at @s run function _lol:structure/nexus/remove
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function rotate {
+        execute at @s run tag @e[tag=lol.structure,sort=nearest,limit=1] add mark_for_rotate
+
+        execute at @s as @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_rotate] if entity @s[tag=lol.structure.tower] at @s run function _lol:structure/tower/rotate
+        execute at @s as @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_rotate] if entity @s[tag=lol.structure.inhib] at @s run function _lol:structure/rotate
+        execute at @s as @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_rotate] if entity @s[tag=lol.structure.nexus] at @s run function _lol:structure/rotate
+
+        execute at @s run tag @e[tag=lol.structure,sort=nearest,limit=1,tag=mark_for_rotate] remove mark_for_rotate
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function tower.1 {
+        execute at @s store success score @s temp positioned ~-3 ~ ~-3 if entity @e[tag=lol.structure,dx=5,dz=5,dy=9]
+        execute if score @s temp matches 1 run tellraw @s [{text:"[LeagueCraft] ",color:"gold"},{text:"There is not enough space for this structure!"}]
+
+        execute if score @s temp matches 0 at @s run function _lol:structure/tower/spawn.red
+        execute if score @s temp matches 0 run tellraw @a [{text:"[LeagueCraft] ",color:"gold"},{selector:"@s"},{text:" has spawned a Red Tower"}]
+        execute if score @s temp matches 0 at @s run tp @s ~ ~10 ~
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function tower.2 {
+        execute at @s store success score @s temp positioned ~-3 ~ ~-3 if entity @e[tag=lol.structure,dx=5,dz=5,dy=9]
+        execute if score @s temp matches 1 run tellraw @s [{text:"[LeagueCraft] ",color:"gold"},{text:"There is not enough space for this structure!"}]
+
+        execute if score @s temp matches 0 at @s run function _lol:structure/tower/spawn.blue
+        execute if score @s temp matches 0 run tellraw @a [{text:"[LeagueCraft] ",color:"gold"},{selector:"@s"},{text:" has spawned a Blue Tower"}]
+        execute if score @s temp matches 0 at @s run tp @s ~ ~10 ~
+
+        clear @s structure_void
+        function _settings:reset
+    }
+}
+
+dir summoner {
+    function champion {
+        scoreboard players set @s settings.page 100
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function spell.1 {
+        scoreboard players add @s spell.1 1
+        execute if score @s spell.1 matches 9.. run scoreboard players set @s spell.1 1
+        execute if score @s spell.1 = @s spell.2 run scoreboard players add @s spell.1 1
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function spell.2 {
+        scoreboard players add @s spell.2 1
+        execute if score @s spell.2 matches 9.. run scoreboard players set @s spell.2 1
+        execute if score @s spell.1 = @s spell.2 run scoreboard players add @s spell.2 1
+
+        clear @s structure_void
+        function _settings:reset
+    }
+
+    function team {
+        execute if entity @s[tag=!champion,team=red] run tag @s add temp
+        execute if entity @s[tag=!champion,team=red,tag=temp] run team join blue @s
+
+        execute if entity @s[tag=!champion,team=blue,tag=!temp] run team join red @s
+        execute if entity @s[tag=!champion,team=!red,team=!blue] run team join red @s
+        tag @s remove temp
+
+        clear @s structure_void
+        function _settings:reset
+    }
+}

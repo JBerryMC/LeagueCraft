@@ -1,0 +1,2 @@
+execute on passengers run function animated_java:lol.structure.tower/zzzzzzzz/animations/spawn/tree/leaf_0_as_bone
+execute unless entity @s[tag=aj.lol.structure.tower.disable_command_keyframes] at @s run function animated_java:lol.structure.tower/animations/pause_all

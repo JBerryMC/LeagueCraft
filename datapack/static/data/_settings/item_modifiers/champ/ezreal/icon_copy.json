@@ -1,0 +1,72 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Ezreal",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "The Prodigal Explorer",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "A dashing adventurer, unknowingly gifted in the magical arts,",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "Ezreal raids long-lost catacombs, tangles with ancient curses, and overcomes seemingly impossible odds with ease.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "His courage and bravado knowing no bounds, he prefers to improvise his way...",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                9999.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

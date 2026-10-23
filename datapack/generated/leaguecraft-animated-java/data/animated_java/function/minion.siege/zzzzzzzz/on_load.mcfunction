@@ -1,0 +1,2 @@
+scoreboard players set @s aj.minion.siege.rig_loaded 1
+execute unless score @s aj.minion.siege.export_version = aj.minion.siege.export_version aj.i at @s run function animated_java:minion.siege/zzzzzzzz/mark_outdated_rig

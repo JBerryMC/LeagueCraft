@@ -1,0 +1,3 @@
+execute if score @s aj.minion.super.animation.aa.loop_mode = $aj.loop_mode.loop aj.i run function animated_java:minion.super/zzzzzzzz/animations/aa/end_loop
+execute if score @s aj.minion.super.animation.aa.loop_mode = $aj.loop_mode.once aj.i run function animated_java:minion.super/animations/aa/stop
+execute if score @s aj.minion.super.animation.aa.loop_mode = $aj.loop_mode.hold aj.i run function animated_java:minion.super/animations/aa/pause

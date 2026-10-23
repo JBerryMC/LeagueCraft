@@ -1,0 +1,72 @@
+{
+  "type": "minecraft:sequence",
+  "functions": [
+    {
+      "type": "minecraft:set_name",
+      "entity": "this",
+      "name": {
+        "text": "Sunlight",
+        "italic": false
+      }
+    },
+    {
+      "type": "minecraft:set_lore",
+      "entity": "this",
+      "lore": [
+        [
+          {
+            "text": "Passive",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": " "
+          }
+        ],
+        [
+          {
+            "text": "Damaging spells afflict enemies with Sunlight for 1.5 seconds.",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "When allied Champions deal damage to those targets, ",
+            "color": "gray",
+            "italic": false
+          }
+        ],
+        [
+          {
+            "text": "they consume the Sunlight to deal additional magic damage.",
+            "color": "gray",
+            "italic": false
+          }
+        ]
+      ],
+      "mode": "replace_all"
+    },
+    {
+      "type": "minecraft:sequence",
+      "functions": [
+        {
+          "type": "minecraft:set_custom_data",
+          "tag": "{}"
+        },
+        {
+          "type": "minecraft:set_components",
+          "components": {
+            "minecraft:custom_model_data": {
+              "floats": [
+                120000.0
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

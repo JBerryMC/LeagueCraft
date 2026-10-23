@@ -1,0 +1,1 @@
+function animated_java:minion.melee/zzzzzzzz/animations/aa/tick_animation

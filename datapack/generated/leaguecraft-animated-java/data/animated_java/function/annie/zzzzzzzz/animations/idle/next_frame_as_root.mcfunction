@@ -1,0 +1,1 @@
+function animated_java:annie/zzzzzzzz/animations/idle/tick_animation

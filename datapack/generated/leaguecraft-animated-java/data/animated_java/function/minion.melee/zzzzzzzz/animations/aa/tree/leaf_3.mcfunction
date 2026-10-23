@@ -1,0 +1,1 @@
+execute on passengers run function animated_java:minion.melee/zzzzzzzz/animations/aa/tree/leaf_3_as_bone

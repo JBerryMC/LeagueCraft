@@ -1,0 +1,1215 @@
+# _lol:champion/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function _choose {
+    execute if entity @s[tag=!has_display_bar] run summon block_display ~ ~ ~ {Tags:["temp","lol.bar_display"],Passengers:[{id:"area_effect_cloud",Tags:["bar_owner"],Duration:2147483647,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["mana","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["shield_all","stats_bar"],background:0,billboard:"vertical"}]}
+    execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[0.325,0.375,0.325]}}
+    execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=mana] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,0.0,0.0001]}}
+    execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=shield_all] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,0.0,0.0001]}}
+    execute if entity @s[tag=!has_display_bar] at @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] run data modify entity @e[tag=bar_owner,limit=1,sort=nearest,type=area_effect_cloud] Owner set from entity @s UUID
+    execute if entity @s[tag=!has_display_bar,team=red] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] add red
+    execute if entity @s[tag=!has_display_bar,team=blue] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] add blue
+    execute if entity @s[tag=!has_display_bar] if score .world settings.show_stats matches 0 as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+    execute if entity @s[tag=!has_display_bar] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] remove temp
+
+    tag @s add has_display_bar
+    tag @s add update.bar.mana
+    tag @s add update.bar.hp
+    tag @s add offhand_temp
+
+    tag @s add remove.shield
+    execute as @e[type=area_effect_cloud,tag=shield.all] run function _champion:dmg/shield/check_origin
+
+    tag @s add update.shield_all
+    scoreboard players set @s shield.all 0
+    scoreboard players set @s shield.physical 0
+    scoreboard players set @s shield.magic 0
+    function _champion:hp/percentage_shield_all
+
+    tag @s remove champion
+    tag @s remove melee
+    tag @s remove ranged
+
+    tag @s remove has_health_bar
+
+    scoreboard players set @s healnshield_power 0
+
+    scoreboard players set @s wound 0
+    scoreboard players set @s dmg_magic.deal 0
+    scoreboard players set @s dmg_physical.deal 0
+    scoreboard players set @s dmg_true.deal 0
+
+    #Yasuo & Yone
+    tag @s remove yasuo
+    tag @s remove yone
+    tag @s remove full_p
+    tag @s remove full_q
+    scoreboard players set @s stack_q 0
+
+    #LeeSin
+    tag @s remove leesin
+    scoreboard players set @s stack_p 0
+
+    ## Zed
+    execute if entity @s[tag=zed,team=red] as @e[tag=!red,tag=zed.r.mark] at @s run function zed:skills/r.end
+    execute if entity @s[tag=zed,team=blue] as @e[tag=!blue,tag=zed.r.mark] at @s run function zed:skills/r.end
+    execute if entity @s[tag=zed,team=red] run kill @e[tag=zed.shadow,tag=red]
+    execute if entity @s[tag=zed,team=red] as @e[tag=zed.shadow.model,team=red] at @s run function zed:skills/shadow.model
+    execute if entity @s[tag=zed,team=blue] run kill @e[tag=zed.shadow,tag=blue]
+    execute if entity @s[tag=zed,team=blue] as @e[tag=zed.shadow.model,team=blue] at @s run function zed:skills/shadow.model
+    tag @s remove zed
+
+    #Pyke
+    tag @s remove pyke
+
+    #Ashe
+    tag @s remove ashe
+    scoreboard players set @s ashe.q.stack 0
+
+    #Vayne
+    execute if entity @s[tag=vayne,team=red] run kill @e[team=red,tag=vayne.w.passive,type=armor_stand]
+    execute if entity @s[tag=vayne,team=blue] run kill @e[team=blue,tag=vayne.w.passive,type=armor_stand]
+    tag @s remove vayne
+    scoreboard players set @s vayne.w.stack 0
+
+    #Ezreal
+    tag @s remove ezreal
+
+    #Jhin
+    execute if entity @s[tag=jhin,team=red] run kill @e[tag=red,tag=jhin.r.limit,type=area_effect_cloud]
+    execute if entity @s[tag=jhin,team=red] run bossbar remove red.jhin.r
+    execute if entity @s[tag=jhin,team=red] run kill @e[team=red,tag=jhin.trap,type=armor_stand]
+    execute if entity @s[tag=jhin,team=red] run kill @e[team=red,tag=jhin.r.dummy,type=armor_stand]
+    execute if entity @s[tag=jhin,team=blue] run kill @e[tag=blue,tag=jhin.r.limit,type=area_effect_cloud]
+    execute if entity @s[tag=jhin,team=blue] run bossbar remove blue.jhin.r
+    execute if entity @s[tag=jhin,team=blue] run kill @e[team=blue,tag=jhin.trap,type=armor_stand]
+    execute if entity @s[tag=jhin,team=blue] run kill @e[team=blue,tag=jhin.r.dummy,type=armor_stand]
+    tag @s remove jhin
+    scoreboard players set @s jhin.aa.count 1
+
+    ## Aatrox
+    execute if entity @s[team=red] as @e[tag=aatrox.r,team=red,type=horse] run function aatrox:skills/r.end
+    execute if entity @s[team=blue] as @e[tag=aatrox.r,team=blue,type=horse] run function aatrox:skills/r.end
+    tag @s remove aatrox
+    scoreboard players set @s stack_q 0
+
+    tag @s remove leona
+    tag @s remove leona.q
+    tag @s remove leona.w
+
+    tag @s remove soraka
+
+    tag @s remove garen
+    tag @s remove garen.q
+    tag @s remove garen.w
+
+    tag @s remove malphite
+    tag @s remove malphite.passive
+    tag @s remove malphite.w
+
+    execute if entity @s[tag=lux,team=red] as @e[tag=lux.e.area,tag=red,type=item_display] at @s run function lux:skills/e.end
+    execute if entity @s[tag=lux,team=blue] as @e[tag=lux.e.area,tag=blue,type=item_display] at @s run function lux:skills/e.end
+    tag @s remove lux
+
+    ## Annie
+    execute if entity @s[tag=annie,team=red] as @e[tag=annie.r,team=red,type=#can_aggro] at @s run function annie:skills/r.end
+    execute if entity @s[tag=annie,team=blue] as @e[tag=annie.r,team=blue,type=#can_aggro] at @s run function annie:skills/r.end
+    tag @s remove annie
+
+    tag @s remove useEnergy
+    tag @s remove useMana
+
+    tag @s remove r.animation
+    tag @s remove w.animation
+
+    clear @s iron_sword[minecraft:custom_data~{kill_item:1}]
+    clear @s minecraft:carrot_on_a_stick[minecraft:custom_data~{kill_item:1}]
+    clear @s phantom_membrane[minecraft:custom_data~{kill_item:1}]
+
+    title @s clear
+    title @s actionbar ""
+    effect clear @s
+
+    scoreboard players set @s channeling -1
+
+    scoreboard players set @s aa.range.count 0
+    scoreboard players set @s spell.1 1
+    scoreboard players set @s spell.2 2
+
+    scoreboard players set @s attack_damage 0
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s dmg_reduction 0
+    scoreboard players set @s dmg_debuff 0
+    scoreboard players set @s armor 0
+    scoreboard players set @s magic_resist 0
+
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s cd_p 0
+    scoreboard players set @s cd_q 0
+    scoreboard players set @s cd_w 0
+    scoreboard players set @s cd_e 0
+    scoreboard players set @s cd_r 0
+
+    scoreboard players set @s cd_spell.1 0
+    scoreboard players set @s cd_spell.2 0
+
+    scoreboard players set @s status.p 0
+    scoreboard players set @s status.q 0
+    scoreboard players set @s status.w 0
+    scoreboard players set @s status.e 0
+    scoreboard players set @s status.r 0
+
+    scoreboard players set @s status.spell.1 1
+    scoreboard players set @s status.spell.2 1
+
+    scoreboard players set @s mana 0
+    scoreboard players set @s hp.left 0
+
+    scoreboard players set @s rclick 0
+    scoreboard players set @s use_sword 0
+    scoreboard players set @s use_ability 0
+    scoreboard players set @s shift 0
+
+    scoreboard players set @s sneak 0
+    scoreboard players set @s walk 0
+    scoreboard players set @s run 0
+}
+
+function _reset {
+    tag @s[tag=has_display_bar] add remove.bar
+    tag @s remove has_display_bar
+
+    attribute @s minecraft:movement_speed base set 0.1
+
+    effect clear @s resistance
+    effect clear @s saturation
+
+    tag @s add remove.shield
+    execute as @e[type=area_effect_cloud,tag=shield.all] run function _champion:dmg/shield/check_origin
+
+    tag @s remove champion
+    tag @s remove melee
+    tag @s remove ranged
+
+    tag @s remove has_health_bar
+
+    scoreboard players set @s healnshield_power 0
+
+    scoreboard players set @s wound 0
+    scoreboard players set @s dmg_magic.deal 0
+    scoreboard players set @s dmg_physical.deal 0
+    scoreboard players set @s dmg_true.deal 0
+
+    #Yasuo & Yone
+    tag @s remove yasuo
+    tag @s remove yone
+    tag @s remove full_p
+    tag @s remove full_q
+    scoreboard players set @s stack_q 0
+
+    #LeeSin
+    tag @s remove leesin
+    scoreboard players set @s stack_p 0
+
+    ## Zed
+    execute if entity @s[tag=zed,team=red] as @e[tag=!red,tag=zed.r.mark] at @s run function zed:skills/r.end
+    execute if entity @s[tag=zed,team=blue] as @e[tag=!blue,tag=zed.r.mark] at @s run function zed:skills/r.end
+    execute if entity @s[tag=zed,team=red] run kill @e[tag=zed.shadow,tag=red]
+    execute if entity @s[tag=zed,team=red] as @e[tag=zed.shadow.model,team=red] at @s run function zed:skills/shadow.model
+    execute if entity @s[tag=zed,team=blue] run kill @e[tag=zed.shadow,tag=blue]
+    execute if entity @s[tag=zed,team=blue] as @e[tag=zed.shadow.model,team=blue] at @s run function zed:skills/shadow.model
+    tag @s remove zed
+
+    #Pyke
+    tag @s remove pyke
+
+    #Ashe
+    execute if entity @s[tag=ashe,team=red] run kill @e[team=red,tag=ashe.e,type=item_display]
+    execute if entity @s[tag=ashe,team=blue] run kill @e[team=blue,tag=ashe.e,type=item_display]
+    tag @s remove ashe
+    scoreboard players set @s ashe.q.stack 0
+
+    #Vayne
+    execute if entity @s[tag=vayne,team=red] run kill @e[team=red,tag=vayne.w.passive,type=armor_stand]
+    execute if entity @s[tag=vayne,team=blue] run kill @e[team=blue,tag=vayne.w.passive,type=armor_stand]
+    tag @s remove vayne
+    scoreboard players set @s vayne.w.stack 0
+
+    #Ezreal
+    execute if entity @s[tag=ezreal,team=red] run tag @e[tag=ezreal.w.target] remove ezreal.w.target
+    tag @s remove ezreal
+
+    #Jhin
+    execute if entity @s[tag=jhin,team=red] run kill @e[tag=red,tag=jhin.r.limit,type=area_effect_cloud]
+    execute if entity @s[tag=jhin,team=red] run bossbar remove red.jhin.r
+    execute if entity @s[tag=jhin,team=red] run kill @e[team=red,tag=jhin.trap,type=armor_stand]
+    execute if entity @s[tag=jhin,team=red] run kill @e[team=red,tag=jhin.r.dummy,type=armor_stand]
+    execute if entity @s[tag=jhin,team=blue] run kill @e[tag=blue,tag=jhin.r.limit,type=area_effect_cloud]
+    execute if entity @s[tag=jhin,team=blue] run bossbar remove blue.jhin.r
+    execute if entity @s[tag=jhin,team=blue] run kill @e[team=blue,tag=jhin.trap,type=armor_stand]
+    execute if entity @s[tag=jhin,team=blue] run kill @e[team=blue,tag=jhin.r.dummy,type=armor_stand]
+    tag @s remove jhin
+    scoreboard players set @s jhin.aa.count 1
+
+    ## Aatrox
+    execute as @e[tag=aatrox.r] run function aatrox:skills/r.end
+    tag @s remove aatrox
+
+    execute if entity @s[tag=leona.q] at @s run function leona:skills/q.end
+    execute if entity @s[tag=leona.w] at @s run function leona:skills/w.end
+    tag @s remove leona
+    tag @s remove leona.q
+    tag @s remove leona.w
+
+    tag @s remove soraka
+
+    execute if entity @s[tag=garen.q] at @s run function garen:skills/q.end
+    execute if entity @s[tag=garen.w] at @s run function garen:skills/w.end
+    tag @s remove garen
+    tag @s remove garen.q
+    tag @s remove garen.w
+
+    execute if entity @s[tag=malphite.w] at @s run function malphite:skills/w.end
+    tag @s remove malphite
+    tag @s remove malphite.passive
+    tag @s remove malphite.w
+
+    execute if entity @s[tag=lux,team=red] as @e[tag=lux.e.area,tag=red,type=item_display] at @s run function lux:skills/e.end
+    execute if entity @s[tag=lux,team=blue] as @e[tag=lux.e.area,tag=blue,type=item_display] at @s run function lux:skills/e.end
+    tag @s remove lux
+
+    ## Annie
+    execute if entity @s[tag=annie,team=red] as @e[tag=annie.r,team=red,type=#can_aggro] at @s run function annie:skills/r.end
+    execute if entity @s[tag=annie,team=blue] as @e[tag=annie.r,team=blue,type=#can_aggro] at @s run function annie:skills/r.end
+    scoreboard players set @s annie.passive 4
+    tag @s remove annie
+
+    tag @s remove useEnergy
+    tag @s remove useMana
+
+    tag @s remove r.animation
+    tag @s remove w.animation
+
+    clear @s iron_sword[minecraft:custom_data~{kill_item:1}]
+    clear @s minecraft:carrot_on_a_stick[minecraft:custom_data~{kill_item:1}]
+    clear @s phantom_membrane[minecraft:custom_data~{kill_item:1}]
+
+    title @s clear
+    title @s actionbar ""
+    effect clear @s
+
+    scoreboard players set @s aa.range.count 0
+    scoreboard players set @s spell.1 1
+
+    scoreboard players set @s attack_damage 0
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s dmg_reduction 0
+    scoreboard players set @s dmg_debuff 0
+    scoreboard players set @s armor 0
+    scoreboard players set @s magic_resist 0
+
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s cd_p 0
+    scoreboard players set @s cd_q 0
+    scoreboard players set @s cd_w 0
+    scoreboard players set @s cd_e 0
+    scoreboard players set @s cd_r 0
+
+    scoreboard players set @s cd_spell.1 0
+    scoreboard players set @s cd_spell.2 0
+
+    scoreboard players set @s status.p 0
+    scoreboard players set @s status.q 0
+    scoreboard players set @s status.w 0
+    scoreboard players set @s status.e 0
+    scoreboard players set @s status.r 0
+
+    scoreboard players set @s status.spell.1 1
+    scoreboard players set @s status.spell.2 1
+
+    scoreboard players set @s mana 0
+    scoreboard players set @s hp.left 0
+
+    scoreboard players set @s rclick 0
+    scoreboard players set @s use_sword 0
+    scoreboard players set @s use_ability 0
+    scoreboard players set @s shift 0
+
+    scoreboard players set @s sneak 0
+    scoreboard players set @s walk 0
+    scoreboard players set @s run 0
+}
+
+function aatrox {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.aatrox
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.aatrox
+
+    scoreboard players set @s champ_id 9
+
+    tag @s add aatrox
+    tag @s add champion
+    tag @s add melee
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10345
+
+    scoreboard players set @s attack_damage 300
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s armor 114
+    scoreboard players set @s magic_resist 67
+    scoreboard players set @s haste 40
+
+    scoreboard players set @s omnivamp 25
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 10
+    scoreboard players set @s aa.range 40
+
+    scoreboard players set @s mana_q 0
+    scoreboard players set @s mana_w 0
+    scoreboard players set @s mana_e 0
+    scoreboard players set @s mana_r 0
+
+    scoreboard players set @s base_cd.q 6
+    scoreboard players set @s base_cd.w 12
+    scoreboard players set @s base_cd.e 5
+    scoreboard players set @s base_cd.r 80
+
+    scoreboard players set @s hp.regen 4
+    scoreboard players set @s mana.regen 0
+    scoreboard players set @s hp.max 3500
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 200
+    scoreboard players set @s mana 0
+
+    scoreboard players set @s status.weapon 900101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:aatrox.select master @s ~ ~ ~
+    playsound minecraft:aatrox.sfx.select master @s ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+
+    #execute as @a if score @s settings.page matches 100 run item replace entity @s inventory.2 with structure_void{display:{Name:'{"text":"Aatrox","italic":"false"}'},CustomModelData:100001}
+}
+
+function annie {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.annie
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.annie
+
+    scoreboard players set @s champ_id 15
+
+    tag @s add annie
+    tag @s add champion
+    tag @s add useMana
+    tag @s add ranged
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10335
+
+    scoreboard players set @s attack_damage 95
+    scoreboard players set @s ability_power 400
+    scoreboard players set @s armor 98
+    scoreboard players set @s magic_resist 52
+    scoreboard players set @s haste 30
+
+    scoreboard players set @s omnivamp 0
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 20
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 10
+    scoreboard players set @s aa.range 145
+
+    scoreboard players set @s mana_q 80
+    scoreboard players set @s mana_w 110
+    scoreboard players set @s mana_e 80
+    scoreboard players set @s mana_r 100
+
+    scoreboard players set @s base_cd.q 4
+    scoreboard players set @s base_cd.w 8
+    scoreboard players set @s base_cd.e 10
+    scoreboard players set @s base_cd.r 100
+
+    scoreboard players set @s hp.regen 3
+    scoreboard players set @s mana.regen 20
+    scoreboard players set @s hp.max 2294
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 3000
+    scoreboard players operation @s mana = @s mana.max
+
+    scoreboard players set @s status.weapon 1500101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:annie.select master @a ~ ~ ~
+    playsound minecraft:annie.sfx.select master @a ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+
+    scoreboard players set @s annie.passive 4
+}
+
+function ashe {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.ashe
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.ashe
+
+    scoreboard players set @s champ_id 5
+
+    tag @s add ashe
+    tag @s add champion
+    tag @s add useMana
+    tag @s add ranged
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10325
+
+    scoreboard players set @s attack_damage 200
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s armor 104
+    scoreboard players set @s magic_resist 52
+    scoreboard players set @s haste 30
+
+    scoreboard players set @s omnivamp 20
+    scoreboard players set @s armor.pen 20
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 25
+    scoreboard players set @s aa.range 140
+
+    scoreboard players set @s mana_q 30
+    scoreboard players set @s mana_w 55
+    scoreboard players set @s mana_e 0
+    scoreboard players set @s mana_r 100
+
+    scoreboard players set @s base_cd.q 0
+    scoreboard players set @s base_cd.w 4
+    scoreboard players set @s base_cd.e 25
+    scoreboard players set @s base_cd.r 60
+
+    scoreboard players set @s hp.regen 3
+    scoreboard players set @s mana.regen 4
+    scoreboard players set @s hp.max 2357
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 875
+    scoreboard players operation @s mana = @s mana.max
+
+    scoreboard players set @s status.weapon 500101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:ashe.select master @a ~ ~ ~
+    playsound minecraft:ashe.sfx.select master @a ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+
+    scoreboard players set @s ashe.q.stack 0
+    scoreboard players set @s ashe.e.stack 0
+}
+
+function ezreal {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.ezreal
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.ezreal
+
+    scoreboard players set @s champ_id 7
+
+    tag @s add ezreal
+    tag @s add champion
+    tag @s add useMana
+    tag @s add ranged
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10325
+
+    scoreboard players set @s attack_damage 300
+    scoreboard players set @s ability_power 50
+    scoreboard players set @s armor 104
+    scoreboard players set @s magic_resist 52
+    scoreboard players set @s haste 50
+
+    scoreboard players set @s omnivamp 20
+    scoreboard players set @s armor.pen 20
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 10
+    scoreboard players set @s aa.range 128
+
+    scoreboard players set @s mana_q 40
+    scoreboard players set @s mana_w 50
+    scoreboard players set @s mana_e 90
+    scoreboard players set @s mana_r 100
+
+    scoreboard players set @s base_cd.q 4
+    scoreboard players set @s base_cd.w 12
+    scoreboard players set @s base_cd.e 14
+    scoreboard players set @s base_cd.r 90
+
+    scoreboard players set @s hp.regen 3
+    scoreboard players set @s mana.regen 20
+    scoreboard players set @s hp.max 2334
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 2000
+    scoreboard players operation @s mana = @s mana.max
+
+    scoreboard players set @s status.weapon 700101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:ezreal.select master @a ~ ~ ~
+    playsound minecraft:ezreal.sfx.select master @s ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+
+    scoreboard players set @s ezreal.p.stack 0
+}
+
+function garen {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.garen
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.aatrox
+
+    scoreboard players set @s champ_id 12
+
+    tag @s add garen
+    tag @s add champion
+    tag @s add melee
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10340
+
+    scoreboard players set @s attack_damage 200
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s armor 150
+    scoreboard players set @s magic_resist 100
+    scoreboard players set @s haste 30
+
+    scoreboard players set @s omnivamp 0
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 10
+    scoreboard players set @s aa.range 40
+
+    scoreboard players set @s mana_q 0
+    scoreboard players set @s mana_w 0
+    scoreboard players set @s mana_e 0
+    scoreboard players set @s mana_r 0
+
+    scoreboard players set @s base_cd.q 8
+    scoreboard players set @s base_cd.w 15
+    scoreboard players set @s base_cd.e 9
+    scoreboard players set @s base_cd.r 80
+
+    scoreboard players set @s hp.regen 3
+    scoreboard players set @s mana.regen 0
+    scoreboard players set @s hp.max 3000
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 0
+    scoreboard players set @s mana 0
+
+    scoreboard players set @s status.weapon 1200102
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:garen.select master @s ~ ~ ~
+    playsound minecraft:garen.sfx.select master @s ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+
+    #execute as @a if score @s settings.page matches 100 run item replace entity @s inventory.2 with structure_void{display:{Name:'{"text":"Aatrox","italic":"false"}'},CustomModelData:100001}
+}
+
+function jhin {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.jhin
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.jhin
+
+    tag @s add jhin
+    tag @s add champion
+    tag @s add useMana
+    tag @s add ranged
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10330
+
+    scoreboard players set @s attack_damage 134
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s armor 104
+    scoreboard players set @s magic_resist 52
+    scoreboard players set @s haste 0
+
+    scoreboard players set @s omnivamp 0
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 10
+    scoreboard players set @s aa.range 128
+
+    scoreboard players set @s mana_q 60
+    scoreboard players set @s mana_w 70
+    scoreboard players set @s mana_e 30
+    scoreboard players set @s mana_r 100
+
+    scoreboard players set @s base_cd.q 5
+    scoreboard players set @s base_cd.w 12
+    scoreboard players set @s base_cd.e 14
+    scoreboard players set @s base_cd.r 90
+
+    scoreboard players set @s hp.regen 3
+    scoreboard players set @s mana.regen 4
+    scoreboard players set @s hp.max 2474
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 1150
+    scoreboard players operation @s mana = @s mana.max
+
+    scoreboard players set @s status.weapon 800101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    scoreboard players set @s jhin.aa.count 4
+    scoreboard players set @s jhin.r.count 0
+
+    playsound minecraft:jhin.select master @a ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+}
+
+function leesin {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.leesin
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.leesin
+
+    scoreboard players set @s champ_id 2
+
+    tag @s add leesin
+    tag @s add useEnergy
+    tag @s add champion
+    tag @s add melee
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10345
+
+    scoreboard players set @s attack_damage 200
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s armor 119
+    scoreboard players set @s magic_resist 67
+    scoreboard players set @s haste 50
+
+    scoreboard players set @s omnivamp 20
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 10
+    scoreboard players set @s aa.range 30
+
+    scoreboard players set @s mana_q 50
+    scoreboard players set @s mana_w 50
+    scoreboard players set @s mana_e 50
+    scoreboard players set @s mana_r 0
+
+    scoreboard players set @s base_cd.q 6
+    scoreboard players set @s base_cd.w 12
+    scoreboard players set @s base_cd.e 9
+    scoreboard players set @s base_cd.r 60
+
+    scoreboard players set @s hp.regen 4
+    scoreboard players set @s mana.regen 10
+    scoreboard players set @s hp.max 2430
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 200
+    scoreboard players operation @s mana = @s mana.max
+
+    scoreboard players set @s status.weapon 200101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:leesin.select master @a ~ ~ ~
+    playsound minecraft:leesin.sfx.select master @a ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+}
+
+function leona {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.leona
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.leona
+
+    scoreboard players set @s champ_id 10
+
+    tag @s add leona
+    tag @s add useMana
+    tag @s add champion
+    tag @s add melee
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10335
+
+    scoreboard players set @s attack_damage 111
+    scoreboard players set @s ability_power 50
+    scoreboard players set @s armor 200
+    scoreboard players set @s armor.base 200
+    scoreboard players set @s magic_resist 150
+    scoreboard players set @s magic_resist.base 150
+    scoreboard players set @s haste 50
+
+    scoreboard players set @s omnivamp 0
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 10
+    scoreboard players set @s aa.range 30
+
+    scoreboard players set @s mana_q 55
+    scoreboard players set @s mana_w 60
+    scoreboard players set @s mana_e 60
+    scoreboard players set @s mana_r 100
+
+    scoreboard players set @s base_cd.q 5
+    scoreboard players set @s base_cd.w 10
+    scoreboard players set @s base_cd.e 6
+    scoreboard players set @s base_cd.r 60
+
+    scoreboard players set @s hp.regen 15
+    scoreboard players set @s mana.regen 4
+    scoreboard players set @s hp.max 4000
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 982
+    scoreboard players operation @s mana = @s mana.max
+
+    scoreboard players set @s status.weapon 1000101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:leona.select master @s ~ ~ ~
+    playsound minecraft:leona.sfx.select master @s ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+
+    #execute as @a if score @s settings.page matches 100 run item replace entity @s inventory.2 with structure_void{display:{Name:'{"text":"Aatrox","italic":"false"}'},CustomModelData:100001}
+}
+
+function lux {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.lux
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.lux
+
+    scoreboard players set @s champ_id 14
+
+    tag @s add lux
+    tag @s add champion
+    tag @s add useMana
+    tag @s add ranged
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10330
+
+    scoreboard players set @s attack_damage 110
+    scoreboard players set @s ability_power 400
+    scoreboard players set @s armor 109
+    scoreboard players set @s magic_resist 52
+    scoreboard players set @s haste 30
+
+    scoreboard players set @s omnivamp 0
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 20
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 10
+    scoreboard players set @s aa.range 128
+
+    scoreboard players set @s mana_q 50
+    scoreboard players set @s mana_w 80
+    scoreboard players set @s mana_e 110
+    scoreboard players set @s mana_r 100
+
+    scoreboard players set @s base_cd.q 9
+    scoreboard players set @s base_cd.w 10
+    scoreboard players set @s base_cd.e 8
+    scoreboard players set @s base_cd.r 40
+
+    scoreboard players set @s hp.regen 3
+    scoreboard players set @s mana.regen 4
+    scoreboard players set @s hp.max 2000
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 1500
+    scoreboard players operation @s mana = @s mana.max
+
+    scoreboard players set @s status.weapon 1400101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:lux.select master @a ~ ~ ~
+    playsound minecraft:lux.sfx.select master @a ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+}
+
+function malphite {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.malphite
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.leesin
+
+    scoreboard players set @s champ_id 13
+
+    tag @s add malphite
+    tag @s add useMana
+    tag @s add champion
+    tag @s add melee
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10335
+
+    scoreboard players set @s attack_damage 130
+    scoreboard players set @s ability_power 50
+    scoreboard players set @s armor 300
+    scoreboard players set @s magic_resist 63
+    scoreboard players set @s haste 40
+
+    scoreboard players set @s omnivamp 0
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 10
+    scoreboard players set @s aa.range 30
+
+    scoreboard players set @s mana_q 60
+    scoreboard players set @s mana_w 50
+    scoreboard players set @s mana_e 50
+    scoreboard players set @s mana_r 100
+
+    scoreboard players set @s base_cd.q 8
+    scoreboard players set @s base_cd.w 8
+    scoreboard players set @s base_cd.e 7
+    scoreboard players set @s base_cd.r 80
+
+    scoreboard players set @s hp.regen 3
+    scoreboard players set @s mana.regen 3
+    scoreboard players set @s hp.max 2412
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 1300
+    scoreboard players operation @s mana = @s mana.max
+
+    scoreboard players set @s status.weapon 1300101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:malphite.select master @a ~ ~ ~
+    playsound minecraft:malphite.sfx.select master @a ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+}
+
+function soraka {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.soraka
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.ashe
+
+    scoreboard players set @s champ_id 11
+
+    tag @s add soraka
+    tag @s add champion
+    tag @s add useMana
+    tag @s add ranged
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10325
+
+    scoreboard players set @s attack_damage 101
+    scoreboard players set @s ability_power 100
+    scoreboard players set @s armor 117
+    scoreboard players set @s magic_resist 52
+    scoreboard players set @s haste 50
+
+    scoreboard players set @s omnivamp 0
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 10
+    scoreboard players set @s aa.range 130
+
+    scoreboard players set @s mana_q 65
+    scoreboard players set @s mana_w 60
+    scoreboard players set @s mana_e 90
+    scoreboard players set @s mana_r 100
+
+    scoreboard players set @s base_cd.q 4
+    scoreboard players set @s base_cd.w 2
+    scoreboard players set @s base_cd.e 16
+    scoreboard players set @s base_cd.r 120
+
+    scoreboard players set @s healnshield_power 40
+
+    scoreboard players set @s hp.regen 2
+    scoreboard players set @s mana.regen 16
+    scoreboard players set @s hp.max 2101
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 1105
+    scoreboard players operation @s mana = @s mana.max
+
+    scoreboard players set @s status.weapon 1100101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:soraka.select master @a ~ ~ ~
+    playsound minecraft:soraka.sfx.select master @a ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+}
+
+function vayne {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.vayne
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.vayne
+
+    tag @s add vayne
+    tag @s add champion
+    tag @s add useMana
+    tag @s add ranged
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10330
+
+    scoreboard players set @s attack_damage 100
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s armor 101
+    scoreboard players set @s magic_resist 52
+    scoreboard players set @s haste 0
+
+    scoreboard players set @s omnivamp 0
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 10
+    scoreboard players set @s aa.range 128
+
+    scoreboard players set @s mana_q 30
+    scoreboard players set @s mana_w 0
+    scoreboard players set @s mana_e 90
+    scoreboard players set @s mana_r 80
+
+    scoreboard players set @s base_cd.q 3
+    scoreboard players set @s base_cd.w 0
+    scoreboard players set @s base_cd.e 12
+    scoreboard players set @s base_cd.r 70
+
+    scoreboard players set @s hp.regen 3
+    scoreboard players set @s mana.regen 3
+    scoreboard players set @s hp.max 2301
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 827
+    scoreboard players operation @s mana = @s mana.max
+
+    scoreboard players set @s status.weapon 600101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:vayne.select master @a ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+
+    scoreboard players set @s vayne.w.stack 0
+}
+
+function yasuo {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.yasuo
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.yasuo
+
+    scoreboard players set @s champ_id 1
+
+    tag @s add yasuo
+    tag @s add champion
+    tag @s add melee
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10375
+
+    scoreboard players set @s attack_damage 150
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s armor 108
+    scoreboard players set @s magic_resist 67
+    scoreboard players set @s haste 30
+
+    scoreboard players set @s omnivamp 20
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 25
+    scoreboard players set @s aa.range 40
+
+    scoreboard players set @s mana_q 0
+    scoreboard players set @s mana_w 0
+    scoreboard players set @s mana_e 0
+    scoreboard players set @s mana_r 0
+
+    scoreboard players set @s base_cd.q 4
+    scoreboard players set @s base_cd.w 17
+    scoreboard players set @s base_cd.e 2
+    scoreboard players set @s base_cd.r 30
+
+    scoreboard players set @s hp.regen 4
+    scoreboard players set @s mana.regen 0
+    scoreboard players set @s hp.max 2460
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 500
+    scoreboard players set @s mana 0
+
+    scoreboard players set @s status.weapon 100101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:yasuo.select master @a ~ ~ ~
+    playsound minecraft:yasuo.sfx.select master @a ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+
+    # [26.3] removed incomplete command from the original pack: execute as @a if score @s settings.page matches 100 run item modify entity @s inventory.3
+}
+
+function yone {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.yone
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.yone
+
+    scoreboard players set @s champ_id 4
+
+    tag @s add yone
+    tag @s add champion
+    tag @s add melee
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10345
+
+    scoreboard players set @s attack_damage 150
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s armor 108
+    scoreboard players set @s magic_resist 67
+    scoreboard players set @s haste 30
+
+    scoreboard players set @s omnivamp 20
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 25
+    scoreboard players set @s aa.range 40
+
+    scoreboard players set @s mana_q 0
+    scoreboard players set @s mana_w 0
+    scoreboard players set @s mana_e 0
+    scoreboard players set @s mana_r 0
+
+    scoreboard players set @s base_cd.q 4
+    scoreboard players set @s base_cd.w 14
+    scoreboard players set @s base_cd.e 10
+    scoreboard players set @s base_cd.r 60
+
+    scoreboard players set @s hp.regen 4
+    scoreboard players set @s mana.regen 0
+    scoreboard players set @s hp.max 2405
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 100
+    scoreboard players set @s mana 0
+
+    scoreboard players set @s status.weapon 400101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:yone.select master @a ~ ~ ~
+    playsound minecraft:yone.sfx.select master @a ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+
+    scoreboard players set @s yone.passive 0
+}
+
+function zed {
+    function _lol:champion/_choose
+
+    execute if score .world lang matches 0 as @s run function _lol:lang/champion/eng.zed
+    execute if score .world lang matches 1 as @s run function _lol:lang/champion/vie.zed
+
+    scoreboard players set @s champ_id 3
+
+    tag @s add zed
+    tag @s add useEnergy
+    tag @s add champion
+    tag @s add melee
+    tag @s add has_health_bar
+
+    attribute @s minecraft:movement_speed base set 0.10345
+
+    scoreboard players set @s attack_damage 250
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s armor 112
+    scoreboard players set @s magic_resist 64
+    scoreboard players set @s haste 50
+
+    scoreboard players set @s omnivamp 0
+    scoreboard players set @s armor.pen 20
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s aa.spd 10
+    scoreboard players set @s aa.range 30
+
+    scoreboard players set @s mana_q 55
+    scoreboard players set @s mana_w 20
+    scoreboard players set @s mana_e 40
+    scoreboard players set @s mana_r 0
+
+    scoreboard players set @s base_cd.q 6
+    scoreboard players set @s base_cd.w 17
+    scoreboard players set @s base_cd.e 3
+    scoreboard players set @s base_cd.r 80
+
+    scoreboard players set @s hp.regen 4
+    scoreboard players set @s mana.regen 10
+    scoreboard players set @s hp.max 2337
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana.max 200
+    scoreboard players operation @s mana = @s mana.max
+
+    scoreboard players set @s status.weapon 300101
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+
+    playsound minecraft:zed.select master @a ~ ~ ~
+    playsound minecraft:zed.sfx.select master @a ~ ~ ~
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+}

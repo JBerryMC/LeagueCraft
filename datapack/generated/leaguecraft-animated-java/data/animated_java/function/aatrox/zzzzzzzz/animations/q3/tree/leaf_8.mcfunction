@@ -1,0 +1,1 @@
+execute on passengers run function animated_java:aatrox/zzzzzzzz/animations/q3/tree/leaf_8_as_bone

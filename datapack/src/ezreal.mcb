@@ -1,0 +1,152 @@
+# ezreal:  (converted from the 1.20.2 LeagueCraft datapack)
+
+function aa {
+    playsound ezreal.sfx.aa master @a ~ ~ ~
+
+    execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.ezreal","aa","homing","red","temp","block_by_windwall"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.ezreal","aa","homing","blue","temp","block_by_windwall"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+}
+
+function hud {
+    $title @s actionbar ["",{translate:"space.-60"},{text:"i",font:"minecraft:ezreal"},{translate:"space.16"},{score:{name:"@s",objective:"status.p"},font:"lol:ezreal/p"},{translate:"space.5"},{score:{name:"@s",objective:"status.q"},font:"lol:ezreal/q"},{translate:"space.6"},{score:{name:"@s",objective:"status.w"},font:"lol:ezreal/w"},{translate:"space.6"},{score:{name:"@s",objective:"status.e"},font:"lol:ezreal/e"},{translate:"space.6"},{score:{name:"@s",objective:"status.r"},font:"lol:ezreal/r"},{translate:"space.9"},{score:{name:"@s",objective:"status.spell.1"},font:"minecraft:lol"},{translate:"space.5"},{score:{name:"@s",objective:"status.spell.2"},font:"minecraft:lol"},{translate:"space.-253"},{text:"M",font:"minecraft:lol"},{translate:"space.-274"},{score:{name:"@s",objective:"status.hotbar"},font:"minecraft:hotbar"},{translate:"space.-207"},{storage:"lol:main",nbt:"hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:hp_display"},{translate:"space.-252"},{storage:"lol:main",nbt:"mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:mana_display"},{translate:"space.-183"},{score:{name:"@s",objective:"ezreal.p.stack"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.passive"},font:"space:default"},{score:{name:"@s",objective:"cd_q"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.q"},font:"space:default"},{score:{name:"@s",objective:"cd_w"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.w"},font:"space:default"},{score:{name:"@s",objective:"cd_e"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.e"},font:"space:default"},{score:{name:"@s",objective:"cd_r"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.r"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.1"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.1"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.2"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.2"},font:"space:default"},{translate:"space.-138"},{score:{name:"@s",objective:"space.hp1"},font:"space:default"},{score:{name:"@s",objective:"hp.left"},font:"minecraft:custom/hp"},{text:"/",font:"minecraft:custom/hp"},{score:{name:"@s",objective:"hp.max"},font:"minecraft:custom/hp"},{score:{name:"@s",objective:"space.hp2"},font:"space:default"},{translate:"space.-78"},{score:{name:"@s",objective:"space.mana1"},font:"space:default"},{score:{name:"@s",objective:"mana"},font:"minecraft:custom/mana"},{text:"/",font:"minecraft:custom/mana"},{score:{name:"@s",objective:"mana.max"},font:"minecraft:custom/mana"},{score:{name:"@s",objective:"space.mana2"},font:"space:default"},{translate:"space.-112"},{storage:"lol:main",nbt:"keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.24"},{storage:"lol:main",nbt:"keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.25"},{nbt:"keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",storage:"lol:main",interpret:true},{translate:"space.18"},{keybind:"key.swapOffhand",font:"minecraft:custom/keybind_small",bold:true,color:"#ffd821"}]
+}
+
+function hud_display {
+    function _champion:hud
+
+    function ezreal:hud with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+}
+
+function loop {
+    execute as @p[tag=ezreal,team=red] if score @s ezreal.p.stack matches 1.. unless entity @e[tag=ezreal.p.stack.cd,tag=red,type=area_effect_cloud] run function ezreal:skills/passive.stack.lost
+    execute as @p[tag=ezreal,team=blue] if score @s ezreal.p.stack matches 1.. unless entity @e[tag=ezreal.p.stack.cd,tag=blue,type=area_effect_cloud] run function ezreal:skills/passive.stack.lost
+
+    execute as @e[tag=ezreal.q,type=area_effect_cloud] at @s run function ezreal:skills/q.animation
+
+    execute as @e[tag=ezreal.w,type=item_display] at @s run function ezreal:skills/w.animation
+
+    execute as @e[tag=ezreal.e.missile,type=area_effect_cloud] at @s run function ezreal:skills/e.missile
+
+    execute as @e[tag=ezreal.r,type=item_display] at @s run function ezreal:skills/r.animation
+    execute as @e[tag=ezreal.r.cast,type=area_effect_cloud] at @s run function ezreal:skills/r.cast
+    #execute as @e[tag=ezreal.r.stun.cd,type=area_effect_cloud] at @s run function ezreal:skills/r.stun
+}
+
+function main {
+    # Cooldown
+    function ezreal:hud_display
+
+    ## Item Handling
+    execute unless predicate _champion:slot/head run function ezreal:item/headwear
+    execute unless predicate _champion:slot/offhand run function ezreal:item/offhand
+
+    ## Re-use
+    execute if predicate _champion:hold_q if score @s use_ability matches 1.. run function _champion:abilities/use_q
+    execute if predicate _champion:hold_w if score @s use_ability matches 1.. run function _champion:abilities/use_w
+    execute if predicate _champion:hold_e if score @s use_ability matches 1.. run function _champion:abilities/use_e
+    execute if predicate _champion:hold_r if score @s use_ability matches 1.. run function _champion:abilities/use_r
+
+    ## First use
+    execute if predicate _champion:use_q run function _champion:abilities/use_q
+
+    execute if predicate _champion:use_w run function _champion:abilities/use_w
+
+    execute if predicate _champion:use_e run function _champion:abilities/use_e
+
+    execute if predicate _champion:use_r run function _champion:abilities/use_r
+}
+
+function passive {
+    execute if entity @s[team=red] run kill @e[tag=ezreal.p.stack.cd,tag=red]
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:120,Tags:["ezreal.p.stack.cd","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    execute if entity @s[team=blue] run kill @e[tag=ezreal.p.stack.cd,tag=blue]
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:120,Tags:["ezreal.p.stack.cd","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    execute if score @s ezreal.p.stack matches ..4 run scoreboard players add @s aa.spd 3
+    execute if score @s ezreal.p.stack matches ..4 run scoreboard players add @s ezreal.p.stack 1
+}
+
+function use_e {
+    #scoreboard players set @s cd_e 14
+    #coreboard players remove @s mana 90
+    function _champion:abilities/cooldown/e
+    scoreboard players add @s channeling 5
+    playsound minecraft:ezreal.sfx.e master @a ~ ~ ~
+
+    execute if entity @s[team=red] anchored eyes positioned ^ ^ ^8 run summon item_display ~ ~ ~ {Tags:["red","lol.auto_clear","ezreal.e"],Passengers:[{id:"area_effect_cloud",Duration:9999,Tags:["e.blink","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:5,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] anchored eyes positioned ^ ^ ^8 run summon item_display ~ ~ ~ {Tags:["blue","lol.auto_clear","ezreal.e"],Passengers:[{id:"area_effect_cloud",Duration:9999,Tags:["e.blink","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:5,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute anchored eyes positioned ^ ^ ^8 run data modify entity @e[tag=e.blink,type=area_effect_cloud,limit=1,sort=nearest,tag=temp] Owner set from entity @s UUID
+    execute anchored eyes positioned ^ ^ ^8 run tag @e[tag=e.blink,type=area_effect_cloud,limit=1,sort=nearest,tag=temp] remove temp
+}
+
+function use_q {
+    #scoreboard players set @s cd_q 4
+    #scoreboard players remove @s mana 40
+    function _champion:abilities/cooldown/q
+    scoreboard players set @s channeling 5
+    playsound ezreal.sfx.q master @a ~ ~ ~
+
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:20,Tags:["red","block_by_windwall","ezreal.q"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] anchored eyes run tp @e[tag=red,tag=ezreal.q,limit=1,sort=nearest] ^ ^ ^ ~ ~
+
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:20,Tags:["blue","block_by_windwall","ezreal.q"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] anchored eyes run tp @e[tag=blue,tag=ezreal.q,limit=1,sort=nearest] ^ ^ ^ ~ ~
+}
+
+function use_r {
+    #scoreboard players set @s cd_r 90
+    #scoreboard players remove @s mana 100
+    function _champion:abilities/cooldown/r
+    scoreboard players set @s channeling 20
+
+    scoreboard players set @s status.weapon 700102
+
+    playsound minecraft:ezreal.ultimate master @a ~ ~ ~
+    playsound minecraft:ezreal.sfx.r master @a ~ ~ ~
+
+    tag @s add r.animation
+    function ezreal:skills/r.clear
+
+    execute anchored eyes run summon item_display ^ ^ ^1 {teleport_duration:1,item_display:"head",item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[700401f]}}},Tags:["ezreal.r.anim","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:20,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute anchored eyes positioned ^ ^ ^1 run tp @e[tag=ezreal.r.anim,limit=1,sort=nearest] ~ ~ ~ ~ ~
+
+    execute if entity @s[team=red] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["ezreal.r.cast","red","mid"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["ezreal.r.cast","red","left"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["ezreal.r.cast","red","right"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] anchored eyes run tp @e[tag=red,tag=left,tag=ezreal.r.cast,limit=1,sort=nearest] ^ ^ ^ ~-90 ~
+    execute if entity @s[team=red] anchored eyes run tp @e[tag=red,tag=right,tag=ezreal.r.cast,limit=1,sort=nearest] ^ ^ ^ ~90 ~
+    execute if entity @s[team=red] anchored eyes run tp @e[tag=red,tag=mid,tag=ezreal.r.cast,limit=1,sort=nearest] ^ ^ ^ ~ ~
+
+    execute if entity @s[team=blue] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["ezreal.r.cast","blue","mid"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["ezreal.r.cast","blue","left"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["ezreal.r.cast","blue","right"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] anchored eyes run tp @e[tag=blue,tag=left,tag=ezreal.r.cast,limit=1,sort=nearest] ^ ^ ^ ~-90 ~
+    execute if entity @s[team=blue] anchored eyes run tp @e[tag=blue,tag=right,tag=ezreal.r.cast,limit=1,sort=nearest] ^ ^ ^ ~90 ~
+    execute if entity @s[team=blue] anchored eyes run tp @e[tag=blue,tag=mid,tag=ezreal.r.cast,limit=1,sort=nearest] ^ ^ ^ ~ ~
+}
+
+function use_w {
+    #scoreboard players set @s cd_w 12
+    #scoreboard players remove @s mana 50
+    function _champion:abilities/cooldown/w
+    scoreboard players set @s channeling 5
+    playsound minecraft:ezreal.sfx.w master @a ~ ~ ~
+
+    execute if entity @s[team=red] run tag @e[tag=ezreal.w.target,team=!red,tag=has_display_bar] add remove.mark.ezreal.w
+    execute if entity @s[team=red] as @e[tag=ezreal.w.target,team=!red,tag=!has_display_bar] on passengers as @s[tag=ezreal.w.mark] on passengers run kill @s
+    execute if entity @s[team=red] as @e[tag=ezreal.w.target,team=!red,tag=!has_display_bar] on passengers as @s[tag=ezreal.w.mark] run kill @s
+    execute if entity @s[team=red] run tag @e[tag=ezreal.w.target,team=!red,tag=!has_display_bar] remove ezreal.w.target
+    execute if entity @s[team=red] run tag @e[tag=ezreal.w.target,tag=lol.structure,tag=!red,tag=!has_display_bar] remove ezreal.w.target
+    execute if entity @s[team=red] run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"ground",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[700211f]}}},Tags:["red","ezreal.w","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:25,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=red] anchored eyes run tp @e[tag=red,tag=ezreal.w,limit=1,sort=nearest] ^ ^ ^ ~ ~
+
+    execute if entity @s[team=blue] run tag @e[tag=ezreal.w.target,team=!blue,tag=has_display_bar] add remove.mark.ezreal.w
+    execute if entity @s[team=blue] as @e[tag=ezreal.w.target,team=!blue,tag=!has_display_bar] on passengers as @s[tag=ezreal.w.mark] on passengers run kill @s
+    execute if entity @s[team=blue] as @e[tag=ezreal.w.target,tag=lol.structure,tag=!blue,tag=!has_display_bar] on passengers as @s[tag=ezreal.w.mark] run kill @s
+    execute if entity @s[team=blue] run tag @e[tag=ezreal.w.target,team=!blue,tag=!has_display_bar] remove ezreal.w.target
+    execute if entity @s[team=blue] run tag @e[tag=ezreal.w.target,team=!blue,tag=!has_display_bar] remove ezreal.w.target
+    execute if entity @s[team=blue] run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"ground",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[700211f]}}},Tags:["blue","ezreal.w","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:25,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] anchored eyes run tp @e[tag=blue,tag=ezreal.w,limit=1,sort=nearest] ^ ^ ^ ~ ~
+}
