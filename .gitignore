@@ -1,0 +1,9 @@
+# Plugin build output
+plugin/target/
+
+# IDEs and OS files
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
