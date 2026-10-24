@@ -322,19 +322,6 @@ function respawn {
     execute if entity @s[tag=!has_display_bar] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] remove temp
 }
 
-predicate aa {
-    "type": "minecraft:entity_properties",
-    "entity": "this",
-    "predicate": {
-        "minecraft:type_specific/player": {
-            "looking_at": {
-                "minecraft:entity_type": "minecraft:interaction",
-                "minecraft:nbt": "{Tags:[\"attack\"]}"
-            }
-        }
-    }
-}
-
 predicate hold_e {
     "type": "minecraft:entity_properties",
     "entity": "this",
@@ -1321,44 +1308,3 @@ loot_table use_w {
     ]
 }
 
-advancement aa {
-    "criteria": {
-        "requirement": {
-            "trigger": "minecraft:player_hurt_entity",
-            "conditions": {
-                "entity": {
-                    "type": "minecraft:entity_properties",
-                    "entity": "this",
-                    "predicate": {
-                        "minecraft:entity_type": "minecraft:interaction",
-                        "minecraft:nbt": "{Tags:[\"attack\"]}"
-                    }
-                }
-            }
-        }
-    },
-    "rewards": {
-        "function": "_champion:aa/check"
-    }
-}
-
-advancement spell {
-    "criteria": {
-        "requirement": {
-            "trigger": "minecraft:player_interacted_with_entity",
-            "conditions": {
-                "entity": {
-                    "type": "minecraft:entity_properties",
-                    "entity": "this",
-                    "predicate": {
-                        "minecraft:entity_type": "minecraft:interaction",
-                        "minecraft:nbt": "{Tags:[\"attack\"]}"
-                    }
-                }
-            }
-        }
-    },
-    "rewards": {
-        "function": "_champion:spell/check"
-    }
-}
