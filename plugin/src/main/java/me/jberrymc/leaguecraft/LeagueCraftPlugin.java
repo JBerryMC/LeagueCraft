@@ -11,7 +11,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * LeagueCraft's server-side helper. The datapack stays the source of truth for champion logic;
@@ -21,8 +24,6 @@ import java.util.List;
 public final class LeagueCraftPlugin extends JavaPlugin {
     /** How often champions' hand slot and weapon copy are checked. */
     private static final long HAND_CHECK_TICKS = 5;
-    /** HUD labels are re-applied every other check (the datapack resets them when it rebuilds the hotbar). */
-    private static final int LABEL_EVERY_N_CHECKS = 2;
 
     static final String KEY_SETUP_TIP =
             "<gold><bold>LeagueCraft controls</bold></gold>\n"
@@ -42,7 +43,8 @@ public final class LeagueCraftPlugin extends JavaPlugin {
     private final DevLog dev = new DevLog();
     private AbilityInputListener input;
     private NamespacedKey tipShown;
-    private int checks;
+    /** Players who were champions at the last check, to spot someone becoming one. */
+    private final Set<UUID> champions = new HashSet<>();
 
     @Override
     public void onEnable() {
@@ -161,18 +163,21 @@ public final class LeagueCraftPlugin extends JavaPlugin {
     private void checkPlayers() {
         InputSettings config = settings;
         CombatSettings combatConfig = combat;
-        boolean labels = ++checks % LABEL_EVERY_N_CHECKS == 0;
+        champions.removeIf(id -> Bukkit.getPlayer(id) == null);
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!input.canCast(player, config)) {
+                champions.remove(player.getUniqueId());
                 weapon.remove(player);
                 thirdPerson.remove(player);
                 movementLock.remove(player);
                 continue;
             }
+            // The datapack sets the default labels itself; custom ones are written when someone
+            // becomes a champion and after each cast (its reload puts the defaults back).
+            if (champions.add(player.getUniqueId())) datapack.writeLabels(player, config.hudLabels());
             weapon.apply(player);
-            thirdPerson.apply(player, combatConfig, labels);
+            thirdPerson.apply(player, combatConfig);
             movementLock.apply(player, combatConfig);
-            if (labels) datapack.writeLabels(player, config.hudLabels());
             if (config.firstTimeTip() && !player.getPersistentDataContainer().has(tipShown)) {
                 player.getPersistentDataContainer().set(tipShown, PersistentDataType.BYTE, (byte) 1);
                 player.sendMessage(MiniMessage.miniMessage().deserialize(KEY_SETUP_TIP));

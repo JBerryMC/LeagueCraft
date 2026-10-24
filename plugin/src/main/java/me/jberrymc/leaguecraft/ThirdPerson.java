@@ -36,8 +36,12 @@ import java.util.logging.Logger;
  * <p><b>Zoom.</b> A server can't change the field of view, but it sets the camera distance, so
  * zooming pulls the camera in (like aiming down sights in a third-person shooter). The crosshair
  * ray doesn't depend on camera distance, so the hitscan aims the same zoomed or not. Holding right
- * click makes the client send a click every 4 ticks; the zoom holds while they keep coming and
- * eases back out {@link #ZOOM_RELEASE_TICKS} ticks after the last one.
+ * click makes the client send a click every 4 ticks: the first one sets the zoomed distance, and
+ * {@link #ZOOM_RELEASE_TICKS} ticks after the last one the normal distance is set back. That's
+ * one attribute change each way; nothing is sent while the zoom is held.
+ *
+ * <p>Everything here goes through the API (no commands) except the crosshair, which lives in
+ * datapack storage: it's written once when someone becomes a champion and removed afterwards.
  */
 final class ThirdPerson implements Listener {
     /**
@@ -49,8 +53,6 @@ final class ThirdPerson implements Listener {
             + "{translate:\"space.-14\"}]";
     /** Held right click repeats every 4 ticks; a gap longer than this means it was let go. */
     static final int ZOOM_RELEASE_TICKS = 6;
-    /** Each tick the camera covers this share of the way to its target distance. */
-    private static final double EASE = 0.5;
 
     private final Datapack datapack;
     private final DevLog dev;
@@ -58,6 +60,8 @@ final class ThirdPerson implements Listener {
     private final Attribute cameraDistance;
     /** Champions this applies to right now; only their camera is changed and reset. */
     private final Set<UUID> applied = new HashSet<>();
+    /** Champions whose crosshair is in the HUD storage. */
+    private final Set<UUID> crosshairShown = new HashSet<>();
     /** Server tick of each zooming player's last right click. */
     private final Map<UUID, Integer> zoomClick = new HashMap<>();
 
@@ -72,43 +76,39 @@ final class ThirdPerson implements Listener {
         }
     }
 
-    /** Called every few ticks for each champion. {@code refreshCrosshair} rewrites the HUD storage. */
-    void apply(Player player, CombatSettings config, boolean refreshCrosshair) {
+    /**
+     * Called every few ticks for each champion. Only changes something when it's out of date: the
+     * first call for a champion, after /lc reload, or if something else moved the camera.
+     */
+    void apply(Player player, CombatSettings config) {
         if (!config.thirdPerson()) {
             remove(player);
             return;
         }
-        applied.add(player.getUniqueId());
-        if (refreshCrosshair) {
-            if (config.crosshair()) {
-                datapack.writeCrosshair(player, CROSSHAIR);
-            } else {
-                datapack.removeCrosshair(player);
-            }
+        UUID id = player.getUniqueId();
+        applied.add(id);
+        if (!zoomClick.containsKey(id)) setDistance(player, config.cameraDistance());
+        if (config.crosshair() && crosshairShown.add(id)) {
+            datapack.writeCrosshair(player, CROSSHAIR);
+        } else if (!config.crosshair() && crosshairShown.remove(id)) {
+            datapack.removeCrosshair(player);
         }
     }
 
-    /** Every tick: ends zooms whose right click was let go, and eases cameras to their distance. */
+    /** Every tick: ends zooms whose right click was let go. */
     void tick() {
-        CombatSettings config = settings.get();
+        if (zoomClick.isEmpty()) return;
         int now = Bukkit.getCurrentTick();
-        for (UUID id : applied) {
-            Player player = Bukkit.getPlayer(id);
-            if (player == null) continue;
-            Integer click = zoomClick.get(id);
-            if (click != null && now - click > ZOOM_RELEASE_TICKS) {
-                zoomClick.remove(id);
+        CombatSettings config = settings.get();
+        zoomClick.entrySet().removeIf(entry -> {
+            if (now - entry.getValue() <= ZOOM_RELEASE_TICKS) return false;
+            Player player = Bukkit.getPlayer(entry.getKey());
+            if (player != null) {
+                setDistance(player, config.cameraDistance());
                 dev.zoom(player, false, config.cameraDistance(), "right click let go");
             }
-            AttributeInstance distance = cameraDistance == null ? null : player.getAttribute(cameraDistance);
-            if (distance == null) continue;
-            double target = zoomClick.containsKey(id) ? config.zoomFor(player.getScoreboardTags()).distance()
-                    : config.cameraDistance();
-            double current = distance.getBaseValue();
-            if (current == target) continue;
-            double next = Math.abs(target - current) < 0.05 ? target : current + (target - current) * EASE;
-            distance.setBaseValue(next);
-        }
+            return true;
+        });
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -132,11 +132,12 @@ final class ThirdPerson implements Listener {
 
     /** Puts the camera back to vanilla once the player isn't playing a champion. */
     void remove(Player player) {
-        zoomClick.remove(player.getUniqueId());
-        if (!applied.remove(player.getUniqueId())) return;
+        UUID id = player.getUniqueId();
+        zoomClick.remove(id);
+        if (crosshairShown.remove(id)) datapack.removeCrosshair(player);
+        if (!applied.remove(id)) return;
         AttributeInstance distance = cameraDistance == null ? null : player.getAttribute(cameraDistance);
-        if (distance != null) distance.setBaseValue(distance.getDefaultValue());
-        datapack.removeCrosshair(player);
+        if (distance != null) setDistance(player, distance.getDefaultValue());
     }
 
     /** A right click from a champion: starts or holds the zoom. Returns false if it isn't theirs to zoom. */
@@ -145,8 +146,15 @@ final class ThirdPerson implements Listener {
         if (!config.zoom() || !applied.contains(player.getUniqueId())) return false;
         if (zoomClick.put(player.getUniqueId(), Bukkit.getCurrentTick()) == null) {
             CombatSettings.Zoom zoom = config.zoomFor(player.getScoreboardTags());
+            setDistance(player, zoom.distance());
             dev.zoom(player, true, zoom.distance(), zoom.source());
         }
         return true;
+    }
+
+    /** Sets the camera distance if it isn't that already. */
+    private void setDistance(Player player, double value) {
+        AttributeInstance distance = cameraDistance == null ? null : player.getAttribute(cameraDistance);
+        if (distance != null && distance.getBaseValue() != value) distance.setBaseValue(value);
     }
 }
