@@ -1,0 +1,170 @@
+# lc:champions/malphite/  (converted from the 1.20.2 LeagueCraft datapack)
+
+# What's special about picking malphite; the stats are in settings.mcb.
+function pick {
+    execute if score .world lang matches 0 as @s run function lc:core/lang/champion/eng.malphite
+    execute if score .world lang matches 1 as @s run function lc:core/lang/champion/vie.leesin
+    tag @s add useMana
+    scoreboard players operation @s mana = @s mana.max
+    playsound minecraft:malphite.select master @a ~ ~ ~
+    playsound minecraft:malphite.sfx.select master @a ~ ~ ~
+}
+
+function aa {
+    execute if entity @s[tag=!malphite.w] run playsound malphite.sfx.aa master @a ~ ~ ~
+    execute if entity @s[tag=malphite.w] run playsound malphite.sfx.w.aa master @a ~ ~ ~
+}
+
+function hud {
+    $title @s actionbar ["",{translate:"space.-60"},{text:"i",font:"minecraft:malphite"},{translate:"space.16"},{score:{name:"@s",objective:"status.p"},font:"lol:malphite/p"},{translate:"space.5"},{score:{name:"@s",objective:"status.q"},font:"lol:malphite/q"},{translate:"space.6"},{score:{name:"@s",objective:"status.w"},font:"lol:malphite/w"},{translate:"space.6"},{score:{name:"@s",objective:"status.e"},font:"lol:malphite/e"},{translate:"space.6"},{score:{name:"@s",objective:"status.r"},font:"lol:malphite/r"},{translate:"space.9"},{score:{name:"@s",objective:"status.spell.1"},font:"minecraft:lol"},{translate:"space.5"},{score:{name:"@s",objective:"status.spell.2"},font:"minecraft:lol"},{translate:"space.-253"},{text:"M",font:"minecraft:lol"},{translate:"space.-274"},{score:{name:"@s",objective:"status.hotbar"},font:"minecraft:hotbar"},{translate:"space.-207"},{storage:"lol:main",nbt:"hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:hp_display"},{translate:"space.-252"},{storage:"lol:main",nbt:"mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:mana_display"},{translate:"space.-183"},{score:{name:"@s",objective:"cd_p"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.passive"},font:"space:default"},{score:{name:"@s",objective:"cd_q"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.q"},font:"space:default"},{score:{name:"@s",objective:"cd_w"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.w"},font:"space:default"},{score:{name:"@s",objective:"cd_e"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.e"},font:"space:default"},{score:{name:"@s",objective:"cd_r"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.r"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.1"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.1"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.2"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.2"},font:"space:default"},{translate:"space.-138"},{score:{name:"@s",objective:"space.hp1"},font:"space:default"},{score:{name:"@s",objective:"hp.left"},font:"minecraft:custom/hp"},{text:"/",font:"minecraft:custom/hp"},{score:{name:"@s",objective:"hp.max"},font:"minecraft:custom/hp"},{score:{name:"@s",objective:"space.hp2"},font:"space:default"},{translate:"space.-78"},{score:{name:"@s",objective:"space.mana1"},font:"space:default"},{score:{name:"@s",objective:"mana"},font:"minecraft:custom/mana"},{text:"/",font:"minecraft:custom/mana"},{score:{name:"@s",objective:"mana.max"},font:"minecraft:custom/mana"},{score:{name:"@s",objective:"space.mana2"},font:"space:default"},{translate:"space.-112"},{storage:"lol:main",nbt:"keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.24"},{storage:"lol:main",nbt:"keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.25"},{nbt:"keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",storage:"lol:main",interpret:true},{translate:"space.18"},{keybind:"key.swapOffhand",font:"minecraft:custom/keybind_small",bold:true,color:"#ffd821"},{storage:"lol:main",nbt:"crosshair.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true}]
+}
+
+function hud_display {
+    function lc:champion/hud
+
+    ## p
+    execute if score @s cd_p matches 0 run scoreboard players set @s status.p 1
+    execute if score @s cd_p matches 1.. run scoreboard players set @s status.p 0
+
+    ## w
+    execute if entity @s[tag=malphite.w] run scoreboard players set @s status.w 9
+
+    function lc:champions/malphite/hud with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+}
+
+function loop {
+    execute as @e[tag=malphite.e.particle,type=area_effect_cloud] at @s run function lc:champions/malphite/skills/e.particle
+    execute as @e[tag=malphite.r.dash,type=item_display] at @s run function lc:champions/malphite/skills/r.dash
+}
+
+function main {
+    ## HUD
+    function lc:champions/malphite/hud_display
+
+    ## Item Handling
+    execute unless predicate lc:champion/slot/head run function lc:champions/malphite/item/headwear
+    execute unless predicate lc:champion/slot/offhand run function lc:champions/malphite/item/offhand
+
+    function lc:champions/malphite/passive
+
+    ## Re-use
+    execute if predicate lc:champion/hold_q if score @s use_ability matches 1.. run function lc:champion/abilities/use_q
+    execute if predicate lc:champion/hold_w if score @s use_ability matches 1.. run function lc:champion/abilities/use_w
+    execute if predicate lc:champion/hold_e if score @s use_ability matches 1.. run function lc:champion/abilities/use_e
+    execute if predicate lc:champion/hold_r if score @s use_ability matches 1.. run function lc:champion/abilities/use_r
+
+    ## First use
+    execute if predicate lc:champion/use_q run function lc:champion/abilities/use_q
+
+    execute if predicate lc:champion/use_w run function lc:champion/abilities/use_w
+
+    execute if predicate lc:champion/use_e run function lc:champion/abilities/use_e
+
+    execute if predicate lc:champion/use_r run function lc:champion/abilities/use_r
+
+    ## Q
+    execute if entity @s[team=red,tag=malphite.w] unless entity @e[tag=malphite.w.cd,tag=red] run function lc:champions/malphite/skills/w.end
+    execute if entity @s[team=blue,tag=malphite.w] unless entity @e[tag=malphite.w.cd,tag=blue] run function lc:champions/malphite/skills/w.end
+}
+
+function passive {
+    execute if score @s[tag=!malphite.passive] cd_p matches 0 run function lc:champions/malphite/skills/passive.shield
+}
+
+function use_e {
+    function lc:champion/abilities/cooldown/e
+
+    playsound malphite.sfx.e master @a ~ ~ ~
+
+    scoreboard players set @s channeling 5
+
+    summon area_effect_cloud ~ ~ ~ {Duration:4,Tags:["malphite.e.particle"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    execute if entity @s[team=red] positioned ~-2.5 ~ ~-2.5 run tag @e[team=!red,dx=4,dz=4,dy=1,type=!#unvalid,tag=!unvalid] add malphite.e.hit
+    execute if entity @s[team=red] run tag @e[team=!red,tag=malphite.e.hit] add malphite.e.temp_dmg
+    execute if entity @s[team=red] if entity @e[team=!red,tag=malphite.e.hit] run function lc:champions/malphite/skills/e.damage
+    execute if entity @s[team=red] run tag @e[team=!red,tag=malphite.e.hit] remove malphite.e.hit
+
+    execute if entity @s[team=blue] positioned ~-2.5 ~ ~-2.5 run tag @e[team=!blue,dx=4,dz=4,dy=1,type=!#unvalid,tag=!unvalid] add malphite.e.hit
+    execute if entity @s[team=blue] run tag @e[team=!blue,tag=malphite.e.hit] add malphite.e.temp_dmg
+    execute if entity @s[team=blue] if entity @e[team=!blue,tag=malphite.e.hit] run function lc:champions/malphite/skills/e.damage
+    execute if entity @s[team=blue] run tag @e[team=!blue,tag=malphite.e.hit] remove malphite.e.hit
+}
+
+function use_q {
+    function lc:champion/abilities/cooldown/q
+    playsound malphite.sfx.q master @a ~ ~ ~
+    scoreboard players set @s channeling 5
+
+    execute if entity @s[team=red] run tag @e[tag=malphite.q.temp_target,team=!red] add malphite.q.target
+    execute if entity @s[team=blue] run tag @e[tag=malphite.q.temp_target,team=!blue] add malphite.q.target
+
+    execute if entity @s[team=red] run summon item_display ~ ~1 ~ {teleport_duration:1,item_display:"thirdperson_righthand",item:{id:"ancient_debris",count:1},Tags:["malphite.q","feet","homing","red","temp","block_by_windwall"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run summon item_display ~ ~1 ~ {teleport_duration:1,item_display:"thirdperson_righthand",item:{id:"ancient_debris",count:1},Tags:["malphite.q","feet","homing","blue","temp","block_by_windwall"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute at @s run summon area_effect_cloud ~ ~ ~ {Duration:1,Tags:["temp_entity"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    data modify entity @e[tag=temp_entity,limit=1,sort=nearest,type=area_effect_cloud] Owner set from entity @s UUID
+
+    execute if entity @s[team=red] as @e[tag=malphite.q,tag=temp,tag=red,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=initial] Owner set from entity @e[type=area_effect_cloud,tag=temp_entity,limit=1,sort=nearest] Owner
+    execute if entity @s[team=blue] as @e[tag=malphite.q,tag=temp,tag=blue,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=initial] Owner set from entity @e[type=area_effect_cloud,tag=temp_entity,limit=1,sort=nearest] Owner
+
+    execute if entity @s[team=red] as @e[tag=malphite.q,tag=temp,tag=red,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=target] Owner set from entity @e[team=!red,tag=malphite.q.target,limit=1,sort=nearest] UUID
+    execute if entity @s[team=red] run tag @e[tag=malphite.q,tag=temp,tag=red,limit=1,sort=nearest] remove temp
+
+    execute if entity @s[team=blue] as @e[tag=malphite.q,tag=temp,tag=blue,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=target] Owner set from entity @e[team=!blue,tag=malphite.q.target,limit=1,sort=nearest] UUID
+    execute if entity @s[team=blue] run tag @e[tag=malphite.q,tag=temp,tag=blue,limit=1,sort=nearest] remove temp
+}
+
+function use_q.check {
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=!malphite.q.temp_target] add malphite.q.temp_target
+
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 if entity @e[dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,tag=malphite.q.temp_target] at @s run function lc:champions/malphite/use_q
+
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,tag=malphite.q.temp_target,limit=1,sort=nearest] remove malphite.q.temp_target
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=!malphite.q.temp_target] add malphite.q.temp_target
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 if entity @e[dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,tag=malphite.q.temp_target] at @s run function lc:champions/malphite/use_q
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,tag=malphite.q.temp_target,limit=1,sort=nearest] remove malphite.q.temp_target
+
+    execute if entity @s[distance=..8] if score @s cd_q matches 0 positioned ^ ^ ^0.1 run function lc:champions/malphite/use_q.check
+}
+
+function use_r {
+    function lc:champion/abilities/cooldown/r
+    playsound malphite.sfx.r master @a ~ ~ ~
+
+    tag @s add r.animation
+    scoreboard players set @s fx.cc_immune 20
+
+    execute anchored eyes positioned ^ ^ ^10 run summon area_effect_cloud ~ ~ ~ {Duration:2,Tags:["malphite.r.position"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute anchored eyes positioned ^ ^ ^10 run data modify entity @e[tag=malphite.r.position,type=area_effect_cloud,limit=1,sort=nearest] Owner set from entity @s UUID
+    execute anchored eyes positioned ^ ^ ^10 as @e[tag=malphite.r.position,type=area_effect_cloud,limit=1,sort=nearest] at @s run function lc:champions/malphite/skills/r.position
+
+    tag @s add r.dash
+
+    function lc:core/motion/interrupt
+
+    execute if entity @s[team=red] run summon item_display ~ ~0.5 ~ {teleport_duration:1,Tags:["dash","red","malphite.r.dash","temp","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run summon item_display ~ ~0.5 ~ {teleport_duration:1,Tags:["dash","blue","malphite.r.dash","temp","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute at @e[tag=malphite.r,tag=temp,limit=1,sort=nearest] run data modify entity @e[tag=cd,limit=1,sort=nearest] Owner set from entity @s UUID
+    tag @e[tag=malphite.r,tag=temp,limit=1,sort=nearest] remove temp
+}
+
+function use_w {
+    function lc:champion/abilities/cooldown/w
+
+    playsound malphite.sfx.w master @a ~ ~ ~
+
+    scoreboard players set @s status.weapon 1300201
+    scoreboard players set @s aa.cd 0
+    scoreboard players add @s aa.range 10
+
+    tag @s add malphite.w
+    tag @s add offhand_temp
+    item replace entity @s weapon.offhand with air
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:120,Tags:["malphite.w.cd","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:120,Tags:["malphite.w.cd","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+}

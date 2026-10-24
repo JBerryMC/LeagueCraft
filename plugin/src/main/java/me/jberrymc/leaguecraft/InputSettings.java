@@ -32,7 +32,7 @@ record InputSettings(
     static final int REST_SLOT = 7;
 
     /**
-     * The labels the datapack itself shows (_champion:abilities/keybind/default). A label set to
+     * The labels the datapack itself shows (lc:champion/abilities/keybind/default). A label set to
      * one of these needs no writing.
      */
     static final Map<String, String> DATAPACK_LABELS = Map.of(
@@ -94,7 +94,7 @@ record InputSettings(
             }
         }
 
-        String function = config.getString("cast-function", "_champion:abilities/use_%s");
+        String function = config.getString("cast-function", "lc:champion/abilities/use_%s");
         if (!function.contains("%s")) {
             log.warning("cast-function has no %s, so every key would cast the same function: " + function);
         }
@@ -106,8 +106,8 @@ record InputSettings(
                 Map.copyOf(hotbar),
                 Map.copyOf(labels),
                 function,
-                config.getString("summoner-1-function", "_champion:spell/check"),
-                config.getString("summoner-2-function", "_champion:spell/check_2"),
+                config.getString("summoner-1-function", "lc:champion/spell/check"),
+                config.getString("summoner-2-function", "lc:champion/spell/check_2"),
                 config.getBoolean("first-time-tip", true),
                 config.getBoolean("debug", false));
     }

@@ -1,0 +1,230 @@
+# lc:champions/aatrox/  (converted from the 1.20.2 LeagueCraft datapack)
+
+# What's special about picking aatrox; the stats are in settings.mcb.
+function pick {
+    execute if score .world lang matches 0 as @s run function lc:core/lang/champion/eng.aatrox
+    execute if score .world lang matches 1 as @s run function lc:core/lang/champion/vie.aatrox
+    playsound minecraft:aatrox.select master @s ~ ~ ~
+    playsound minecraft:aatrox.sfx.select master @s ~ ~ ~
+}
+
+function aa {
+    execute if score @s cd_p matches 1.. run playsound aatrox.sfx.aa master @a ~ ~ ~
+    execute if score @s cd_p matches 1.. on vehicle on passengers as @s[tag=aj.aatrox.root,type=#animated_java:root] run function animated_java:aatrox/animations/aa/play
+
+    execute unless entity @e[tag=temp_dmg,tag=lol.structure] if score @s cd_p matches 0 run playsound aatrox.sfx.p.aa master @a ~ ~ ~
+    execute unless entity @e[tag=temp_dmg,tag=lol.structure] if score @s cd_p matches 0 on vehicle on passengers as @s[tag=aj.aatrox.root,type=#animated_java:root] run function animated_java:aatrox/animations/passive/play
+
+    execute if entity @e[tag=temp_dmg,tag=lol.structure] if score @s cd_p matches 0 run playsound aatrox.sfx.aa master @a ~ ~ ~
+    execute if entity @e[tag=temp_dmg,tag=lol.structure] if score @s cd_p matches 0 on vehicle on passengers as @s[tag=aj.aatrox.root,type=#animated_java:root] run function animated_java:aatrox/animations/aa/play
+}
+
+function hud {
+    $title @s actionbar ["",{translate:"space.-60"},{text:"i",font:"minecraft:aatrox"},{translate:"space.16"},{score:{name:"@s",objective:"status.p"},font:"lol:aatrox/p"},{translate:"space.5"},{score:{name:"@s",objective:"status.q"},font:"lol:aatrox/q"},{translate:"space.6"},{score:{name:"@s",objective:"status.w"},font:"lol:aatrox/w"},{translate:"space.6"},{score:{name:"@s",objective:"status.e"},font:"lol:aatrox/e"},{translate:"space.6"},{score:{name:"@s",objective:"status.r"},font:"lol:aatrox/r"},{translate:"space.9"},{score:{name:"@s",objective:"status.spell.1"},font:"minecraft:lol"},{translate:"space.5"},{score:{name:"@s",objective:"status.spell.2"},font:"minecraft:lol"},{translate:"space.-253"},{text:"M",font:"minecraft:lol"},{translate:"space.-274"},{score:{name:"@s",objective:"status.hotbar"},font:"minecraft:hotbar"},{translate:"space.-207"},{storage:"lol:main",nbt:"hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:hp_display"},{translate:"space.-252"},{storage:"lol:main",nbt:"mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:mana_display"},{translate:"space.-183"},{score:{name:"@s",objective:"cd_p"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.passive"},font:"space:default"},{score:{name:"@s",objective:"cd_q"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.q"},font:"space:default"},{score:{name:"@s",objective:"cd_w"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.w"},font:"space:default"},{score:{name:"@s",objective:"cd_e"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.e"},font:"space:default"},{score:{name:"@s",objective:"cd_r"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.r"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.1"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.1"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.2"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.2"},font:"space:default"},{translate:"space.-138"},{score:{name:"@s",objective:"space.hp1"},font:"space:default"},{score:{name:"@s",objective:"hp.left"},font:"minecraft:custom/hp"},{text:"/",font:"minecraft:custom/hp"},{score:{name:"@s",objective:"hp.max"},font:"minecraft:custom/hp"},{score:{name:"@s",objective:"space.hp2"},font:"space:default"},{translate:"space.-78"},{score:{name:"@s",objective:"space.mana1"},font:"space:default"},{score:{name:"@s",objective:"mana"},font:"minecraft:custom/mana"},{text:"/",font:"minecraft:custom/mana"},{score:{name:"@s",objective:"mana.max"},font:"minecraft:custom/mana"},{score:{name:"@s",objective:"space.mana2"},font:"space:default"},{translate:"space.-112"},{storage:"lol:main",nbt:"keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.24"},{storage:"lol:main",nbt:"keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.25"},{nbt:"keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",storage:"lol:main",interpret:true},{translate:"space.18"},{keybind:"key.swapOffhand",font:"minecraft:custom/keybind_small",bold:true,color:"#ffd821"},{storage:"lol:main",nbt:"crosshair.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true}]
+}
+
+function hud_display {
+    function lc:champion/hud
+
+    ## p
+    execute if score @s cd_p matches 0 run scoreboard players set @s status.p 1
+    execute if score @s cd_p matches 1.. run scoreboard players set @s status.p 0
+
+    ## Q
+    execute if entity @s[team=red,tag=!r.animation,tag=!cced] if score @s cd_q matches 0 if entity @e[tag=aatrox.q.cd,tag=red] if score @s stack_q matches 0 run scoreboard players set @s status.q 1
+    execute if entity @s[team=red,tag=!r.animation,tag=!cced] if entity @e[tag=aatrox.q.cd,tag=red] if score @s stack_q matches 1 run scoreboard players set @s status.q 2
+    execute if entity @s[team=red,tag=!r.animation,tag=!cced] if entity @e[tag=aatrox.q.cd,tag=red] if score @s stack_q matches 2 run scoreboard players set @s status.q 3
+
+    execute if entity @s[team=blue,tag=!r.animation,tag=!cced] if score @s cd_q matches 0 if entity @e[tag=aatrox.q.cd,tag=blue] if score @s stack_q matches 0 run scoreboard players set @s status.q 1
+    execute if entity @s[team=blue,tag=!r.animation,tag=!cced] if entity @e[tag=aatrox.q.cd,tag=blue] if score @s stack_q matches 1 run scoreboard players set @s status.q 2
+    execute if entity @s[team=blue,tag=!r.animation,tag=!cced] if entity @e[tag=aatrox.q.cd,tag=blue] if score @s stack_q matches 2 run scoreboard players set @s status.q 3
+    execute if score @s channeling matches 1.. run scoreboard players set @s status.q 9
+
+    ## W
+    execute if score @s channeling matches 1.. run scoreboard players set @s status.w 9
+
+    ## E
+    execute if score @s cc.root matches 1.. run scoreboard players set @s status.e 9
+
+    ## R
+    execute if score @s[tag=!r.animation,tag=!cced] mana matches 1.. run scoreboard players set @s status.r 6
+    execute if score @s channeling matches 1.. run scoreboard players set @s status.r 9
+
+    function lc:champions/aatrox/hud with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+}
+
+function loop {
+    execute as @p[tag=aatrox,team=red] at @s if score @s stack_p matches 0 if score @s cd_p matches 0 run function lc:champions/aatrox/skills/passive.trigger
+    execute as @p[tag=aatrox,team=blue] at @s if score @s stack_p matches 0 if score @s cd_p matches 0 run function lc:champions/aatrox/skills/passive.trigger
+
+    ## Q
+    execute as @p[tag=aatrox,team=red] if score @s stack_q matches 1..3 unless entity @e[tag=red,tag=aatrox.q.cd] run function lc:champions/aatrox/skills/q.reset
+    execute as @p[tag=aatrox,team=blue] if score @s stack_q matches 1..3 unless entity @e[tag=blue,tag=aatrox.q.cd] run function lc:champions/aatrox/skills/q.reset
+    execute as @e[tag=aatrox.q,type=item_display] at @s run function lc:champions/aatrox/skills/q.passive
+
+    ## W
+    execute as @e[tag=aatrox.w,type=area_effect_cloud] at @s run function lc:champions/aatrox/skills/w.passive
+    execute as @e[tag=aatrox.w.chain,type=area_effect_cloud] at @s run function lc:champions/aatrox/skills/w.chain.passive
+    execute as @e[tag=aatrox.w.chain.particle,type=area_effect_cloud] at @s run particle dust_color_transition{from_color:[0.525,0,0.078],scale:1,to_color:[0,0,0]} ~ ~ ~ 0 0 0 0 1 force
+
+    ## E
+    execute as @e[tag=aatrox.e,type=item_display] at @s run function lc:champions/aatrox/skills/e.dash
+
+    ## R
+    execute as @e[tag=aatrox.r,type=horse] at @s run function lc:champions/aatrox/skills/r.passive
+}
+
+function main {
+    ## HUD
+    function lc:champions/aatrox/hud_display
+
+    ## Item Handling
+    execute unless predicate lc:champion/slot/head run function lc:champions/aatrox/item/headwear
+    execute unless predicate lc:champion/slot/offhand run function lc:champions/aatrox/item/offhand
+
+    ## Re-use
+    execute if predicate lc:champion/hold_q if score @s use_ability matches 1.. run function lc:champion/abilities/use_q
+    execute if predicate lc:champion/hold_w if score @s use_ability matches 1.. run function lc:champion/abilities/use_w
+    execute if predicate lc:champion/hold_e if score @s use_ability matches 1.. run function lc:champion/abilities/use_e
+    execute if predicate lc:champion/hold_r if score @s use_ability matches 1.. run function lc:champion/abilities/use_r
+
+    ## First use
+    execute if predicate lc:champion/use_q run function lc:champion/abilities/use_q
+
+    execute if predicate lc:champion/use_w run function lc:champion/abilities/use_w
+
+    execute if predicate lc:champion/use_e run function lc:champion/abilities/use_e
+
+    execute if predicate lc:champion/use_r run function lc:champion/abilities/use_r
+}
+
+function passive {
+    scoreboard players set @s cd_p 24
+    scoreboard players remove @s aa.range 10
+    scoreboard players set @s stack_p 0
+
+    execute if entity @s[team=red] as @e[team=!red,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] at @s run particle item{item:"blaze_powder"} ~ ~1 ~ 0 0 0 0.1 100 force
+    execute if entity @s[team=red] run scoreboard players operation aatrox.p.dmg temp = @e[team=!red,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] hp.max
+
+    execute if entity @s[team=blue] as @e[team=!blue,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] at @s run particle item{item:"blaze_powder"} ~ ~1 ~ 0 0 0 0.1 100 force
+    execute if entity @s[team=blue] run scoreboard players operation aatrox.p.dmg temp = @e[team=!blue,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] hp.max
+
+    scoreboard players operation aatrox.p.dmg temp *= 12 integer
+    scoreboard players operation aatrox.p.dmg temp /= 100 integer
+
+    scoreboard players operation @s dmg_magic.deal = aatrox.p.dmg temp
+
+    execute if entity @s[team=red] run tag @e[team=!red,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] add aatrox.p.red
+    execute if entity @s[team=blue] run tag @e[team=!blue,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] add aatrox.p.blue
+}
+
+function use_e {
+    function lc:champion/abilities/cooldown/e
+    playsound aatrox.sfx.e master @a ~ ~ ~
+    scoreboard players set @s aa.cd 0
+
+    execute if entity @s[team=red] run summon minecraft:item_display ~ ~0.5 ~ {teleport_duration:1,interpolation_duration:10,Tags:["interrupt_by_blink","aatrox.e","temp","red","dash","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:6,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run summon minecraft:item_display ~ ~0.5 ~ {teleport_duration:1,interpolation_duration:10,Tags:["interrupt_by_blink","aatrox.e","temp","blue","dash","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:6,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute if score @s mana matches 0 run function lc:core/motion/face_moving
+    execute if score @s mana matches 1.. on vehicle run tp @e[tag=aatrox.e,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ ~
+    execute as @e[tag=aatrox.e,tag=temp,limit=1,sort=nearest] on passengers store result entity @s Rotation[0] float 1 on vehicle run data get entity @s Rotation[0] 1
+    execute at @e[tag=aatrox.e,tag=temp,limit=1,sort=nearest] run data modify entity @e[tag=cd,limit=1,sort=nearest] Owner set from entity @s UUID
+    tag @e[tag=aatrox.e,tag=temp,limit=1,sort=nearest] remove temp
+}
+
+function use_q {
+    function lc:champion/abilities/cooldown/q
+    scoreboard players set @s channeling 12
+    scoreboard players add @s stack_q 1
+    execute if score @s stack_q matches 4 run scoreboard players set @s stack_q 1
+
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:20,Tags:["aatrox.q.delay","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:20,Tags:["aatrox.q.delay","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    execute if score @s stack_q matches 1 run playsound aatrox.sfx.q1 master @a ~ ~ ~
+    execute if score @s stack_q matches 2 run playsound aatrox.sfx.q2 master @a ~ ~ ~
+    execute if score @s stack_q matches 3 run playsound aatrox.sfx.q3 master @a ~ ~ ~
+
+    execute unless predicate lc:core/is_flying if score @s stack_q matches 1 run function lc:champions/aatrox/skills/q.spawn.1
+    execute unless predicate lc:core/is_flying if score @s stack_q matches 2 run function lc:champions/aatrox/skills/q.spawn.2
+    execute unless predicate lc:core/is_flying if score @s stack_q matches 3 run function lc:champions/aatrox/skills/q.spawn.3
+
+    execute if predicate lc:core/is_flying if score @s stack_q matches 1 on vehicle at @s[tag=aatrox.r] on controller as @p run function lc:champions/aatrox/skills/q.spawn.1
+    execute if predicate lc:core/is_flying if score @s stack_q matches 2 on vehicle at @s[tag=aatrox.r] on controller as @p run function lc:champions/aatrox/skills/q.spawn.2
+    execute if predicate lc:core/is_flying if score @s stack_q matches 3 on vehicle at @s[tag=aatrox.r] on controller as @p run function lc:champions/aatrox/skills/q.spawn.3
+
+    execute if score @s stack_q matches 3 run scoreboard players set @s stack_q 0
+}
+
+function use_r {
+    scoreboard players set @s cd_r 45
+    playsound minecraft:aatrox.ultimate master @a ~ ~ ~ 2
+    playsound minecraft:aatrox.sfx.r master @a ~ ~ ~ 2
+
+    scoreboard players set @s mana 200
+    scoreboard players set @s channeling 5
+    scoreboard players add @s aa.range 10
+    scoreboard players add @s omnivamp 45
+
+    scoreboard players set @s status.r 6
+
+    scoreboard players set @s fx.invis 200
+    scoreboard players set @s status.weapon 9999
+
+    execute if entity @s[team=red] run scoreboard players operation red.aatrox.r.buff temp = @s attack_damage
+    execute if entity @s[team=red] run scoreboard players operation red.aatrox.r.buff temp *= 45 integer
+    execute if entity @s[team=red] run scoreboard players operation red.aatrox.r.buff temp /= 100 integer
+
+    execute if entity @s[team=red] run scoreboard players operation @s attack_damage += red.aatrox.r.buff temp
+
+    execute if entity @s[team=blue] run scoreboard players operation blue.aatrox.r.buff temp = @s attack_damage
+    execute if entity @s[team=blue] run scoreboard players operation blue.aatrox.r.buff temp *= 45 integer
+    execute if entity @s[team=blue] run scoreboard players operation blue.aatrox.r.buff temp /= 100 integer
+
+    execute if entity @s[team=blue] run scoreboard players operation @s attack_damage += blue.aatrox.r.buff temp
+
+    particle lava ~ ~1 ~ 0.5 0.5 0.5 1 100 force
+    particle campfire_cosy_smoke ~ ~1 ~ 0.5 0.5 0.5 0.2 100 force
+    particle crimson_spore ~ ~1 ~ 0 0 0 1 1000 force
+    particle block{block_state:"nether_wart_block"} ~ ~1 ~ 1 1 1 1 100 force
+
+    execute if entity @s[team=red] run summon horse ~ ~ ~ {Team:"red",Tags:["unvalid","aatrox.r","lol.is_flying"],Invulnerable:1,NoAI:1,Silent:1,CustomName:" ",active_effects:[{duration:-1,id:"invisibility",amplifier:0,show_particles:0b},{duration:5,id:"slowness",amplifier:10,show_particles:0b}],Tame:1,DeathLootTable:"air",attributes:[{id:"minecraft:movement_speed",base:0.2},{id:"minecraft:jump_strength",base:1.0}],equipment:{saddle:{id:"saddle",count:1,components:{"minecraft:custom_model_data":{floats:[400400f]},"minecraft:custom_name":{text:"World Ender",italic:false},"minecraft:lore":[{text:"This unit is being enhanced",italic:false}],"minecraft:custom_data":{kill_item:1}}}}}
+    execute if entity @s[team=red] run ride @s mount @e[tag=aatrox.r,team=red,limit=1,sort=nearest]
+
+    execute if entity @s[team=blue] run summon horse ~ ~ ~ {Team:"blue",Tags:["unvalid","aatrox.r","lol.is_flying"],Invulnerable:1,NoAI:1,Silent:1,CustomName:" ",active_effects:[{duration:-1,id:"invisibility",amplifier:0,show_particles:0b},{duration:5,id:"slowness",amplifier:10,show_particles:0b}],Tame:1,DeathLootTable:"air",attributes:[{id:"minecraft:movement_speed",base:0.2},{id:"minecraft:jump_strength",base:1.0}],equipment:{saddle:{id:"saddle",count:1,components:{"minecraft:custom_model_data":{floats:[400400f]},"minecraft:custom_name":{text:"World Ender",italic:false},"minecraft:lore":[{text:"This unit is being enhanced",italic:false}],"minecraft:custom_data":{kill_item:1}}}}}
+    execute if entity @s[team=blue] run ride @s mount @e[tag=aatrox.r,team=blue,limit=1,sort=nearest]
+
+    execute rotated ~ 0 run function animated_java:aatrox/summon
+
+    execute if entity @s[team=red] run ride @e[type=#animated_java:root,tag=aj.aatrox.root,limit=1,sort=nearest] mount @e[type=horse,tag=aatrox.r,team=red,limit=1,sort=nearest]
+    execute if entity @s[team=red] as @e[tag=aatrox.r,team=red,limit=1,sort=nearest] on passengers run team join red @s[type=#animated_java:root,tag=aj.aatrox.root]
+    execute if entity @s[team=red] as @e[tag=aatrox.r,team=red,limit=1,sort=nearest] on passengers as @s[type=#animated_java:root,tag=aj.aatrox.root] on passengers run team join red @s
+    execute if entity @s[team=red] as @e[tag=aatrox.r,team=red,limit=1,sort=nearest] on passengers as @s[type=#animated_java:root,tag=aj.aatrox.root] run function animated_java:aatrox/animations/r.cast/play
+    execute if entity @s[team=red] as @e[tag=aatrox.r,team=red,limit=1,sort=nearest] on passengers as @s[type=#animated_java:root,tag=aj.aatrox.root] on passengers run data modify entity @s teleport_duration set value 1
+
+    execute if entity @s[team=blue] run ride @e[type=#animated_java:root,tag=aj.aatrox.root,limit=1,sort=nearest] mount @e[type=horse,tag=aatrox.r,team=blue,limit=1,sort=nearest]
+    execute if entity @s[team=blue] as @e[tag=aatrox.r,team=blue,limit=1,sort=nearest] on passengers run team join blue @s[type=#animated_java:root,tag=aj.aatrox.root]
+    execute if entity @s[team=blue] as @e[tag=aatrox.r,team=blue,limit=1,sort=nearest] on passengers as @s[type=#animated_java:root,tag=aj.aatrox.root] on passengers run team join blue @s
+    execute if entity @s[team=blue] as @e[tag=aatrox.r,team=blue,limit=1,sort=nearest] on passengers as @s[type=#animated_java:root,tag=aj.aatrox.root] run function animated_java:aatrox/animations/r.cast/play
+    execute if entity @s[team=blue] as @e[tag=aatrox.r,team=blue,limit=1,sort=nearest] on passengers as @s[type=#animated_java:root,tag=aj.aatrox.root] on passengers run data modify entity @s teleport_duration set value 1
+
+    execute if entity @s[team=red] run scoreboard players operation @e[tag=aatrox.r,team=red,limit=1,sort=nearest] attack_damage = aatrox.r.buff temp
+    execute if entity @s[team=blue] run scoreboard players operation @e[tag=aatrox.r,team=blue,limit=1,sort=nearest] attack_damage = aatrox.r.buff temp
+
+    effect give @s speed 10 4 true
+}
+
+function use_w {
+    function lc:champion/abilities/cooldown/w
+    scoreboard players set @s channeling 5
+
+    playsound minecraft:aatrox.sfx.w master @a ~ ~ ~
+    execute on vehicle on passengers as @s[tag=aj.aatrox.root,type=#animated_java:root] run function animated_java:aatrox/animations/w/tween_play
+
+    execute if entity @s[team=red] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:10,Tags:["aatrox.w","red","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:10,Tags:["aatrox.w","blue","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    execute if score @s mana matches 0 run tp @e[tag=aatrox.w,limit=1,sort=nearest] ~ ~ ~ ~ 0
+    execute if score @s mana matches 1.. on vehicle at @s[tag=aatrox.r] run tp @e[tag=aatrox.w,limit=1,sort=nearest] ~ ~ ~ ~ 0
+}

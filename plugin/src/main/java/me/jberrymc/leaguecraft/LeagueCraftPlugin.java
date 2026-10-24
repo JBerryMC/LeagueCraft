@@ -4,6 +4,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
@@ -39,6 +40,8 @@ public final class LeagueCraftPlugin extends JavaPlugin {
     private WeaponDisplay weapon;
     private ThirdPerson thirdPerson;
     private MovementLock movementLock;
+    private Ammo ammo;
+    private ChampionModel model;
     private RigTest rigTest;
     private final DevLog dev = new DevLog();
     private AbilityInputListener input;
@@ -56,12 +59,16 @@ public final class LeagueCraftPlugin extends JavaPlugin {
         weapon = new WeaponDisplay(this);
         thirdPerson = new ThirdPerson(datapack, dev, () -> combat, getLogger());
         movementLock = new MovementLock(() -> combat, getLogger());
+        ammo = new Ammo(datapack, dev, () -> combat);
         tipShown = new NamespacedKey(this, "key_tip_shown");
 
         input = new AbilityInputListener(datapack, weapon, dev, () -> settings, getLogger());
         getServer().getPluginManager().registerEvents(input, this);
         getServer().getPluginManager().registerEvents(
-                new BasicAttackListener(input, dev, () -> settings, () -> combat), this);
+                new BasicAttackListener(input, datapack, ammo, dev, () -> settings, () -> combat), this);
+        getServer().getPluginManager().registerEvents(ammo, this);
+        getServer().getPluginManager().registerEvents(new Motion(datapack), this);
+        Bukkit.getScheduler().runTaskTimer(this, ammo::tick, 1, 1);
         getServer().getPluginManager().registerEvents(thirdPerson, this);
         getServer().getPluginManager().registerEvents(movementLock, this);
         Bukkit.getScheduler().runTaskTimer(this, thirdPerson::tick, 1, 1);
@@ -72,6 +79,10 @@ public final class LeagueCraftPlugin extends JavaPlugin {
         } catch (IOException | RuntimeException e) {
             getLogger().warning("Couldn't load the aatrox rig for /lc rigtest: " + e.getMessage());
         }
+
+        model = new ChampionModel(player -> rigTest != null && rigTest.has(player));
+        getServer().getPluginManager().registerEvents(model, this);
+        Bukkit.getScheduler().runTaskTimer(this, model::tick, 1, 1);
 
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
                 event -> LeagueCraftCommand.register(event.registrar(), this));
@@ -94,8 +105,10 @@ public final class LeagueCraftPlugin extends JavaPlugin {
             weapon.remove(player);
             thirdPerson.remove(player);
             movementLock.remove(player);
+            ammo.remove(player);
         }
         if (rigTest != null) rigTest.removeAll();
+        model.removeAll();
     }
 
     InputSettings settings() {
@@ -149,6 +162,37 @@ public final class LeagueCraftPlugin extends JavaPlugin {
             config.set("hud-labels.w", "key.hotbar.2");
             changes.add("hud-labels.w SH -> key.hotbar.2");
         }
+        // 0.7.0: the datapack moved into one namespace, so _champion:x is lc:champion/x now.
+        for (String path : List.of("cast-function", "summoner-1-function", "summoner-2-function")) {
+            String function = config.getString(path, "");
+            if (function.startsWith("_champion:")) {
+                config.set(path, "lc:champion/" + function.substring("_champion:".length()));
+                changes.add(path + " " + function + " -> " + config.getString(path));
+            }
+        }
+        // 0.7.0: range and attack speed are champion stats in the datapack's stats chart now.
+        for (String removed : List.of("basic-attack.melee-range", "basic-attack.ranged-range", "basic-attack.cooldown-ticks")) {
+            if (config.isSet(removed)) {
+                config.set(removed, null);
+                changes.add("removed " + removed + " (now a champion stat in the datapack's settings.mcb)");
+            }
+        }
+        // 0.7.0: zoom values are a slowdown (0-1), not a camera distance.
+        for (String path : List.of("zoom.melee", "zoom.ranged")) {
+            if (config.isSet(path) && !CombatSettings.isSlowdown(config.getDouble(path))) {
+                config.set(path, null);
+                changes.add("reset " + path + " (zoom is a slowdown now, not a camera distance)");
+            }
+        }
+        ConfigurationSection zoomChampions = config.getConfigurationSection("zoom.champions");
+        if (zoomChampions != null) {
+            for (String champion : zoomChampions.getKeys(false)) {
+                if (!CombatSettings.isSlowdown(zoomChampions.getDouble(champion, -1))) {
+                    zoomChampions.set(champion, null);
+                    changes.add("removed zoom.champions." + champion + " (was a camera distance)");
+                }
+            }
+        }
         if (changes.isEmpty()) return;
         saveConfig();
         getLogger().info("Updated config.yml from an older version: " + String.join(", ", changes));
@@ -170,6 +214,8 @@ public final class LeagueCraftPlugin extends JavaPlugin {
                 weapon.remove(player);
                 thirdPerson.remove(player);
                 movementLock.remove(player);
+                ammo.remove(player);
+                model.remove(player);
                 continue;
             }
             // The datapack sets the default labels itself; custom ones are written when someone
@@ -178,6 +224,8 @@ public final class LeagueCraftPlugin extends JavaPlugin {
             weapon.apply(player);
             thirdPerson.apply(player, combatConfig);
             movementLock.apply(player, combatConfig);
+            ammo.apply(player);
+            model.apply(player);
             if (config.firstTimeTip() && !player.getPersistentDataContainer().has(tipShown)) {
                 player.getPersistentDataContainer().set(tipShown, PersistentDataType.BYTE, (byte) 1);
                 player.sendMessage(MiniMessage.miniMessage().deserialize(KEY_SETUP_TIP));

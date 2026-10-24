@@ -1,0 +1,559 @@
+# lc:champions/yone/skills/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function e.body {
+    execute if entity @s[tag=red] unless entity @e[tag=yone.e.dash,type=minecraft:item_display,tag=red] on passengers rotated as @s run summon minecraft:area_effect_cloud ^ ^ ^1 {Duration:105,Tags:["yone.e.cd.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=red] if entity @e[tag=yone.e.dash,tag=red] rotated as @e[tag=yone.e.dash,tag=red] if block ^ ^ ^-.75 #like_air run tp @s ^ ^ ^-.75
+
+    execute if entity @s[tag=red] unless entity @e[tag=yone.e.dash,tag=red] if block ~ ~-0.5 ~ #like_air run tp @s ~ ~-0.5 ~
+    execute if entity @s[tag=red] unless entity @e[tag=yone.e.dash,tag=red] run scoreboard players remove @p[tag=yone,team=red,scores={mana=1..}] mana 1
+
+    execute if entity @s[tag=red,tag=!yone.e.end] run effect give @p[tag=yone,team=red] speed infinite 1 true
+    execute if entity @s[tag=red] facing entity @p[tag=yone,team=red] feet positioned ^ ^ ^0.1 run function lc:champions/yone/skills/e.particle
+
+    execute if entity @s[tag=red] positioned ~ ~0.5 ~ if entity @e[tag=yone.unbound,distance=..1,tag=red] run tag @p[tag=yone,team=red] remove e.animation
+    execute if entity @s[tag=red] positioned ~ ~0.5 ~ if entity @e[tag=yone.unbound,distance=..1,tag=red] run tag @p[tag=yone,team=red] remove unstoppable
+    execute if entity @s[tag=red] positioned ~ ~0.5 ~ if entity @e[tag=yone.unbound,distance=..1,tag=red] as @e[tag=yone.unbound,tag=red,limit=1,sort=nearest] on passengers run kill @s[tag=cd]
+    execute if entity @s[tag=red] positioned ~ ~0.5 ~ if entity @e[tag=yone.unbound,distance=..1,tag=red] at @s run tp @p[tag=yone,team=red] ~ ~ ~
+    execute if entity @s[tag=red] positioned ~ ~0.5 ~ if entity @e[tag=yone.unbound,distance=..1,tag=red] run gamemode spectator @p[tag=yone,team=red,tag=dead]
+    execute if entity @s[tag=red] positioned ~ ~0.5 ~ if entity @e[tag=yone.unbound,distance=..1,tag=red] run kill @s
+
+    execute if entity @s[tag=unbound.buffer,tag=red,tag=!yone.e.end] as @p[team=red,tag=yone,tag=!cced,tag=!r.animation] if score @s channeling matches -1 unless function lc:core/motion/in_dash as @e[tag=unbound.buffer,tag=red] run function lc:champions/yone/skills/e.unbound
+
+    execute if entity @s[tag=blue] unless entity @e[tag=yone.e.dash,type=minecraft:item_display,tag=blue] on passengers rotated as @s run summon minecraft:area_effect_cloud ^ ^ ^1 {Duration:105,Tags:["yone.e.cd.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=blue] if entity @e[tag=yone.e.dash,tag=blue] rotated as @e[tag=yone.e.dash,tag=blue] if block ^ ^ ^-.75 #like_air run tp @s ^ ^ ^-.75
+
+    execute if entity @s[tag=blue] unless entity @e[tag=yone.e.dash,tag=blue] if block ~ ~-0.5 ~ #like_air run tp @s ~ ~-0.5 ~
+    execute if entity @s[tag=blue] unless entity @e[tag=yone.e.dash,tag=blue] run scoreboard players remove @p[tag=yone,team=blue,scores={mana=1..}] mana 1
+
+    execute if entity @s[tag=blue,tag=!yone.e.end] run effect give @p[tag=yone,team=blue] speed infinite 1 true
+    execute if entity @s[tag=blue] facing entity @p[tag=yone,team=blue] feet positioned ^ ^ ^0.1 run function lc:champions/yone/skills/e.particle
+
+    execute if entity @s[tag=blue] positioned ~ ~0.5 ~ if entity @e[tag=yone.unbound,distance=..1,tag=blue] run tag @p[tag=yone,team=blue] remove e.animation
+    execute if entity @s[tag=blue] positioned ~ ~0.5 ~ if entity @e[tag=yone.unbound,distance=..1,tag=blue] run tag @p[tag=yone,team=blue] remove unstoppable
+    execute if entity @s[tag=blue] positioned ~ ~0.5 ~ if entity @e[tag=yone.unbound,distance=..1,tag=blue] as @e[tag=yone.unbound,tag=blue,limit=1,sort=nearest] on passengers run kill @s[tag=cd]
+    execute if entity @s[tag=blue] positioned ~ ~0.5 ~ if entity @e[tag=yone.unbound,distance=..1,tag=blue] at @s run tp @p[tag=yone,team=blue] ~ ~ ~
+    execute if entity @s[tag=blue] positioned ~ ~0.5 ~ if entity @e[tag=yone.unbound,distance=..1,tag=blue] run gamemode spectator @p[tag=yone,team=blue,tag=dead]
+    execute if entity @s[tag=blue] positioned ~ ~0.5 ~ if entity @e[tag=yone.unbound,distance=..1,tag=blue] run kill @s
+
+    execute if entity @s[tag=unbound.buffer,tag=blue,tag=!yone.e.end] as @p[team=blue,tag=yone,tag=!cced,tag=!r.animation] if score @s channeling matches -1 unless function lc:core/motion/in_dash as @e[tag=unbound.buffer,tag=blue] run function lc:champions/yone/skills/e.unbound
+
+    execute on passengers at @s run tp @s ~ ~ ~ ~3.7 0
+}
+
+function e.damage {
+    execute if entity @s[team=red] run damage @e[tag=yone.e.mark,type=!#unvalid,team=!red,limit=1,sort=nearest] 5 lc:core/dmg_physical by @s
+
+    execute if entity @s[team=red] as @e[team=!red,tag=yone.e.mark,tag=has_health_bar,limit=1,sort=nearest] run scoreboard players operation @s yone.e.dmg *= 35 integer
+    execute if entity @s[team=red] as @e[team=!red,tag=yone.e.mark,tag=has_health_bar,limit=1,sort=nearest] run scoreboard players operation @s yone.e.dmg /= 100 integer
+
+    execute if entity @s[team=red] as @e[team=!red,tag=yone.e.mark,tag=has_health_bar,limit=1,sort=nearest] run scoreboard players operation @s dmg_true.raw = @s yone.e.dmg
+
+    execute if entity @s[team=red] run scoreboard players set @e[team=!red,tag=yone.e.mark,type=!#unvalid,limit=1,sort=nearest] yone.e.dmg 0
+    execute if entity @s[team=red] run tag @e[team=!red,tag=yone.e.mark,type=!#unvalid,limit=1,sort=nearest] remove yone.e.mark
+
+    execute if entity @s[team=red] if entity @e[tag=yone.e.mark,type=!#unvalid,team=!red] run function lc:champions/yone/skills/e.damage
+
+    execute if entity @s[team=blue] run damage @e[tag=yone.e.mark,type=!#unvalid,team=!blue,limit=1,sort=nearest] 5 lc:core/dmg_physical by @s
+
+    execute if entity @s[team=blue] as @e[team=!blue,tag=yone.e.mark,tag=has_health_bar,limit=1,sort=nearest] run scoreboard players operation @s yone.e.dmg *= 35 integer
+    execute if entity @s[team=blue] as @e[team=!blue,tag=yone.e.mark,tag=has_health_bar,limit=1,sort=nearest] run scoreboard players operation @s yone.e.dmg /= 100 integer
+
+    execute if entity @s[team=blue] as @e[team=!blue,tag=yone.e.mark,tag=has_health_bar,limit=1,sort=nearest] run scoreboard players operation @s dmg_true.raw = @s yone.e.dmg
+
+    execute if entity @s[team=blue] run scoreboard players set @e[team=!blue,tag=yone.e.mark,type=!#unvalid,limit=1,sort=nearest] yone.e.dmg 0
+    execute if entity @s[team=blue] run tag @e[team=!blue,tag=yone.e.mark,type=!#unvalid,limit=1,sort=nearest] remove yone.e.mark
+
+    execute if entity @s[team=blue] if entity @e[tag=yone.e.mark,type=!#unvalid,team=!blue] run function lc:champions/yone/skills/e.damage
+}
+
+function e.dash {
+    tp @s ^ ^ ^.75
+    execute if entity @s[tag=red] at @s positioned ~ ~-0.5 ~ as @p[team=red,tag=yone] run function lc:core/motion/follow
+    execute if entity @s[tag=blue] at @s positioned ~ ~-0.5 ~ as @p[team=blue,tag=yone] run function lc:core/motion/follow
+}
+
+function e.mark {
+    execute as @e[type=!#unvalid,type=!player] store result score @s hurt run data get entity @s HurtTime
+    execute if entity @s[team=red] positioned ^ ^ ^1 run tag @e[tag=!unvalid,type=!#unvalid,team=!red,limit=1,sort=nearest,scores={hurt=1..}] add yone.e.mark
+    execute if entity @s[team=blue] positioned ^ ^ ^1 run tag @e[tag=!unvalid,type=!#unvalid,team=!blue,limit=1,sort=nearest,scores={hurt=1..}] add yone.e.mark
+
+    scoreboard players reset @e[type=!#unvalid,type=!player] hurt
+}
+
+function e.particle {
+    particle dust{color:[1,0,0],scale:0.5} ~ ~1 ~ 0 0 0 1 1 force
+    execute if entity @s[tag=red] positioned ~-0.5 ~-0.5 ~-0.5 unless entity @p[tag=yone,team=red,dx=0] positioned ~0.5 ~0.5 ~0.5 positioned ^ ^ ^0.1 run function lc:champions/yone/skills/e.particle
+    execute if entity @s[tag=blue] positioned ~-0.5 ~-0.5 ~-0.5 unless entity @p[tag=yone,team=blue,dx=0] positioned ~0.5 ~0.5 ~0.5 positioned ^ ^ ^0.1 run function lc:champions/yone/skills/e.particle
+}
+
+function e.unbound {
+    ## RED
+    execute if entity @s[tag=red] run scoreboard players set @p[tag=yone,team=red] channeling 5
+    execute if entity @s[tag=red] if entity @e[tag=yone.e.mark,team=!red] as @p[tag=yone,team=red] run function lc:champions/yone/skills/e.damage
+    execute if entity @s[tag=red] run scoreboard players set @p[tag=yone,team=red] mana 0
+
+    execute if entity @s[tag=red] positioned as @p[tag=yone,team=red] run playsound minecraft:yone.sfx.e2 master @a ~ ~ ~
+
+    execute if entity @s[tag=red] run effect clear @p[tag=yone,team=red] speed
+
+    execute if entity @s[tag=red] run kill @e[tag=yone.e.cd.particle,type=minecraft:area_effect_cloud,tag=red]
+    execute if entity @s[tag=red] as @p[tag=yone,team=red] run function lc:core/effect/cleanse
+    execute if entity @s[tag=red] run tag @p[tag=yone,team=red] remove e.soul
+    execute if entity @s[tag=red] run tag @p[tag=yone,team=red] add unstoppable
+
+    execute if entity @s[tag=red] as @p[tag=yone,team=red] at @s run function lc:champions/yone/skills/e.unbound.spawn
+
+    ## BLUE
+    execute if entity @s[tag=blue] run scoreboard players set @p[tag=yone,team=blue] channeling 5
+    execute if entity @s[tag=blue] if entity @e[tag=yone.e.mark,team=!blue] as @p[tag=yone,team=blue] run function lc:champions/yone/skills/e.damage
+    execute if entity @s[tag=blue] run scoreboard players set @p[tag=yone,team=blue] mana 0
+
+    execute if entity @s[tag=blue] positioned as @p[tag=yone,team=blue] run playsound minecraft:yone.sfx.e2 master @a ~ ~ ~
+
+    execute if entity @s[tag=blue] run effect clear @p[tag=yone,team=blue] speed
+
+    execute if entity @s[tag=blue] run kill @e[tag=yone.e.cd.particle,type=minecraft:area_effect_cloud,tag=blue]
+    execute if entity @s[tag=blue] as @p[tag=yone,team=blue] run function lc:core/effect/cleanse
+    execute if entity @s[tag=blue] run tag @p[tag=yone,team=blue] remove e.soul
+    execute if entity @s[tag=blue] run tag @p[tag=yone,team=blue] add unstoppable
+
+    execute if entity @s[tag=blue] as @p[tag=yone,team=blue] at @s run function lc:champions/yone/skills/e.unbound.spawn
+
+    tag @s add yone.e.end
+}
+
+function e.unbound.dash {
+    execute if entity @s[tag=red] if score @p[team=red,tag=yone] channeling matches -1 facing entity @e[tag=red,tag=yone.e.body,type=item_display] feet rotated ~ ~-5 run tp @s ^ ^ ^1.5
+    execute if entity @s[tag=red] if score @p[team=red,tag=yone] channeling matches -1 at @s positioned ~ ~-0.5 ~ as @p[team=red,tag=yone] run function lc:core/motion/follow
+
+    execute if entity @s[tag=blue] if score @p[team=blue,tag=yone] channeling matches -1 facing entity @e[tag=blue,tag=yone.e.body,type=item_display] feet rotated ~ ~-5 run tp @s ^ ^ ^1.5
+    execute if entity @s[tag=blue] if score @p[team=blue,tag=yone] channeling matches -1 at @s positioned ~ ~-0.5 ~ as @p[team=blue,tag=yone] run function lc:core/motion/follow
+}
+
+function e.unbound.spawn {
+    execute if entity @s[team=red] run summon item_display ~ ~0.5 ~ {teleport_duration:1,Tags:["dash","red","yone.unbound","temp","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run summon item_display ~ ~0.5 ~ {teleport_duration:1,Tags:["dash","blue","yone.unbound","temp","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute at @e[tag=yone.unbound,tag=temp,limit=1,sort=nearest] run data modify entity @e[tag=cd,limit=1,sort=nearest] Owner set from entity @s UUID
+    tag @e[tag=yone.unbound,tag=temp,limit=1,sort=nearest] remove temp
+}
+
+function q.check {
+    execute if entity @s[team=red] positioned ^ ^ ^ positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[dx=0,team=!red,type=!#unvalid,tag=!unvalid,tag=!yone.q.hit] add yone.q.hit
+    execute if entity @s[team=red] positioned ^ ^ ^1 positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[dx=0,team=!red,type=!#unvalid,tag=!unvalid,tag=!yone.q.hit] add yone.q.hit
+    execute if entity @s[team=red] positioned ^ ^ ^2 positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[dx=0,team=!red,type=!#unvalid,tag=!unvalid,tag=!yone.q.hit] add yone.q.hit
+
+    execute if entity @s[team=red] if entity @e[tag=yone.q.hit,team=!red,type=!#unvalid] run scoreboard players add @s stack_q 1
+    execute if entity @s[team=red] if entity @e[tag=yone.q.hit,team=!red,type=!#unvalid] run function lc:champions/yone/skills/q.stack_cd
+    execute if entity @s[team=red] if entity @e[tag=yone.q.hit,team=!red,type=!#unvalid] run tag @e[tag=yone.q.hit,type=!#unvalid,team=!red] add temp_dmg
+    execute if entity @s[team=red] if entity @e[tag=yone.q.hit,team=!red,type=!#unvalid] run function lc:champions/yone/skills/q.damage
+    execute if entity @s[team=red] if entity @e[tag=yone.q.hit,team=!red,type=!#unvalid] run tag @e[tag=yone.q.hit,type=!#unvalid,team=!red] remove yone.q.hit
+
+    execute if entity @s[team=blue] positioned ^ ^ ^ positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[dx=0,team=!blue,type=!#unvalid,tag=!unvalid,tag=!yone.q.hit] add yone.q.hit
+    execute if entity @s[team=blue] positioned ^ ^ ^1 positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[dx=0,team=!blue,type=!#unvalid,tag=!unvalid,tag=!yone.q.hit] add yone.q.hit
+    execute if entity @s[team=blue] positioned ^ ^ ^2 positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[dx=0,team=!blue,type=!#unvalid,tag=!unvalid,tag=!yone.q.hit] add yone.q.hit
+
+    execute if entity @s[team=blue] if entity @e[tag=yone.q.hit,team=!blue,type=!#unvalid] run scoreboard players add @s stack_q 1
+    execute if entity @s[team=blue] if entity @e[tag=yone.q.hit,team=!blue,type=!#unvalid] run function lc:champions/yone/skills/q.stack_cd
+    execute if entity @s[team=blue] if entity @e[tag=yone.q.hit,team=!blue,type=!#unvalid] run tag @e[tag=yone.q.hit,type=!#unvalid,team=!blue] add temp_dmg
+    execute if entity @s[team=blue] if entity @e[tag=yone.q.hit,team=!blue,type=!#unvalid] run function lc:champions/yone/skills/q.damage
+    execute if entity @s[team=blue] if entity @e[tag=yone.q.hit,team=!blue,type=!#unvalid] run tag @e[tag=yone.q.hit,type=!#unvalid,team=!blue] remove yone.q.hit
+
+    execute if score @s stack_q matches 2 run tag @s add full_q
+}
+
+function q.damage {
+    execute if entity @s[team=red] run damage @e[tag=yone.q.hit,tag=temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 5 lc:core/dmg_physical by @s
+    execute if entity @s[team=blue] run damage @e[tag=yone.q.hit,tag=temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 5 lc:core/dmg_physical by @s
+
+    scoreboard players set @s dmg_physical.deal 100
+    scoreboard players operation @s dmg_physical.deal += @s attack_damage
+    function lc:champion/aa/on_hit
+    function lc:champion/dmg/calc.debuff
+
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=yone.q.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=yone.q.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=red] run tag @e[team=!red,tag=yone.q.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+    execute if entity @s[team=red] if entity @e[tag=yone.q.hit,tag=temp_dmg,type=!#unvalid,team=!red] run function lc:champions/yone/skills/q.damage
+
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=yone.q.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=yone.q.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=blue] run tag @e[team=!blue,tag=yone.q.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+    execute if entity @s[team=blue] if entity @e[tag=yone.q.hit,tag=temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/yone/skills/q.damage
+}
+
+function q.dash {
+    execute if block ^ ^ ^1 #like_air run tp @s ^ ^ ^1
+    execute if entity @s[tag=red] at @s positioned ~ ~-0.5 ~ as @p[team=red,tag=yone] run function lc:core/motion/follow
+    execute if entity @s[tag=blue] at @s positioned ~ ~-0.5 ~ as @p[team=blue,tag=yone] run function lc:core/motion/follow
+
+    particle minecraft:instant_effect ^ ^ ^ 0.2 0 0.2 0 10 force
+}
+
+function q.particle {
+    particle minecraft:end_rod ^ ^ ^0.5 0 0 0 0 1 force
+    particle minecraft:end_rod ^ ^ ^0.75 0 0 0 0 1 force
+    particle minecraft:end_rod ^ ^ ^1 0.05 0.05 0.05 0 2 force
+    particle minecraft:end_rod ^ ^ ^1.25 0.05 0.05 0.05 0 2 force
+    particle minecraft:end_rod ^ ^ ^1.5 0.1 0.1 0.1 0 3 force
+    particle minecraft:end_rod ^ ^ ^1.75 0.05 0.05 0.05 0 2 force
+    particle minecraft:end_rod ^ ^ ^2 0.05 0.05 0.05 0 2 force
+    particle minecraft:end_rod ^ ^ ^2.25 0 0 0 0 1 force
+    particle minecraft:end_rod ^ ^ ^2.5 0 0 0 0 1 force
+
+    particle minecraft:dust{color:[1,0.5,0.5],scale:1} ^ ^ ^0.5 0 0 0 0 1 force
+    particle minecraft:dust{color:[1,0.5,0.5],scale:1} ^ ^ ^0.75 0 0 0 0 1 force
+    particle minecraft:dust{color:[1,0.5,0.5],scale:1} ^ ^ ^1 0.05 0.05 0.05 0 2 force
+    particle minecraft:dust{color:[1,0.5,0.5],scale:1} ^ ^ ^1.25 0.05 0.05 0.05 0 2 force
+    particle minecraft:dust{color:[1,0.5,0.5],scale:1} ^ ^ ^1.5 0.1 0.1 0.1 0 3 force
+    particle minecraft:dust{color:[1,0.5,0.5],scale:1} ^ ^ ^1.75 0.05 0.05 0.05 0 2 force
+    particle minecraft:dust{color:[1,0.5,0.5],scale:1} ^ ^ ^2 0.05 0.05 0.05 0 2 force
+    particle minecraft:dust{color:[1,0.5,0.5],scale:1} ^ ^ ^2.25 0 0 0 0 1 force
+    particle minecraft:dust{color:[1,0.5,0.5],scale:1} ^ ^ ^2.5 0 0 0 0 1 force
+}
+
+function q.stack {
+    execute if entity @s[tag=red] if entity @p[tag=yone,team=red,tag=full_q] run tp @s ~ ~ ~ ~20 0
+    execute if entity @s[tag=red] if entity @p[tag=yone,team=red,tag=full_q] positioned as @p[tag=yone,team=red] rotated as @s run particle minecraft:instant_effect ^ ^1.3 ^0.75 0 0 0 0 2 force
+    execute if entity @s[tag=red] if entity @p[tag=yone,team=red,tag=full_q] positioned as @p[tag=yone,team=red] rotated as @s run particle minecraft:instant_effect ^ ^0.7 ^-0.75 0 0 0 0 2 force
+    execute if entity @s[tag=red,nbt={Age:120}] run scoreboard players set @p[tag=yone,team=red] stack_q 0
+    execute if entity @s[tag=red,nbt={Age:120}] run tag @p[tag=yone,team=red] remove full_q
+
+    execute if entity @s[tag=blue] if entity @p[tag=yone,team=blue,tag=full_q] run tp @s ~ ~ ~ ~20 0
+    execute if entity @s[tag=blue] if entity @p[tag=yone,team=blue,tag=full_q] positioned as @p[tag=yone,team=blue] rotated as @s run particle minecraft:instant_effect ^ ^1.3 ^0.75 0 0 0 0 2 force
+    execute if entity @s[tag=blue] if entity @p[tag=yone,team=blue,tag=full_q] positioned as @p[tag=yone,team=blue] rotated as @s run particle minecraft:instant_effect ^ ^0.7 ^-0.75 0 0 0 0 2 force
+    execute if entity @s[tag=blue,nbt={Age:120}] run scoreboard players set @p[tag=yone,team=blue] stack_q 0
+    execute if entity @s[tag=blue,nbt={Age:120}] run tag @p[tag=yone,team=blue] remove full_q
+}
+
+function q.stack_cd {
+    execute if entity @s[team=red] if entity @e[tag=yone.q.stackcd,type=minecraft:area_effect_cloud,tag=red] run data modify entity @e[tag=yone.q.stackcd,tag=red,type=minecraft:area_effect_cloud,limit=1] Age set value 0
+    execute if entity @s[team=red] unless entity @e[tag=yone.q.stackcd,type=minecraft:area_effect_cloud,tag=red] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:121,Tags:["yone.q.stackcd","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] if entity @e[tag=yone.q.stackcd,type=minecraft:area_effect_cloud,tag=blue] run data modify entity @e[tag=yone.q.stackcd,tag=blue,type=minecraft:area_effect_cloud,limit=1] Age set value 0
+    execute if entity @s[team=blue] unless entity @e[tag=yone.q.stackcd,type=minecraft:area_effect_cloud,tag=blue] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:121,Tags:["yone.q.stackcd","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+}
+
+function q.tornado.clear {
+    execute if entity @s[tag=red] run tag @p[tag=yone,team=red,tag=q.dash] remove q.dash
+    execute if entity @s[tag=red] run tag @e[tag=yone.tornado.hit,team=!red,type=!#unvalid] remove yone.tornado.hit
+
+    execute if entity @s[tag=blue] run tag @p[tag=yone,team=blue,tag=q.dash] remove q.dash
+    execute if entity @s[tag=blue] run tag @e[tag=yone.tornado.hit,team=!blue,type=!#unvalid] remove yone.tornado.hit
+
+    kill @s
+}
+
+function q.tornado.knockup {
+    function lc:champion/cc/cancel
+    scoreboard players set @s cc.airborne 15
+
+    function lc:core/motion/push {x:0,y:424,z:0,ticks:0}
+}
+
+function q.tornado.passive {
+    tp @s ^ ^ ^1
+    particle minecraft:sweep_attack ~ ~1 ~ 0.8 0 0.8 1 5 force
+
+    execute as @s[tag=red] positioned ~-1.5 ~-1.5 ~-1.5 run tag @e[team=!red,dx=2,dz=2,dy=5,type=!#unvalid,tag=!unvalid] add yone.q.hit
+
+    execute if entity @s[tag=red] if entity @e[tag=yone.q.hit,team=!red,type=!#unvalid] run tag @e[tag=yone.q.hit,type=!#unvalid,team=!red,tag=!yone.tornado.hit] add temp_dmg
+    execute if entity @s[tag=red] if entity @e[tag=yone.q.hit,team=!red,type=!#unvalid] as @e[tag=yone.q.hit,type=!#unvalid,team=!red,tag=!yone.tornado.hit,tag=temp_dmg,tag=!unstoppable] at @s run function lc:champions/yone/skills/q.tornado.knockup
+    execute if entity @s[tag=red] if entity @e[tag=yone.q.hit,team=!red,type=!#unvalid] on passengers on origin run function lc:champions/yone/skills/q.damage
+
+    execute if entity @s[tag=red] if entity @e[tag=yone.q.hit,team=!red,type=!#unvalid] run tag @e[tag=yone.q.hit,type=!#unvalid,team=!red] add yone.tornado.hit
+    execute if entity @s[tag=red] if entity @e[tag=yone.q.hit,team=!red,type=!#unvalid] run tag @e[tag=yone.q.hit,type=!#unvalid,team=!red] remove yone.q.hit
+
+    execute as @s[tag=blue] positioned ~-1.5 ~-1.5 ~-1.5 run tag @e[team=!blue,dx=2,dz=2,dy=5,type=!#unvalid,tag=!unvalid] add yone.q.hit
+
+    execute if entity @s[tag=blue] if entity @e[tag=yone.q.hit,team=!blue,type=!#unvalid] run tag @e[tag=yone.q.hit,type=!#unvalid,team=!blue,tag=!yone.tornado.hit] add temp_dmg
+    execute if entity @s[tag=blue] if entity @e[tag=yone.q.hit,team=!blue,type=!#unvalid] as @e[tag=yone.q.hit,type=!#unvalid,team=!blue,tag=!yone.tornado.hit,tag=temp_dmg,tag=!unstoppable] at @s run function lc:champions/yone/skills/q.tornado.knockup
+    execute if entity @s[tag=blue] if entity @e[tag=yone.q.hit,team=!blue,type=!#unvalid] on passengers on origin run function lc:champions/yone/skills/q.damage
+
+    execute if entity @s[tag=blue] if entity @e[tag=yone.q.hit,team=!blue,type=!#unvalid] run tag @e[tag=yone.q.hit,type=!#unvalid,team=!blue] add yone.tornado.hit
+    execute if entity @s[tag=blue] if entity @e[tag=yone.q.hit,team=!blue,type=!#unvalid] run tag @e[tag=yone.q.hit,type=!#unvalid,team=!blue] remove yone.q.hit
+}
+
+function q.tornado.spawn {
+    playsound yone.sfx.q2 master @a ~ ~ ~
+
+    execute if entity @s[team=red] run summon minecraft:item_display ~ ~ ~ {teleport_duration:1,interpolation_duration:10,Tags:["yone.q.tornado","temp","red","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:15,Tags:["cd","red","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=red] run summon minecraft:item_display ~ ~0.5 ~ {teleport_duration:1,interpolation_duration:10,Tags:["yone.q","temp","red","dash","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:8,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute if entity @s[team=blue] run summon minecraft:item_display ~ ~ ~ {teleport_duration:1,interpolation_duration:10,Tags:["yone.q.tornado","temp","blue","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:15,Tags:["cd","blue","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run summon minecraft:item_display ~ ~0.5 ~ {teleport_duration:1,interpolation_duration:10,Tags:["yone.q","temp","blue","dash","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:8,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    tp @e[tag=yone.q,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ 0
+    execute as @e[tag=yone.q,tag=temp,limit=1,sort=nearest] on passengers store result entity @s Rotation[0] float 1 on vehicle run data get entity @s Rotation[0] 1
+    execute at @e[tag=yone.q,tag=temp,limit=1,sort=nearest] run data modify entity @e[tag=cd,limit=1,sort=nearest] Owner set from entity @s UUID
+    tag @e[tag=yone.q,tag=temp,limit=1,sort=nearest] remove temp
+
+    tp @e[tag=yone.q.tornado,tag=temp,limit=1,sort=nearest] ~ ~ ~ ~ 0
+    execute at @e[tag=yone.q.tornado,tag=temp,limit=1,sort=nearest] run data modify entity @e[tag=cd,limit=1,sort=nearest] Owner set from entity @s UUID
+    tag @e[tag=yone.q.tornado,tag=temp,limit=1,sort=nearest] remove temp
+
+    tag @s remove full_q
+    execute if entity @s[team=red] run kill @e[tag=yone.q.stackcd,type=area_effect_cloud,tag=red]
+    execute if entity @s[team=blue] run kill @e[tag=yone.q.stackcd,type=area_effect_cloud,tag=blue]
+}
+
+function r.animation {
+    ## RED
+    execute if entity @s[tag=red] positioned as @p[tag=yone,team=red] run playsound minecraft:yone.ultimate master @a ~ ~ ~
+    execute if entity @s[tag=red] as @e[tag=yone.r.mark,type=minecraft:area_effect_cloud,tag=red] at @s positioned ~-1.5 ~ ~-1.5 run tag @e[type=!#unvalid,tag=!unvalid,dx=2,dz=2,dy=10,team=!red,tag=!yone.r.hit] add yone.r.hit
+    execute if entity @s[tag=red] unless entity @e[tag=yone.r.hit,team=!red] positioned as @e[tag=yone.r.mark,limit=1,type=area_effect_cloud,tag=red,sort=furthest] rotated as @p[tag=yone,team=red] run tp @p[tag=yone,team=red] ~ ~0.2 ~
+    execute if entity @s[tag=red] if entity @e[tag=yone.r.hit,team=!red] positioned as @e[tag=yone.r.hit,team=!red,sort=furthest,limit=1] positioned as @e[tag=yone.r.mark,limit=1,sort=nearest] rotated as @p[tag=yone,team=red] run tp @p[tag=yone,team=red] ^ ^0.2 ^4
+    execute if entity @s[tag=red] if entity @e[tag=yone.r.hit,team=!red] positioned as @e[tag=yone.r.hit,team=!red,sort=furthest,limit=1] positioned as @e[tag=yone.r.mark,limit=1,sort=nearest] rotated as @p[tag=yone,team=red] run tp @e[tag=yone.r.hit,team=!red] ^ ^0.2 ^3
+    execute if entity @s[tag=red] run scoreboard players set @e[tag=yone.r.hit,team=!red] cc.stun 20
+
+    execute if entity @s[tag=red] if entity @e[tag=yone.r.hit,team=!red] if entity @p[tag=yone,team=red,tag=e.soul] run tag @e[tag=yone.r.hit,team=!red] add yone.e.mark
+
+    execute if entity @s[tag=red] if entity @e[tag=yone.r.hit,team=!red] run tag @e[team=!red,tag=yone.r.hit] add temp_dmg
+    execute if entity @s[tag=red] if entity @e[tag=yone.r.hit,team=!red] as @e[type=!#unvalid,team=!red,tag=yone.r.hit,tag=temp_dmg,tag=!unstoppable] at @s run function lc:champions/yone/skills/r.knockup
+    execute if entity @s[tag=red] if entity @e[tag=yone.r.hit,team=!red] as @p[tag=yone,team=red] run function lc:champions/yone/skills/r.damage
+
+    execute if entity @s[tag=red] if entity @e[tag=yone.r.hit,team=!red] run tag @e[tag=yone.r.hit,team=!red] remove yone.r.hit
+    execute if entity @s[tag=red] as @e[tag=yone.r.mark,type=minecraft:area_effect_cloud,tag=red] at @s run particle minecraft:crimson_spore ~ ~1 ~ 0.5 0 0.5 0.1 20 force
+    execute if entity @s[tag=red] as @e[tag=yone.r.mark,type=minecraft:area_effect_cloud,tag=red] at @s run particle minecraft:campfire_cosy_smoke ~ ~1 ~ 0.5 0 0.5 0.02 2 force
+    execute if entity @s[tag=red] run kill @e[tag=yone.r.mark,type=minecraft:area_effect_cloud,tag=red]
+    execute if entity @s[tag=red] run tag @p[tag=yone,team=red,tag=r.animation] remove r.animation
+
+    ## BLUE
+    execute if entity @s[tag=blue] positioned as @p[tag=yone,team=blue] run playsound minecraft:yone.ultimate master @a ~ ~ ~
+    execute if entity @s[tag=blue] as @e[tag=yone.r.mark,type=minecraft:area_effect_cloud,tag=blue] at @s positioned ~-1.5 ~ ~-1.5 run tag @e[type=!#unvalid,tag=!unvalid,dx=2,dz=2,dy=10,team=!blue,tag=!yone.r.hit] add yone.r.hit
+    execute if entity @s[tag=blue] unless entity @e[tag=yone.r.hit,team=!blue] positioned as @e[tag=yone.r.mark,limit=1,type=area_effect_cloud,tag=blue,sort=furthest] rotated as @p[tag=yone,team=blue] run tp @p[tag=yone,team=blue] ~ ~0.2 ~
+    execute if entity @s[tag=blue] if entity @e[tag=yone.r.hit,team=!blue] positioned as @e[tag=yone.r.hit,team=!blue,sort=furthest,limit=1] positioned as @e[tag=yone.r.mark,limit=1,sort=nearest] rotated as @p[tag=yone,team=blue] run tp @p[tag=yone,team=blue] ^ ^0.2 ^4
+    execute if entity @s[tag=blue] if entity @e[tag=yone.r.hit,team=!blue] positioned as @e[tag=yone.r.hit,team=!blue,sort=furthest,limit=1] positioned as @e[tag=yone.r.mark,limit=1,sort=nearest] rotated as @p[tag=yone,team=blue] run tp @e[tag=yone.r.hit,team=!blue] ^ ^0.2 ^3
+    execute if entity @s[tag=blue] run scoreboard players set @e[tag=yone.r.hit,team=!blue] cc.stun 20
+
+    execute if entity @s[tag=blue] if entity @e[tag=yone.r.hit,team=!blue] if entity @p[tag=yone,team=blue,tag=e.soul] run tag @e[tag=yone.r.hit,team=!blue] add yone.e.mark
+
+    execute if entity @s[tag=blue] if entity @e[tag=yone.r.hit,team=!blue] run tag @e[team=!blue,tag=yone.r.hit] add temp_dmg
+    execute if entity @s[tag=blue] if entity @e[tag=yone.r.hit,team=!blue] as @e[type=!#unvalid,team=!blue,tag=yone.r.hit,tag=temp_dmg,tag=!unstoppable] at @s run function lc:champions/yone/skills/r.knockup
+    execute if entity @s[tag=blue] if entity @e[tag=yone.r.hit,team=!blue] as @p[tag=yone,team=blue] run function lc:champions/yone/skills/r.damage
+
+    execute if entity @s[tag=blue] if entity @e[tag=yone.r.hit,team=!blue] run tag @e[tag=yone.r.hit,team=!blue] remove yone.r.hit
+    execute if entity @s[tag=blue] as @e[tag=yone.r.mark,type=minecraft:area_effect_cloud,tag=blue] at @s run particle minecraft:crimson_spore ~ ~1 ~ 0.5 0 0.5 0.1 20 force
+    execute if entity @s[tag=blue] as @e[tag=yone.r.mark,type=minecraft:area_effect_cloud,tag=blue] at @s run particle minecraft:campfire_cosy_smoke ~ ~1 ~ 0.5 0 0.5 0.02 2 force
+    execute if entity @s[tag=blue] run kill @e[tag=yone.r.mark,type=minecraft:area_effect_cloud,tag=blue]
+    execute if entity @s[tag=blue] run tag @p[tag=yone,team=blue,tag=r.animation] remove r.animation
+}
+
+function r.cast {
+    #execute if entity @s[tag=red] run tp @p[tag=yone,team=red] ~ ~ ~ ~ ~
+    execute if entity @s[tag=red] rotated as @s positioned as @e[tag=yone.r.animation,tag=red,type=minecraft:area_effect_cloud] run tp @e[tag=yone.r.animation,tag=red,type=minecraft:area_effect_cloud] ^ ^ ^1
+    execute if entity @s[tag=red] positioned as @e[tag=yone.r.animation,tag=red,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["yone.r.mark","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    execute if entity @s[tag=red] rotated as @s positioned as @e[tag=yone.r.animation,tag=red,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^2 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=red] rotated as @s positioned as @e[tag=yone.r.animation,tag=red,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^-2 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    execute if entity @s[tag=red,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=red,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^1.5 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=red,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=red,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^1 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=red,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=red,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^0.5 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=red,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=red,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^ ^0.5 ^ {Duration:20,Tags:["yone.r.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=red,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=red,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^-0.5 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=red,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=red,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^-1 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=red,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=red,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^-1.5 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=red,nbt={Age:19}] as @e[tag=yone.r.mark,tag=red,type=minecraft:area_effect_cloud,limit=1,sort=nearest] at @s run function lc:champions/yone/skills/r.animation
+
+    #execute if entity @s[tag=blue] run tp @p[tag=yone,team=blue] ~ ~ ~ ~ ~
+    execute if entity @s[tag=blue] rotated as @s positioned as @e[tag=yone.r.animation,tag=blue,type=minecraft:area_effect_cloud] run tp @e[tag=yone.r.animation,tag=blue,type=minecraft:area_effect_cloud] ^ ^ ^1
+    execute if entity @s[tag=blue] positioned as @e[tag=yone.r.animation,tag=blue,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:20,Tags:["yone.r.mark","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    execute if entity @s[tag=blue] rotated as @s positioned as @e[tag=yone.r.animation,tag=blue,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^2 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=blue] rotated as @s positioned as @e[tag=yone.r.animation,tag=blue,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^-2 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    execute if entity @s[tag=blue,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=blue,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^1.5 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=blue,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=blue,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^1 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=blue,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=blue,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^0.5 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=blue,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=blue,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^ ^0.5 ^ {Duration:20,Tags:["yone.r.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=blue,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=blue,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^-0.5 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=blue,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=blue,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^-1 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=blue,nbt={Age:19}] positioned as @e[tag=yone.r.animation,tag=blue,type=minecraft:area_effect_cloud] run summon minecraft:area_effect_cloud ^-1.5 ^0.5 ^ {Duration:20,Tags:["yone.r.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=blue,nbt={Age:19}] as @e[tag=yone.r.mark,tag=blue,type=minecraft:area_effect_cloud,limit=1,sort=nearest] at @s run function lc:champions/yone/skills/r.animation
+}
+
+function r.damage {
+    execute if entity @s[team=red] run damage @e[tag=yone.r.hit,tag=temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 10 lc:core/dmg_physical by @s
+    execute if entity @s[team=blue] run damage @e[tag=yone.r.hit,tag=temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 10 lc:core/dmg_physical by @s
+
+    scoreboard players set @s dmg_physical.deal 300
+    scoreboard players operation dmg temp = @s attack_damage
+    scoreboard players operation dmg temp *= 40 integer
+    scoreboard players operation dmg temp /= 100 integer
+
+    scoreboard players operation @s dmg_physical.deal += dmg temp
+    scoreboard players operation @s dmg_magic.deal = @s dmg_physical.deal
+
+    function lc:champion/dmg/calc.debuff
+
+    ## RED
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=yone.r.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=yone.r.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=yone.r.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=yone.r.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+    execute if entity @s[team=red] run tag @e[team=!red,tag=yone.r.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+    execute if entity @s[team=red] run execute if entity @e[tag=yone.r.hit,tag=temp_dmg,type=!#unvalid,team=!red] run function lc:champions/yone/skills/r.damage
+
+    ## BLUE
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=yone.r.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=yone.r.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=yone.r.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=yone.r.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+    execute if entity @s[team=blue] run tag @e[team=!blue,tag=yone.r.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+    execute if entity @s[team=blue] run execute if entity @e[tag=yone.r.hit,tag=temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/yone/skills/r.damage
+}
+
+function r.knockup {
+    function lc:champion/cc/cancel
+    scoreboard players set @s cc.airborne 15
+
+    function lc:core/motion/push {x:0,y:495,z:0,ticks:0}
+}
+
+function w.animation {
+    function lc:champions/yone/skills/w.particle
+    execute rotated ~-12 ~ run function lc:champions/yone/skills/w.particle
+
+    tp @s ~ ~ ~ ~-24 ~
+
+    ## RED
+    execute if entity @s[tag=red] positioned ^ ^ ^1 run tag @e[type=!#unvalid,tag=!unvalid,dx=0,team=!red,tag=!yone.w.hit] add yone.w.hit
+    execute if entity @s[tag=red] positioned ^ ^ ^2 run tag @e[type=!#unvalid,tag=!unvalid,dx=0,team=!red,tag=!yone.w.hit] add yone.w.hit
+    execute if entity @s[tag=red] positioned ^ ^ ^3 run tag @e[type=!#unvalid,tag=!unvalid,dx=0,team=!red,tag=!yone.w.hit] add yone.w.hit
+    execute if entity @s[tag=red] positioned ^ ^ ^4 run tag @e[type=!#unvalid,tag=!unvalid,dx=0,team=!red,tag=!yone.w.hit] add yone.w.hit
+
+    execute if entity @s[tag=red,nbt={Age:4}] on origin store result score @s yone.w.count run tag @e[tag=yone.w.hit,team=!red] add temp_dmg
+    execute on origin if entity @e[tag=yone.w.hit,team=!red,tag=temp_dmg] run function lc:champions/yone/skills/w.damage
+    execute if entity @s[tag=red,nbt={Age:4}] on origin if entity @s[team=red,tag=e.soul] run tag @e[tag=yone.w.hit,team=!red] add yone.e.mark
+
+    execute if entity @s[tag=red,nbt={Age:4}] on origin if score @s yone.w.count matches 1.. run function lc:champions/yone/skills/w.shield.trigger
+    execute if entity @s[tag=red,nbt={Age:4}] run tag @e[tag=yone.w.hit,team=!red] remove yone.w.hit
+
+    ## BLUE
+    execute if entity @s[tag=blue] positioned ^ ^ ^1 run tag @e[type=!#unvalid,tag=!unvalid,dx=0,team=!blue,tag=!yone.w.hit] add yone.w.hit
+    execute if entity @s[tag=blue] positioned ^ ^ ^2 run tag @e[type=!#unvalid,tag=!unvalid,dx=0,team=!blue,tag=!yone.w.hit] add yone.w.hit
+    execute if entity @s[tag=blue] positioned ^ ^ ^3 run tag @e[type=!#unvalid,tag=!unvalid,dx=0,team=!blue,tag=!yone.w.hit] add yone.w.hit
+    execute if entity @s[tag=blue] positioned ^ ^ ^4 run tag @e[type=!#unvalid,tag=!unvalid,dx=0,team=!blue,tag=!yone.w.hit] add yone.w.hit
+
+    execute if entity @s[tag=blue,nbt={Age:4}] on origin store result score @s yone.w.count run tag @e[tag=yone.w.hit,team=!blue] add temp_dmg
+    execute on origin if entity @e[tag=yone.w.hit,team=!blue,tag=temp_dmg] run function lc:champions/yone/skills/w.damage
+    execute if entity @s[tag=blue,nbt={Age:4}] on origin if entity @s[team=blue,tag=e.soul] run tag @e[tag=yone.w.hit,team=!blue] add yone.e.mark
+
+    execute if entity @s[tag=blue,nbt={Age:4}] on origin if score @s yone.w.count matches 1.. run function lc:champions/yone/skills/w.shield.trigger
+    execute if entity @s[tag=blue,nbt={Age:4}] run tag @e[tag=yone.w.hit,team=!blue] remove yone.w.hit
+}
+
+function w.damage {
+    execute if entity @s[team=red] run damage @e[tag=yone.w.hit,tag=temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+    execute if entity @s[team=blue] run damage @e[tag=yone.w.hit,tag=temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+
+    scoreboard players set @s dmg_physical.deal 25
+    execute if entity @s[team=red] run scoreboard players operation dmg temp = @e[tag=yone.w.hit,tag=temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] hp.max
+    execute if entity @s[team=blue] run scoreboard players operation dmg temp = @e[tag=yone.w.hit,tag=temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] hp.max
+    scoreboard players operation dmg temp *= 8 integer
+    scoreboard players operation dmg temp /= 100 integer
+
+    scoreboard players operation @s dmg_physical.deal += dmg temp
+    scoreboard players operation @s dmg_magic.deal = @s dmg_physical.deal
+
+    function lc:champion/dmg/calc.debuff
+
+    ## RED
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=yone.w.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=yone.w.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=yone.w.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=yone.w.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+    execute if entity @s[team=red] run tag @e[team=!red,tag=yone.w.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+    execute if entity @s[team=red] run execute if entity @e[tag=yone.w.hit,tag=temp_dmg,type=!#unvalid,team=!red] run function lc:champions/yone/skills/w.damage
+
+    ## BLUE
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=yone.w.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=yone.w.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=yone.w.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=yone.w.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+    execute if entity @s[team=blue] run tag @e[team=!blue,tag=yone.w.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+    execute if entity @s[team=blue] run execute if entity @e[tag=yone.w.hit,tag=temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/yone/skills/w.damage
+}
+
+function w.particle {
+    particle dust{color:[1,0.75,0.75],scale:1} ^ ^ ^1 0.2 0 0.2 1 5 force
+    particle dust{color:[1,0.75,0.75],scale:1} ^ ^ ^1.25 0.2 0 0.2 1 5 force
+
+    particle dust{color:[1,0.5,0.5],scale:1} ^ ^ ^1.5 0.2 0 0.2 1 5 force
+    particle dust{color:[1,0.5,0.5],scale:1} ^ ^ ^1.75 0.2 0 0.2 1 5 force
+
+    particle dust{color:[1,0.25,0.25],scale:1} ^ ^ ^2 0.2 0 0.2 1 5 force
+    particle dust{color:[1,0.25,0.25],scale:1} ^ ^ ^2.25 0.2 0 0.2 1 5 force
+
+    particle dust{color:[1,0,0],scale:1} ^ ^ ^2.5 0.2 0 0.2 1 5 force
+    particle dust{color:[1,0,0],scale:1} ^ ^ ^2.75 0.2 0 0.2 1 5 force
+
+    particle dust{color:[0.75,0,0],scale:1} ^ ^ ^3 0.2 0 0.2 1 5 force
+    particle dust{color:[0.75,0,0],scale:1} ^ ^ ^3.25 0.2 0 0.2 1 5 force
+
+    particle dust{color:[0.5,0,0],scale:1} ^ ^ ^3.5 0.2 0 0.2 1 5 force
+    particle dust{color:[0.5,0,0],scale:1} ^ ^ ^3.75 0.2 0 0.2 1 5 force
+
+    particle dust{color:[0.25,0,0],scale:1} ^ ^ ^4 0.2 0 0.2 1 5 force
+}
+
+function w.shield.particle {
+    particle dust{color:[1,0.75,0.75],scale:1} ^ ^1 ^0.1 0 0 0 1 1 force
+
+    particle dust{color:[1,0.5,0.5],scale:1} ^ ^0.9 ^0.2 0 0 0 1 1 force
+    particle dust{color:[1,0.5,0.5],scale:1} ^ ^0.8 ^0.5 0 0 0 1 1 force
+
+    particle dust{color:[1,0.5,0.5],scale:1} ^ ^0.7 ^0.7 0 0 0 1 1 force
+
+    particle dust{color:[1,0.25,0.25],scale:1} ^ ^0.5 ^0.8 0 0 0 1 1 force
+    particle dust{color:[1,0.25,0.25],scale:1} ^ ^0.2 ^0.9 0 0 0 1 1 force
+
+    particle dust{color:[1,0,0],scale:1} ^ ^ ^1 0 0 0 1 1 force
+
+    particle dust{color:[0.75,0,0],scale:1} ^ ^-0.2 ^0.9 0 0 0 1 1 force
+    particle dust{color:[0.75,0,0],scale:1} ^ ^-0.5 ^0.8 0 0 0 1 1 force
+
+    particle dust{color:[0.5,0,0],scale:1} ^ ^-0.7 ^0.7 0 0 0 1 1 force
+
+    particle dust{color:[0.5,0,0],scale:1} ^ ^-0.8 ^0.5 0 0 0 1 1 force
+    particle dust{color:[0.5,0,0],scale:1} ^ ^-0.9 ^0.2 0 0 0 1 1 force
+
+    particle dust{color:[0.25,0,0],scale:1} ^ ^-1 ^0.1 0 0 0 1 1 force
+}
+
+function w.shield.trigger {
+    tag @s add update.shield.yone
+    summon area_effect_cloud ~ ~ ~ {Duration:999999,Tags:["shield.all","new"],Passengers:[{id:"area_effect_cloud",Tags:["cd"],Duration:40,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    data modify entity @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] Owner set from entity @s UUID
+
+    ## 65% AD to shield
+    scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all = @s attack_damage
+    scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all *= 65 integer
+    scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all /= 100 integer
+
+    ## 80 base shield
+    scoreboard players add @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all 80
+
+    ## Double the shield if hits 2 or more targets
+    execute if score @s yone.w.count matches 2.. run scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all *= 2 integer
+
+    scoreboard players operation @s shield.all += @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all
+
+    tag @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] remove new
+}

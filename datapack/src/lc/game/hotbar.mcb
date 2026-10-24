@@ -1,0 +1,44 @@
+# lc:game/hotbar/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function backward {
+    scoreboard players remove @s hotbar_menu 1
+    execute if score @s hotbar_menu matches ..-1 run scoreboard players set @s hotbar_menu 2
+    function lc:game/hotbar/update_menu
+}
+
+function check {
+    execute if score @s hotbar_old matches 1..7 if score @s hotbar > @s hotbar_old run function lc:game/hotbar/forward
+    execute if score @s hotbar_old matches 1..7 if score @s hotbar < @s hotbar_old run function lc:game/hotbar/backward
+
+    execute if score @s hotbar_old matches 8 if score @s hotbar matches 0 run function lc:game/hotbar/forward
+    execute if score @s hotbar_old matches 8 if score @s hotbar matches 7 run function lc:game/hotbar/backward
+    execute if score @s hotbar_old matches 0 if score @s hotbar matches 1 run function lc:game/hotbar/forward
+    execute if score @s hotbar_old matches 0 if score @s hotbar matches 8 run function lc:game/hotbar/backward
+
+    scoreboard players operation @s hotbar_old = @s hotbar
+}
+
+function forward {
+    scoreboard players add @s hotbar_menu 1
+    execute if score @s hotbar_menu matches 3.. run scoreboard players set @s hotbar_menu 0
+    function lc:game/hotbar/update_menu
+}
+
+function update_menu {
+    playsound sfx.menu.hover master @a 0 0 0 1 1 1
+
+    clear @s warped_fungus_on_a_stick[minecraft:custom_data~{menu:1}]
+    item replace entity @s hotbar.0 with warped_fungus_on_a_stick[minecraft:custom_model_data={floats:[1f]},minecraft:custom_name=" ",minecraft:custom_data={kill_item:1,menu:1}]
+    item replace entity @s hotbar.1 with warped_fungus_on_a_stick[minecraft:custom_model_data={floats:[1f]},minecraft:custom_name=" ",minecraft:custom_data={kill_item:1,menu:1}]
+    item replace entity @s hotbar.2 with warped_fungus_on_a_stick[minecraft:custom_model_data={floats:[1f]},minecraft:custom_name=" ",minecraft:custom_data={kill_item:1,menu:1}]
+    item replace entity @s hotbar.3 with warped_fungus_on_a_stick[minecraft:custom_model_data={floats:[1f]},minecraft:custom_name=" ",minecraft:custom_data={kill_item:1,menu:1}]
+    item replace entity @s hotbar.4 with warped_fungus_on_a_stick[minecraft:custom_model_data={floats:[1f]},minecraft:custom_name=" ",minecraft:custom_data={kill_item:1,menu:1}]
+    item replace entity @s hotbar.5 with warped_fungus_on_a_stick[minecraft:custom_model_data={floats:[1f]},minecraft:custom_name=" ",minecraft:custom_data={kill_item:1,menu:1}]
+    item replace entity @s hotbar.6 with warped_fungus_on_a_stick[minecraft:custom_model_data={floats:[1f]},minecraft:custom_name=" ",minecraft:custom_data={kill_item:1,menu:1}]
+    item replace entity @s hotbar.7 with warped_fungus_on_a_stick[minecraft:custom_model_data={floats:[1f]},minecraft:custom_name=" ",minecraft:custom_data={kill_item:1,menu:1}]
+    item replace entity @s hotbar.8 with warped_fungus_on_a_stick[minecraft:custom_model_data={floats:[1f]},minecraft:custom_name=" ",minecraft:custom_data={kill_item:1,menu:1}]
+
+    execute if score @s hotbar_menu matches 0 run function lc:game/menu/page_0
+    execute if score @s hotbar_menu matches 1 run function lc:game/menu/page_1
+    execute if score @s hotbar_menu matches 2 run function lc:game/menu/page_2
+}

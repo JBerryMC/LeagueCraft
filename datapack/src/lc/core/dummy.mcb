@@ -1,0 +1,62 @@
+# lc:core/dummy/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function clear {
+    execute as @e[tag=dummy,type=pillager] on passengers run kill @s
+    execute as @e[tag=dummy,type=pillager] on vehicle run kill @s
+    kill @e[tag=dummy,type=pillager]
+}
+
+function dmg_check {
+    scoreboard players set @s mana 5
+    execute if score @s hp.left matches ..0 run scoreboard players set @s hp.left 1
+
+    execute on passengers as @s[tag=dmg_check] store result score @s dmg_physical.taken on vehicle run scoreboard players get @s dmg_physical.taken
+    execute on passengers as @s[tag=dmg_check] store result score @s dmg_magic.taken on vehicle run scoreboard players get @s dmg_magic.taken
+    execute on passengers as @s[tag=dmg_check] store result score @s dmg_true.taken on vehicle run scoreboard players get @s dmg_true.taken
+    execute on passengers as @s[tag=dmg_check] run scoreboard players operation @s dmg_total.taken += @s dmg_physical.taken
+    execute on passengers as @s[tag=dmg_check] run scoreboard players operation @s dmg_total.taken += @s dmg_magic.taken
+    execute on passengers as @s[tag=dmg_check] run scoreboard players operation @s dmg_total.taken += @s dmg_true.taken
+
+    execute on passengers as @s[tag=dmg_check] run data modify entity @s text set value ["Total: ",{score:{name:"@s",objective:"dmg_total.taken"}}]
+}
+
+function reset {
+    execute on passengers as @s[tag=dmg_check] run scoreboard players set @s dmg_total.taken 0
+    execute on passengers as @s[tag=dmg_check] run data modify entity @s text set value ["Total: ",{score:{name:"@s",objective:"dmg_total.taken"}}]
+
+    scoreboard players operation @s hp.left = @s hp.max
+}
+
+function spawn.blue {
+    summon pillager ~ ~ ~ {PersistenceRequired:1,Team:"blue",Tags:["has_health_bar","dummy","champion","temp"],Silent:1,CustomNameVisible:1,CustomName:"Blue Dummy",attributes:[{id:"minecraft:max_health",base:1000.0d},{id:"minecraft:movement_speed",base:0.0d},{id:"minecraft:knockback_resistance",base:1.0d}],Health:1000.0f,Passengers:[{id:"text_display",Tags:["dmg_check","stats_bar"],text:"Total: 0",billboard:"vertical"},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["mana","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["shield_all","stats_bar"],background:0,billboard:"vertical"}]}
+
+    scoreboard players set @e[tag=dummy,tag=temp,limit=1,sort=nearest] hp.max 1000
+    scoreboard players set @e[tag=dummy,tag=temp,limit=1,sort=nearest] mana.max 5
+
+    execute as @e[tag=dummy,tag=temp,limit=1,sort=nearest] run function lc:core/dummy/reset
+    execute as @e[tag=dummy,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,-0.55,0.0]}}
+    execute as @e[tag=dummy,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=mana] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,-0.55,0.0001]}}
+    execute as @e[tag=dummy,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=shield_all] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,-0.55,0.0001]}}
+    execute as @e[tag=dummy,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=dmg_check] {transformation:{translation:[0.0,0.45,0.0]}}
+
+    execute if score .world settings.show_stats matches 0 as @e[tag=dummy,tag=temp,limit=1,sort=nearest] on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+
+    tag @e[tag=dummy,tag=temp,limit=1,sort=nearest] remove temp
+}
+
+function spawn.red {
+    summon pillager ~ ~ ~ {PersistenceRequired:1,Team:"red",Tags:["has_health_bar","dummy","champion","temp"],Silent:1,CustomNameVisible:1,CustomName:"Red Dummy",attributes:[{id:"minecraft:max_health",base:1000.0d},{id:"minecraft:movement_speed",base:0.0d},{id:"minecraft:knockback_resistance",base:1.0d}],Health:1000.0f,Passengers:[{id:"text_display",Tags:["dmg_check","stats_bar"],text:"Total: 0",billboard:"vertical"},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["mana","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["shield_all","stats_bar"],background:0,billboard:"vertical"}]}
+
+    scoreboard players set @e[tag=dummy,tag=temp,limit=1,sort=nearest] hp.max 1000
+    scoreboard players set @e[tag=dummy,tag=temp,limit=1,sort=nearest] mana.max 5
+
+    execute as @e[tag=dummy,tag=temp,limit=1,sort=nearest] run function lc:core/dummy/reset
+    execute as @e[tag=dummy,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,-0.55,0.0]}}
+    execute as @e[tag=dummy,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=mana] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,-0.55,0.0001]}}
+    execute as @e[tag=dummy,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=shield_all] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,-0.55,0.0001]}}
+    execute as @e[tag=dummy,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=dmg_check] {transformation:{translation:[0.0,0.45,0.0]}}
+
+    execute if score .world settings.show_stats matches 0 as @e[tag=dummy,tag=temp,limit=1,sort=nearest] on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+
+    tag @e[tag=dummy,tag=temp,limit=1,sort=nearest] remove temp
+}

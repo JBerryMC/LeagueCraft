@@ -4,7 +4,7 @@ This plugin is a server-side helper for the LeagueCraft datapack. The datapack s
 
 ## Install
 
-1. Put `LeagueCraft-0.6.3.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version. An existing `plugins/LeagueCraft/config.yml` is kept; settings older versions used (the right click/Shift keys and their M2/SH labels) are updated automatically, and the server log says what changed. New settings use their defaults until you add them, or delete the file to get a fresh one with every option.
+1. Put `LeagueCraft-0.7.0.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version. An existing `plugins/LeagueCraft/config.yml` is kept; settings older versions used (the right click/Shift keys and their M2/SH labels, zoom camera distances) are updated automatically, and the server log says what changed. New settings use their defaults until you add them, or delete the file to get a fresh one with every option.
 2. Use the LeagueCraft 26.3 datapack and resource pack from the same commit. The HUD has the summoner-spell label and the crosshair slot the plugin writes to, and the resource pack carries the ShoulderCam shaders. The datapack now needs the plugin: champions' basic attack and summoner spell 1 come from it.
 3. Start the server. Run `/lc` to check that it shows **Datapack detected: yes**.
 
@@ -15,13 +15,14 @@ The ShoulderCam resource pack is now merged into the LeagueCraft resource pack; 
 | Action | Key |
 |---|---|
 | Move | WASD |
-| Basic attack | **Left click** (hitscan from the crosshair) |
+| Basic attack | **Left click** (aimed with the crosshair) |
+| Reload | **Sprint** (Ctrl), or by itself when the ammo runs out |
 | Q / W / E / R | **1 / 2 / 3 / 4** |
 | Summoner spell 1 | **Q** (drop) |
 | Summoner spell 2 | **F** (swap hands) |
 | Zoom | **Right click** (hold) |
 
-Champions can't sprint or crouch, so Sprint and Shift are free for abilities later.
+Champions can't sprint or crouch, so Sprint reloads and Shift is free for abilities later.
 
 Abilities follow each player's **Hotbar Slot 1–4** binds (Options → Controls → Key Binds), so players can move them to other keys, and the HUD label under each ability shows their key. Players get the controls in chat the first time they play a champion, and any time with `/lc keys`.
 
@@ -31,7 +32,7 @@ Abilities follow each player's **Hotbar Slot 1–4** binds (Options → Controls
 - The scroll wheel can only move one slot from 8, to keys 7 or 9, and those are never mapped, so scrolling can't cast.
 - The drop key and F never move or throw items. F also works on the first press after picking a champion; the datapack alone ignores that one.
 - When the match ends or you stop being a champion, the weapon copy is removed.
-- The plugin never decides what an ability does. It runs the datapack's own functions (`_champion:abilities/use_q` … `use_r`, `_champion:spell/check`, `_champion:spell/check_2`) as that player. Cooldowns, mana, crowd control and the HUD work exactly as before.
+- The plugin never decides what an ability does. It runs the datapack's own functions (`lc:champion/abilities/use_q` … `use_r`, `lc:champion/spell/check`, `lc:champion/spell/check_2`) as that player. Cooldowns, mana, crowd control and the HUD work exactly as before.
 
 ## Third person
 
@@ -46,9 +47,13 @@ A server can't switch a player's perspective, so players press **F5** themselves
 
 ## Zoom (right click)
 
-Holding right click pulls the camera in, like aiming down sights in a third-person shooter. A server can't change the field of view, so zoom moves the camera instead (the `camera_distance` attribute). The hitscan aims the same zoomed or not: the crosshair ray doesn't depend on camera distance.
+Holding right click narrows your view and slows you down, like aiming down sights in a third-person shooter. A server can't set the field of view, but Minecraft narrows it when you walk slower (the same effect that widens it when you sprint) and eases it in over a few frames. So zoom is a `movement_speed` modifier, and the client animates it smoothly at full frame rate. The view narrows by about half the slowdown: 30% slower gives about 15% narrower. The modifier multiplies your total speed, so it stacks with the datapack's champion speeds and Slowness. The camera distance doesn't change, and the hitscan aims the same zoomed or not.
 
-How far each champion zooms is a stat in `zoom:` in the config: `melee` (2.2 blocks) for champions the datapack tags `melee`, `ranged` (1.2) for the rest, and `zoom.champions.<name>` for any one champion. Holding right click makes the client send a click every 4 ticks: the first one sets the zoomed distance, and about 0.3 s after the last one the normal distance is set back. That's one change each way, nothing while the zoom is held. `/lc dev` shows zoom in/out with the distance and where it came from.
+How much each champion zooms is a stat in `zoom:` in the config, as a slowdown between 0 and 1: `melee` (0.15) for champions the datapack tags `melee`, `ranged` (0.3) for the rest, and `zoom.champions.<name>` for any one champion. Holding right click makes the client send a click every 4 ticks: the first one starts the zoom, and about 0.25 s after the last one it ends. `/lc dev` shows zoom in/out with the slowdown and where it came from.
+
+Players who turned **FOV Effects** down (Options → Accessibility) see less zoom, or none at 0%. They're still slowed.
+
+**Why not a "used" item?** Giving the weapon copy a food, bow, spyglass or shield behaviour would tell the server the moment right click is let go, instead of about 0.25 s later. But the client throws away every left click while an item is in use, so you couldn't basic-attack while zoomed. The bow's own zoom is also capped at 15% and only works on a real bow, and the spyglass zoom only works in first person. A carrot on a stick only counts clicks, the same 4-tick repeat the plugin already reads.
 
 ## No sprinting or crouching
 
@@ -59,23 +64,49 @@ The client controls movement, so neither can be blocked outright; the plugin tak
 
 Both are on by default (`movement.disable-sprint`, `movement.disable-sneak`), and both keys still reach the plugin, ready to be used for abilities.
 
-## Basic attack (hitscan)
+## Basic attack
 
-Left click fires instantly along the crosshair. Champions the datapack tags `melee` punch (3.5 blocks); everyone else shoots (48 blocks). For now the result is a chat message; the Animated Java attack animations and damage come later:
+Left click is the champion's basic attack, aimed with the crosshair. It deals real damage through the datapack's own damage system (`lc:champion/aa/plugin.hit`), with armor, magic resist and every on-hit effect: Ashe's slow, Yone's mark, Zed's R, the passives and so on.
 
-> **Shot** hit **Zombie** (enemy) 12.3m · **Punch** missed (3.5m range)
+- **Melee** champions (datapack tag `melee`) hit **every enemy in a cone** in front of them: `basic-attack.melee-angle` wide (100°), as far as their range, and only what they can see (no hitting through walls).
+- **Ranged** champions hit **the first enemy** on the crosshair and use **ammo**.
+- **Allies** are never hit, and don't block shots.
+
+Range, attack speed, ammo and reload time are **champion stats** in the datapack's stats chart (`datapack/src/settings.mcb`), which sets the scores the plugin reads (`aa.range`, `aa.spd`, `ammo.max`, `ammo.reload`). Abilities that change them, like Ezreal's passive or Aatrox's R, work straight away. The time between attacks is the datapack's own formula, 2 × (100 / `aa.spd`) ticks, doubled while crippled. Champions can't attack while crowd controlled or channeling an ability.
+
+**Ammo.** A boss bar shows `Ammo 6 / 8`, emptying as you shoot. A reload starts by itself when the last shot is fired, or early with **Sprint** (`basic-attack.reload-key`: sprint, sneak or none); the bar turns yellow and fills while reloading, then the magazine is full again. Champions with 0 ammo in the chart (all melee champions) never run out and get no bar.
+
+**Effects.** A shot leaves a trail from the weapon to where it landed, in the particle each champion's old projectile left (Ashe light blue, Ezreal gold, Lux sparks, Annie flames…), with a burst where it hit. A melee attack shows a sweep in front, and a burst on each target hit. The attack sound is the champion's own (`lc:champion/aa/plugin.attack`).
 
 **Aiming.** The crosshair ray runs parallel to where the player looks, offset 0.8 right and 0.25 up from their eye. The shader only shifts the picture, so camera distance and wall clipping never change what the crosshair points at. Each attack does two traces:
 1. Along the crosshair ray, starting beside the eye so nothing between the camera and the player counts, to find what's under the crosshair.
-2. From the eye to that point. This is what actually hits, so a player can't shoot round a corner only the camera can see past.
+2. From the eye to that point. This is what actually hits, so a player can't shoot round a corner only the camera can see past. Melee cones point the same way.
 
-**Targets** follow the datapack's basic attack rules: anything except the `#minecraft:unvalid` entity types and entities tagged `unvalid`, plus structure interactions (tag `lol.structure`: turrets and Nexus). Allies (same scoreboard team) are hit too and reported as "(ally)".
+**Targets** follow the datapack's basic attack rules: enemies, except the `#minecraft:unvalid` entity types and entities tagged `unvalid`, plus enemy structure interactions (tag `lol.structure`: turrets and Nexus).
 
-**Inputs.** Left click on air, on a block and on an entity all fire; one click fires once even though Minecraft can report it twice. Hitting an entity in vanilla reach is cancelled, so vanilla melee damage never applies. The arm swing the client plays when you press drop isn't counted as a click.
+**Inputs.** Left click on air, on a block and on an entity all attack; one click attacks once even though Minecraft can report it twice. Hitting an entity in vanilla reach is cancelled, so vanilla melee damage never applies. The arm swing the client plays when you press drop isn't counted as a click.
 
-This replaced the datapack's old basic attack, which re-summoned an invisible interaction entity in front of every champion every tick and attacked when you hit it (and cast summoner 1 when you right-clicked it). That entity and its advancements are gone from the datapack.
+`/lc dev` shows each attack (what it hit, aim start and point, the melee cone's targets) and each reload.
 
-`/lc dev` shows each attack's aim start and aim point next to what it hit.
+## Faster champions, same view
+
+Champions walk about 30% faster than before (the `speed` column of the stats chart; vanilla is 0.1). Minecraft widens the view whenever you're faster than your *walking speed*, like when sprinting, so the plugin keeps each champion's walking speed equal to their speed stat. The view stays normal, and slows, speed boosts and the zoom still narrow or widen it as usual.
+
+## Dashes and knockups
+
+Dashes and knockups used to mount the player on another entity. Now the plugin sets velocities instead, because the datapack can't set a player's velocity and the API can. The datapack asks for one by leaving scores and a tag on the entity (`lc:core/motion`; see the comments there):
+
+- **Knockups** (Yasuo and Yone tornadoes, Malphite R, Annie's Tibbers, Aatrox Q, Lee Sin R's collisions, Yone R) push the target straight up, as high as before. **Aatrox W** throws it at the chain, **Lee Sin R** kicks it away in a straight line, and **Yasuo R** holds his targets in the air.
+- **Dashes** keep their dash entity and everything that runs on it (contact damage, arriving at a target, Yasuo's E→Q). The player **follows** it instead of riding it: every tick the velocity is the dash entity's own step, and the first tick without one the player stops dead, as dismounting used to do. (Steering by "distance to the dash entity" overshoots once the velocity reaches the client a tick or two late; following the step doesn't.)
+- **Dash Looking** goes where the camera looks: Yasuo E (no longer aimed at the target), Lee Sin W, Yone Q3 and E. **Dash Moving** goes where your WASD keys point: Aatrox E. Dashes that home in on something still do: Lee Sin Q2, Leona E2, Malphite R, Yone's return and Zed R.
+
+Flash and Ezreal's E during a dash still carry it on from where you blinked to (or end it, for Lee Sin's).
+
+## Champion model (placeholder)
+
+Every champion now wears a model, the way `/lc rigtest` mounts the Aatrox rig. Until each champion has an Animated Java rig it's a **mannequin wearing the player's skin**, and the player's own body is hidden. A rider sits on top of its vehicle, so the mannequin rides an **interaction entity** that rides the player: an interaction may have a negative height, and one `0.6 − player height` tall (−1.2) puts the mannequin's feet at the player's feet. The mannequin turns with the player every tick and disappears while the player has Invisibility. Both entities are tagged `unvalid`; a shot at the model hits the player's hidden hitbox in the same place. Players wearing the test rig (`/lc rigtest`) don't get the mannequin.
+
+Known limit: Minecraft draws any humanoid that rides something **sitting** (legs forward) and without its walk animation, so the mannequin looks seated. Animated Java rigs are item displays and don't have this problem.
 
 ## Rig test (`/lc rigtest`)
 
@@ -109,9 +140,9 @@ hud-labels:                # "key.<control>" shows the player's own key; text is
 first-time-tip: true
 require-match: true        # only while score _ingame (objective "game") is 1
 ability-items: [minecraft:phantom_membrane]
-cast-function: "_champion:abilities/use_%s"
-summoner-1-function: "_champion:spell/check"
-summoner-2-function: "_champion:spell/check_2"
+cast-function: "lc:champion/abilities/use_%s"
+summoner-1-function: "lc:champion/spell/check"
+summoner-2-function: "lc:champion/spell/check_2"
 third-person:
   enabled: true
   camera-distance: 3.0     # blocks behind the player (vanilla 4)
@@ -120,16 +151,15 @@ third-person:
   crosshair: true
 zoom:
   enabled: true
-  melee: 2.2               # camera distance while zoomed, champions tagged "melee"
-  ranged: 1.2              # everyone else
-  champions: {}            # per champion by name, e.g. {jhin: 0.8}
+  melee: 0.15              # slowdown while zoomed (0.15 = 15% slower), champions tagged "melee"
+  ranged: 0.3              # everyone else
+  champions: {}            # per champion by name, e.g. {jhin: 0.5}
 movement:
   disable-sprint: true
   disable-sneak: true
 basic-attack:
-  melee-range: 3.5         # champions tagged "melee"
-  ranged-range: 48.0
-  cooldown-ticks: 10
+  melee-angle: 100         # how wide the melee cone is, in degrees
+  reload-key: sprint       # sprint, sneak or none
 debug: false
 ```
 
@@ -148,7 +178,14 @@ Hotbar keys 7, 8 and 9 are reserved: the hand rests on 8 and the scroll wheel re
 
 ## Tested
 
-The hitscan basic attack (0.4.0) was tested in game and works. Keys 1–4 and the rig test (0.5–0.6.1) were played and work. 0.6.2's zoom and the sprint/crouch lock are compiled and unit-tested by CI but not yet played.
+The hitscan basic attack (0.4.0) was tested in game and works. Keys 1–4 and the rig test (0.5–0.6.1) were played and work. The sprint/crouch lock (0.6.2) is compiled and unit-tested but not yet played.
+
+0.7.0 hasn’t been played with a client yet. On a headless copy of the test server (Paper 26.3 build 214) it loads with no errors, and these were checked with commands:
+- the stats chart applies to an entity (HP, attack speed, range, reload ticks, weapon, speed 0.1344, the melee/ranged tag);
+- the basic attack’s datapack hit takes 200 HP off a 1000 HP target for Ashe’s 200 attack damage, through the normal damage pipeline;
+- velocity requests: a push up, a 20-tick straight throw (14.25 blocks in 19 ticks at 0.75/tick), a hold in place, and a 20-tick dash follow that ends exactly where its dash entity ended and stops dead;
+- a mannequin on a negative-height interaction lands at its vehicle’s feet.
+Melee cones, ranged hitscan with ammo and the reload key, the boss bar, the WASD dash direction and the mannequin’s look need a real client.
 
 Controls (0.3.x) were tested on Paper 26.3 build 214 with the LeagueCraft 26.3 datapack, playing Ezreal, with real key presses and mouse clicks from a 26.3 client.
 
@@ -162,7 +199,7 @@ Controls (0.3.x) were tested on Paper 26.3 build 214 with the LeagueCraft 26.3 d
 ## Building from source
 
 ```
-mvn package          # needs JDK 25; runs the tests; output: target/LeagueCraft-0.6.3.jar
+mvn package          # needs JDK 25; runs the tests; output: target/LeagueCraft-0.7.0.jar
 ```
 
 ## Where this goes next

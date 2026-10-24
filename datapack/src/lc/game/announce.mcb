@@ -1,0 +1,40 @@
+# lc:game/announce/  (converted from the 1.20.2 LeagueCraft datapack)
+
+dir game {
+    function start {
+        playsound announcer.game.start master @a 0 0 0 1 1 1
+    }
+}
+
+dir takedown {
+    function champion {
+        playsound announcer.self.die master @s 0 0 0 1 1 1
+        tag @s add temp
+        execute if entity @s[team=red] run playsound announcer.ally.die master @a[team=red,tag=!temp] 0 0 0 1 1 1
+        execute if entity @s[team=blue] run playsound announcer.ally.die master @a[team=blue,tag=!temp] 0 0 0 1 1 1
+
+        execute on attacker run tag @s add temp
+        execute on attacker run playsound announcer.self.takedown master @s 0 0 0 1 1 1
+        execute if entity @s[team=red] run playsound announcer.ally.takedown master @a[team=blue,tag=!temp] 0 0 0 1 1 1
+        execute if entity @s[team=blue] run playsound announcer.ally.takedown master @a[team=red,tag=!temp] 0 0 0 1 1 1
+
+        tag @s remove temp
+        execute on attacker run tag @s remove temp
+    }
+
+    function inhib {
+        execute if entity @s[tag=red] run playsound announcer.inhib.die master @a[team=red] 0 0 0 1 1 1
+        execute if entity @s[tag=red] run playsound announcer.inhib.takedown master @a[team=blue] 0 0 0 1 1 1
+
+        execute if entity @s[tag=blue] run playsound announcer.inhib.die master @a[team=blue] 0 0 0 1 1 1
+        execute if entity @s[tag=blue] run playsound announcer.inhib.takedown master @a[team=red] 0 0 0 1 1 1
+    }
+
+    function turret {
+        execute if entity @s[tag=red] run playsound announcer.turret.die master @a[team=red] 0 0 0 1 1 1
+        execute if entity @s[tag=red] run playsound announcer.turret.takedown master @a[team=blue] 0 0 0 1 1 1
+
+        execute if entity @s[tag=blue] run playsound announcer.turret.die master @a[team=blue] 0 0 0 1 1 1
+        execute if entity @s[tag=blue] run playsound announcer.turret.takedown master @a[team=red] 0 0 0 1 1 1
+    }
+}

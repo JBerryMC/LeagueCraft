@@ -1,7 +1,7 @@
 {
   "values": [
-    "_lol:dmg_physical",
-    "_lol:dmg_magic",
-    "_lol:dmg_true"
+    "lc:core/dmg_physical",
+    "lc:core/dmg_magic",
+    "lc:core/dmg_true"
   ]
 }

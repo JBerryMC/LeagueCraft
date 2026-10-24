@@ -1,0 +1,121 @@
+# lc:mobs/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function convert {
+    tag @s add has_health_bar
+    effect give @s resistance infinite 127 true
+
+    execute store result score @s hp.max run attribute @s minecraft:max_health base get 100
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s hp.regen 4
+
+    execute store result score @s armor.base run attribute @s minecraft:armor base get 10
+    scoreboard players operation @s magic_resist.base = @s armor.base
+
+    summon text_display ~ ~ ~ {Tags:["hp","temp","stats_bar"],background:0,billboard:"vertical"}
+    ride @e[tag=temp,tag=hp,limit=1,sort=nearest,type=text_display] mount @s
+    execute if score .world settings.show_stats matches 0 on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+
+    tag @e[tag=temp,tag=hp,limit=1,sort=nearest,type=text_display] remove temp
+
+    execute on passengers run data merge entity @s[tag=hp] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,-0.5,0.0]}}
+}
+
+function dead {
+    tag @s add unvalid
+
+    execute if entity @s[tag=annie.r,tag=!is_dead] run function lc:champions/annie/skills/r.end
+
+    execute if entity @s[tag=lol.minion,tag=minion.melee,tag=!is_dead] run function lc:core/minion/melee/dead
+    execute if entity @s[tag=lol.minion,tag=minion.caster,tag=!is_dead] run function lc:core/minion/caster/dead
+    execute if entity @s[tag=lol.minion,tag=minion.siege,tag=!is_dead] run function lc:core/minion/siege/dead
+    execute if entity @s[tag=lol.minion,tag=minion.super,tag=!is_dead] run function lc:core/minion/super/dead
+
+    tag @s add is_dead
+}
+
+function kill {
+    execute on passengers as @s[tag=!lol.animation] on passengers run kill @s
+    execute on passengers as @s[tag=!lol.animation] run kill @s
+    kill @s
+}
+
+function main {
+    execute as @a at @s if entity @e[type=!player,tag=!has_health_bar,type=!#unvalid,distance=..40,tag=!champion,tag=!lol.is_flying] as @e[tag=!no_convert,type=!#unvalid,tag=!has_health_bar,limit=1,sort=nearest] at @s run function lc:mobs/convert
+    tag @e[type=text_display,tag=hp,tag=alive] remove alive
+    execute as @e[type=text_display,tag=hp] on vehicle on passengers run tag @s add alive
+    execute as @e[type=text_display,tag=hp,tag=!alive] at @s run function lc:mobs/remove_bar
+
+    execute as @a[scores={_mc.dmg_resist=1..},advancements={lc:mobs/hurt_by_entities=true,lc:mobs/hurt_by_lol=false}] store result score @s dmg_physical.raw run scoreboard players operation @s _mc.dmg_resist *= 10 integer
+
+    execute as @a[advancements={lc:mobs/hurt_by_entities=true}] run advancement revoke @s only lc:mobs/hurt_by_entities
+    execute as @a[advancements={lc:mobs/hurt_by_lol=true}] run advancement revoke @s only lc:mobs/hurt_by_lol
+
+    execute as @e[tag=is_dead,type=#has_health_bar] at @s run function lc:mobs/kill
+
+    #execute as @e[tag=has_health_bar,type=#has_health_bar] if predicate lc:mobs/entity_hurt run say @s
+}
+
+function remove_bar {
+    execute on passengers run kill @s
+    kill @s
+}
+
+predicate entity_hurt {
+    "type": "minecraft:damage_source_properties",
+    "predicate": {
+        "tags": [
+            {
+                "id": "#minecraft:no_knockback",
+                "expected": true
+            }
+        ],
+        "source_entity": {}
+    }
+}
+
+advancement hurt_by_entities {
+    "criteria": {
+        "hurt": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "player": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:equipment": {
+                            "head": {
+                                "predicates": {
+                                    "minecraft:custom_data": "{lol_item:1}"
+                                }
+                            }
+                        }
+                    }
+                },
+                "damage": {
+                    "source_entity": {}
+                }
+            }
+        }
+    }
+}
+
+advancement hurt_by_lol {
+    "criteria": {
+        "hurt": {
+            "trigger": "minecraft:entity_hurt_player",
+            "conditions": {
+                "damage": {
+                    "source_entity": {},
+                    "type": {
+                        "tags": [
+                            {
+                                "id": "#minecraft:bypasses_cooldown",
+                                "expected": true
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,92 @@
+# lc:menu/champion/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function _random {
+    # Roll a number
+    scoreboard players reset rng temp
+    execute store result score @s temp run random value 1..15
+    # Test if someone has the same number
+    execute store result score rng temp run function lc:menu/champion/_rng_check
+    # If yes -> return
+    execute if score rng temp matches 1 run function lc:menu/champion/_random
+    # If no -> continue
+    execute unless score rng temp matches 1 at @s run function lc:menu/champion/_selection
+
+    scoreboard players set @s settings.page 0
+    clear @s structure_void
+    function lc:menu/reset
+}
+
+function _rng_check {
+    execute if score @s champ_id = @s temp run return 1
+    execute if score @s temp matches 6 run return 1
+    execute if score @s temp matches 8 run return 1
+
+    execute if score @s[team=red] temp matches 1 if entity @a[team=red,scores={champ_id=1}] run return 1
+    execute if score @s[team=red] temp matches 2 if entity @a[team=red,scores={champ_id=2}] run return 1
+    execute if score @s[team=red] temp matches 3 if entity @a[team=red,scores={champ_id=3}] run return 1
+    execute if score @s[team=red] temp matches 4 if entity @a[team=red,scores={champ_id=4}] run return 1
+    execute if score @s[team=red] temp matches 5 if entity @a[team=red,scores={champ_id=5}] run return 1
+    execute if score @s[team=red] temp matches 7 if entity @a[team=red,scores={champ_id=7}] run return 1
+    execute if score @s[team=red] temp matches 9 if entity @a[team=red,scores={champ_id=9}] run return 1
+    execute if score @s[team=red] temp matches 10 if entity @a[team=red,scores={champ_id=10}] run return 1
+    execute if score @s[team=red] temp matches 11 if entity @a[team=red,scores={champ_id=11}] run return 1
+    execute if score @s[team=red] temp matches 12 if entity @a[team=red,scores={champ_id=12}] run return 1
+    execute if score @s[team=red] temp matches 13 if entity @a[team=red,scores={champ_id=13}] run return 1
+    execute if score @s[team=red] temp matches 14 if entity @a[team=red,scores={champ_id=14}] run return 1
+    execute if score @s[team=red] temp matches 15 if entity @a[team=red,scores={champ_id=15}] run return 1
+
+    execute if score @s[team=blue] temp matches 1 if entity @a[team=blue,scores={champ_id=1}] run return 1
+    execute if score @s[team=blue] temp matches 2 if entity @a[team=blue,scores={champ_id=2}] run return 1
+    execute if score @s[team=blue] temp matches 3 if entity @a[team=blue,scores={champ_id=3}] run return 1
+    execute if score @s[team=blue] temp matches 4 if entity @a[team=blue,scores={champ_id=4}] run return 1
+    execute if score @s[team=blue] temp matches 5 if entity @a[team=blue,scores={champ_id=5}] run return 1
+    execute if score @s[team=blue] temp matches 7 if entity @a[team=blue,scores={champ_id=7}] run return 1
+    execute if score @s[team=blue] temp matches 9 if entity @a[team=blue,scores={champ_id=9}] run return 1
+    execute if score @s[team=blue] temp matches 10 if entity @a[team=blue,scores={champ_id=10}] run return 1
+    execute if score @s[team=blue] temp matches 11 if entity @a[team=blue,scores={champ_id=11}] run return 1
+    execute if score @s[team=blue] temp matches 12 if entity @a[team=blue,scores={champ_id=12}] run return 1
+    execute if score @s[team=blue] temp matches 13 if entity @a[team=blue,scores={champ_id=13}] run return 1
+    execute if score @s[team=blue] temp matches 14 if entity @a[team=blue,scores={champ_id=14}] run return 1
+    execute if score @s[team=blue] temp matches 15 if entity @a[team=blue,scores={champ_id=15}] run return 1
+}
+
+function _selection {
+    scoreboard players operation @s champ_id = @s temp
+    execute if score @s champ_id matches 1 run function lc:core/champion/setup {name:"yasuo"}
+    execute if score @s champ_id matches 2 run function lc:core/champion/setup {name:"leesin"}
+    execute if score @s champ_id matches 3 run function lc:core/champion/setup {name:"zed"}
+    execute if score @s champ_id matches 4 run function lc:core/champion/setup {name:"yone"}
+    execute if score @s champ_id matches 5 run function lc:core/champion/setup {name:"ashe"}
+    execute if score @s champ_id matches 7 run function lc:core/champion/setup {name:"ezreal"}
+    execute if score @s champ_id matches 9 run function lc:core/champion/setup {name:"aatrox"}
+    execute if score @s champ_id matches 10 run function lc:core/champion/setup {name:"leona"}
+    execute if score @s champ_id matches 11 run function lc:core/champion/setup {name:"soraka"}
+    execute if score @s champ_id matches 12 run function lc:core/champion/setup {name:"garen"}
+    execute if score @s champ_id matches 13 run function lc:core/champion/setup {name:"malphite"}
+    execute if score @s champ_id matches 14 run function lc:core/champion/setup {name:"lux"}
+    execute if score @s champ_id matches 15 run function lc:core/champion/setup {name:"annie"}
+}
+
+function random {
+}
+
+function reset {
+    execute at @s run function lc:core/champion/_reset
+
+    clear @s structure_void
+    function lc:menu/reset
+}
+
+# lc:menu/champion/pick {name:"<champion>"}: joins a team if needed, then becomes that champion
+# unless a teammate already is.
+function pick {
+    $execute if entity @s[team=!red,team=!blue] unless entity @e[tag=champion,tag=$(name),team=red] run team join red @s
+    $execute if entity @s[team=!red,team=!blue] unless entity @e[tag=champion,tag=$(name),team=blue] run team join blue @s
+
+    $execute if entity @s[team=red] unless entity @e[tag=champion,tag=$(name),team=red] at @s run function lc:core/champion/setup {name:"$(name)"}
+    $execute if entity @s[team=blue] unless entity @e[tag=champion,tag=$(name),team=blue] at @s run function lc:core/champion/setup {name:"$(name)"}
+
+    scoreboard players set @s settings.page 0
+    clear @s structure_void
+    function lc:menu/reset
+}

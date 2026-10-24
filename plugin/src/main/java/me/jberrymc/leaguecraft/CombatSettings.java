@@ -22,24 +22,26 @@ record CombatSettings(
         Map<String, Double> zoomChampions,
         boolean disableSprint,
         boolean disableSneak,
-        double meleeRange,
-        double rangedRange,
-        int cooldownTicks) {
+        double meleeAngle,
+        ReloadKey reloadKey) {
 
-    /** Camera distance while zoomed, and why (for dev mode). */
-    record Zoom(double distance, String source) {}
+    /** The key that reloads early (a reload also starts by itself when the ammo runs out). */
+    enum ReloadKey { SPRINT, SNEAK, NONE }
+
+    /** How much slower a zoomed champion walks (0.3 = 30%), and why (for dev mode). */
+    record Zoom(double slow, String source) {}
 
     static CombatSettings from(FileConfiguration config, Logger log) {
-        // zoom.champions: <champion tag> -> camera distance
+        // zoom.champions: <champion tag> -> slowdown
         Map<String, Double> champions = new HashMap<>();
         ConfigurationSection section = config.getConfigurationSection("zoom.champions");
         if (section != null) {
             for (String champion : section.getKeys(false)) {
-                double distance = section.getDouble(champion, -1);
-                if (distance > 0) {
-                    champions.put(champion.toLowerCase(Locale.ROOT), distance);
+                double slow = section.getDouble(champion, -1);
+                if (isSlowdown(slow)) {
+                    champions.put(champion.toLowerCase(Locale.ROOT), slow);
                 } else {
-                    log.warning("Ignoring zoom.champions." + champion + ": must be a camera distance above 0");
+                    log.warning("Ignoring zoom.champions." + champion + ": must be a slowdown above 0 and below 1");
                 }
             }
         }
@@ -50,14 +52,13 @@ record CombatSettings(
                 config.getDouble("third-person.height", 0.25),
                 config.getBoolean("third-person.crosshair", true),
                 config.getBoolean("zoom.enabled", true),
-                positive(config, "zoom.melee", 2.2, log),
-                positive(config, "zoom.ranged", 1.2, log),
+                slowdown(config, "zoom.melee", 0.15, log),
+                slowdown(config, "zoom.ranged", 0.3, log),
                 Map.copyOf(champions),
                 config.getBoolean("movement.disable-sprint", true),
                 config.getBoolean("movement.disable-sneak", true),
-                positive(config, "basic-attack.melee-range", 3.5, log),
-                positive(config, "basic-attack.ranged-range", 48.0, log),
-                Math.max(0, config.getInt("basic-attack.cooldown-ticks", 10)));
+                Math.min(360, positive(config, "basic-attack.melee-angle", 100.0, log)),
+                reloadKey(config.getString("basic-attack.reload-key", "sprint"), log));
     }
 
     /**
@@ -66,10 +67,31 @@ record CombatSettings(
      */
     Zoom zoomFor(Set<String> tags) {
         for (String tag : tags) {
-            Double distance = zoomChampions.get(tag.toLowerCase(Locale.ROOT));
-            if (distance != null) return new Zoom(distance, tag);
+            Double slow = zoomChampions.get(tag.toLowerCase(Locale.ROOT));
+            if (slow != null) return new Zoom(slow, tag);
         }
         return tags.contains("melee") ? new Zoom(zoomMelee, "melee") : new Zoom(zoomRanged, "ranged");
+    }
+
+    /** A zoom slowdown: above 0 (or it wouldn't zoom) and below 1 (or the player couldn't move). */
+    static boolean isSlowdown(double value) {
+        return value > 0 && value < 1;
+    }
+
+    private static double slowdown(FileConfiguration config, String path, double fallback, Logger log) {
+        double value = config.getDouble(path, fallback);
+        if (isSlowdown(value)) return value;
+        log.warning(path + " must be above 0 and below 1, using " + fallback);
+        return fallback;
+    }
+
+    private static ReloadKey reloadKey(String value, Logger log) {
+        try {
+            return ReloadKey.valueOf(value.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException e) {
+            log.warning("basic-attack.reload-key must be sprint, sneak or none, using sprint");
+            return ReloadKey.SPRINT;
+        }
     }
 
     private static double positive(FileConfiguration config, String path, double fallback, Logger log) {

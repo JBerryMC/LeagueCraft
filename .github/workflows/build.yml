@@ -38,4 +38,4 @@ jobs:
         run: |
           npm i -g mc-build@4.2.0
           mcb build
-          test -d data/_lol/function
+          test -d data/lc/function && test -f data/settings/function/load.mcfunction

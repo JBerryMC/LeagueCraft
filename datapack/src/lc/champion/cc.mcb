@@ -1,0 +1,7 @@
+# lc:champion/cc/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function cancel {
+    execute if entity @s[type=player] run function lc:core/motion/cancel_dash
+    execute on vehicle run kill @s[tag=dash]
+    execute on vehicle run kill @s[tag=cc]
+}

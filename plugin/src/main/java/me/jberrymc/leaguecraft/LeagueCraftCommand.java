@@ -101,10 +101,13 @@ final class LeagueCraftCommand {
         CombatSettings c = plugin.combat();
         send(ctx, line("Third person (camera distance " + c.cameraDistance() + ", crosshair " + (c.crosshair() ? "on" : "off") + ")",
                 c.thirdPerson()));
-        send(ctx, line("Zoom on right click (melee " + c.zoomMelee() + ", ranged " + c.zoomRanged()
+        send(ctx, line("Zoom on right click (slows melee " + Math.round(c.zoomMelee() * 100) + "%, ranged "
+                + Math.round(c.zoomRanged() * 100) + "%"
                 + (c.zoomChampions().isEmpty() ? "" : ", " + c.zoomChampions().size() + " champion overrides") + ")", c.zoom()));
         send(ctx, line("No sprinting", c.disableSprint()) + "  " + line("No crouching", c.disableSneak()));
-        send(ctx, "<gray>Basic attack: <white>hitscan</white> (melee " + c.meleeRange() + ", ranged " + c.rangedRange() + " blocks)");
+        send(ctx, "<gray>Basic attack: <white>melee cone " + Math.round(c.meleeAngle()) + "°, ranged hitscan</white>"
+                + " (range, attack speed and ammo from the stats chart) · reload key: <white>"
+                + c.reloadKey().name().toLowerCase(java.util.Locale.ROOT));
         return Command.SINGLE_SUCCESS;
     }
 

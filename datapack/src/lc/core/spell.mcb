@@ -1,0 +1,39 @@
+# lc:core/spell/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function flash {
+    execute if block ~ ~ ~ #like_air on origin unless predicate lc:core/is_flying run function lc:core/motion/blink
+    execute if block ~ ~ ~ #like_air on origin if predicate lc:core/is_flying if data entity @s RootVehicle.Entity{Tags:["interrupt_by_blink"]} on vehicle on vehicle run function lc:animation/abilities/interrupt
+    execute if block ~ ~ ~ #like_air on origin if predicate lc:core/is_flying unless data entity @s RootVehicle.Entity{Tags:["interrupt_by_blink"]} on vehicle run tp @s ~ ~ ~
+
+    execute if block ~ ~ ~ #like_air on origin unless data entity @s RootVehicle run tp @s ~ ~ ~
+
+    execute if block ~ ~ ~ #like_air run kill @s
+
+    execute unless block ~ ~ ~ #like_air positioned ~ ~1 ~ run function lc:core/spell/flash
+}
+
+function ignite {
+    execute if entity @s[type=item_display] on passengers as @s[tag=target] on origin run tag @s add ignite.temp_target
+    execute if entity @s[type=item_display] on passengers as @s[tag=initial] on origin run function lc:core/spell/ignite
+
+    execute if entity @s[type=item_display] run summon area_effect_cloud ~ ~ ~ {Duration:20,Tags:["cd","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[type=item_display] run ride @e[tag=cd,limit=1,sort=nearest,type=area_effect_cloud,tag=temp] mount @s
+    execute if entity @s[type=item_display] run tag @e[tag=cd,limit=1,sort=nearest,type=area_effect_cloud,tag=temp] remove temp
+
+    execute if entity @s[type=item_display] if score @s dot.tick matches 5.. run tag @s remove do_not_clear
+
+    execute if entity @s[type=!item_display] if entity @s[team=red] run damage @e[tag=ignite.temp_target,type=!#unvalid,team=!red,limit=1,sort=nearest] 1 lc:core/dmg_true by @s
+    execute if entity @s[type=!item_display] if entity @s[team=blue] run damage @e[tag=ignite.temp_target,type=!#unvalid,team=!blue,limit=1,sort=nearest] 1 lc:core/dmg_true by @s
+
+    execute if entity @s[type=!item_display] run scoreboard players set @s dmg_true.deal 82
+
+    execute if entity @s[type=!item_display] run function lc:champion/dmg/calc.debuff
+
+    ## RED
+    execute if entity @s[type=!item_display] if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=ignite.temp_target,tag=has_health_bar,limit=1,sort=nearest] dmg_true.raw = @s dmg_true.deal
+    execute if entity @s[type=!item_display] if entity @s[team=red] run tag @e[team=!red,tag=ignite.temp_target,type=!#unvalid,limit=1,sort=nearest] remove ignite.temp_target
+
+    ## BLUE
+    execute if entity @s[type=!item_display] if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=ignite.temp_target,tag=has_health_bar,limit=1,sort=nearest] dmg_true.raw = @s dmg_true.deal
+    execute if entity @s[type=!item_display] if entity @s[team=blue] run tag @e[team=!blue,tag=ignite.temp_target,type=!#unvalid,limit=1,sort=nearest] remove ignite.temp_target
+}

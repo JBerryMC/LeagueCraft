@@ -34,16 +34,26 @@ import java.util.logging.Logger;
  *       edges while Shift is held.</li>
  * </ul>
  * Both keys still reach the plugin through {@code Player#getCurrentInput()}.
+ *
+ * <p>It also keeps each champion's <b>walking speed</b> equal to their speed stat (the
+ * {@code movement_speed} the datapack sets from its stats chart). Minecraft widens the view when you
+ * move faster than your walking speed, as when sprinting; with the two matched, champions' faster
+ * base speed doesn't, and slows and speed boosts still narrow or widen it as usual.
  */
 final class MovementLock implements Listener {
     /** Minecraft lets players sprint only with more than this much hunger. */
     static final int NO_SPRINT_FOOD = 6;
     private static final int FULL_FOOD = 20;
+    /** Bukkit's default walk speed (Minecraft's 0.1). */
+    private static final float VANILLA_WALK_SPEED = 0.2f;
 
     private final Supplier<CombatSettings> settings;
     private final Attribute sneakingSpeed;
+    private final Attribute movementSpeed;
     /** Champions this applies to right now; only they are changed and reset. */
     private final Set<UUID> locked = new HashSet<>();
+    /** Champions whose walking speed was matched to their speed stat. */
+    private final Set<UUID> walkMatched = new HashSet<>();
 
     MovementLock(Supplier<CombatSettings> settings, Logger log) {
         this.settings = settings;
@@ -52,12 +62,26 @@ final class MovementLock implements Listener {
         if (sneakingSpeed == null) {
             log.warning("This server has no minecraft:sneaking_speed attribute; crouching will still slow champions.");
         }
+        this.movementSpeed = RegistryAccess.registryAccess().getRegistry(RegistryKey.ATTRIBUTE)
+                .get(Key.key("minecraft", "movement_speed"));
+    }
+
+    /** Matches the walking speed to the champion's speed stat, so their base speed doesn't widen the view. */
+    void matchWalkSpeed(Player player) {
+        AttributeInstance speed = movementSpeed == null ? null : player.getAttribute(movementSpeed);
+        if (speed == null) return;
+        // Bukkit's walk speed is twice Minecraft's, and setting it also sets the attribute's base
+        // value to the same speed, so this changes nothing but the view.
+        float walk = (float) Math.clamp(speed.getBaseValue() * 2, 0.0, 1.0);
+        if (Math.abs(player.getWalkSpeed() - walk) > 1e-4) player.setWalkSpeed(walk);
     }
 
     /** Called every few ticks for each champion. */
     void apply(Player player, CombatSettings config) {
+        walkMatched.add(player.getUniqueId());
+        matchWalkSpeed(player);
         if (!config.disableSprint() && !config.disableSneak()) {
-            remove(player);
+            unlock(player);
             return;
         }
         locked.add(player.getUniqueId());
@@ -75,8 +99,13 @@ final class MovementLock implements Listener {
         }
     }
 
-    /** Gives sprinting and crouching back once the player isn't playing a champion. */
+    /** Gives sprinting, crouching and the vanilla walking speed back once the player isn't playing a champion. */
     void remove(Player player) {
+        if (walkMatched.remove(player.getUniqueId())) player.setWalkSpeed(VANILLA_WALK_SPEED);
+        unlock(player);
+    }
+
+    private void unlock(Player player) {
         if (!locked.remove(player.getUniqueId())) return;
         player.setFoodLevel(FULL_FOOD);
         AttributeInstance speed = sneakingSpeed == null ? null : player.getAttribute(sneakingSpeed);

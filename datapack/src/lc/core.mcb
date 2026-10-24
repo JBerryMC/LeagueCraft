@@ -1,0 +1,1503 @@
+# lc:core/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function loop {
+    # [26.3] drop-to-cast: refill the hand before hold_<x> checks (1.20.2 matched the dropped, count-0 stack)
+    execute as @a[tag=champion,scores={use_ability=1..}] unless items entity @s weapon.mainhand * run function lc:champion/abilities/reload
+    execute as @a[tag=champion,tag=!offhand_temp] unless predicate lc:champion/slot/offhand at @s run function lc:champion/spell/check_2
+
+    ## Champion | Yasuo
+    execute if entity @a[tag=yasuo] as @a[tag=yasuo] at @s run function lc:champions/yasuo/main
+    execute if entity @a[tag=yasuo] run function lc:champions/yasuo/loop
+
+    ## Champion | Lee Sin
+    execute if entity @a[tag=leesin] as @a[tag=leesin] at @s run function lc:champions/leesin/main
+    execute if entity @a[tag=leesin] run function lc:champions/leesin/loop
+
+    ## Chaimpion | Zed
+    execute if entity @a[tag=zed] as @a[tag=zed] at @s run function lc:champions/zed/main
+    execute if entity @a[tag=zed] run function lc:champions/zed/loop
+
+    ## Champion | Yone
+    execute if entity @a[tag=yone] as @a[tag=yone] at @s run function lc:champions/yone/main
+    execute if entity @a[tag=yone] run function lc:champions/yone/loop
+
+    ## Champion | Ashe
+    execute if entity @a[tag=ashe] as @a[tag=ashe] at @s run function lc:champions/ashe/main
+    execute if entity @a[tag=ashe] run function lc:champions/ashe/loop
+
+    ## Champion | Vayne
+    execute if entity @a[tag=vayne] as @a[tag=vayne] at @s run function lc:champions/vayne/main
+    execute if entity @a[tag=vayne] run function lc:champions/vayne/loop
+
+    ## Champion | Ezreal
+    execute if entity @a[tag=ezreal] as @a[tag=ezreal] at @s run function lc:champions/ezreal/main
+    execute if entity @a[tag=ezreal] run function lc:champions/ezreal/loop
+
+    ## Champion | Jhin
+    execute if entity @a[tag=jhin] as @a[tag=jhin] at @s run function lc:champions/jhin/main
+    execute if entity @a[tag=jhin] run function lc:champions/jhin/loop
+
+    ## Champion | Aatrox
+    execute if entity @a[tag=aatrox] as @a[tag=aatrox] at @s run function lc:champions/aatrox/main
+    execute if entity @a[tag=aatrox] run function lc:champions/aatrox/loop
+
+    ## Champion | Leona
+    execute if entity @a[tag=leona] as @a[tag=leona] at @s run function lc:champions/leona/main
+    execute if entity @a[tag=leona] run function lc:champions/leona/loop
+
+    ## Champion | Soraka
+    execute if entity @a[tag=soraka] as @a[tag=soraka] at @s run function lc:champions/soraka/main
+    execute if entity @a[tag=soraka] run function lc:champions/soraka/loop
+
+    ## Champion | Garen
+    execute if entity @a[tag=garen] as @a[tag=garen] at @s run function lc:champions/garen/main
+    execute if entity @a[tag=garen] run function lc:champions/garen/loop
+
+    ## Champion | Malphite
+    execute if entity @a[tag=malphite] as @a[tag=malphite] at @s run function lc:champions/malphite/main
+    execute if entity @a[tag=malphite] run function lc:champions/malphite/loop
+
+    ## Champion | Lux
+    execute if entity @a[tag=lux] as @a[tag=lux] at @s run function lc:champions/lux/main
+    execute if entity @a[tag=lux] run function lc:champions/lux/loop
+
+    ## Champion | Annie
+    execute if entity @a[tag=annie] as @a[tag=annie] at @s run function lc:champions/annie/main
+    execute if entity @a[tag=annie] run function lc:champions/annie/loop
+
+    # General
+    function lc:mobs/main
+    function lc:core/main
+}
+
+function main {
+    ## Hotbar Handling
+
+    execute as @a[tag=champion] unless predicate lc:champion/slot/hotbar.0 unless score @s use_ability matches 1.. run function lc:champion/abilities/reload
+    execute as @a[tag=champion] unless predicate lc:champion/slot/hotbar.1 unless score @s use_ability matches 1.. run function lc:champion/abilities/reload
+    execute as @a[tag=champion] unless predicate lc:champion/slot/hotbar.2 unless score @s use_ability matches 1.. run function lc:champion/abilities/reload
+    execute as @a[tag=champion] unless predicate lc:champion/slot/hotbar.3 unless score @s use_ability matches 1.. run function lc:champion/abilities/reload
+    execute as @a[tag=champion] unless predicate lc:champion/slot/hotbar.4 run function lc:champion/abilities/reload
+    execute as @a[tag=champion] unless score @s status.weapon = @s status.weapon_old run function lc:champion/abilities/model
+
+    ## Hurt and Damage
+    execute as @e[type=text_display,tag=dmg_text] unless predicate lc:animation/dmg_indicator run kill @s
+    execute as @e[type=#has_health_bar,tag=has_health_bar] if score @s dmg_physical.raw matches 1.. run function lc:champion/dmg/calc.physical
+    execute as @e[type=#has_health_bar,tag=has_health_bar] if score @s dmg_physical.taken matches 1.. run function lc:champion/dmg/taken/physical
+
+    execute as @e[type=#has_health_bar,tag=has_health_bar] if score @s dmg_magic.raw matches 1.. run function lc:champion/dmg/calc.magic
+    execute as @e[type=#has_health_bar,tag=has_health_bar] if score @s dmg_magic.taken matches 1.. run function lc:champion/dmg/taken/magic
+
+    execute as @e[type=#has_health_bar,tag=has_health_bar] if score @s dmg_true.raw matches 1.. run function lc:champion/dmg/calc.true
+    execute as @e[type=#has_health_bar,tag=has_health_bar] if score @s dmg_true.taken matches 1.. run function lc:champion/dmg/taken/true
+
+    execute as @e[type=#has_health_bar,tag=has_health_bar] if score @s healing matches 1.. run function lc:champion/dmg/calc.healing
+
+    ##
+    execute if entity @e[type=item_display,tag=lol.auto_clear] as @e[type=item_display,tag=lol.auto_clear] unless data entity @s Passengers[{Tags:["cd"]}] run function lc:animation/abilities/clear
+    execute if entity @e[type=area_effect_cloud,tag=shield.all] as @e[type=area_effect_cloud,tag=shield.all] unless data entity @s Passengers run function lc:champion/dmg/shield/off
+
+    ## Crowd Control and Bonus Effects
+
+    execute as @e[type=#has_health_bar] at @s if score @s channeling matches 0.. run function lc:core/effect/channeling
+
+    execute as @e[type=#has_health_bar] at @s if score @s fx.invis matches 0.. run function lc:core/effect/invis
+    execute as @e[type=#has_health_bar] at @s if score @s fx.ghost matches 0.. run function lc:core/effect/ghost
+
+    execute as @e[type=#has_health_bar] at @s if score @s cc.silence matches 0.. run function lc:core/effect/silence
+    execute as @e[type=#has_health_bar] at @s if score @s cc.stun matches 0.. run function lc:core/effect/stun
+    execute as @e[type=#has_health_bar] at @s if score @s cc.root matches 0.. run function lc:core/effect/root
+    execute as @e[type=#has_health_bar] at @s if score @s cc.airborne matches 0.. run function lc:core/effect/airborne
+    execute as @e[type=#has_health_bar] at @s if score @s cc.exhaust matches 0.. run function lc:core/effect/exhaust
+    execute as @e[type=#has_health_bar] at @s if score @s cc.cripple matches 0.. run function lc:core/effect/cripple
+    execute as @e[type=#has_health_bar] at @s if score @s cc.ignite matches 0.. run function lc:core/effect/ignite
+
+    ## Status Effect
+    execute as @e[type=#has_health_bar] at @s if score @s fx.cc_immune matches 0.. run function lc:core/effect/cc_immune
+    execute as @e[type=#has_health_bar] at @s if score @s fx.sight matches 0.. run function lc:core/effect/sight
+
+    ## STRUCTURE | Tower
+    execute if entity @e[type=interaction,tag=lol.structure.tower,tag=!is_stunned,tag=!is_destroyed] as @e[type=interaction,tag=lol.structure.tower,tag=!is_stunned,tag=!is_destroyed] at @s run function lc:core/structure/tower/main
+    execute if entity @e[type=interaction,tag=lol.structure.tower,tag=!is_destroyed] as @e[type=interaction,tag=lol.structure.tower,tag=!is_destroyed] at @s if score @s cc.stun matches 0.. run function lc:core/structure/tower/stun
+
+    execute if entity @e[type=area_effect_cloud,tag=tower.shot,tag=!temp] as @e[type=area_effect_cloud,tag=tower.shot,tag=!temp] at @s run function lc:core/structure/tower/shot.find_target
+
+    ## STRUCTURE | Inhibitor
+    execute if entity @e[type=interaction,tag=lol.structure.inhib,tag=is_destroyed] as @e[type=interaction,tag=lol.structure.inhib,tag=is_destroyed] at @s if score @s death_time matches 0 run function lc:core/structure/inhib/rebuild
+
+    ## NPC | Minion
+    execute if entity @e[type=#can_aggro,tag=lol.minion] as @e[type=#can_aggro,tag=lol.minion] at @s run function lc:core/minion/ai
+
+    ## Settings
+    execute if entity @a[tag=champion,scores={settings.refresh_mana=1}] as @a[tag=champion,scores={settings.refresh_mana=1}] run function lc:core/set/practice.mana
+    execute if entity @a[tag=champion,scores={settings.refresh_cd=1}] as @a[tag=champion,scores={settings.refresh_cd=1}] run function lc:core/set/practice.cd
+    execute if entity @a[tag=champion,scores={settings.refresh_hp=1}] as @a[tag=champion,scores={settings.refresh_hp=1}] run function lc:core/set/practice.hp
+
+    ## Animation
+    ### Spinning
+    execute if entity @e[type=item_display,tag=spin1] as @e[type=item_display,tag=spin1] at @s unless predicate lc:animation/spin1 run function lc:animation/spin1
+    execute if entity @e[type=item_display,tag=spin2] as @e[type=item_display,tag=spin2] at @s unless predicate lc:animation/spin2 run function lc:animation/spin2
+    execute if entity @e[type=item_display,tag=spin3] as @e[type=item_display,tag=spin3] at @s unless predicate lc:animation/spin3 run function lc:animation/spin3
+    execute if entity @e[type=item_display,tag=spin4] as @e[type=item_display,tag=spin4] at @s unless predicate lc:animation/spin4 run function lc:animation/spin4
+
+    ## Auto Attack (champions' basic attack is the plugin's hitscan)
+    #execute as @a[tag=champion] at @s anchored eyes positioned ^ ^ ^1 run particle flame ~ ~ ~ 0 0 0 0 1
+
+    execute if entity @e[tag=homing,type=#unvalid] as @e[tag=homing,type=#unvalid] at @s run function lc:champion/aa/ranged.homing
+
+    #execute as @e[tag=aa,tag=set] at @s run function lc:champion/aa/loop
+
+    ## Stats Bar
+    execute as @e[scores={shield.all=1..},type=#has_health_bar] run function lc:champion/hp/percentage_shield_all
+    execute as @e[tag=has_health_bar,type=#has_health_bar] run function lc:champion/hp/percentage
+    execute as @e[tag=has_health_bar,tag=champion,type=#has_health_bar] run function lc:champion/mana/percentage
+
+    execute as @e[tag=lol.bar_display,type=block_display] at @s run function lc:champion/bar_display
+
+    ## Death and Respawn
+    execute as @a[tag=dead,scores={death_time=0..}] run title @s title {score:{name:"@s",objective:"death_time"}}
+    execute as @a[tag=dead,scores={death_time=0}] at @s run function lc:champion/respawn
+
+    ## Scoreboard Control
+    scoreboard players remove @e[scores={aa.cd=1..},type=#has_health_bar] aa.cd 1
+
+    scoreboard players remove @e[scores={channeling=0..},type=#has_health_bar] channeling 1
+    scoreboard players remove @e[scores={wound=0..},type=#has_health_bar] wound 1
+
+    scoreboard players remove @e[scores={fx.ghost=0..},type=#has_health_bar] fx.ghost 1
+    scoreboard players remove @e[scores={fx.cc_immune=0..},type=#has_health_bar] fx.cc_immune 1
+    scoreboard players remove @e[scores={fx.invis=0..},type=#has_health_bar] fx.invis 1
+    scoreboard players remove @e[scores={fx.sight=0..},type=#has_health_bar] fx.sight 1
+
+    scoreboard players remove @e[scores={cc.silence=0..},type=#has_health_bar] cc.silence 1
+    scoreboard players remove @e[scores={cc.airborne=0..},type=#has_health_bar] cc.airborne 1
+    scoreboard players remove @e[scores={cc.stun=0..},type=#has_health_bar] cc.stun 1
+    scoreboard players remove @e[scores={cc.root=0..},type=#has_health_bar] cc.root 1
+    scoreboard players remove @e[scores={cc.cripple=0..},type=#has_health_bar] cc.cripple 1
+    scoreboard players remove @e[scores={cc.exhaust=0..},type=#has_health_bar] cc.exhaust 1
+    scoreboard players remove @e[scores={cc.ignite=0..},type=#has_health_bar] cc.ignite 1
+
+    scoreboard players remove @e[scores={death_time=0..},type=#has_health_bar] death_time 1
+
+    scoreboard players remove @a[scores={garen.e.duration=1..}] garen.e.duration 1
+
+    scoreboard players set @a[scores={_mc.dmg_resist=1..}] _mc.dmg_resist 0
+
+    scoreboard players set @a[scores={use_sword=1..}] use_sword 0
+    scoreboard players set @a[scores={drop_sword=1..}] drop_sword 0
+    scoreboard players set @a[scores={use_trident=1..}] use_trident 0
+    scoreboard players set @a[scores={use_ability=1..}] use_ability 0
+    scoreboard players set @a[scores={rclick=1..}] rclick 0
+    scoreboard players set @a[scores={shift=1..}] shift 0
+
+    scoreboard players set @a[scores={sneak=1..}] sneak 0
+    scoreboard players set @a[scores={walk=1..}] walk 0
+    scoreboard players set @a[scores={run=1..}] run 0
+
+    scoreboard players set @a[scores={dmgdeal=1..}] dmgdeal 0
+    scoreboard players set @a[scores={hurt=1..}] hurt 0
+    scoreboard players set @a[scores={resist=1..}] resist 0
+    scoreboard players set @a[scores={absorb=1..}] absorb 0
+
+    scoreboard players set @a[scores={death=1..}] death 0
+
+    scoreboard players set @a[scores={cd_spell.1=..-1}] cd_spell.1 0
+    scoreboard players set @a[scores={cd_spell.2=..-1}] cd_spell.2 0
+    scoreboard players set @e[scores={cd_p=..-1}] cd_p 1
+    scoreboard players set @a[scores={cd_q=..-1}] cd_q 0
+    scoreboard players set @a[scores={cd_w=..-1}] cd_w 0
+    scoreboard players set @a[scores={cd_e=..-1}] cd_e 0
+    scoreboard players set @a[scores={cd_r=..-1}] cd_r 0
+}
+
+function main_10t {
+    schedule function lc:core/main_10t 10t replace
+}
+
+function main_20t {
+    schedule function lc:core/main_20t 20t replace
+
+    execute as @a[tag=champion,tag=!dead] unless score @s mana >= @s mana.max run scoreboard players operation @s mana += @s mana.regen
+    execute as @e[tag=has_health_bar,tag=!dead,type=#has_health_bar] unless score @s hp.left >= @s hp.max run scoreboard players operation @s hp.left += @s hp.regen
+
+    execute as @a[tag=champion,tag=!dead] if score @s mana > @s mana.max run scoreboard players operation @s mana = @s mana.max
+    execute as @e[tag=has_health_bar,tag=!dead,type=#has_health_bar] if score @s hp.left > @s hp.max run scoreboard players operation @s hp.left = @s hp.max
+
+    scoreboard players remove @e[scores={cd_spell.1=1..},type=#has_health_bar] cd_spell.1 1
+    scoreboard players remove @e[scores={cd_spell.2=1..},type=#has_health_bar] cd_spell.2 1
+    scoreboard players remove @e[scores={cd_p=1..},type=#has_health_bar] cd_p 1
+    scoreboard players remove @e[scores={cd_q=1..},type=#has_health_bar] cd_q 1
+    scoreboard players remove @e[scores={cd_w=1..},type=#has_health_bar] cd_w 1
+    scoreboard players remove @e[scores={cd_e=1..},type=#has_health_bar] cd_e 1
+    scoreboard players remove @e[scores={cd_r=1..},type=#has_health_bar] cd_r 1
+
+    execute as @e[tag=dummy,type=#has_health_bar] if score @s mana matches 1.. run scoreboard players remove @s mana 1
+    execute as @e[tag=dummy,type=#has_health_bar] if score @s mana matches 0 on passengers if score @s[tag=dmg_check] dmg_total.taken matches 1.. on vehicle as @s[tag=dummy] run function lc:core/dummy/reset
+
+    # Champion Scoreboard | Zed
+    scoreboard players remove @e[scores={zed_p_cd=1..},type=#has_health_bar] zed_p_cd 1
+
+    # Champion Scoreboard | Leona
+    scoreboard players remove @e[scores={leona.passive=1..},type=#has_health_bar] leona.passive 1
+
+    # Champion Scoreboard | Soraka
+    effect give @e[scores={soraka.passive=1..},type=#has_health_bar] speed 1 1 false
+    tag @e[scores={soraka.passive=1..},type=#has_health_bar] add is_heal_target
+    execute as @e[scores={soraka.passive=1..},team=red,type=#has_health_bar] as @p[tag=soraka,team=red] run function lc:champions/soraka/skills/passive.healing
+    execute as @e[scores={soraka.passive=1..},team=blue,type=#has_health_bar] as @p[tag=soraka,team=blue] run function lc:champions/soraka/skills/passive.healing
+    scoreboard players remove @e[scores={soraka.passive=1..},type=#has_health_bar] soraka.passive 1
+
+    # Champion Scoreboard | Garen
+    execute as @a[tag=garen,scores={cd_p=0}] if score @s hp.left < @s hp.max run tag @s add is_heal_target
+    execute as @a[tag=garen,scores={cd_p=0},tag=is_heal_target,team=red] run function lc:champions/garen/skills/passive.healing
+    execute as @a[tag=garen,scores={cd_p=0},tag=is_heal_target,team=blue] run function lc:champions/garen/skills/passive.healing
+
+    # Champion Scoreboard | Lux
+    scoreboard players remove @e[scores={lux.passive=1..},type=#has_health_bar] lux.passive 1
+
+    # Champion Scoreboard | Annie
+    scoreboard players remove @e[scores={annie.r.duration=1..},type=#has_health_bar] annie.r.duration 1
+    scoreboard players remove @e[scores={annie.r.skill=1..},type=#has_health_bar] annie.r.skill 1
+}
+
+function main_2t {
+    schedule function lc:core/main_2t 2t replace
+
+    execute as @e[type=#has_health_bar,tag=!dead,tag=!unvalid,type=!interaction] at @s if predicate lc:core/hide_on_bush if score @s fx.invis matches ..2 run scoreboard players set @s fx.invis 2
+}
+
+function reload {
+    function lc:core/setup
+    #execute if score .world lang matches 0 run function lc:core/lang/eng.load
+    #execute if score .world lang matches 1 run function lc:core/lang/vie.load
+    say LoL Datapack reloaded
+
+    scoreboard players set @a cd_p 0
+    scoreboard players set @a cd_q 0
+    scoreboard players set @a cd_w 0
+    scoreboard players set @a cd_e 0
+    scoreboard players set @a cd_r 0
+
+    scoreboard players set @a cd_spell.1 0
+    scoreboard players set @a cd_spell.2 0
+
+    scoreboard players set @a mana 0
+
+    scoreboard players set @a rclick 0
+    scoreboard players set @a use_sword 0
+    scoreboard players set @a use_ability 0
+    scoreboard players set @a shift 0
+
+    scoreboard players set @a sneak 0
+    scoreboard players set @a walk 0
+    scoreboard players set @a run 0
+}
+
+function setup {
+    # Setup Scoreboard ( Run ONCE per world )
+    # General Scoreboard
+    gamerule mob_drops false
+    gamerule spawn_mobs false
+    gamerule keep_inventory true
+    gamerule block_drops false
+    gamerule mob_griefing false
+    gamerule command_block_output false
+    gamerule send_command_feedback false
+    gamerule natural_health_regeneration false
+    gamerule fall_damage false
+    gamerule fire_damage false
+    gamerule immediate_respawn true
+
+    ## Minecraft Scoreboard
+    scoreboard objectives add _mc.dmg_resist minecraft.custom:minecraft.damage_resisted
+
+    ## Auto Attack
+    scoreboard objectives add aa.spd dummy
+    scoreboard objectives add aa.cd dummy
+    scoreboard objectives add aa.range dummy
+    scoreboard objectives add aa.range.count dummy
+    scoreboard objectives add ammo.max dummy
+    scoreboard objectives add ammo.reload dummy
+    scoreboard objectives add motion.x dummy
+    scoreboard objectives add motion.y dummy
+    scoreboard objectives add motion.z dummy
+    scoreboard objectives add motion.ticks dummy
+    scoreboard objectives add motion.px dummy
+    scoreboard objectives add motion.py dummy
+    scoreboard objectives add motion.pz dummy
+
+    ## Abilities
+    scoreboard objectives add spell.1 dummy
+    scoreboard objectives add spell.2 dummy
+    scoreboard objectives add mana_q dummy
+    scoreboard objectives add mana_w dummy
+    scoreboard objectives add mana_e dummy
+    scoreboard objectives add mana_r dummy
+
+    ## Cooldown
+    scoreboard objectives add haste dummy
+
+    scoreboard objectives add base_cd.p dummy
+    scoreboard objectives add base_cd.q dummy
+    scoreboard objectives add base_cd.w dummy
+    scoreboard objectives add base_cd.e dummy
+    scoreboard objectives add base_cd.r dummy
+
+    scoreboard objectives add cd_p dummy
+    scoreboard objectives add cd_q dummy
+    scoreboard objectives add cd_w dummy
+    scoreboard objectives add cd_e dummy
+    scoreboard objectives add cd_r dummy
+
+    scoreboard objectives add cd_spell.1 dummy
+    scoreboard objectives add cd_spell.2 dummy
+
+    ## HUD display
+    scoreboard objectives add status.hotbar dummy
+    scoreboard objectives add status.weapon dummy
+    scoreboard objectives add status.weapon_old dummy
+
+    scoreboard objectives add status.p dummy
+    scoreboard objectives add status.q dummy
+    scoreboard objectives add status.w dummy
+    scoreboard objectives add status.e dummy
+    scoreboard objectives add status.r dummy
+
+    scoreboard objectives add status.spell.1 dummy
+    scoreboard objectives add status.spell.2 dummy
+
+    scoreboard objectives add space.passive dummy
+    scoreboard objectives add space.q dummy
+    scoreboard objectives add space.w dummy
+    scoreboard objectives add space.e dummy
+    scoreboard objectives add space.r dummy
+    scoreboard objectives add space.spell.1 dummy
+    scoreboard objectives add space.spell.2 dummy
+    scoreboard objectives add space.hp1 dummy
+    scoreboard objectives add space.hp2 dummy
+    scoreboard objectives add space.mana1 dummy
+    scoreboard objectives add space.mana2 dummy
+
+    ## Crowd Control
+    scoreboard objectives add fx.ghost dummy
+    scoreboard objectives add fx.invis dummy
+    scoreboard objectives add fx.sight dummy
+    scoreboard objectives add fx.cc_immune dummy
+    scoreboard objectives add channeling dummy
+    scoreboard objectives add cc.ignite dummy
+    scoreboard objectives add cc.silence dummy
+    scoreboard objectives add cc.airborne dummy
+    scoreboard objectives add cc.root dummy
+    scoreboard objectives add cc.stun dummy
+    scoreboard objectives add cc.exhaust dummy
+    scoreboard objectives add cc.cripple dummy
+
+    ## Motion
+    scoreboard objectives add pos_x1 dummy
+    scoreboard objectives add pos_y1 dummy
+    scoreboard objectives add pos_z1 dummy
+    scoreboard objectives add pos_x2 dummy
+    scoreboard objectives add pos_y2 dummy
+    scoreboard objectives add pos_z2 dummy
+
+    scoreboard objectives add rot.x dummy
+
+    scoreboard objectives add mot_x dummy
+    scoreboard objectives add mot_y dummy
+    scoreboard objectives add mot_z dummy
+
+    ## Statistics
+    scoreboard objectives add attack_damage dummy
+    scoreboard objectives add ability_power dummy
+    scoreboard objectives add magic_resist dummy
+    scoreboard objectives add armor dummy
+    scoreboard objectives add shield.all dummy
+    scoreboard objectives add shield_all.percentage dummy
+    scoreboard objectives add shield_all.percentage_old dummy
+    scoreboard objectives add shield.physical dummy
+    scoreboard objectives add shield_physical.percentage dummy
+    scoreboard objectives add shield_physical.percentage_old dummy
+    scoreboard objectives add shield.magic dummy
+    scoreboard objectives add shield_magic.percentage dummy
+    scoreboard objectives add shield_magic.percentage_old dummy
+
+    scoreboard objectives add armor.reduced dummy
+    scoreboard objectives add armor.base dummy
+    scoreboard objectives add armor.pen dummy
+    scoreboard objectives add magic_resist.reduced dummy
+    scoreboard objectives add magic_resist.pen dummy
+    scoreboard objectives add magic_resist.base dummy
+
+    scoreboard objectives add healing dummy
+    scoreboard objectives add healnshield_power dummy
+    scoreboard objectives add omnivamp dummy
+    scoreboard objectives add wound dummy
+
+    scoreboard objectives add hp.regen dummy
+    scoreboard objectives add hp.max dummy
+    scoreboard objectives add hp.left dummy
+    scoreboard objectives add hp.percentage dummy
+    scoreboard objectives add hp.percentage_old dummy
+    scoreboard objectives add hp.percentage_lost dummy
+    scoreboard objectives add mana dummy
+    scoreboard objectives add mana.regen dummy
+    scoreboard objectives add mana.max dummy
+    scoreboard objectives add mana.percentage dummy
+    scoreboard objectives add mana.percentage_old dummy
+
+    scoreboard objectives add death_time dummy
+
+    ## Damage
+    scoreboard objectives add dmg_debuff dummy
+    scoreboard objectives add dmg_reduction dummy
+    scoreboard objectives add dmg_total.taken dummy
+    scoreboard objectives add dmg_physical.deal dummy
+    scoreboard objectives add dmg_physical.raw dummy
+    scoreboard objectives add dmg_physical.taken dummy
+    scoreboard objectives add dmg_magic.deal dummy
+    scoreboard objectives add dmg_magic.raw dummy
+    scoreboard objectives add dmg_magic.taken dummy
+    scoreboard objectives add dmg_true.deal dummy
+    scoreboard objectives add dmg_true.raw dummy
+    scoreboard objectives add dmg_true.taken dummy
+
+    ## DoT
+    scoreboard objectives add dot.tick dummy
+
+    ## Mechanics
+    scoreboard objectives add timer dummy
+    scoreboard objectives add temp dummy
+
+    scoreboard objectives add rclick minecraft.used:minecraft.carrot_on_a_stick
+    scoreboard objectives add use_sword minecraft.used:minecraft.iron_sword
+    scoreboard objectives add drop_sword minecraft.dropped:minecraft.iron_sword
+    scoreboard objectives add use_trident minecraft.used:minecraft.trident
+    scoreboard objectives add use_ability minecraft.custom:minecraft.drop
+    scoreboard objectives add shift minecraft.custom:minecraft.sneak_time
+
+    scoreboard objectives add sneak minecraft.custom:minecraft.crouch_one_cm
+    scoreboard objectives add walk minecraft.custom:minecraft.walk_one_cm
+    scoreboard objectives add run minecraft.custom:minecraft.sprint_one_cm
+
+    scoreboard objectives add dmgdeal minecraft.custom:minecraft.damage_dealt
+    scoreboard objectives add hurt minecraft.custom:minecraft.damage_taken
+    scoreboard objectives add resist minecraft.custom:minecraft.damage_resisted
+    scoreboard objectives add absorb minecraft.custom:minecraft.damage_absorbed
+
+    #scoreboard objectives setdisplay below_name hp.left
+    #scoreboard objectives modify hp.left displayname {"text":"❤","color":"red"}
+    scoreboard objectives add death deathCount
+
+    ## Language
+    scoreboard objectives add lang dummy
+    execute unless score .world lang matches 0.. run scoreboard players set .world lang 0
+
+    ## Settings
+    scoreboard objectives add settings.page dummy
+    scoreboard objectives add settings.refresh_hp dummy
+    scoreboard objectives add settings.refresh_mana dummy
+    scoreboard objectives add settings.refresh_cd dummy
+
+    scoreboard objectives add settings.show_stats dummy
+    execute unless score .world settings.show_stats matches 0.. run scoreboard players set .world settings.show_stats 1
+
+    scoreboard objectives add settings.show_dmg dummy
+    execute unless score .world settings.show_dmg matches 0.. run scoreboard players set .world settings.show_dmg 1
+
+    ## Integer
+    scoreboard objectives add integer dummy
+    scoreboard players set 1 integer 1
+    scoreboard players set 2 integer 2
+    scoreboard players set 3 integer 3
+    scoreboard players set 6 integer 6
+    scoreboard players set 7 integer 7
+    scoreboard players set 8 integer 8
+    scoreboard players set 9 integer 9
+    scoreboard players set 10 integer 10
+    scoreboard players set 12 integer 12
+    scoreboard players set 15 integer 15
+    scoreboard players set 20 integer 20
+    scoreboard players set 25 integer 25
+    scoreboard players set 30 integer 30
+    scoreboard players set 35 integer 35
+    scoreboard players set 40 integer 40
+    scoreboard players set 45 integer 45
+    scoreboard players set 50 integer 50
+    scoreboard players set 55 integer 55
+    scoreboard players set 60 integer 60
+    scoreboard players set 65 integer 65
+    scoreboard players set 70 integer 70
+    scoreboard players set 75 integer 75
+    scoreboard players set 85 integer 85
+    scoreboard players set 90 integer 90
+    scoreboard players set 100 integer 100
+    scoreboard players set 120 integer 120
+    scoreboard players set 125 integer 125
+    scoreboard players set 130 integer 130
+    scoreboard players set 150 integer 150
+    scoreboard players set 200 integer 200
+    scoreboard players set 15625 integer 15625
+    scoreboard players set 10000 integer 10000
+    scoreboard players set -1 integer -1
+
+    ## Team Scoreboard
+    team add red {"text":"Red"}
+    team add blue {"text":"Blue"}
+    team modify red nametagVisibility never
+    team modify red collisionRule always
+    team modify blue collisionRule always
+    team modify blue nametagVisibility never
+    team modify red friendlyFire false
+    team modify blue friendlyFire false
+    team modify red seeFriendlyInvisibles false
+    team modify blue seeFriendlyInvisibles false
+    team modify red color red
+    team modify blue color blue
+
+    team add noname
+    team modify noname nametagVisibility never
+    team add nocollision
+    team modify nocollision collisionRule never
+
+    # Champion Scoreboard | Yasuo
+    scoreboard objectives add stack_q dummy
+
+    # Champion Scoreboard | LeeSin
+    scoreboard objectives add stack_p dummy
+
+    # Champion Scoreboard | Zed
+    scoreboard objectives add zed_p_cd dummy
+    scoreboard objectives add zed.r.dmg dummy
+
+    # Champion Scoreboard | Yone
+    scoreboard objectives add yone.passive dummy
+    scoreboard objectives add yone.w.count dummy
+    scoreboard objectives add yone.e.dmg dummy
+
+    # Champion Scoreborad | Ashe
+    scoreboard objectives add ashe.q.stack dummy
+    scoreboard objectives add ashe.e.stack dummy
+
+    # Champion Scoreborad | Ezreal
+    scoreboard objectives add ezreal.p.stack dummy
+
+    # Champion Scoreboard | Vayne
+    scoreboard objectives add vayne.w.stack dummy
+    scoreboard objectives add vayne.r.duration dummy
+
+    # Champion Scoreboard | Jhin
+    scoreboard objectives add jhin.aa.count dummy
+    scoreboard objectives add jhin.r.channel dummy
+    scoreboard objectives add jhin.r.count dummy
+    scoreboard objectives add jhin.q.count dummy
+
+    # Champion Scoreboard | Leona
+    scoreboard objectives add leona.passive dummy
+
+    # Champion Scoreboard | Soraka
+    scoreboard objectives add soraka.passive dummy
+
+    # Champion Scoreboard | Garen
+    scoreboard objectives add garen.e.duration dummy
+    scoreboard objectives add garen.e.count dummy
+
+    # Champion Scoreboard | Malphite
+    scoreboard objectives add malphite.bonus_armor dummy
+
+    # Champion Scoreboard | Lux
+    scoreboard objectives add lux.passive dummy
+
+    # Champion Scoreboard | Annie
+    scoreboard objectives add annie.passive dummy
+    scoreboard objectives add annie.r.duration dummy
+    scoreboard objectives add annie.r.skill dummy
+
+    ## 1-100
+    data modify storage lol:main hp.0 set value [{text:""}]
+    data modify storage lol:main hp.1 set value [{text:""}]
+    data modify storage lol:main hp.2 set value [{text:""}]
+    data modify storage lol:main hp.3 set value [{text:""}]
+    data modify storage lol:main hp.4 set value [{text:""}]
+    data modify storage lol:main hp.5 set value [{text:""}]
+    data modify storage lol:main hp.6 set value [{text:""}]
+    data modify storage lol:main hp.7 set value [{text:""}]
+    data modify storage lol:main hp.8 set value [{text:""}]
+    data modify storage lol:main hp.9 set value [{text:""}]
+
+    data modify storage lol:main hp.10 set value [{text:""}]
+    data modify storage lol:main hp.11 set value [{text:""}]
+    data modify storage lol:main hp.12 set value [{text:""}]
+    data modify storage lol:main hp.13 set value [{text:""}]
+    data modify storage lol:main hp.14 set value [{text:""}]
+    data modify storage lol:main hp.15 set value [{text:""}]
+    data modify storage lol:main hp.16 set value [{text:""}]
+    data modify storage lol:main hp.17 set value [{text:""}]
+    data modify storage lol:main hp.18 set value [{text:""}]
+    data modify storage lol:main hp.19 set value [{text:""}]
+
+    data modify storage lol:main hp.20 set value [{text:""}]
+    data modify storage lol:main hp.21 set value [{text:""}]
+    data modify storage lol:main hp.22 set value [{text:""}]
+    data modify storage lol:main hp.23 set value [{text:""}]
+    data modify storage lol:main hp.24 set value [{text:""}]
+    data modify storage lol:main hp.25 set value [{text:""}]
+    data modify storage lol:main hp.26 set value [{text:""}]
+    data modify storage lol:main hp.27 set value [{text:""}]
+    data modify storage lol:main hp.28 set value [{text:""}]
+    data modify storage lol:main hp.29 set value [{text:""}]
+
+    data modify storage lol:main hp.30 set value [{text:""}]
+    data modify storage lol:main hp.31 set value [{text:""}]
+    data modify storage lol:main hp.32 set value [{text:""}]
+    data modify storage lol:main hp.33 set value [{text:""}]
+    data modify storage lol:main hp.34 set value [{text:""}]
+    data modify storage lol:main hp.35 set value [{text:""}]
+    data modify storage lol:main hp.36 set value [{text:""}]
+    data modify storage lol:main hp.37 set value [{text:""}]
+    data modify storage lol:main hp.38 set value [{text:""}]
+    data modify storage lol:main hp.39 set value [{text:""}]
+
+    data modify storage lol:main hp.40 set value [{text:""}]
+    data modify storage lol:main hp.41 set value [{text:""}]
+    data modify storage lol:main hp.42 set value [{text:""}]
+    data modify storage lol:main hp.43 set value [{text:""}]
+    data modify storage lol:main hp.44 set value [{text:""}]
+    data modify storage lol:main hp.45 set value [{text:""}]
+    data modify storage lol:main hp.46 set value [{text:""}]
+    data modify storage lol:main hp.47 set value [{text:""}]
+    data modify storage lol:main hp.48 set value [{text:""}]
+    data modify storage lol:main hp.49 set value [{text:""}]
+
+    data modify storage lol:main hp.50 set value [{text:""}]
+    data modify storage lol:main hp.51 set value [{text:""}]
+    data modify storage lol:main hp.52 set value [{text:""}]
+    data modify storage lol:main hp.53 set value [{text:""}]
+    data modify storage lol:main hp.54 set value [{text:""}]
+    data modify storage lol:main hp.55 set value [{text:""}]
+    data modify storage lol:main hp.56 set value [{text:""}]
+    data modify storage lol:main hp.57 set value [{text:""}]
+    data modify storage lol:main hp.58 set value [{text:""}]
+    data modify storage lol:main hp.59 set value [{text:""}]
+
+    data modify storage lol:main hp.60 set value [{text:""}]
+    data modify storage lol:main hp.61 set value [{text:""}]
+    data modify storage lol:main hp.62 set value [{text:""}]
+    data modify storage lol:main hp.63 set value [{text:""}]
+    data modify storage lol:main hp.64 set value [{text:""}]
+    data modify storage lol:main hp.65 set value [{text:""}]
+    data modify storage lol:main hp.66 set value [{text:""}]
+    data modify storage lol:main hp.67 set value [{text:""}]
+    data modify storage lol:main hp.68 set value [{text:""}]
+    data modify storage lol:main hp.69 set value [{text:""}]
+
+    data modify storage lol:main hp.70 set value [{text:""}]
+    data modify storage lol:main hp.71 set value [{text:""}]
+    data modify storage lol:main hp.72 set value [{text:""}]
+    data modify storage lol:main hp.73 set value [{text:""}]
+    data modify storage lol:main hp.74 set value [{text:""}]
+    data modify storage lol:main hp.75 set value [{text:""}]
+    data modify storage lol:main hp.76 set value [{text:""}]
+    data modify storage lol:main hp.77 set value [{text:""}]
+    data modify storage lol:main hp.78 set value [{text:""}]
+    data modify storage lol:main hp.79 set value [{text:""}]
+
+    data modify storage lol:main hp.80 set value [{text:""}]
+    data modify storage lol:main hp.81 set value [{text:""}]
+    data modify storage lol:main hp.82 set value [{text:""}]
+    data modify storage lol:main hp.83 set value [{text:""}]
+    data modify storage lol:main hp.84 set value [{text:""}]
+    data modify storage lol:main hp.85 set value [{text:""}]
+    data modify storage lol:main hp.86 set value [{text:""}]
+    data modify storage lol:main hp.87 set value [{text:""}]
+    data modify storage lol:main hp.88 set value [{text:""}]
+    data modify storage lol:main hp.89 set value [{text:""}]
+
+    data modify storage lol:main hp.90 set value [{text:""}]
+    data modify storage lol:main hp.91 set value [{text:""}]
+    data modify storage lol:main hp.92 set value [{text:""}]
+    data modify storage lol:main hp.93 set value [{text:""}]
+    data modify storage lol:main hp.94 set value [{text:""}]
+    data modify storage lol:main hp.95 set value [{text:""}]
+    data modify storage lol:main hp.96 set value [{text:""}]
+    data modify storage lol:main hp.97 set value [{text:""}]
+    data modify storage lol:main hp.98 set value [{text:""}]
+    data modify storage lol:main hp.99 set value [{text:""}]
+
+    data modify storage lol:main hp.100 set value [{text:""}]
+}
+
+function uninstall {
+    # Setup Scoreboard ( Run ONCE per world )
+    # General Scoreboard
+    tag @a remove admin
+    clear @a structure_void
+
+    execute as @e[tag=lol.bar_display,type=block_display] on passengers run kill @s
+    kill @e[tag=lol.bar_display,type=block_display]
+
+    execute as @a run function lc:core/champion/_reset
+    function lc:core/dummy/clear
+    execute at @s as @e[tag=lol.structure] if entity @s[tag=lol.structure.tower] at @s run function lc:core/structure/tower/remove
+
+    function animated_java:aatrox/uninstall
+    function animated_java:lol.structure.tower/uninstall
+
+    execute if score .world lang matches 0 run tellraw @a {text:"\n\n\n\n\n\n\n\n\nLeagueCraft Datapack has been uninstalled",color:"red",bold:true}
+    execute if score .world lang matches 1 run tellraw @a {text:"Datapack Liên Minh Huyền Thoại đã được gỡ cài đặt",color:"red",bold:true}
+
+    gamerule send_command_feedback true
+    gamerule natural_health_regeneration true
+    gamerule fall_damage true
+    gamerule fire_damage true
+
+    execute as @e[tag=has_health_bar] on passengers run kill @s
+
+    effect clear @e
+    tag @e remove has_health_bar
+    tag @e remove has_display_bar
+    tag @e remove remove.bar
+    tag @e remove update.shield.yasuo
+    tag @e remove update.shield.leesin
+    tag @e remove update.shield.yone
+    tag @e remove update.shield.barrier
+    tag @e remove update.shield_all
+    tag @e remove update.bar.hp
+    tag @e remove update.bar.mana
+
+    scoreboard objectives remove uuid.1
+    scoreboard objectives remove uuid.2
+    scoreboard objectives remove uuid.3
+    scoreboard objectives remove uuid.4
+
+    scoreboard objectives remove aa.cd
+    scoreboard objectives remove aa.spd
+    scoreboard objectives remove aa.range
+    scoreboard objectives remove aa.range.count
+
+    scoreboard objectives remove spell
+    scoreboard objectives remove mana_q
+    scoreboard objectives remove mana_w
+    scoreboard objectives remove mana_e
+    scoreboard objectives remove mana_r
+
+    scoreboard objectives remove haste
+
+    scoreboard objectives remove base_cd.p
+    scoreboard objectives remove base_cd.q
+    scoreboard objectives remove base_cd.w
+    scoreboard objectives remove base_cd.e
+    scoreboard objectives remove base_cd.r
+
+    scoreboard objectives remove cd_p
+    scoreboard objectives remove cd_q
+    scoreboard objectives remove cd_w
+    scoreboard objectives remove cd_e
+    scoreboard objectives remove cd_r
+
+    scoreboard objectives remove cd_spell.1
+    scoreboard objectives remove cd_spell.2
+
+    scoreboard objectives remove status.hotbar
+    scoreboard objectives remove status.weapon
+    scoreboard objectives remove status.weapon_old
+    scoreboard objectives remove status.p
+    scoreboard objectives remove status.q
+    scoreboard objectives remove status.w
+    scoreboard objectives remove status.e
+    scoreboard objectives remove status.r
+    scoreboard objectives remove status.spell.1
+    scoreboard objectives remove status.spell.2
+
+    scoreboard objectives remove space.passive
+    scoreboard objectives remove space.q
+    scoreboard objectives remove space.w
+    scoreboard objectives remove space.e
+    scoreboard objectives remove space.r
+    scoreboard objectives remove space.spell.1
+    scoreboard objectives remove space.spell.2
+    scoreboard objectives remove space.hp1
+    scoreboard objectives remove space.hp2
+    scoreboard objectives remove space.mana1
+    scoreboard objectives remove space.mana2
+
+    scoreboard objectives remove pos_x1
+    scoreboard objectives remove pos_y1
+    scoreboard objectives remove pos_z1
+    scoreboard objectives remove pos_x2
+    scoreboard objectives remove pos_y2
+    scoreboard objectives remove pos_z2
+
+    scoreboard objectives remove rot.x
+
+    scoreboard objectives remove attack_damage
+    scoreboard objectives remove ability_power
+    scoreboard objectives remove magic_resist
+    scoreboard objectives remove armor
+    scoreboard objectives remove shield.all
+    scoreboard objectives remove shield.physical
+    scoreboard objectives remove shield.magic
+
+    scoreboard objectives remove armor.reduced
+    scoreboard objectives remove armor.base
+    scoreboard objectives remove armor.pen
+    scoreboard objectives remove magic_resist.reduced
+    scoreboard objectives remove magic_resist.base
+    scoreboard objectives remove magic_resist.pen
+
+    scoreboard objectives remove omnivamp
+    scoreboard objectives remove wound
+
+    scoreboard objectives remove dmg_debuff
+    scoreboard objectives remove dmg_reduction
+    scoreboard objectives remove dmg_total.taken
+    scoreboard objectives remove dmg_physical.deal
+    scoreboard objectives remove dmg_physical.raw
+    scoreboard objectives remove dmg_physical.taken
+    scoreboard objectives remove dmg_magic.deal
+    scoreboard objectives remove dmg_magic.raw
+    scoreboard objectives remove dmg_magic.taken
+    scoreboard objectives remove dmg_true.deal
+    scoreboard objectives remove dmg_true.raw
+    scoreboard objectives remove dmg_true.taken
+
+    scoreboard objectives remove shield_all.percentage
+    scoreboard objectives remove shield_all.percentage_old
+    scoreboard objectives remove shield_magic.percentage
+    scoreboard objectives remove shield_magic.percentage_old
+    scoreboard objectives remove shield_physical.percentage
+    scoreboard objectives remove shield_physical.percentage_old
+
+    scoreboard objectives remove hp.regen
+    scoreboard objectives remove hp.max
+    scoreboard objectives remove hp.left
+    scoreboard objectives remove hp.percentage
+    scoreboard objectives remove hp.percentage_old
+    scoreboard objectives remove hp.percentage_lost
+
+    scoreboard objectives remove mana
+    scoreboard objectives remove mana.regen
+    scoreboard objectives remove mana.max
+    scoreboard objectives remove mana.percentage
+    scoreboard objectives remove mana.percentage_old
+
+    scoreboard objectives remove timer
+    scoreboard objectives remove temp
+
+    scoreboard objectives remove rclick
+    scoreboard objectives remove use_sword
+    scoreboard objectives remove drop_sword
+    scoreboard objectives remove use_trident
+    scoreboard objectives remove use_ability
+    scoreboard objectives remove shift
+
+    scoreboard objectives remove sneak
+    scoreboard objectives remove walk
+    # [26.3] removed incomplete command from the original pack: scoreboard objectives remove run
+
+    scoreboard objectives remove dmgdeal
+    scoreboard objectives remove hurt
+    scoreboard objectives remove resist
+    scoreboard objectives remove absorb
+
+    scoreboard objectives remove death
+
+    scoreboard objectives remove lang
+
+    scoreboard objectives remove _mc.dmg_resist
+    scoreboard objectives remove cc.airborne
+    scoreboard objectives remove cc.exhaust
+    scoreboard objectives remove cc.root
+    scoreboard objectives remove cc.stun
+    scoreboard objectives remove channeling
+    scoreboard objectives remove fx.cc_immune
+    scoreboard objectives remove fx.invis
+    scoreboard objectives remove fx.sight
+
+    scoreboard objectives remove settings.page
+    scoreboard objectives remove settings.refresh_cd
+    scoreboard objectives remove settings.refresh_hp
+    scoreboard objectives remove settings.refresh_mana
+    scoreboard objectives remove settings.show_dmg
+    scoreboard objectives remove settings.show_stats
+
+    scoreboard objectives remove death_time
+
+    scoreboard objectives remove integer
+    data remove storage lol:main hp
+    data remove storage lol:main keybind
+    data remove storage lol:main mana
+    data remove storage lol:main temp
+
+    # Team Scoreboard
+    team remove red
+    team remove blue
+
+    # Champion Scoreboard | Yasuo
+    scoreboard objectives remove stack_q
+
+    # Champion Scoreboard | LeeSin
+    scoreboard objectives remove stack_p
+
+    # Champion Scoreboard | Zed
+    scoreboard objectives remove zed_p_cd
+    scoreboard objectives remove zed.r.dmg
+
+    # Champion Scoreboard | Yone
+    scoreboard objectives remove yone.passive
+    scoreboard objectives remove yone.w.count
+    scoreboard objectives remove yone.e.dmg
+
+    # Champion Scoreboard | Ashe
+    scoreboard objectives remove ashe.e.stack
+    scoreboard objectives remove ashe.q.stack
+
+    # Champion Scorebaord | Vayne
+    scoreboard objectives remove vayne.w.stack
+    scoreboard objectives remove vayne.r.duration
+    bossbar remove red.vayne.r
+    bossbar remove blue.vayne.r
+
+    # Champion Scoreboard | Ezreal
+
+    # CHampion Scoreboard | Jhin
+    scoreboard objectives remove jhin.aa.count
+    scoreboard objectives remove jhin.q.count
+    scoreboard objectives remove jhin.r.count
+    scoreboard objectives remove jhin.r.channel
+}
+
+predicate hide_on_bush {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "minecraft:location": {
+            "block": {
+                "blocks": [
+                    "short_grass",
+                    "minecraft:tall_grass",
+                    "minecraft:fern",
+                    "minecraft:large_fern"
+                ]
+            }
+        }
+    }
+}
+
+predicate is_flying {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {
+        "minecraft:type_specific/player": {},
+        "minecraft:vehicle": {
+            "minecraft:entity_type": "minecraft:horse",
+            "minecraft:nbt": "{Tags:[\"lol.is_flying\"]}"
+        }
+    }
+}
+
+advancement kill_a_mob {
+    "criteria": {
+        "minecraft:blaze": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:blaze"
+                    }
+                }
+            }
+        },
+        "minecraft:cave_spider": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:cave_spider"
+                    }
+                }
+            }
+        },
+        "minecraft:creeper": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:creeper"
+                    }
+                }
+            }
+        },
+        "minecraft:drowned": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:drowned"
+                    }
+                }
+            }
+        },
+        "minecraft:elder_guardian": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:elder_guardian"
+                    }
+                }
+            }
+        },
+        "minecraft:ender_dragon": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:ender_dragon"
+                    }
+                }
+            }
+        },
+        "minecraft:enderman": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:enderman"
+                    }
+                }
+            }
+        },
+        "minecraft:endermite": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:endermite"
+                    }
+                }
+            }
+        },
+        "minecraft:evoker": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:evoker"
+                    }
+                }
+            }
+        },
+        "minecraft:ghast": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:ghast"
+                    }
+                }
+            }
+        },
+        "minecraft:guardian": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:guardian"
+                    }
+                }
+            }
+        },
+        "minecraft:hoglin": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:hoglin"
+                    }
+                }
+            }
+        },
+        "minecraft:husk": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:husk"
+                    }
+                }
+            }
+        },
+        "minecraft:magma_cube": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:magma_cube"
+                    }
+                }
+            }
+        },
+        "minecraft:phantom": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:phantom"
+                    }
+                }
+            }
+        },
+        "minecraft:piglin": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:piglin"
+                    }
+                }
+            }
+        },
+        "minecraft:piglin_brute": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:piglin_brute"
+                    }
+                }
+            }
+        },
+        "minecraft:pillager": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:pillager"
+                    }
+                }
+            }
+        },
+        "minecraft:ravager": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:ravager"
+                    }
+                }
+            }
+        },
+        "minecraft:shulker": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:shulker"
+                    }
+                }
+            }
+        },
+        "minecraft:silverfish": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:silverfish"
+                    }
+                }
+            }
+        },
+        "minecraft:skeleton": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:skeleton"
+                    }
+                }
+            }
+        },
+        "minecraft:slime": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:slime"
+                    }
+                }
+            }
+        },
+        "minecraft:spider": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:spider"
+                    }
+                }
+            }
+        },
+        "minecraft:stray": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:stray"
+                    }
+                }
+            }
+        },
+        "minecraft:vex": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:vex"
+                    }
+                }
+            }
+        },
+        "minecraft:vindicator": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:vindicator"
+                    }
+                }
+            }
+        },
+        "minecraft:witch": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:witch"
+                    }
+                }
+            }
+        },
+        "minecraft:wither": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:wither"
+                    }
+                }
+            }
+        },
+        "minecraft:wither_skeleton": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:wither_skeleton"
+                    }
+                }
+            }
+        },
+        "minecraft:zoglin": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:zoglin"
+                    }
+                }
+            }
+        },
+        "minecraft:zombie": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:zombie"
+                    }
+                }
+            }
+        },
+        "minecraft:zombie_villager": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:zombie_villager"
+                    }
+                }
+            }
+        },
+        "minecraft:zombified_piglin": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:zombified_piglin"
+                    }
+                }
+            }
+        }
+    },
+    "requirements": [
+        [
+            "minecraft:blaze",
+            "minecraft:cave_spider",
+            "minecraft:creeper",
+            "minecraft:drowned",
+            "minecraft:elder_guardian",
+            "minecraft:ender_dragon",
+            "minecraft:enderman",
+            "minecraft:endermite",
+            "minecraft:evoker",
+            "minecraft:ghast",
+            "minecraft:guardian",
+            "minecraft:hoglin",
+            "minecraft:husk",
+            "minecraft:magma_cube",
+            "minecraft:phantom",
+            "minecraft:piglin",
+            "minecraft:piglin_brute",
+            "minecraft:pillager",
+            "minecraft:ravager",
+            "minecraft:shulker",
+            "minecraft:silverfish",
+            "minecraft:skeleton",
+            "minecraft:slime",
+            "minecraft:spider",
+            "minecraft:stray",
+            "minecraft:vex",
+            "minecraft:vindicator",
+            "minecraft:witch",
+            "minecraft:wither_skeleton",
+            "minecraft:wither",
+            "minecraft:zoglin",
+            "minecraft:zombie_villager",
+            "minecraft:zombie",
+            "minecraft:zombified_piglin"
+        ]
+    ]
+}
+
+advancement setup {
+    "criteria": {
+        "requirement": {
+            "trigger": "minecraft:tick"
+        }
+    },
+    "rewards": {
+        "function": "lc:core/setup"
+    }
+}
+
+advancement takedown {
+    "criteria": {
+        "requirement": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "player": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:team": "red"
+                    }
+                },
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:nbt": "{Tags:[\"champion\"]}",
+                        "minecraft:team": "blue"
+                    }
+                }
+            }
+        },
+        "a": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "player": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:team": "blue"
+                    }
+                },
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:nbt": "{Tags:[\"champion\"]}",
+                        "minecraft:team": "red"
+                    }
+                }
+            }
+        }
+    }
+}

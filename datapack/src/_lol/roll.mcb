@@ -1,6 +1,0 @@
-# _lol:roll/  (converted from the 1.20.2 LeagueCraft datapack)
-
-predicate 50 {
-    "type": "minecraft:random_chance",
-    "chance": 0.5
-}

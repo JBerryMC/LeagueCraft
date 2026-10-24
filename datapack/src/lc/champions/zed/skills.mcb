@@ -1,0 +1,414 @@
+# lc:champions/zed/skills/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function e.animation {
+    summon minecraft:area_effect_cloud ~ ~ ~ {Duration:5,Tags:["zed.e.particle"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    playsound minecraft:zed.sfx.e master @a ~ ~ ~
+
+    execute if entity @s[team=red,tag=zed.shadow.model] unless entity @e[tag=zed.e.hit,team=!red] positioned ~-1.5 ~-1 ~-1.5 run effect give @e[type=!#unvalid,tag=!unvalid,team=!red,dx=2,dz=2,dy=1] minecraft:slowness 1 2 false
+
+    execute if entity @s[team=red] positioned ~-1.5 ~-1 ~-1.5 run tag @e[type=!#unvalid,tag=!unvalid,team=!red,dx=2,dz=2,dy=1] add zed.e.hit
+    execute if entity @s[team=red] if entity @e[tag=zed.e.hit,team=!red] run scoreboard players add @p[tag=zed,team=red] mana 40
+    execute if entity @s[team=red] if entity @e[tag=zed.e.hit,team=!red] as @p[tag=zed,team=red] run function lc:champions/zed/skills/e.damage
+
+    execute if entity @s[team=blue,tag=zed.shadow.model] unless entity @e[tag=zed.e.hit,team=!blue] positioned ~-1.5 ~-1 ~-1.5 run effect give @e[type=!#unvalid,tag=!unvalid,team=!blue,dx=2,dz=2,dy=1] minecraft:slowness 1 2 false
+
+    execute if entity @s[team=blue] positioned ~-1.5 ~-1 ~-1.5 run tag @e[type=!#unvalid,tag=!unvalid,team=!blue,dx=2,dz=2,dy=1] add zed.e.hit
+    execute if entity @s[team=blue] if entity @e[tag=zed.e.hit,team=!blue] run scoreboard players add @p[tag=zed,team=blue] mana 40
+    execute if entity @s[team=blue] if entity @e[tag=zed.e.hit,team=!blue] as @p[tag=zed,team=blue] run function lc:champions/zed/skills/e.damage
+}
+
+function e.damage {
+    scoreboard players remove @s cd_w 2
+
+    execute if entity @s[team=red] run damage @e[tag=zed.e.hit,type=!#unvalid,team=!red,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+    execute if entity @s[team=blue] run damage @e[tag=zed.e.hit,type=!#unvalid,team=!blue,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+
+    scoreboard players set @s dmg_physical.deal 145
+
+    scoreboard players operation dmg temp = @s attack_damage
+    scoreboard players operation dmg temp *= 65 integer
+    scoreboard players operation dmg temp /= 100 integer
+
+    scoreboard players operation @s dmg_physical.deal += dmg temp
+
+    execute if entity @s[team=red] run scoreboard players operation @e[tag=zed.r.mark.red,team=!red,tag=zed.e.hit,tag=has_health_bar,limit=1,sort=nearest] zed.r.dmg += @s dmg_physical.deal
+    execute if entity @s[team=blue] run scoreboard players operation @e[tag=zed.r.mark.blue,team=!blue,tag=zed.e.hit,tag=has_health_bar,limit=1,sort=nearest] zed.r.dmg += @s dmg_physical.deal
+
+    function lc:champion/dmg/calc.debuff
+
+    ## RED
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=zed.e.hit,tag=has_health_bar,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=zed.e.hit,tag=has_health_bar,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=red] run tag @e[team=!red,tag=zed.e.hit,type=!#unvalid,limit=1,sort=nearest] remove zed.e.hit
+
+    execute if entity @s[team=red] run execute if entity @e[tag=zed.e.hit,type=!#unvalid,team=!red] run function lc:champions/zed/skills/e.damage
+
+    ## BLUE
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=zed.e.hit,tag=has_health_bar,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=zed.e.hit,tag=has_health_bar,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=blue] run tag @e[team=!blue,tag=zed.e.hit,type=!#unvalid,limit=1,sort=nearest] remove zed.e.hit
+
+    execute if entity @s[team=blue] run execute if entity @e[tag=zed.e.hit,type=!#unvalid,team=!blue] run function lc:champions/zed/skills/e.damage
+}
+
+function e.particle {
+    tp @s ~ ~ ~ ~30 0
+    particle dust{color:[0.5,0,0],scale:2} ^ ^1 ^1.5 0.2 0 0.2 0 10 force
+    particle dust{color:[0.5,0,0],scale:2} ^ ^1 ^-1.5 0.2 0 0.2 0 10 force
+}
+
+function q.clear {
+    execute if entity @s[tag=red,tag=q1] run tag @e[tag=zed.q.damage,team=!red,type=!#unvalid] remove zed.q.damage
+    execute if entity @s[tag=red,tag=q2] run tag @e[tag=zed.q2.damage,team=!red,type=!#unvalid] remove zed.q2.damage
+    execute if entity @s[tag=red,tag=q3] run tag @e[tag=zed.q3.damage,team=!red,type=!#unvalid] remove zed.q3.damage
+
+    execute if entity @s[tag=blue,tag=q1] run tag @e[tag=zed.q.damage,team=!blue,type=!#unvalid] remove zed.q.damage
+    execute if entity @s[tag=blue,tag=q2] run tag @e[tag=zed.q2.damage,team=!blue,type=!#unvalid] remove zed.q2.damage
+    execute if entity @s[tag=blue,tag=q3] run tag @e[tag=zed.q3.damage,team=!blue,type=!#unvalid] remove zed.q3.damage
+
+    kill @s
+}
+
+function q.damage {
+    execute if entity @s[team=red] if entity @e[tag=zed.q.hit,tag=temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest,tag=!zed.q.damage,tag=!zed.q2.damage,tag=!zed.q3.damage] run scoreboard players add @s mana 40
+
+    execute if entity @s[team=red] run damage @e[tag=zed.q.hit,tag=temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 5 lc:core/dmg_physical by @s
+    execute if entity @s[team=blue] run damage @e[tag=zed.q.hit,tag=temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 5 lc:core/dmg_physical by @s
+
+    scoreboard players set @s dmg_physical.deal 210
+    scoreboard players operation @s dmg_physical.deal += @s attack_damage
+
+    execute if entity @s[team=red] run scoreboard players operation @e[tag=zed.r.mark.red,team=!red,tag=has_health_bar,limit=1,sort=nearest] zed.r.dmg += @s dmg_physical.deal
+    execute if entity @s[team=blue] run scoreboard players operation @e[tag=zed.r.mark.blue,team=!blue,tag=has_health_bar,limit=1,sort=nearest] zed.r.dmg += @s dmg_physical.deal
+
+    function lc:champion/dmg/calc.debuff
+
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=zed.q.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=zed.q.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=red] run tag @e[team=!red,tag=zed.q.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+    execute if entity @s[team=red] if entity @e[tag=zed.q.hit,tag=temp_dmg,type=!#unvalid,team=!red] run function lc:champions/zed/skills/q.damage
+
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=zed.q.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=zed.q.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=blue] run tag @e[team=!blue,tag=zed.q.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+    execute if entity @s[team=blue] if entity @e[tag=zed.q.hit,tag=temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/zed/skills/q.damage
+}
+
+function q.damage2 {
+    execute if entity @s[team=red] if entity @e[tag=zed.q2.hit,tag=temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest,tag=!zed.q.damage,tag=!zed.q2.damage,tag=!zed.q3.damage] run scoreboard players add @s mana 40
+
+    execute if entity @s[team=red] run damage @e[tag=zed.q2.hit,tag=temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 5 lc:core/dmg_physical by @s
+    execute if entity @s[team=blue] run damage @e[tag=zed.q2.hit,tag=temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 5 lc:core/dmg_physical by @s
+
+    scoreboard players set @s dmg_physical.deal 210
+    scoreboard players operation @s dmg_physical.deal += @s attack_damage
+
+    execute if entity @s[team=red] run scoreboard players operation @e[tag=zed.r.mark.red,team=!red,tag=has_health_bar,limit=1,sort=nearest] zed.r.dmg += @s dmg_physical.deal
+    execute if entity @s[team=blue] run scoreboard players operation @e[tag=zed.r.mark.blue,team=!blue,tag=has_health_bar,limit=1,sort=nearest] zed.r.dmg += @s dmg_physical.deal
+
+    function lc:champion/dmg/calc.debuff
+
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=zed.q2.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=zed.q2.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=red] run tag @e[team=!red,tag=zed.q2.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+    execute if entity @s[team=red] if entity @e[tag=zed.q2.hit,tag=temp_dmg,type=!#unvalid,team=!red] run function lc:champions/zed/skills/q.damage2
+
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=zed.q2.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=zed.q2.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=blue] run tag @e[team=!blue,tag=zed.q2.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+    execute if entity @s[team=blue] if entity @e[tag=zed.q2.hit,tag=temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/zed/skills/q.damage2
+}
+
+function q.damage3 {
+    execute if entity @s[team=red] if entity @e[tag=zed.q3.hit,tag=temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest,tag=!zed.q.damage,tag=!zed.q2.damage,tag=!zed.q3.damage] run scoreboard players add @s mana 40
+
+    execute if entity @s[team=red] run damage @e[tag=zed.q3.hit,tag=temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 5 lc:core/dmg_physical by @s
+    execute if entity @s[team=blue] run damage @e[tag=zed.q3.hit,tag=temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 5 lc:core/dmg_physical by @s
+
+    scoreboard players set @s dmg_physical.deal 210
+    scoreboard players operation @s dmg_physical.deal += @s attack_damage
+
+    execute if entity @s[team=red] run scoreboard players operation @e[tag=zed.r.mark.red,team=!red,tag=has_health_bar,limit=1,sort=nearest] zed.r.dmg += @s dmg_physical.deal
+    execute if entity @s[team=blue] run scoreboard players operation @e[tag=zed.r.mark.blue,team=!blue,tag=has_health_bar,limit=1,sort=nearest] zed.r.dmg += @s dmg_physical.deal
+
+    function lc:champion/dmg/calc.debuff
+
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=zed.q3.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=zed.q3.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=red] run tag @e[team=!red,tag=zed.q3.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+    execute if entity @s[team=red] if entity @e[tag=zed.q3.hit,tag=temp_dmg,type=!#unvalid,team=!red] run function lc:champions/zed/skills/q.damage3
+
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=zed.q3.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=zed.q3.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    execute if entity @s[team=blue] run tag @e[team=!blue,tag=zed.q3.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+    execute if entity @s[team=blue] if entity @e[tag=zed.q3.hit,tag=temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/zed/skills/q.damage3
+}
+
+function q.passive {
+    tp @s ^ ^ ^1.5
+    particle minecraft:dust{color:[0.5,0,0],scale:1} ~ ~ ~ 0.2 0 0.2 0 10 force
+
+    ## Q1
+    execute as @s[tag=red,tag=q1] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[team=!red,dx=0,type=!#unvalid,tag=!unvalid,tag=!zed.q.hit] add zed.q.hit
+
+    execute if entity @s[tag=red,tag=q1] if entity @e[tag=zed.q.hit,team=!red,type=!#unvalid] run tag @e[tag=zed.q.hit,type=!#unvalid,team=!red,tag=!zed.q.damage] add temp_dmg
+    execute if entity @s[tag=red,tag=q1] if entity @e[tag=zed.q.hit,team=!red,type=!#unvalid] on passengers on origin run function lc:champions/zed/skills/q.damage
+
+    execute if entity @s[tag=red,tag=q1] if entity @e[tag=zed.q.hit,team=!red,type=!#unvalid] run tag @e[tag=zed.q.hit,type=!#unvalid,team=!red] add zed.q.damage
+    execute if entity @s[tag=red,tag=q1] if entity @e[tag=zed.q.hit,team=!red,type=!#unvalid] run tag @e[tag=zed.q.hit,type=!#unvalid,team=!red] remove zed.q.hit
+
+    ## Q2
+    execute as @s[tag=red,tag=q2] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[team=!red,dx=0,type=!#unvalid,tag=!unvalid,tag=!zed.q2.hit] add zed.q2.hit
+
+    execute if entity @s[tag=red,tag=q2] if entity @e[tag=zed.q2.hit,team=!red,type=!#unvalid] run tag @e[tag=zed.q2.hit,type=!#unvalid,team=!red,tag=!zed.q2.damage] add temp_dmg
+    execute if entity @s[tag=red,tag=q2] if entity @e[tag=zed.q2.hit,team=!red,type=!#unvalid] on passengers on origin run function lc:champions/zed/skills/q.damage2
+
+    execute if entity @s[tag=red,tag=q2] if entity @e[tag=zed.q2.hit,team=!red,type=!#unvalid] run tag @e[tag=zed.q2.hit,type=!#unvalid,team=!red] add zed.q2.damage
+    execute if entity @s[tag=red,tag=q2] if entity @e[tag=zed.q2.hit,team=!red,type=!#unvalid] run tag @e[tag=zed.q2.hit,type=!#unvalid,team=!red] remove zed.q2.hit
+
+    ## Q2
+    execute as @s[tag=red,tag=q3] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[team=!red,dx=0,type=!#unvalid,tag=!unvalid,tag=!zed.q3.hit] add zed.q3.hit
+
+    execute if entity @s[tag=red,tag=q3] if entity @e[tag=zed.q3.hit,team=!red,type=!#unvalid] run tag @e[tag=zed.q3.hit,type=!#unvalid,team=!red,tag=!zed.q3.damage] add temp_dmg
+    execute if entity @s[tag=red,tag=q3] if entity @e[tag=zed.q3.hit,team=!red,type=!#unvalid] on passengers on origin run function lc:champions/zed/skills/q.damage3
+
+    execute if entity @s[tag=red,tag=q3] if entity @e[tag=zed.q3.hit,team=!red,type=!#unvalid] run tag @e[tag=zed.q3.hit,type=!#unvalid,team=!red] add zed.q3.damage
+    execute if entity @s[tag=red,tag=q3] if entity @e[tag=zed.q3.hit,team=!red,type=!#unvalid] run tag @e[tag=zed.q3.hit,type=!#unvalid,team=!red] remove zed.q3.hit
+
+    ## Q1
+    execute as @s[tag=blue,tag=q1] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[team=!blue,dx=0,type=!#unvalid,tag=!unvalid,tag=!zed.q.hit] add zed.q.hit
+
+    execute if entity @s[tag=blue,tag=q1] if entity @e[tag=zed.q.hit,team=!blue,type=!#unvalid] run tag @e[tag=zed.q.hit,type=!#unvalid,team=!blue,tag=!zed.q.damage] add temp_dmg
+    execute if entity @s[tag=blue,tag=q1] if entity @e[tag=zed.q.hit,team=!blue,type=!#unvalid] on passengers on origin run function lc:champions/zed/skills/q.damage
+
+    execute if entity @s[tag=blue,tag=q1] if entity @e[tag=zed.q.hit,team=!blue,type=!#unvalid] run tag @e[tag=zed.q.hit,type=!#unvalid,team=!blue] add zed.q.damage
+    execute if entity @s[tag=blue,tag=q1] if entity @e[tag=zed.q.hit,team=!blue,type=!#unvalid] run tag @e[tag=zed.q.hit,type=!#unvalid,team=!blue] remove zed.q.hit
+
+    ## Q2
+    execute as @s[tag=blue,tag=q2] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[team=!blue,dx=0,type=!#unvalid,tag=!unvalid,tag=!zed.q2.hit] add zed.q2.hit
+
+    execute if entity @s[tag=blue,tag=q2] if entity @e[tag=zed.q2.hit,team=!blue,type=!#unvalid] run tag @e[tag=zed.q2.hit,type=!#unvalid,team=!blue,tag=!zed.q2.damage] add temp_dmg
+    execute if entity @s[tag=blue,tag=q2] if entity @e[tag=zed.q2.hit,team=!blue,type=!#unvalid] on passengers on origin run function lc:champions/zed/skills/q.damage2
+
+    execute if entity @s[tag=blue,tag=q2] if entity @e[tag=zed.q2.hit,team=!blue,type=!#unvalid] run tag @e[tag=zed.q2.hit,type=!#unvalid,team=!blue] add zed.q2.damage
+    execute if entity @s[tag=blue,tag=q2] if entity @e[tag=zed.q2.hit,team=!blue,type=!#unvalid] run tag @e[tag=zed.q2.hit,type=!#unvalid,team=!blue] remove zed.q2.hit
+
+    ## Q2
+    execute as @s[tag=blue,tag=q3] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[team=!blue,dx=0,type=!#unvalid,tag=!unvalid,tag=!zed.q3.hit] add zed.q3.hit
+
+    execute if entity @s[tag=blue,tag=q3] if entity @e[tag=zed.q3.hit,team=!blue,type=!#unvalid] run tag @e[tag=zed.q3.hit,type=!#unvalid,team=!blue,tag=!zed.q3.damage] add temp_dmg
+    execute if entity @s[tag=blue,tag=q3] if entity @e[tag=zed.q3.hit,team=!blue,type=!#unvalid] on passengers on origin run function lc:champions/zed/skills/q.damage3
+
+    execute if entity @s[tag=blue,tag=q3] if entity @e[tag=zed.q3.hit,team=!blue,type=!#unvalid] run tag @e[tag=zed.q3.hit,type=!#unvalid,team=!blue] add zed.q3.damage
+    execute if entity @s[tag=blue,tag=q3] if entity @e[tag=zed.q3.hit,team=!blue,type=!#unvalid] run tag @e[tag=zed.q3.hit,type=!#unvalid,team=!blue] remove zed.q3.hit
+}
+
+function q.raycasting {
+    execute if entity @s[team=red,distance=..15] unless entity @e[tag=red.zed.q.target] positioned ~-0.5 ~-0.5 ~-0.5 unless entity @e[tag=!unvalid,type=!#unvalid,dx=0,team=!red] positioned ~0.5 ~0.5 ~0.5 positioned ^ ^ ^1 run function lc:champions/zed/skills/q.raycasting
+    execute if entity @s[team=red,distance=..15] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[tag=!unvalid,type=!#unvalid,dx=0,team=!red] run tag @e[tag=!unvalid,type=!#unvalid,dx=0,team=!red,limit=1,sort=nearest] add red.zed.q.target
+
+    execute if entity @s[team=blue,distance=..15] unless entity @e[tag=blue.zed.q.target] positioned ~-0.5 ~-0.5 ~-0.5 unless entity @e[tag=!unvalid,type=!#unvalid,dx=0,team=!blue] positioned ~0.5 ~0.5 ~0.5 positioned ^ ^ ^1 run function lc:champions/zed/skills/q.raycasting
+    execute if entity @s[team=blue,distance=..15] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[tag=!unvalid,type=!#unvalid,dx=0,team=!blue] run tag @e[tag=!unvalid,type=!#unvalid,dx=0,team=!blue,limit=1,sort=nearest] add blue.zed.q.target
+}
+
+function q.spawn {
+    playsound minecraft:zed.sfx.q master @a ~ ~ ~
+
+    execute if entity @s[team=red] run summon minecraft:item_display ~ ~ ~ {interpolation_duration:5,teleport_duration:1,item_display:"head",item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[300003f]}}},Tags:["q1","red","temp","zed.q","spin1","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run summon minecraft:item_display ~ ~ ~ {interpolation_duration:5,teleport_duration:1,item_display:"head",item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[300003f]}}},Tags:["q1","blue","temp","zed.q","spin1","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    tp @e[tag=zed.q,tag=temp,limit=1,sort=nearest] ~ ~ ~ ~ ~
+    execute as @e[tag=zed.q,tag=temp,limit=1,sort=nearest] on passengers store result entity @s Rotation[0] float 1 on vehicle run data get entity @s Rotation[0] 1
+    data modify entity @e[tag=cd,limit=1,sort=nearest] Owner set from entity @s UUID
+    tag @e[tag=zed.q,tag=temp,limit=1,sort=nearest] remove temp
+}
+
+function q.spawn.shadow {
+    playsound minecraft:zed.sfx.q master @a ~ ~ ~
+
+    execute if entity @s[team=red,tag=w.shadow] run summon minecraft:item_display ~ ~ ~ {interpolation_duration:5,teleport_duration:1,item_display:"head",item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[300003f]}}},Tags:["q2","red","temp","zed.q","spin1","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=red,tag=r.shadow] run summon minecraft:item_display ~ ~ ~ {interpolation_duration:5,teleport_duration:1,item_display:"head",item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[300003f]}}},Tags:["q3","red","temp","zed.q","spin1","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute if entity @s[team=blue,tag=w.shadow] run summon minecraft:item_display ~ ~ ~ {interpolation_duration:5,teleport_duration:1,item_display:"head",item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[300003f]}}},Tags:["q2","blue","temp","zed.q","spin1","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue,tag=r.shadow] run summon minecraft:item_display ~ ~ ~ {interpolation_duration:5,teleport_duration:1,item_display:"head",item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[300003f]}}},Tags:["q3","blue","temp","zed.q","spin1","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    tp @e[tag=zed.q,tag=temp,limit=1,sort=nearest] ~ ~ ~ ~ ~
+    execute as @e[tag=zed.q,tag=temp,limit=1,sort=nearest] on passengers store result entity @s Rotation[0] float 1 on vehicle run data get entity @s Rotation[0] 1
+    execute if entity @s[team=red] run data modify entity @e[tag=cd,limit=1,sort=nearest] Owner set from entity @p[tag=zed,team=red] UUID
+    execute if entity @s[team=blue] run data modify entity @e[tag=cd,limit=1,sort=nearest] Owner set from entity @p[tag=zed,team=blue] UUID
+    tag @e[tag=zed.q,tag=temp,limit=1,sort=nearest] remove temp
+}
+
+function r.animation {
+    execute as @e[tag=zed.r.animation,type=minecraft:armor_stand] at @s run particle smoke ~ ~1 ~ 0.2 0.2 0.2 0 10 force
+
+    execute if entity @s[tag=red] facing entity @e[tag=zed.r.target,limit=1,team=!red] feet rotated ~ ~-5 run tp @s ^ ^ ^0.3
+    execute if entity @s[tag=red] at @s positioned ~ ~-0.5 ~ as @p[tag=zed,team=red] run function lc:core/motion/follow
+    execute if entity @s[tag=red] as @e[tag=zed.r.animation,team=red] at @s facing entity @e[tag=zed.r.target,limit=1,team=!red] feet run tp @s ^ ^ ^0.3 ~ ~
+
+    execute if entity @s[tag=red] unless data entity @s Passengers[{Tags:["cd"]}] run scoreboard players set @p[tag=zed,team=red] status.weapon 300101
+
+    execute if entity @s[tag=red] unless data entity @s Passengers[{Tags:["cd"]}] positioned as @e[tag=zed.r.target,team=!red,limit=1] facing entity @e[tag=zed.shadow,tag=r.shadow,type=minecraft:area_effect_cloud,limit=1,tag=red] eyes rotated ~ 0 run tp @p[tag=zed,team=red] ^ ^0.1 ^-2 ~ 0
+    execute if entity @s[tag=red] unless data entity @s Passengers[{Tags:["cd"]}] run kill @e[tag=zed.r.animation,team=red,type=minecraft:armor_stand]
+    execute if entity @s[tag=red] unless data entity @s Passengers[{Tags:["cd"]}] run tag @e[tag=zed.r.target,team=!red,limit=1] add zed.r.mark.red
+
+    execute if entity @s[tag=red] unless data entity @s Passengers[{Tags:["cd"]}] run tag @p[tag=zed,team=red] remove unvalid
+    execute if entity @s[tag=red] unless data entity @s Passengers[{Tags:["cd"]}] positioned as @e[tag=zed.r.mark.red,team=!red,limit=1] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:61,Tags:["red","zed.r.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=red] unless data entity @s Passengers[{Tags:["cd"]}] run tag @e[tag=zed,team=red] remove r.animation
+
+    execute if entity @s[tag=blue] facing entity @e[tag=zed.r.target,limit=1,team=!blue] feet rotated ~ ~-5 run tp @s ^ ^ ^0.3
+    execute if entity @s[tag=blue] at @s positioned ~ ~-0.5 ~ as @p[tag=zed,team=blue] run function lc:core/motion/follow
+    execute if entity @s[tag=blue] as @e[tag=zed.r.animation,team=blue] at @s facing entity @e[tag=zed.r.target,limit=1,team=!blue] feet run tp @s ^ ^ ^0.3 ~ ~
+
+    execute if entity @s[tag=blue] unless data entity @s Passengers[{Tags:["cd"]}] run scoreboard players set @p[tag=zed,team=blue] status.weapon 300101
+
+    execute if entity @s[tag=blue] unless data entity @s Passengers[{Tags:["cd"]}] positioned as @e[tag=zed.r.target,team=!blue,limit=1] facing entity @e[tag=zed.shadow,tag=r.shadow,type=minecraft:area_effect_cloud,limit=1,tag=blue] eyes rotated ~ 0 run tp @p[tag=zed,team=blue] ^ ^0.1 ^-2 ~ 0
+    execute if entity @s[tag=blue] unless data entity @s Passengers[{Tags:["cd"]}] run kill @e[tag=zed.r.animation,team=blue,type=minecraft:armor_stand]
+    execute if entity @s[tag=blue] unless data entity @s Passengers[{Tags:["cd"]}] run tag @e[tag=zed.r.target,team=!blue,limit=1] add zed.r.mark.blue
+
+    execute if entity @s[tag=blue] unless data entity @s Passengers[{Tags:["cd"]}] run tag @p[tag=zed,team=blue] remove unvalid
+    execute if entity @s[tag=blue] unless data entity @s Passengers[{Tags:["cd"]}] positioned as @e[tag=zed.r.mark.blue,team=!blue,limit=1] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:61,Tags:["blue","zed.r.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=blue] unless data entity @s Passengers[{Tags:["cd"]}] run tag @e[tag=zed,team=blue] remove r.animation
+}
+
+function r.damage {
+    execute if entity @s[team=red] run damage @e[tag=zed.r.mark.red,type=!#unvalid,team=!red,limit=1,sort=nearest] 10 lc:core/dmg_physical by @s
+    execute if entity @s[team=blue] run damage @e[tag=zed.r.mark.blue,type=!#unvalid,team=!blue,limit=1,sort=nearest] 10 lc:core/dmg_physical by @s
+
+    scoreboard players operation dmg temp = @s attack_damage
+    scoreboard players operation dmg temp *= 65 integer
+    scoreboard players operation dmg temp /= 100 integer
+
+    scoreboard players operation @s dmg_physical.deal = dmg temp
+
+    execute if entity @s[team=red] as @e[team=!red,tag=zed.r.mark.red,tag=has_health_bar,limit=1,sort=nearest] run scoreboard players operation @s zed.r.dmg *= 55 integer
+    execute if entity @s[team=red] as @e[team=!red,tag=zed.r.mark.red,tag=has_health_bar,limit=1,sort=nearest] run scoreboard players operation @s zed.r.dmg /= 100 integer
+
+    execute if entity @s[team=red] as @e[team=!red,tag=zed.r.mark.red,tag=has_health_bar,limit=1,sort=nearest] run scoreboard players operation dmg temp = @s zed.r.dmg
+    execute if entity @s[team=red] run scoreboard players set @e[team=!red,tag=zed.r.mark.red,type=!#unvalid,limit=1,sort=nearest] zed.r.dmg 0
+
+    execute if entity @s[team=blue] as @e[team=!blue,tag=zed.r.mark.blue,tag=has_health_bar,limit=1,sort=nearest] run scoreboard players operation @s zed.r.dmg *= 55 integer
+    execute if entity @s[team=blue] as @e[team=!blue,tag=zed.r.mark.blue,tag=has_health_bar,limit=1,sort=nearest] run scoreboard players operation @s zed.r.dmg /= 100 integer
+
+    execute if entity @s[team=blue] as @e[team=!blue,tag=zed.r.mark.blue,tag=has_health_bar,limit=1,sort=nearest] run scoreboard players operation dmg temp = @s zed.r.dmg
+    execute if entity @s[team=blue] run scoreboard players set @e[team=!blue,tag=zed.r.mark.blue,type=!#unvalid,limit=1,sort=nearest] zed.r.dmg 0
+
+    scoreboard players operation @s dmg_physical.deal += dmg temp
+
+    function lc:champion/dmg/calc.debuff
+
+    ## RED
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=zed.r.mark.red,tag=has_health_bar,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=zed.r.mark.red,tag=has_health_bar,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+    ## BLUE
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=zed.r.mark.blue,tag=has_health_bar,limit=1,sort=nearest] armor.reduced = @s armor.pen
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=zed.r.mark.blue,tag=has_health_bar,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+}
+
+function r.end {
+    execute if entity @s[tag=zed.r.mark.red] run tag @s remove zed.r.mark.red
+    execute if entity @s[tag=zed.r.mark.blue] run tag @s remove zed.r.mark.blue
+
+    execute if entity @s[tag=zed.r.mark.blue] run tag @s remove zed.r.mark.blue
+    execute if entity @s[tag=zed.r.mark.blue] run tag @s remove zed.r.mark.blue
+
+    tag @s remove zed.r.target
+    particle item{item:"redstone_block"} ~ ~1 ~ 0 0 0 0.2 200 force
+    kill @s[tag=zed.r.cd]
+    playsound minecraft:zed.sfx.r.end master @a ~ ~ ~
+}
+
+function r.passive {
+    particle dust{color:[1,0,0],scale:2} ~ ~1 ~ 0.1 0.1 0.1 0.1 10 force
+
+    execute if entity @s[tag=red] run tp @s @e[tag=zed.r.mark.red,limit=1,team=!red]
+
+    execute if entity @s[tag=red,nbt={Age:60}] as @p[tag=zed,team=red] run function lc:champions/zed/skills/r.damage
+    execute if entity @s[tag=red,nbt={Age:60}] as @e[tag=zed.r.mark.red,limit=1,team=!red] at @s run function lc:champions/zed/skills/r.end
+    execute if entity @s[tag=red] unless entity @e[tag=zed.r.mark.red,limit=1,team=!red] run function lc:champions/zed/skills/r.end
+
+    execute if entity @s[tag=blue] run tp @s @e[tag=zed.r.mark.blue,limit=1,team=!blue]
+
+    execute if entity @s[tag=blue,nbt={Age:60}] as @p[tag=zed,team=blue] run function lc:champions/zed/skills/r.damage
+    execute if entity @s[tag=blue,nbt={Age:60}] as @e[tag=zed.r.mark.blue,limit=1,team=!blue] at @s run function lc:champions/zed/skills/r.end
+    execute if entity @s[tag=blue] unless entity @e[tag=zed.r.mark.blue,limit=1,team=!blue] run function lc:champions/zed/skills/r.end
+}
+
+function shadow.blink {
+    kill @e[tag=zed.shadow.model,limit=1,sort=nearest]
+    playsound minecraft:zed.sfx.w2 master @a ~ ~ ~
+
+    execute if entity @s[tag=red,tag=w.shadow] positioned as @p[team=red,tag=zed] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:105,Tags:["blinked","red","zed.shadow","temp","w.shadow"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=red,tag=r.shadow] positioned as @p[team=red,tag=zed] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:105,Tags:["blinked","red","zed.shadow","temp","r.shadow"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=red] run data modify entity @e[tag=zed.shadow,tag=temp,limit=1,type=minecraft:area_effect_cloud] Duration set from entity @s Duration
+    execute if entity @s[tag=red] run data modify entity @e[tag=zed.shadow,tag=temp,limit=1,type=minecraft:area_effect_cloud] Age set from entity @s Age
+    execute if entity @s[tag=red] positioned as @e[tag=zed.shadow,tag=temp,limit=1,type=minecraft:area_effect_cloud] run function lc:champions/zed/skills/shadow.spawn
+    execute if entity @s[tag=red] run tp @p[team=red,tag=zed] ~ ~0.1 ~
+    execute if entity @s[tag=red] run tag @e[tag=zed.shadow,type=minecraft:area_effect_cloud,tag=temp] remove temp
+
+    execute if entity @s[tag=blue,tag=w.shadow] positioned as @p[team=blue,tag=zed] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:105,Tags:["blinked","blue","zed.shadow","temp","w.shadow"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=blue,tag=r.shadow] positioned as @p[team=blue,tag=zed] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:105,Tags:["blinked","blue","zed.shadow","temp","r.shadow"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=blue] run data modify entity @e[tag=zed.shadow,tag=temp,limit=1,type=minecraft:area_effect_cloud] Duration set from entity @s Duration
+    execute if entity @s[tag=blue] run data modify entity @e[tag=zed.shadow,tag=temp,limit=1,type=minecraft:area_effect_cloud] Age set from entity @s Age
+    execute if entity @s[tag=blue] positioned as @e[tag=zed.shadow,tag=temp,limit=1,type=minecraft:area_effect_cloud] run function lc:champions/zed/skills/shadow.spawn
+    execute if entity @s[tag=blue] run tp @p[team=blue,tag=zed] ~ ~0.1 ~
+    execute if entity @s[tag=blue] run tag @e[tag=zed.shadow,type=minecraft:area_effect_cloud,tag=temp] remove temp
+
+    kill @s
+}
+
+function shadow.model {
+    execute unless entity @e[tag=zed.shadow,type=minecraft:area_effect_cloud,distance=..1] run particle smoke ~ ~1 ~ 0.2 0.2 0.2 0.1 200 force
+    execute unless entity @e[tag=zed.shadow,type=minecraft:area_effect_cloud,distance=..1] run playsound minecraft:zed.sfx.w.end master @a ~ ~ ~
+    execute unless entity @e[tag=zed.shadow,type=minecraft:area_effect_cloud,distance=..1] run kill @s
+}
+
+function shadow.passive {
+    particle dust{color:[0,0,0],scale:2} ~ ~ ~ 0.2 0 0.2 0 10 force
+    tag @s[nbt={Age:6}] remove moving
+    tp @s[tag=moving] ^ ^ ^1.5
+    execute if entity @s[nbt={Age:6}] run function lc:champions/zed/skills/w.spawncheck
+
+    execute as @s[nbt={Age:6},tag=e.buffer,tag=red] as @e[tag=zed.shadow.model,team=red,limit=1,sort=nearest] at @s run function lc:champions/zed/skills/e.animation
+    execute as @s[nbt={Age:6},tag=e.buffer,tag=red] run tag @s remove e.buffer
+
+    execute as @s[nbt={Age:6},tag=e.buffer,tag=blue] as @e[tag=zed.shadow.model,team=blue,limit=1,sort=nearest] at @s run function lc:champions/zed/skills/e.animation
+    execute as @s[nbt={Age:6},tag=e.buffer,tag=blue] run tag @s remove e.buffer
+
+    execute as @s[tag=!moving,tag=blink,tag=w.shadow] at @s run function lc:champions/zed/skills/shadow.blink
+    execute as @s[tag=blink,tag=r.shadow] at @s run function lc:champions/zed/skills/shadow.blink
+}
+
+function shadow.spawn {
+    execute if entity @s[tag=red,tag=w.shadow] run summon minecraft:armor_stand ~ ~ ~ {Marker:1,Invisible:1,Team:"red",ShowArms:1,Pose:{LeftArm:[22.5f,0.0f,0.0f],RightArm:[-22.5f,0.0f,0.0f]},Tags:["w.shadow","zed.shadow.model","unvalid"],equipment:{mainhand:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[300131f]}}},offhand:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[300131f]}}},head:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[300002f]}}}}}
+    execute if entity @s[tag=red,tag=r.shadow] run summon minecraft:armor_stand ~ ~ ~ {Marker:1,Invisible:1,Team:"red",ShowArms:1,Pose:{LeftArm:[22.5f,0.0f,0.0f],RightArm:[-22.5f,0.0f,0.0f]},Tags:["r.shadow","zed.shadow.model","unvalid"],equipment:{mainhand:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[300131f]}}},offhand:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[300131f]}}},head:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[300002f]}}}}}
+
+    execute if entity @s[tag=blinked] run tag @e[tag=zed.shadow.model,limit=1,sort=nearest,tag=!blinked] add blinked
+
+    execute if entity @s[tag=blue,tag=w.shadow] run summon minecraft:armor_stand ~ ~ ~ {Marker:1,Invisible:1,Team:"blue",ShowArms:1,Pose:{LeftArm:[22.5f,0.0f,0.0f],RightArm:[-22.5f,0.0f,0.0f]},Tags:["w.shadow","zed.shadow.model","unvalid"],equipment:{mainhand:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[300131f]}}},offhand:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[300131f]}}},head:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[300002f]}}}}}
+    execute if entity @s[tag=blue,tag=r.shadow] run summon minecraft:armor_stand ~ ~ ~ {Marker:1,Invisible:1,Team:"blue",ShowArms:1,Pose:{LeftArm:[22.5f,0.0f,0.0f],RightArm:[-22.5f,0.0f,0.0f]},Tags:["r.shadow","zed.shadow.model","unvalid"],equipment:{mainhand:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[300131f]}}},offhand:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[300131f]}}},head:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[300002f]}}}}}
+
+    particle dust{color:[0.5,0,0],scale:1} ~ ~1 ~ 0.2 0.5 0.2 0 200 force
+}
+
+function w.spawncheck {
+    execute if block ~ ~ ~ #like_air run tp @s ~ ~ ~
+    execute if block ~ ~ ~ #like_air run function lc:champions/zed/skills/shadow.spawn
+
+    execute unless block ~ ~ ~ #like_air positioned ~ ~1 ~ run function lc:champions/zed/skills/w.spawncheck
+}

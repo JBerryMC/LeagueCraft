@@ -1,0 +1,200 @@
+# lc:champion/spell/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function barrier {
+    scoreboard players set @s[tag=!use_spell_2] cd_spell.1 180
+    scoreboard players set @s[tag=use_spell_2] cd_spell.2 180
+    tag @s remove use_spell_2
+    playsound spell.barrier master @a ~ ~ ~
+
+    tag @s add update.shield.barrier
+
+    summon area_effect_cloud ~ ~ ~ {Duration:999999,Tags:["shield.all","new"],Passengers:[{id:"area_effect_cloud",Tags:["cd"],Duration:40,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    data modify entity @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] Owner set from entity @s UUID
+    scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all = @s hp.max
+    scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all /= 6 integer
+    scoreboard players operation @s shield.all += @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all
+    tag @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] remove new
+}
+
+function check {
+    advancement revoke @s only lc:champion/spell
+
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 1 run function lc:champion/spell/flash
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 2 run function lc:champion/spell/barrier
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 3 run function lc:champion/spell/cleanse
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 4 run function lc:champion/spell/exhaust_check
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 5 run function lc:champion/spell/smite_check
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 6 run function lc:champion/spell/ghost
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 7 run function lc:champion/spell/ignite_check
+    execute if score @s cd_spell.1 matches 0 if score @s spell.1 matches 8 run function lc:champion/spell/heal
+}
+
+function check_2 {
+    tag @s add use_spell_2
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 1 run function lc:champion/spell/flash
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 2 run function lc:champion/spell/barrier
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 3 run function lc:champion/spell/cleanse
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 4 run function lc:champion/spell/exhaust_check
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 5 run function lc:champion/spell/smite_check
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 6 run function lc:champion/spell/ghost
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 7 run function lc:champion/spell/ignite_check
+    execute if score @s cd_spell.2 matches 0 if score @s spell.2 matches 8 run function lc:champion/spell/heal
+    tag @s remove use_spell_2
+}
+
+function cleanse {
+    scoreboard players set @s[tag=!use_spell_2] cd_spell.1 210
+    scoreboard players set @s[tag=use_spell_2] cd_spell.2 210
+    tag @s remove use_spell_2
+    playsound spell.cleanse master @a ~ ~ ~
+    particle end_rod ~ ~1 ~ 0 0 0 0.1 20 force
+    particle dust{color:[0.365,0.933,0.984],scale:2} ~ ~1 ~ 0.5 0.5 0.5 1 100 force
+
+    function lc:core/effect/cleanse
+    scoreboard players add @s fx.cc_immune 10
+}
+
+function exhaust {
+    scoreboard players set @s[tag=!use_spell_2] cd_spell.1 210
+    scoreboard players set @s[tag=use_spell_2] cd_spell.2 210
+    playsound spell.exhaust master @a ~ ~ ~
+
+    execute if entity @s[team=red] run scoreboard players set @e[team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest] cc.exhaust 60
+    execute if entity @s[team=blue] run scoreboard players set @e[team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest] cc.exhaust 60
+}
+
+function exhaust_check {
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=!temp_target] add temp_target
+
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 if entity @e[dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target] at @s run function lc:champion/spell/exhaust
+
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest] remove temp_target
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=!temp_target] add temp_target
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 if entity @e[dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target] at @s run function lc:champion/spell/exhaust
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest] remove temp_target
+
+    execute if entity @s[distance=..10] if score @s[tag=!use_spell_2] cd_spell.1 matches 0 positioned ^ ^ ^0.1 run function lc:champion/spell/exhaust_check
+    execute if entity @s[distance=..10] if score @s[tag=use_spell_2] cd_spell.2 matches 0 positioned ^ ^ ^0.1 run function lc:champion/spell/exhaust_check
+}
+
+function flash {
+    scoreboard players set @s[tag=!use_spell_2] cd_spell.1 300
+    scoreboard players set @s[tag=use_spell_2] cd_spell.2 300
+    tag @s remove use_spell_2
+    playsound spell.flash master @a ~ ~ ~
+    particle dust{color:[1,1,0],scale:4.0} ~ ~ ~ 0.5 0.5 0.5 1 20 force
+    particle firework ~ ~ ~ 0 0 0 0.2 10 force
+
+    execute anchored eyes positioned ^ ^ ^8 run summon area_effect_cloud ~ ~ ~ {Duration:2,Tags:["flash"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute anchored eyes positioned ^ ^ ^8 run data modify entity @e[tag=flash,type=area_effect_cloud,limit=1,sort=nearest] Owner set from entity @s UUID
+    execute anchored eyes positioned ^ ^ ^8 as @e[tag=flash,type=area_effect_cloud,limit=1,sort=nearest] at @s run function lc:core/spell/flash
+}
+
+function ghost {
+    scoreboard players set @s[tag=!use_spell_2] cd_spell.1 240
+    scoreboard players set @s[tag=use_spell_2] cd_spell.2 240
+    tag @s remove use_spell_2
+    playsound spell.ghost master @a ~ ~ ~
+
+    scoreboard players set @s fx.ghost 200
+}
+
+function heal {
+    scoreboard players set @s[tag=!use_spell_2] cd_spell.1 240
+    scoreboard players set @s[tag=use_spell_2] cd_spell.2 240
+    tag @s remove use_spell_2
+    playsound spell.heal master @a ~ ~ ~
+
+    scoreboard players add @s healing 318
+    tag @s add is_heal_target
+    execute if entity @s[team=red] positioned ~-3 ~-3 ~-3 run tag @e[dx=5,dz=5,dy=5,tag=champion,team=red,tag=!unvalid,type=!#unvalid,limit=1,sort=nearest] add is_heal_target
+    execute if entity @s[team=red] as @e[tag=champion,team=red,tag=!unvalid,type=!#unvalid,tag=is_heal_target] run effect give @s speed 1 1 false
+    execute if entity @s[team=red] as @e[tag=champion,team=red,tag=!unvalid,type=!#unvalid,tag=is_heal_target] at @s anchored eyes run particle heart ^ ^-0.5 ^ 0.25 0.25 0.25 1 20 force
+    execute if entity @s[team=red] as @e[tag=champion,team=red,tag=!unvalid,type=!#unvalid,tag=is_heal_target] at @s anchored eyes run particle happy_villager ^ ^-0.5 ^ 0.25 0.25 0.25 1 20 force
+    execute if entity @s[team=red] as @e[tag=champion,team=red,tag=!unvalid,type=!#unvalid,tag=is_heal_target] at @s anchored eyes run particle sneeze ^ ^-0.5 ^ 0.25 0.25 0.25 0.1 100 force
+
+    execute if entity @s[team=blue] positioned ~-3 ~-3 ~-3 run tag @e[dx=5,dz=5,dy=5,tag=champion,team=blue,tag=!unvalid,type=!#unvalid,limit=1,sort=nearest] add is_heal_target
+    execute if entity @s[team=blue] as @e[tag=champion,team=blue,tag=!unvalid,type=!#unvalid,tag=is_heal_target] run effect give @s speed 1 1 false
+    execute if entity @s[team=blue] as @e[tag=champion,team=blue,tag=!unvalid,type=!#unvalid,tag=is_heal_target] at @s anchored eyes run particle heart ^ ^-0.5 ^ 0.25 0.25 0.25 1 20 force
+    execute if entity @s[team=blue] as @e[tag=champion,team=blue,tag=!unvalid,type=!#unvalid,tag=is_heal_target] at @s anchored eyes run particle happy_villager ^ ^-0.5 ^ 0.25 0.25 0.25 1 20 force
+    execute if entity @s[team=blue] as @e[tag=champion,team=blue,tag=!unvalid,type=!#unvalid,tag=is_heal_target] at @s anchored eyes run particle sneeze ^ ^-0.5 ^ 0.25 0.25 0.25 0.1 100 force
+}
+
+function ignite {
+    scoreboard players set @s[tag=!use_spell_2] cd_spell.1 180
+    scoreboard players set @s[tag=use_spell_2] cd_spell.2 180
+
+    playsound spell.ignite master @a ~ ~ ~
+
+    execute if entity @s[team=red] run summon item_display ~ ~ ~ {Tags:["dot.ignite","dot","red","temp","lol.auto_clear","do_not_clear"],Passengers:[{id:"area_effect_cloud",Duration:1,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run summon item_display ~ ~ ~ {Tags:["dot.ignite","dot","blue","temp","lol.auto_clear","do_not_clear"],Passengers:[{id:"area_effect_cloud",Duration:1,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute at @s run summon area_effect_cloud ~ ~ ~ {Duration:1,Tags:["temp_entity"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    data modify entity @e[tag=temp_entity,limit=1,sort=nearest,type=area_effect_cloud] Owner set from entity @s UUID
+
+    execute if entity @s[team=red] as @e[tag=dot.ignite,tag=temp,tag=red,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=initial] Owner set from entity @e[type=area_effect_cloud,tag=temp_entity,limit=1,sort=nearest] Owner
+    execute if entity @s[team=blue] as @e[tag=dot.ignite,tag=temp,tag=blue,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=initial] Owner set from entity @e[type=area_effect_cloud,tag=temp_entity,limit=1,sort=nearest] Owner
+
+    execute if entity @s[team=red] as @e[tag=dot.ignite,tag=temp,tag=red,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=target] Owner set from entity @e[team=!red,tag=temp_target,limit=1,sort=nearest] UUID
+    execute if entity @s[team=red] run tag @e[tag=dot.ignite,tag=temp,tag=red,limit=1,sort=nearest] remove temp
+
+    execute if entity @s[team=blue] as @e[tag=dot.ignite,tag=temp,tag=blue,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=target] Owner set from entity @e[team=!blue,tag=temp_target,limit=1,sort=nearest] UUID
+    execute if entity @s[team=blue] run tag @e[tag=dot.ignite,tag=temp,tag=blue,limit=1,sort=nearest] remove temp
+
+    execute if entity @s[team=red] run scoreboard players set @e[team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest] cc.ignite 80
+    execute if entity @s[team=blue] run scoreboard players set @e[team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest] cc.ignite 80
+}
+
+function ignite_check {
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=!temp_target] add temp_target
+
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 if entity @e[dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target] at @s run function lc:champion/spell/ignite
+
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest] remove temp_target
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=!temp_target] add temp_target
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 if entity @e[dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target] at @s run function lc:champion/spell/ignite
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest] remove temp_target
+
+    execute if entity @s[distance=..10] if score @s[tag=!use_spell_2] cd_spell.1 matches 0 positioned ^ ^ ^0.1 run function lc:champion/spell/ignite_check
+    execute if entity @s[distance=..10] if score @s[tag=use_spell_2] cd_spell.2 matches 0 positioned ^ ^ ^0.1 run function lc:champion/spell/ignite_check
+}
+
+function smite {
+    scoreboard players set @s[tag=!use_spell_2] cd_spell.1 90
+    scoreboard players set @s[tag=use_spell_2] cd_spell.2 90
+    tag @s remove use_spell_2
+    playsound spell.smite master @a ~ ~ ~
+
+    execute if entity @s[team=red] run damage @e[team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest,tag=!champion] 4 lc:core/dmg_true by @s
+    execute if entity @s[team=red] run scoreboard players set @e[team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest,tag=!champion] dmg_true.raw 600
+    execute if entity @s[team=red] run scoreboard players add @e[team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest,tag=!champion] cc.stun 15
+
+    execute if entity @s[team=blue] run damage @e[team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest,tag=!champion] 4 lc:core/dmg_true by @s
+    execute if entity @s[team=blue] run scoreboard players set @e[team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest,tag=!champion] dmg_true.raw 600
+    execute if entity @s[team=blue] run scoreboard players add @e[team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest,tag=!champion] cc.stun 15
+}
+
+function smite_check {
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=!temp_target,tag=!champion] add temp_target
+
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 if entity @e[dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target,tag=!champion] at @s run function lc:champion/spell/smite
+
+    execute if entity @s[team=red] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!red,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest,tag=!champion] remove temp_target
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=!temp_target,tag=!champion] add temp_target
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 if entity @e[dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target,tag=!champion] at @s run function lc:champion/spell/smite
+
+    execute if entity @s[team=blue] positioned ~-1 ~-1 ~-1 run tag @e[dx=1,dz=1,dy=1,team=!blue,type=!#unvalid,tag=!unvalid,tag=temp_target,limit=1,sort=nearest,tag=!champion] remove temp_target
+
+    execute unless entity @s[distance=..8] run tag @s[tag=use_spell_2] remove use_spell_2
+
+    execute if entity @s[distance=..8] if score @s[tag=!use_spell_2] cd_spell.1 matches 0 positioned ^ ^ ^0.1 run function lc:champion/spell/smite_check
+    execute if entity @s[distance=..8] if score @s[tag=use_spell_2] cd_spell.2 matches 0 positioned ^ ^ ^0.1 run function lc:champion/spell/smite_check
+}
