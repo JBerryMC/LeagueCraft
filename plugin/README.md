@@ -4,7 +4,7 @@ This plugin is a server-side helper for the LeagueCraft datapack. The datapack s
 
 ## Install
 
-1. Put `LeagueCraft-0.6.0.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version; delete the old `plugins/LeagueCraft/config.yml` so the new one is written.
+1. Put `LeagueCraft-0.6.1.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version. An existing `plugins/LeagueCraft/config.yml` is kept; settings older versions used (the right click/Shift keys and their M2/SH labels) are updated automatically, and the server log says what changed. New settings use their defaults until you add them, or delete the file to get a fresh one with every option.
 2. Use the LeagueCraft 26.3 datapack and resource pack from the same commit. The HUD has the summoner-spell label and the crosshair slot the plugin writes to, and the resource pack carries the ShoulderCam shaders. The datapack now needs the plugin: champions' basic attack and summoner spell 1 come from it.
 3. Start the server. Run `/lc` to check that it shows **Datapack detected: yes**.
 
@@ -109,7 +109,7 @@ basic-attack:
 debug: false
 ```
 
-Hotbar keys 7, 8 and 9 are reserved: the hand rests on 8 and the scroll wheel reaches 7 and 9. The plugin warns if the config maps them, or still has the `right-click`/`sneak` keys from 0.4.0. To test champions outside a match, set `require-match: false`.
+Hotbar keys 7, 8 and 9 are reserved: the hand rests on 8 and the scroll wheel reaches 7 and 9. The plugin warns if the config maps them. To test champions outside a match, set `require-match: false`.
 
 ## Commands
 
@@ -138,7 +138,7 @@ Controls (0.3.x) were tested on Paper 26.3 build 214 with the LeagueCraft 26.3 d
 ## Building from source
 
 ```
-mvn package          # needs JDK 25; runs the tests; output: target/LeagueCraft-0.6.0.jar
+mvn package          # needs JDK 25; runs the tests; output: target/LeagueCraft-0.6.1.jar
 ```
 
 ## Where this goes next
