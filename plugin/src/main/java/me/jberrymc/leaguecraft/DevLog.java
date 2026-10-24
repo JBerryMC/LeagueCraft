@@ -71,6 +71,13 @@ final class DevLog {
                 from, to, detail);
     }
 
+    /** Zoom started (with the camera distance and where it came from) or ended. */
+    void zoom(Player player, boolean in, double distance, String why) {
+        if (!on(player)) return;
+        send(player, "<dark_gray>[dev]</dark_gray> <aqua><input></aqua> <gray>→ camera <action> <dark_gray>(<reason>)",
+                in ? "zoom in" : "zoom out", String.format(Locale.ROOT, "%.1f", distance), why);
+    }
+
     private static String format(Vec3 v) {
         return String.format(Locale.ROOT, "%.2f %.2f %.2f", v.x(), v.y(), v.z());
     }

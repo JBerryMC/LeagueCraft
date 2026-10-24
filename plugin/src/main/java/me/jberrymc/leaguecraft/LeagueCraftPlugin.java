@@ -26,7 +26,7 @@ public final class LeagueCraftPlugin extends JavaPlugin {
 
     static final String KEY_SETUP_TIP =
             "<gold><bold>LeagueCraft controls</bold></gold>\n"
-            + "<gray>Press <white>F5</white> for the over-the-shoulder view. Aim with the crosshair.\n"
+            + "<gray>Press <white>F5</white> for the over-the-shoulder view. Aim with the crosshair; hold <white>right click</white> to zoom.\n"
             + "<gray>Left click <white>attack</white> · <white>1 2 3 4</white> abilities Q W E R · "
             + "Q <white>summoner 1</white> · F <white>summoner 2</white>\n"
             + "<gray>Abilities follow your <white>Hotbar Slot 1-4</white> binds, so you can move them to other keys in "
@@ -37,6 +37,7 @@ public final class LeagueCraftPlugin extends JavaPlugin {
     private Datapack datapack;
     private WeaponDisplay weapon;
     private ThirdPerson thirdPerson;
+    private MovementLock movementLock;
     private RigTest rigTest;
     private final DevLog dev = new DevLog();
     private AbilityInputListener input;
@@ -51,7 +52,8 @@ public final class LeagueCraftPlugin extends JavaPlugin {
         combat = CombatSettings.from(getConfig(), getLogger());
         datapack = new Datapack(getLogger(), () -> settings.debug());
         weapon = new WeaponDisplay(this);
-        thirdPerson = new ThirdPerson(datapack, getLogger());
+        thirdPerson = new ThirdPerson(datapack, dev, () -> combat, getLogger());
+        movementLock = new MovementLock(() -> combat, getLogger());
         tipShown = new NamespacedKey(this, "key_tip_shown");
 
         input = new AbilityInputListener(datapack, weapon, dev, () -> settings, getLogger());
@@ -59,6 +61,8 @@ public final class LeagueCraftPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(
                 new BasicAttackListener(input, dev, () -> settings, () -> combat), this);
         getServer().getPluginManager().registerEvents(thirdPerson, this);
+        getServer().getPluginManager().registerEvents(movementLock, this);
+        Bukkit.getScheduler().runTaskTimer(this, thirdPerson::tick, 1, 1);
         try {
             rigTest = new RigTest(Rig.load(this, "aatrox"), dev);
             getServer().getPluginManager().registerEvents(rigTest, this);
@@ -87,6 +91,7 @@ public final class LeagueCraftPlugin extends JavaPlugin {
         for (Player player : Bukkit.getOnlinePlayers()) {
             weapon.remove(player);
             thirdPerson.remove(player);
+            movementLock.remove(player);
         }
         if (rigTest != null) rigTest.removeAll();
     }
@@ -161,10 +166,12 @@ public final class LeagueCraftPlugin extends JavaPlugin {
             if (!input.canCast(player, config)) {
                 weapon.remove(player);
                 thirdPerson.remove(player);
+                movementLock.remove(player);
                 continue;
             }
             weapon.apply(player);
             thirdPerson.apply(player, combatConfig, labels);
+            movementLock.apply(player, combatConfig);
             if (labels) datapack.writeLabels(player, config.hudLabels());
             if (config.firstTimeTip() && !player.getPersistentDataContainer().has(tipShown)) {
                 player.getPersistentDataContainer().set(tipShown, PersistentDataType.BYTE, (byte) 1);

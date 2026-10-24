@@ -8,7 +8,8 @@
 #   left click = basic attack (a hitscan from the crosshair, see basic-attack below)
 #   hotbar keys 1-4 = Q/W/E/R (players can rebind Hotbar Slot 1-4 to any keys)
 #   Q (drop) = summoner 1    F (swap hands) = summoner 2
-#   right click and shift do nothing special (shift still crouches)
+#   right click (hold) = zoom, see zoom below
+#   sprint and shift don't sprint or crouch (see movement below), so they're free for abilities
 #
 # While you play a champion your hand rests on hotbar key 8, holding a copy of your weapon.
 # Scrolling can only reach keys 7 and 9, so keys 7, 8 and 9 can't be mapped.
@@ -65,6 +66,27 @@ third-person:
   height: 0.25
   # Draw the crosshair at the end of the champion HUD (vanilla hides it in F5).
   crosshair: true
+
+# Hold right click to zoom: the camera moves in to this distance (blocks), then back out to
+# third-person.camera-distance about 0.3 s after you let go. A server can't change the field of
+# view, so zooming pulls the camera in instead. Champions the datapack tags "melee" use melee,
+# everyone else ranged; zoom.champions sets it for one champion by name (its datapack tag).
+zoom:
+  enabled: true
+  melee: 2.2
+  ranged: 1.2
+  champions: {}
+  # champions:
+  #   jhin: 0.8
+  #   garen: 2.6
+
+# Champions can't sprint or crouch, so Sprint and Shift are free for abilities.
+# Sprinting is stopped by keeping hunger at 6 (Minecraft needs more to sprint; the resource pack
+# hides the hunger bar). Crouching doesn't slow you, other players never see it and your hitbox
+# stays full height, but your own view still crouches while Shift is held.
+movement:
+  disable-sprint: true
+  disable-sneak: true
 
 # Left click fires instantly along the crosshair, at most once per click. Until the Animated Java
 # attack animations exist, the result ("Shot hit Zombie (enemy) 12.3m") is shown in chat and

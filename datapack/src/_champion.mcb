@@ -308,7 +308,7 @@ function respawn {
     tag @s remove has_display_bar
 
     effect give @s speed 20 4
-    effect give @s saturation infinite 0 true
+    # No saturation: the plugin keeps champions' hunger at 6 so they can't sprint.
     effect give @s resistance infinite 127 true
 
     execute if entity @s[tag=!has_display_bar] run summon block_display ~ ~ ~ {Tags:["temp","lol.bar_display"],Passengers:[{id:"area_effect_cloud",Tags:["bar_owner"],Duration:2147483647,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["mana","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["shield_all","stats_bar"],background:0,billboard:"vertical"}]}
