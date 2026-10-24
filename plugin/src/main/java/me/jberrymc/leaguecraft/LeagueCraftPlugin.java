@@ -20,14 +20,12 @@ public final class LeagueCraftPlugin extends JavaPlugin {
     private static final int LABEL_EVERY_N_CHECKS = 2;
 
     static final String KEY_SETUP_TIP =
-            "<gold><bold>LeagueCraft controls</bold></gold> <gray>(League's WASD layout)</gray>\n"
+            "<gold><bold>LeagueCraft controls</bold></gold>\n"
             + "<gray>Press <white>F5</white> for the over-the-shoulder view. Aim with the crosshair.\n"
-            + "<gray>Left click <white>attack</white> · Right click <white>Q</white> · Shift <white>W</white> · "
-            + "<white>E</white>/<white>R</white> · Q <white>summoner 1</white> · F <white>summoner 2</white>\n"
-            + "<gray>Minecraft can't tell the server about the E and R keys, so they go through hotbar slots 3 and 4. "
-            + "Set them up once in <white>Options › Controls › Key Binds</white>:\n"
-            + "<gray> • Inventory → <white>I</white>   • Hotbar Slot 3 → <white>E</white>   • Hotbar Slot 4 → <white>R</white>\n"
-            + "<gray>Number keys 1-4 also cast Q/W/E/R. <white>/lc keys</white> shows this again.";
+            + "<gray>Left click <white>attack</white> · <white>1 2 3 4</white> abilities Q W E R · "
+            + "Q <white>summoner 1</white> · F <white>summoner 2</white>\n"
+            + "<gray>Abilities follow your <white>Hotbar Slot 1-4</white> binds, so you can move them to other keys in "
+            + "<white>Options › Controls › Key Binds</white>; the HUD shows your keys. <white>/lc keys</white> shows this again.";
 
     private volatile InputSettings settings;
     private volatile CombatSettings combat;

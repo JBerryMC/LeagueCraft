@@ -48,13 +48,6 @@ final class DevLog {
                 input, "", reason);
     }
 
-    /** The input is handled by the datapack, not the plugin (e.g. left click). */
-    void passthrough(Player player, String input, String note) {
-        if (!on(player)) return;
-        send(player, "<dark_gray>[dev]</dark_gray> <white><input></white> <aqua>→ datapack: <reason>",
-                input, "", note);
-    }
-
     /** A basic attack hitscan: where the crosshair ray started, what it aimed at, and what the shot hit. */
     void shot(Player player, String input, Hitscan.Shot shot) {
         if (!on(player)) return;

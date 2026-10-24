@@ -74,14 +74,12 @@ final class LeagueCraftCommand {
             KeyAction action = s.hotbar().get(slot);
             if (action != null) hotbar.append(" ").append(slot + 1).append("=").append(action.id());
         }
-        send(ctx, "<gray>Right click: <white>" + s.rightClick().id() + "</white>  Shift: <white>" + s.sneak().id()
-                + "</white>  Drop: <white>" + s.drop().id() + "</white>  F: <white>" + s.swapHands().id()
+        send(ctx, "<gray>Drop: <white>" + s.drop().id() + "</white>  F: <white>" + s.swapHands().id()
                 + "</white>  Hotbar:<white>" + hotbar);
         CombatSettings c = plugin.combat();
         send(ctx, line("Third person (camera distance " + c.cameraDistance() + ", crosshair " + (c.crosshair() ? "on" : "off") + ")",
                 c.thirdPerson()));
-        send(ctx, line("Hitscan basic attack (melee " + c.meleeRange() + ", ranged " + c.rangedRange() + " blocks)",
-                c.hitscan()));
+        send(ctx, "<gray>Basic attack: <white>hitscan</white> (melee " + c.meleeRange() + ", ranged " + c.rangedRange() + " blocks)");
         return Command.SINGLE_SUCCESS;
     }
 
