@@ -48,13 +48,6 @@ final class DevLog {
                 input, "", reason);
     }
 
-    /** The input is handled by the datapack, not the plugin (e.g. left click). */
-    void passthrough(Player player, String input, String note) {
-        if (!on(player)) return;
-        send(player, "<dark_gray>[dev]</dark_gray> <white><input></white> <aqua>→ datapack: <reason>",
-                input, "", note);
-    }
-
     /** A basic attack hitscan: where the crosshair ray started, what it aimed at, and what the shot hit. */
     void shot(Player player, String input, Hitscan.Shot shot) {
         if (!on(player)) return;
@@ -68,6 +61,14 @@ final class DevLog {
                 input, "hitscan " + result,
                 String.format(Locale.ROOT, "%.1fm of %.1f · aim from %s to %s", shot.distance(), shot.range(),
                         format(shot.aimOrigin()), format(shot.aimPoint())));
+    }
+
+    /** The animation a champion's model should be playing changed (see {@link MovementState}). */
+    void animation(Player player, String from, String to, String detail) {
+        if (!on(player)) return;
+        send(player, "<dark_gray>[dev]</dark_gray> <light_purple>animation</light_purple> <gray><input> → "
+                        + "</gray><gold><action></gold> <dark_gray>(<reason>)",
+                from, to, detail);
     }
 
     private static String format(Vec3 v) {

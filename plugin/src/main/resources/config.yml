@@ -4,18 +4,17 @@
 # pressed, then runs the datapack's own function as you, so cooldowns, mana, crowd control and the
 # HUD keep working exactly as the datapack defines them.
 #
-# Default layout is League of Legends' WASD mode:
+# Default layout:
 #   left click = basic attack (a hitscan from the crosshair, see basic-attack below)
-#   right click = Q    shift = W    E / R = hotbar slots 3 / 4 (players rebind those keys)
-#   Q (drop) = summoner 1    F (swap hands) = summoner 2    number keys 1-4 = Q/W/E/R as well
+#   hotbar keys 1-4 = Q/W/E/R (players can rebind Hotbar Slot 1-4 to any keys)
+#   Q (drop) = summoner 1    F (swap hands) = summoner 2
+#   right click and shift do nothing special (shift still crouches)
 #
 # While you play a champion your hand rests on hotbar key 8, holding a copy of your weapon.
 # Scrolling can only reach keys 7 and 9, so keys 7, 8 and 9 can't be mapped.
 
 # Minecraft action -> what it does. Actions: q, w, e, r, summoner-1, summoner-2, none
 keys:
-  right-click: q
-  sneak: w
   drop: summoner-1
   swap-hands: summoner-2
   hotbar-1: q
@@ -26,12 +25,12 @@ keys:
   hotbar-6: none
 
 # Key labels under the HUD icons. "key.<control>" shows whatever key the player bound to that
-# Minecraft control (key.hotbar.3 shows "E" once they've rebound it). Anything else is shown as
+# Minecraft control (key.hotbar.1 shows "1", or whatever they rebound Hotbar Slot 1 to). Anything else is shown as
 # written; there's room for 1-2 characters. summoner-1 is the label under summoner spell 1.
 # Leave a label empty ("") to keep the datapack's own label.
 hud-labels:
-  q: "M2"
-  w: "SH"
+  q: "key.hotbar.1"
+  w: "key.hotbar.2"
   e: "key.hotbar.3"
   r: "key.hotbar.4"
   summoner-1: "key.drop"
@@ -69,9 +68,8 @@ third-person:
 
 # Left click fires instantly along the crosshair, at most once per click. Until the Animated Java
 # attack animations exist, the result ("Shot hit Zombie (enemy) 12.3m") is shown in chat and
-# nothing is damaged. Set hitscan to false to go back to the datapack's own basic attack.
+# nothing is damaged.
 basic-attack:
-  hitscan: true
   # Range in blocks from the player's eye. Champions the datapack tags "melee" punch; the rest shoot.
   melee-range: 3.5
   ranged-range: 48.0

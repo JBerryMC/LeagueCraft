@@ -15,8 +15,6 @@ import java.util.logging.Logger;
 record InputSettings(
         boolean requireMatch,
         Set<Material> abilityItems,
-        KeyAction rightClick,
-        KeyAction sneak,
         KeyAction drop,
         KeyAction swapHands,
         Map<Integer, KeyAction> hotbar,
@@ -72,6 +70,13 @@ record InputSettings(
             }
         }
 
+        for (String removed : new String[] {"keys.right-click", "keys.sneak"}) {
+            if (config.isSet(removed)) {
+                log.warning(removed + " is no longer supported (abilities are on hotbar keys 1-4); "
+                        + "remove it, and set hud-labels q/w to key.hotbar.1/key.hotbar.2");
+            }
+        }
+
         // HUD storage slot -> label. q/w/e/r sit under the ability icons, d under summoner spell 1.
         Map<String, String> labels = new LinkedHashMap<>();
         ConfigurationSection labelSection = config.getConfigurationSection("hud-labels");
@@ -91,8 +96,6 @@ record InputSettings(
         return new InputSettings(
                 config.getBoolean("require-match", true),
                 items,
-                action(config, "keys.right-click", KeyAction.Q, log),
-                action(config, "keys.sneak", KeyAction.W, log),
                 action(config, "keys.drop", KeyAction.SUMMONER_1, log),
                 action(config, "keys.swap-hands", KeyAction.SUMMONER_2, log),
                 Map.copyOf(hotbar),

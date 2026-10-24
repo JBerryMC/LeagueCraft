@@ -32,12 +32,11 @@ import java.util.function.Supplier;
  * <ul>
  *   <li>air: {@link PlayerInteractEvent} LEFT_CLICK_AIR (from the arm swing)</li>
  *   <li>a block: LEFT_CLICK_BLOCK</li>
- *   <li>an entity in vanilla reach: {@link PrePlayerAttackEntityEvent}. It's cancelled, so neither
- *       vanilla melee damage nor the datapack's "attack" interaction (its old basic attack) fires.</li>
+ *   <li>an entity in vanilla reach: {@link PrePlayerAttackEntityEvent}. It's cancelled, so vanilla
+ *       melee damage never applies.</li>
  * </ul>
  *
  * <p>For now a hit is reported in chat; the Animated Java attack animations and damage come later.
- * With {@code basic-attack.hitscan: false} left click goes back to the datapack's basic attack.
  */
 final class BasicAttackListener implements Listener {
     private static final MiniMessage MM = MiniMessage.miniMessage();
@@ -80,7 +79,7 @@ final class BasicAttackListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onAttack(PrePlayerAttackEntityEvent event) {
         Player player = event.getPlayer();
-        String input = "left click (" + AbilityInputListener.describe(event.getAttacked()) + ")";
+        String input = "left click (" + event.getAttacked().getType().getKey().getKey() + ")";
         if (!ready(player, input)) return;
         event.setCancelled(true);
         fire(player, input);
@@ -98,14 +97,8 @@ final class BasicAttackListener implements Listener {
         lastDrop.remove(event.getPlayer().getUniqueId());
     }
 
-    /** True if left click is the hitscan attack for this player right now; otherwise says why in dev mode. */
+    /** True if this player can attack right now; otherwise says why in dev mode. */
     private boolean ready(Player player, String input) {
-        if (!settings.get().hitscan()) {
-            if (this.input.canCast(player, inputSettings.get())) {
-                dev.passthrough(player, input, "basic-attack.hitscan is off, the datapack's basic attack handles it");
-            }
-            return false;
-        }
         return this.input.ready(player, input, inputSettings.get());
     }
 

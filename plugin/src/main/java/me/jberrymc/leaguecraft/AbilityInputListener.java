@@ -2,33 +2,25 @@ package me.jberrymc.leaguecraft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 /**
- * Turns Minecraft actions into LeagueCraft casts (League's WASD layout by default).
+ * Turns Minecraft actions into LeagueCraft casts: hotbar keys 1-4 for Q/W/E/R, drop and F for summoner spells.
  *
  * <p>Every input only picks *what* to cast; the cast itself is the datapack's own function run as
  * the player, so cooldowns, mana, crowd control and the HUD behave exactly as the datapack defines.
@@ -73,42 +65,6 @@ final class AbilityInputListener implements Listener {
             return;
         }
         perform(player, action, input, config);
-    }
-
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onRightClick(PlayerInteractEvent event) {
-        // Right-clicking air arrives already cancelled (nothing to use), so no ignoreCancelled here.
-        if (event.getHand() != EquipmentSlot.HAND) return;
-        Player player = event.getPlayer();
-        Action click = event.getAction();
-        if (click != Action.RIGHT_CLICK_AIR && click != Action.RIGHT_CLICK_BLOCK) return;
-        InputSettings config = settings.get();
-        String input = "right click (" + (click == Action.RIGHT_CLICK_AIR ? "air" : "block") + ")";
-        if (!ready(player, input, config)) return;
-        event.setCancelled(true);
-        perform(player, config.rightClick(), input, config);
-    }
-
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onRightClickEntity(PlayerInteractEntityEvent event) {
-        if (event.getHand() != EquipmentSlot.HAND) return;
-        Player player = event.getPlayer();
-        InputSettings config = settings.get();
-        String input = "right click (" + describe(event.getRightClicked()) + ")";
-        if (!ready(player, input, config)) return;
-        // The datapack keeps an invisible "attack" interaction in front of each champion and casts
-        // summoner 1 when it's right-clicked. Right click is mapped by the plugin instead.
-        if (isAttackTarget(event.getRightClicked())) event.setCancelled(true);
-        perform(player, config.rightClick(), input, config);
-    }
-
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onSneak(PlayerToggleSneakEvent event) {
-        if (!event.isSneaking()) return;
-        Player player = event.getPlayer();
-        InputSettings config = settings.get();
-        if (!ready(player, "shift", config)) return;
-        perform(player, config.sneak(), "shift", config);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -201,14 +157,5 @@ final class AbilityInputListener implements Listener {
         if (config.debug()) {
             log.info(player.getName() + " " + input + " -> " + action.id() + " (" + function + ")" + (ok ? "" : " FAILED"));
         }
-    }
-
-    private static boolean isAttackTarget(Entity entity) {
-        return entity.getType() == EntityType.INTERACTION && entity.getScoreboardTags().contains("attack");
-    }
-
-    static String describe(Entity entity) {
-        if (isAttackTarget(entity)) return "attack target";
-        return entity.getType().getKey().getKey().toLowerCase(Locale.ROOT);
     }
 }

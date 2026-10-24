@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+
 /**
  * LeagueCraft's server-side helper. The datapack stays the source of truth for champion logic;
  * the plugin takes over the parts a datapack can only fake: input, the third-person view and the
@@ -20,20 +22,19 @@ public final class LeagueCraftPlugin extends JavaPlugin {
     private static final int LABEL_EVERY_N_CHECKS = 2;
 
     static final String KEY_SETUP_TIP =
-            "<gold><bold>LeagueCraft controls</bold></gold> <gray>(League's WASD layout)</gray>\n"
+            "<gold><bold>LeagueCraft controls</bold></gold>\n"
             + "<gray>Press <white>F5</white> for the over-the-shoulder view. Aim with the crosshair.\n"
-            + "<gray>Left click <white>attack</white> · Right click <white>Q</white> · Shift <white>W</white> · "
-            + "<white>E</white>/<white>R</white> · Q <white>summoner 1</white> · F <white>summoner 2</white>\n"
-            + "<gray>Minecraft can't tell the server about the E and R keys, so they go through hotbar slots 3 and 4. "
-            + "Set them up once in <white>Options › Controls › Key Binds</white>:\n"
-            + "<gray> • Inventory → <white>I</white>   • Hotbar Slot 3 → <white>E</white>   • Hotbar Slot 4 → <white>R</white>\n"
-            + "<gray>Number keys 1-4 also cast Q/W/E/R. <white>/lc keys</white> shows this again.";
+            + "<gray>Left click <white>attack</white> · <white>1 2 3 4</white> abilities Q W E R · "
+            + "Q <white>summoner 1</white> · F <white>summoner 2</white>\n"
+            + "<gray>Abilities follow your <white>Hotbar Slot 1-4</white> binds, so you can move them to other keys in "
+            + "<white>Options › Controls › Key Binds</white>; the HUD shows your keys. <white>/lc keys</white> shows this again.";
 
     private volatile InputSettings settings;
     private volatile CombatSettings combat;
     private Datapack datapack;
     private WeaponDisplay weapon;
     private ThirdPerson thirdPerson;
+    private RigTest rigTest;
     private final DevLog dev = new DevLog();
     private AbilityInputListener input;
     private NamespacedKey tipShown;
@@ -54,6 +55,13 @@ public final class LeagueCraftPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(
                 new BasicAttackListener(input, dev, () -> settings, () -> combat), this);
         getServer().getPluginManager().registerEvents(thirdPerson, this);
+        try {
+            rigTest = new RigTest(Rig.load(this, "aatrox"), dev);
+            getServer().getPluginManager().registerEvents(rigTest, this);
+            Bukkit.getScheduler().runTaskTimer(this, rigTest::tick, 1, 1);
+        } catch (IOException | RuntimeException e) {
+            getLogger().warning("Couldn't load the aatrox rig for /lc rigtest: " + e.getMessage());
+        }
 
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
                 event -> LeagueCraftCommand.register(event.registrar(), this));
@@ -76,6 +84,7 @@ public final class LeagueCraftPlugin extends JavaPlugin {
             weapon.remove(player);
             thirdPerson.remove(player);
         }
+        if (rigTest != null) rigTest.removeAll();
     }
 
     InputSettings settings() {
@@ -84,6 +93,11 @@ public final class LeagueCraftPlugin extends JavaPlugin {
 
     CombatSettings combat() {
         return combat;
+    }
+
+    /** Null if the test rig failed to load. */
+    RigTest rigTest() {
+        return rigTest;
     }
 
     Datapack datapack() {

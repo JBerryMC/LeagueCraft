@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-/** /lc (status), /lc keys, /lc dev, /lc reload, /lc debug on|off */
+/** /lc (status), /lc keys, /lc dev, /lc rigtest, /lc reload, /lc debug on|off */
 final class LeagueCraftCommand {
     private static final MiniMessage MM = MiniMessage.miniMessage();
 
@@ -38,6 +38,28 @@ final class LeagueCraftCommand {
                     player.sendMessage(MM.deserialize(on
                             ? "<green>Dev mode on.</green> <gray>Every input you make shows up here with what it did. /lc dev again to turn off."
                             : "<gray>Dev mode off."));
+                    return Command.SINGLE_SUCCESS;
+                }));
+
+        root.then(Commands.literal("rigtest")
+                .requires(source -> source.getSender().hasPermission("leaguecraft.dev"))
+                .executes(ctx -> {
+                    if (!(ctx.getSource().getExecutor() instanceof Player player)) {
+                        send(ctx, "<red>Run this as a player (or: execute as <player> run lc rigtest).");
+                        return 0;
+                    }
+                    RigTest rigs = plugin.rigTest();
+                    if (rigs == null) {
+                        send(ctx, "<red>No rig loaded; see the server log.");
+                        return 0;
+                    }
+                    boolean on = rigs.toggle(player);
+                    player.sendMessage(MM.deserialize(on
+                            ? "<green>Mounted the " + rigs.rigName() + " rig on you.</green> <gray>Press F5 to see it. "
+                                    + (plugin.dev().on(player) ? "Animation changes show here."
+                                    : "Turn on <white>/lc dev</white> to see animation changes.")
+                                    + " /lc rigtest again to take it off."
+                            : "<gray>Rig taken off."));
                     return Command.SINGLE_SUCCESS;
                 }));
 
@@ -74,14 +96,12 @@ final class LeagueCraftCommand {
             KeyAction action = s.hotbar().get(slot);
             if (action != null) hotbar.append(" ").append(slot + 1).append("=").append(action.id());
         }
-        send(ctx, "<gray>Right click: <white>" + s.rightClick().id() + "</white>  Shift: <white>" + s.sneak().id()
-                + "</white>  Drop: <white>" + s.drop().id() + "</white>  F: <white>" + s.swapHands().id()
+        send(ctx, "<gray>Drop: <white>" + s.drop().id() + "</white>  F: <white>" + s.swapHands().id()
                 + "</white>  Hotbar:<white>" + hotbar);
         CombatSettings c = plugin.combat();
         send(ctx, line("Third person (camera distance " + c.cameraDistance() + ", crosshair " + (c.crosshair() ? "on" : "off") + ")",
                 c.thirdPerson()));
-        send(ctx, line("Hitscan basic attack (melee " + c.meleeRange() + ", ranged " + c.rangedRange() + " blocks)",
-                c.hitscan()));
+        send(ctx, "<gray>Basic attack: <white>hitscan</white> (melee " + c.meleeRange() + ", ranged " + c.rangedRange() + " blocks)");
         return Command.SINGLE_SUCCESS;
     }
 

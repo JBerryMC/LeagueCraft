@@ -14,7 +14,7 @@ The game logic is unchanged. Commands and JSON were rewritten only where 26.3 re
 
 Don't load the old 1.20.2 packs alongside these.
 
-On a Paper server you can also add the **LeagueCraft plugin**. It gives LeagueCraft League of Legends' WASD controls (right click Q, Shift W, E/R, Q and F for summoner spells). The datapack still works on its own with its original controls.
+Run it on a Paper server with the **LeagueCraft plugin** (`plugin/`). Champions' basic attack (a hitscan from the over-the-shoulder crosshair), ability keys 1–4 and summoner spell 1 (drop key) come from the plugin. The datapack's old basic attack, an invisible interaction entity re-summoned in front of every champion each tick, has been removed.
 
 ## Layout
 

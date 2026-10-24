@@ -140,19 +140,10 @@ function main {
     execute if entity @e[type=item_display,tag=spin3] as @e[type=item_display,tag=spin3] at @s unless predicate _animation:spin3 run function _animation:spin3
     execute if entity @e[type=item_display,tag=spin4] as @e[type=item_display,tag=spin4] at @s unless predicate _animation:spin4 run function _animation:spin4
 
-    ## Auto Attack
-    #execute as @a[tag=champion,tag=!dead] at @s if predicate _champion:aa run kill @e[tag=attack,sort=furthest,limit=1]
-    #execute as @a[tag=champion,tag=!dead] at @s unless predicate _champion:aa anchored eyes positioned ^ ^ ^1 run summon minecraft:interaction ~ ~ ~ {Tags:["attack"],width:0.2,height:0.2}
-
+    ## Auto Attack (champions' basic attack is the plugin's hitscan)
     #execute as @a[tag=champion] at @s anchored eyes positioned ^ ^ ^1 run particle flame ~ ~ ~ 0 0 0 0 1
 
     execute if entity @e[tag=homing,type=#unvalid] as @e[tag=homing,type=#unvalid] at @s run function _champion:aa/ranged.homing
-
-    execute as @a[tag=champion,tag=!dead] at @s anchored eyes positioned ^ ^ ^2.5 if entity @e[dx=0,tag=attack,type=interaction] positioned ~-0.9 ~-0.9 ~-0.9 run tag @e[tag=attack,dx=0,type=interaction] add checked
-    kill @e[tag=attack,tag=!checked,type=interaction]
-    execute as @a[tag=champion,tag=!dead] at @s anchored eyes positioned ^ ^ ^2.5 unless entity @e[tag=attack,dx=0,tag=checked,type=interaction] positioned ^ ^ ^-1 run summon minecraft:interaction ~ ~-1 ~ {Tags:["attack"],width:2,height:2}
-    execute as @a[tag=champion,tag=!dead] at @s anchored eyes positioned ^ ^ ^2.5 if entity @e[tag=attack,dx=0,tag=checked,type=interaction] positioned ~-0.9 ~-0.9 ~-0.9 unless entity @e[tag=attack,dx=0,tag=checked,type=interaction] positioned ~0.9 ~0.9 ~0.9 positioned ^ ^ ^-1 run summon minecraft:interaction ~ ~-1 ~ {Tags:["attack"],width:2,height:2}
-    tag @e[tag=checked,type=interaction] remove checked
 
     #execute as @e[tag=aa,tag=set] at @s run function _champion:aa/loop
 
@@ -228,7 +219,6 @@ function main_10t {
 
 function main_20t {
     schedule function _lol:main_20t 20t replace
-    #execute if entity @e[tag=champion] run kill @e[tag=attack,type=interaction]
 
     execute as @a[tag=champion,tag=!dead] unless score @s mana >= @s mana.max run scoreboard players operation @s mana += @s mana.regen
     execute as @e[tag=has_health_bar,tag=!dead,type=#has_health_bar] unless score @s hp.left >= @s hp.max run scoreboard players operation @s hp.left += @s hp.regen

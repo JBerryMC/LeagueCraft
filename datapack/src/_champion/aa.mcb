@@ -14,7 +14,6 @@ function cd {
 }
 
 function check {
-    advancement revoke @s only _champion:aa
     execute if score @s aa.cd matches 0 run scoreboard players operation @s aa.range.count = @s aa.range
 
     execute if score @s aa.cd matches 0 if entity @s[scores={channeling=..0},tag=!cced,tag=!airborne] as @s[tag=melee] anchored eyes run function _champion:aa/melee

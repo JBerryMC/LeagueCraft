@@ -11,7 +11,6 @@ record CombatSettings(
         double shoulder,
         double height,
         boolean crosshair,
-        boolean hitscan,
         double meleeRange,
         double rangedRange,
         int cooldownTicks) {
@@ -23,7 +22,6 @@ record CombatSettings(
                 config.getDouble("third-person.shoulder", 0.8),
                 config.getDouble("third-person.height", 0.25),
                 config.getBoolean("third-person.crosshair", true),
-                config.getBoolean("basic-attack.hitscan", true),
                 positive(config, "basic-attack.melee-range", 3.5, log),
                 positive(config, "basic-attack.ranged-range", 48.0, log),
                 Math.max(0, config.getInt("basic-attack.cooldown-ticks", 10)));

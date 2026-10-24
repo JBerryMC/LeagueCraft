@@ -205,7 +205,6 @@ function endgame_animation {
     stopsound @a master music.ingame
     stopsound @a master music.champion
     stopsound @a master music.queue
-    kill @e[tag=attack,type=interaction]
 
     kill @e[tag=lol.structure.entity,type=silverfish]
     function _settings:move/practice/show_stats

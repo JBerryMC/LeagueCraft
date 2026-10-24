@@ -1,11 +1,11 @@
 # LeagueCraft plugin (Paper 26.3)
 
-This plugin is a server-side helper for the LeagueCraft datapack. The datapack still owns all the champion logic. The plugin takes over the jobs a datapack can only fake: **input** (League of Legends' WASD controls), the **over-the-shoulder third-person view**, and a **hitscan basic attack** aimed with its crosshair. It's the first step towards a third-person hero fighter in the style of Marvel Rivals or Plants vs. Zombies: Garden Warfare.
+This plugin is a server-side helper for the LeagueCraft datapack. The datapack still owns all the champion logic. The plugin takes over the jobs a datapack can only fake: **input** (abilities on keys 1–4), the **over-the-shoulder third-person view**, and a **hitscan basic attack** aimed with its crosshair. It's the first step towards a third-person hero fighter in the style of Marvel Rivals or Plants vs. Zombies: Garden Warfare.
 
 ## Install
 
-1. Put `LeagueCraft-0.4.0.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version; delete the old `plugins/LeagueCraft/config.yml` so the new one is written.
-2. Use the LeagueCraft 26.3 datapack and resource pack from the same commit. The HUD has the summoner-spell label and the crosshair slot the plugin writes to, and the resource pack carries the ShoulderCam shaders.
+1. Put `LeagueCraft-0.6.0.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version; delete the old `plugins/LeagueCraft/config.yml` so the new one is written.
+2. Use the LeagueCraft 26.3 datapack and resource pack from the same commit. The HUD has the summoner-spell label and the crosshair slot the plugin writes to, and the resource pack carries the ShoulderCam shaders. The datapack now needs the plugin: champions' basic attack and summoner spell 1 come from it.
 3. Start the server. Run `/lc` to check that it shows **Datapack detected: yes**.
 
 The ShoulderCam resource pack is now merged into the LeagueCraft resource pack; don't load it separately as well.
@@ -16,20 +16,13 @@ The ShoulderCam resource pack is now merged into the LeagueCraft resource pack; 
 |---|---|
 | Move | WASD |
 | Basic attack | **Left click** (hitscan from the crosshair) |
-| Q | **Right click** (or 1) |
-| W | **Shift** (or 2) |
-| E | **E** once rebound (or 3) |
-| R | **R** once rebound (or 4) |
+| Q / W / E / R | **1 / 2 / 3 / 4** |
 | Summoner spell 1 | **Q** (drop) |
 | Summoner spell 2 | **F** (swap hands) |
 
-That's League's WASD default layout. Minecraft only sends the server *actions*, not raw keys. Opening the inventory (E) is never sent, and R has no action at all. So E and R go through the "Hotbar Slot 3/4" actions, and each player sets them up once in **Options → Controls → Key Binds**:
+Right click does nothing special and Shift just crouches.
 
-- **Inventory** → I (frees up E)
-- **Hotbar Slot 3** → E
-- **Hotbar Slot 4** → R
-
-Until they do, the number keys 1–4 cast Q/W/E/R. Players get this tip in chat the first time they play a champion, and any time with `/lc keys`. The HUD labels follow their binds: once Hotbar Slot 3 is on E, the label under E shows "E".
+Abilities follow each player's **Hotbar Slot 1–4** binds (Options → Controls → Key Binds), so players can move them to other keys, and the HUD label under each ability shows their key. Players get the controls in chat the first time they play a champion, and any time with `/lc keys`.
 
 **How it works**
 - While you play a champion, your hand rests on **hotbar key 8**, holding a copy of your weapon. The copy has your weapon's model and none of the ability data.
@@ -38,7 +31,6 @@ Until they do, the number keys 1–4 cast Q/W/E/R. Players get this tip in chat 
 - The drop key and F never move or throw items. F also works on the first press after picking a champion; the datapack alone ignores that one.
 - When the match ends or you stop being a champion, the weapon copy is removed.
 - The plugin never decides what an ability does. It runs the datapack's own functions (`_champion:abilities/use_q` … `use_r`, `_champion:spell/check`, `_champion:spell/check_2`) as that player. Cooldowns, mana, crowd control and the HUD work exactly as before.
-- Shift still crouches. In LeagueCraft that only slows you while the key is held, so tap it.
 
 ## Third person
 
@@ -63,9 +55,20 @@ Left click fires instantly along the crosshair. Champions the datapack tags `mel
 
 **Targets** follow the datapack's basic attack rules: anything except the `#minecraft:unvalid` entity types and entities tagged `unvalid`, plus structure interactions (tag `lol.structure`: turrets and Nexus). Allies (same scoreboard team) are hit too and reported as "(ally)".
 
-**Inputs.** Left click on air, on a block and on an entity all fire; one click fires once even though Minecraft can report it twice. Hitting an entity in vanilla reach is cancelled, so neither vanilla melee damage nor the datapack's old "attack" interaction basic attack fires. The arm swing the client plays when you press drop isn't counted as a click. Set `basic-attack.hitscan: false` to go back to the datapack's basic attack.
+**Inputs.** Left click on air, on a block and on an entity all fire; one click fires once even though Minecraft can report it twice. Hitting an entity in vanilla reach is cancelled, so vanilla melee damage never applies. The arm swing the client plays when you press drop isn't counted as a click.
+
+This replaced the datapack's old basic attack, which re-summoned an invisible interaction entity in front of every champion every tick and attacked when you hit it (and cast summoner 1 when you right-clicked it). That entity and its advancements are gone from the datapack.
 
 `/lc dev` shows each attack's aim start and aim point next to what it hit.
+
+## Rig test (`/lc rigtest`)
+
+A first step towards Animated Java models for champions, played by the plugin. It mounts the Aatrox ultimate rig (34 bones) on you as passengers, to check that a model riding the player follows smoothly. The vanilla `/ride` command refuses to put anything on a player, but the plugin API allows it, and each client moves passengers along with its own view of the player.
+
+- Only the rest pose shows; nothing animates yet. Your own body is hidden (armor and held items still show). Press F5 to see the model.
+- Each tick the plugin works out which animation *would* play: `idle`, `walk`, `sprint`, `sneak`, `sneak_walk`, `jump` or `fall`. With `/lc dev` on, every change shows in chat with the keys you're holding, e.g. `animation idle → walk (keys: W A)`.
+- The bones are moved down by your hitbox height (passengers sit on top of it) and turn with your yaw. If a teleport, death or world change drops them, they're put back the next tick.
+- The rig comes from `src/main/resources/rigs/aatrox.json`, extracted from the Animated Java datapack with `python3 plugin/tools/extract_aj_rig.py aatrox`.
 
 ## Config (`plugins/LeagueCraft/config.yml`)
 
@@ -73,8 +76,6 @@ Every mapping can be changed. Run `/lc reload` afterwards; no restart needed.
 
 ```yaml
 keys:                      # actions: q, w, e, r, summoner-1, summoner-2, none
-  right-click: q
-  sneak: w
   drop: summoner-1
   swap-hands: summoner-2
   hotbar-1: q
@@ -84,8 +85,8 @@ keys:                      # actions: q, w, e, r, summoner-1, summoner-2, none
   hotbar-5: none           # free for later (items, recall ...)
   hotbar-6: none
 hud-labels:                # "key.<control>" shows the player's own key; text is shown as written
-  q: "M2"
-  w: "SH"
+  q: "key.hotbar.1"
+  w: "key.hotbar.2"
   e: "key.hotbar.3"
   r: "key.hotbar.4"
   summoner-1: "key.drop"
@@ -102,28 +103,28 @@ third-person:
   height: 0.25             # must match TPS_HEIGHT
   crosshair: true
 basic-attack:
-  hitscan: true            # false: the datapack's own basic attack
   melee-range: 3.5         # champions tagged "melee"
   ranged-range: 48.0
   cooldown-ticks: 10
 debug: false
 ```
 
-Hotbar keys 7, 8 and 9 are reserved: the hand rests on 8 and the scroll wheel reaches 7 and 9. The plugin warns if the config maps them. To test champions outside a match, set `require-match: false`.
+Hotbar keys 7, 8 and 9 are reserved: the hand rests on 8 and the scroll wheel reaches 7 and 9. The plugin warns if the config maps them, or still has the `right-click`/`sneak` keys from 0.4.0. To test champions outside a match, set `require-match: false`.
 
 ## Commands
 
 | Command | Who | What |
 |---|---|---|
-| `/lc keys` | everyone | The controls and the one-time key bind setup |
+| `/lc keys` | everyone | The controls |
 | `/lc` | everyone | Status: datapack detected, match running, current key mapping |
-| `/lc dev` | `leaguecraft.dev` (op) | Toggle dev mode: every input you make is echoed to your chat with what it did (cast, ignored and why, or handled by the datapack). Per player, off after a restart. From the console: `execute as <player> run lc dev` |
+| `/lc dev` | `leaguecraft.dev` (op) | Toggle dev mode: every input you make is echoed to your chat with what it did (cast, ignored and why, or what a basic attack hit). Per player, off after a restart. From the console: `execute as <player> run lc dev` |
+| `/lc rigtest` | `leaguecraft.dev` (op) | Mount the Aatrox ultimate rig on yourself (see *Rig test*). Run again to take it off |
 | `/lc reload` | `leaguecraft.admin` (op) | Re-read config.yml |
 | `/lc debug on\|off` | `leaguecraft.admin` (op) | Log each cast to the console |
 
 ## Tested
 
-The third-person view and hitscan (0.4.0) haven't been tested in game yet. The camera math has unit tests (`ShoulderCameraTest`), and CI compiles the plugin against the Paper 26.3 API.
+The hitscan basic attack (0.4.0) was tested in game and works. 0.5.0's changes (keys 1–4 only, and the datapack without its interaction entity) are compiled and unit-tested by CI but not yet played.
 
 Controls (0.3.x) were tested on Paper 26.3 build 214 with the LeagueCraft 26.3 datapack, playing Ezreal, with real key presses and mouse clicks from a 26.3 client.
 
@@ -137,12 +138,11 @@ Controls (0.3.x) were tested on Paper 26.3 build 214 with the LeagueCraft 26.3 d
 ## Building from source
 
 ```
-mvn package          # needs JDK 25; runs the tests; output: target/LeagueCraft-0.4.0.jar
+mvn package          # needs JDK 25; runs the tests; output: target/LeagueCraft-0.6.0.jar
 ```
 
 ## Where this goes next
 
 - **Attack animations and damage.** Play an Animated Java animation per champion on left click, and deal the datapack's basic attack damage to what the hitscan hit.
-- **Drop the interaction entity.** With hitscan on, the datapack's per-tick "attack" interaction entity in front of every champion is no longer needed; removing it saves an entity per player per tick.
 - **Aim for abilities.** Point skill shots along the same crosshair ray.
 - **Minions.** Move the per-tick minion work, including the rig updates behind the lag you saw, into the plugin.
