@@ -93,13 +93,13 @@ final class DevLog {
                 from, to, detail);
     }
 
-    /** Zoom started (with the slowdown and where it came from) or ended. */
-    void zoom(Player player, boolean in, double slow, String why) {
+    /** Zoom started (how much narrower the view gets, any slowdown, and where it came from) or ended. */
+    void zoom(Player player, boolean in, double view, double slow, String why) {
         if (!on(player)) return;
-        // At walking speed the client narrows the view by half the slowdown.
         String effect = in
-                ? String.format(Locale.ROOT, "%.0f%% slower, view ~%.0f%% narrower", slow * 100, slow * 50)
-                : "normal speed and view";
+                ? String.format(Locale.ROOT, "view %.0f%% narrower", view * 100)
+                        + (slow > 0 ? String.format(Locale.ROOT, ", %.0f%% slower", slow * 100) : "")
+                : "normal view";
         send(player, "<dark_gray>[dev]</dark_gray> <aqua><input></aqua> <gray>→ <action> <dark_gray>(<reason>)",
                 in ? "zoom in" : "zoom out", effect, why);
     }

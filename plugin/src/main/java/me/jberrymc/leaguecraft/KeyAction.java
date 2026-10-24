@@ -24,6 +24,16 @@ enum KeyAction {
         return name().toLowerCase(Locale.ROOT).replace('_', '-');
     }
 
+    /** The action that casts this ability. */
+    static KeyAction of(Ability ability) {
+        return switch (ability) {
+            case Q -> Q;
+            case W -> W;
+            case E -> E;
+            case R -> R;
+        };
+    }
+
     static KeyAction parse(String id) {
         if (id == null) return null;
         String normal = id.trim().toLowerCase(Locale.ROOT).replace('_', '-');

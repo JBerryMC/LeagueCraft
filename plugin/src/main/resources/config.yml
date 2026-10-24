@@ -69,20 +69,30 @@ third-person:
   # Draw the crosshair at the end of the champion HUD (vanilla hides it in F5).
   crosshair: true
 
-# Hold right click to zoom. A server can't set the field of view, but Minecraft narrows it when you
-# walk slower and eases it in smoothly, so zooming slows you down: each value is how much slower
-# (0.3 = 30% slower), and the view narrows by about half that. It ends about 0.25 s after you let
-# go. Players who turned FOV Effects down (Options > Accessibility) see less zoom, or none at 0%.
-# Champions the datapack tags "melee" use melee, everyone else ranged; zoom.champions sets it for
-# one champion by name (its datapack tag). Values must be above 0 and below 1.
+# Hold right click to zoom: the view narrows smoothly, without slowing you (the plugin changes the
+# "walking speed" the client works the view out from, which nothing else uses). It ends about
+# 0.25 s after you let go. Players who turned FOV Effects down (Options > Accessibility) see less
+# zoom, or none at 0%.
+# The same trick keeps champions' view steady: speed changes from slows, roots, channeling an
+# ability or their faster base speed never move the camera.
 zoom:
   enabled: true
-  melee: 0.15
-  ranged: 0.3
-  champions: {}
-  # champions:
-  #   jhin: 0.5
-  #   garen: 0.1
+  # How much narrower the view gets (0.3 = 30% narrower), at most 0.49: the client can't narrow it
+  # by half or more. Champions the datapack tags "melee" use melee, everyone else ranged;
+  # champions sets it for one champion by name (a sniper could have 0.49).
+  view:
+    melee: 0.15
+    ranged: 0.3
+    champions: {}
+    # champions:
+    #   jhin: 0.49
+  # How much slower you walk while zoomed (0.2 = 20% slower), like aiming down sights. 0 = not at all.
+  slowdown:
+    melee: 0.2
+    ranged: 0.5
+    champions: {}
+    # champions:
+    #   jhin: 0.4
 
 # Champions can't sprint or crouch, so Sprint and Shift are free for abilities.
 # Sprinting is stopped by keeping hunger at 6 (Minecraft needs more to sprint; the resource pack
@@ -96,13 +106,25 @@ movement:
 # (with every on-hit effect). Melee champions hit every enemy in a cone in front; ranged champions
 # hit the first enemy on the crosshair. Allies are never hit and don't block shots.
 # Each champion's range, attack speed, ammo and reload time are stats in the datapack's stats chart
-# (datapack/src/settings.mcb). Ammo shows in a boss bar; a reload also starts by itself when the
-# ammo runs out.
+# (datapack/src/settings.mcb). A reload also starts by itself when the ammo runs out. The scores
+# ammo.left and ammo.reloading (ticks left) are kept up to date for the HUD.
 basic-attack:
   # How wide the melee cone is, in degrees.
   melee-angle: 100
   # Key that reloads early: sprint, sneak or none.
   reload-key: sprint
+
+# Ground-targeted abilities (the aim table of the datapack's stats chart, like Leona R and Soraka E)
+# land where the crosshair meets the ground: never behind a wall or on a ceiling; past their range
+# they drop to the ground below the end of it. With no ground below, they aren't cast.
+abilities:
+  # confirm: the first press shows where the ability lands; press it again or left click to cast,
+  # Shift to cancel. quick: cast on the first press. Abilities you can't cast yet (cooldown, not
+  # enough mana) cast straight away, so the datapack can say why.
+  ground-cast: confirm
+  # Where abilities land, as circles only you see: aimed (only the one you're aiming) or always
+  # (every ready ground-targeted ability, all the time).
+  indicators: aimed
 
 # Log every cast and the datapack's command output to the console.
 debug: false

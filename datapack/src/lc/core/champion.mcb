@@ -1,7 +1,7 @@
 # lc:core/champion/  (converted from the 1.20.2 LeagueCraft datapack)
 
 function _choose {
-    execute if entity @s[tag=!has_display_bar] run summon block_display ~ ~ ~ {Tags:["temp","lol.bar_display"],Passengers:[{id:"area_effect_cloud",Tags:["bar_owner"],Duration:2147483647,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["mana","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["shield_all","stats_bar"],background:0,billboard:"vertical"}]}
+    # The HP/mana bar above the head is off for now (better visibility); this line summoned it.
     execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[0.325,0.375,0.325]}}
     execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=mana] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,0.0,0.0001]}}
     execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=shield_all] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,0.0,0.0001]}}
@@ -87,8 +87,7 @@ function _choose {
     scoreboard players set @s jhin.aa.count 1
 
     ## Aatrox
-    execute if entity @s[team=red] as @e[tag=aatrox.r,team=red,type=horse] run function lc:champions/aatrox/skills/r.end
-    execute if entity @s[team=blue] as @e[tag=aatrox.r,team=blue,type=horse] run function lc:champions/aatrox/skills/r.end
+    execute if entity @s[tag=aatrox.r] run function lc:champions/aatrox/skills/r.end
     tag @s remove aatrox
     scoreboard players set @s stack_q 0
 
@@ -181,6 +180,7 @@ function _reset {
     tag @s remove has_display_bar
 
     attribute @s minecraft:movement_speed base set 0.1
+    attribute @s minecraft:jump_strength base reset
 
     effect clear @s resistance
     effect clear @s saturation
@@ -253,7 +253,7 @@ function _reset {
     scoreboard players set @s jhin.aa.count 1
 
     ## Aatrox
-    execute as @e[tag=aatrox.r] run function lc:champions/aatrox/skills/r.end
+    execute if entity @s[tag=aatrox.r] run function lc:champions/aatrox/skills/r.end
     tag @s remove aatrox
 
     execute if entity @s[tag=leona.q] at @s run function lc:champions/leona/skills/q.end
@@ -369,6 +369,7 @@ dir stats {
         $function lc:core/champion/stats/offense with storage lc:stats offense[{name:"$(name)"}]
         $function lc:core/champion/stats/abilities with storage lc:stats abilities[{name:"$(name)"}]
         $function lc:core/champion/stats/attack with storage lc:stats attack[{name:"$(name)"}]
+        $function lc:core/champion/stats/aim with storage lc:stats aim[{name:"$(name)"}]
     }
 
     function health {
@@ -389,6 +390,7 @@ dir stats {
         $scoreboard players set @s omnivamp $(omnivamp)
         $scoreboard players set @s haste $(haste)
         $attribute @s minecraft:movement_speed base set $(speed)
+        $attribute @s minecraft:jump_strength base set $(jump)
     }
 
     function abilities {
@@ -412,6 +414,18 @@ dir stats {
         $execute store result score @s aa.range run data get storage lc:stats attack[{name:"$(name)"}].range 10
         $scoreboard players set @s ammo.max $(ammo)
         $execute store result score @s ammo.reload run data get storage lc:stats attack[{name:"$(name)"}].reload 20
+    }
+
+    # The plugin reads aim.<key> (ground-target range) and aim.<key>.radius, in tenths of a block.
+    function aim {
+        $execute store result score @s aim.q run data get storage lc:stats aim[{name:"$(name)"}].q 10
+        $execute store result score @s aim.q.radius run data get storage lc:stats aim[{name:"$(name)"}].q_radius 10
+        $execute store result score @s aim.w run data get storage lc:stats aim[{name:"$(name)"}].w 10
+        $execute store result score @s aim.w.radius run data get storage lc:stats aim[{name:"$(name)"}].w_radius 10
+        $execute store result score @s aim.e run data get storage lc:stats aim[{name:"$(name)"}].e 10
+        $execute store result score @s aim.e.radius run data get storage lc:stats aim[{name:"$(name)"}].e_radius 10
+        $execute store result score @s aim.r run data get storage lc:stats aim[{name:"$(name)"}].r 10
+        $execute store result score @s aim.r.radius run data get storage lc:stats aim[{name:"$(name)"}].r_radius 10
     }
 
     # After /reload: applies the chart again to everyone already playing a champion.

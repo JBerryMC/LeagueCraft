@@ -14,8 +14,8 @@ function pick {
 function aa {
     playsound soraka.sfx.aa master @a ~ ~ ~
 
-    execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.soraka","aa","homing","red","temp","block_by_windwall"],item_display:"head",item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1100001f]}}},Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
-    execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.soraka","aa","homing","blue","temp","block_by_windwall"],item_display:"head",item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1100001f]}}},Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.soraka","aa","homing","red","temp","block_by_windwall"],item_display:"head",item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1100001f]}}},Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.soraka","aa","homing","blue","temp","block_by_windwall"],item_display:"head",item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1100001f]}}},Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
 }
 
 function hud {
@@ -89,9 +89,9 @@ function use_e {
 
     scoreboard players set @s channeling 5
 
-    execute anchored eyes positioned ^ ^ ^9.25 run summon area_effect_cloud ~ ~ ~ {Duration:2,Tags:["soraka.e.position"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute anchored eyes positioned ^ ^ ^9.25 run data modify entity @e[tag=soraka.e.position,type=area_effect_cloud,limit=1,sort=nearest] Owner set from entity @s UUID
-    execute anchored eyes positioned ^ ^ ^9.25 as @e[tag=soraka.e.position,type=area_effect_cloud,limit=1,sort=nearest] at @s run function lc:champions/soraka/skills/e.position
+    execute positioned as @e[type=marker,tag=lc.ground_target,limit=1] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:2,Tags:["soraka.e.position"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute positioned as @e[type=marker,tag=lc.ground_target,limit=1] run data modify entity @e[tag=soraka.e.position,type=area_effect_cloud,limit=1,sort=nearest] Owner set from entity @s UUID
+    execute positioned as @e[type=marker,tag=lc.ground_target,limit=1] as @e[tag=soraka.e.position,type=area_effect_cloud,limit=1,sort=nearest] at @s run function lc:champions/soraka/skills/e.position
 }
 
 function use_q {
@@ -99,12 +99,12 @@ function use_q {
     playsound soraka.sfx.q master @a ~ ~ ~
     scoreboard players set @s channeling 5
 
-    execute anchored eyes positioned ^ ^ ^8 run summon area_effect_cloud ~ ~ ~ {Duration:2,Tags:["soraka.q.position"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute anchored eyes positioned ^ ^ ^8 run data modify entity @e[tag=soraka.q.position,type=area_effect_cloud,limit=1,sort=nearest] Owner set from entity @s UUID
-    execute anchored eyes positioned ^ ^ ^8 as @e[tag=soraka.q.position,type=area_effect_cloud,limit=1,sort=nearest] at @s run function lc:champions/soraka/skills/q.position
+    execute positioned as @e[type=marker,tag=lc.ground_target,limit=1] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:2,Tags:["soraka.q.position"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute positioned as @e[type=marker,tag=lc.ground_target,limit=1] run data modify entity @e[tag=soraka.q.position,type=area_effect_cloud,limit=1,sort=nearest] Owner set from entity @s UUID
+    execute positioned as @e[type=marker,tag=lc.ground_target,limit=1] as @e[tag=soraka.q.position,type=area_effect_cloud,limit=1,sort=nearest] at @s run function lc:champions/soraka/skills/q.position
 
-    execute if entity @s[team=red] anchored eyes run summon area_effect_cloud ^ ^3 ^ {Duration:20,Tags:["soraka.q.projectile","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[team=blue] anchored eyes run summon area_effect_cloud ^ ^3 ^ {Duration:20,Tags:["soraka.q.projectile","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] anchored eyes run summon area_effect_cloud ^ ^3 ^ {WaitTime:0,Duration:20,Tags:["soraka.q.projectile","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] anchored eyes run summon area_effect_cloud ^ ^3 ^ {WaitTime:0,Duration:20,Tags:["soraka.q.projectile","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
 }
 
 function use_r {
@@ -115,8 +115,8 @@ function use_r {
 
     scoreboard players set @s channeling 5
 
-    execute if entity @s[team=red] as @e[tag=champion,team=red,type=!#unvalid,tag=!unvalid,tag=champion,tag=!dead] at @s anchored eyes run summon area_effect_cloud ^ ^-0.5 ^ {Duration:12,Tags:["soraka.r.fx","soraka.fx"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[team=blue] as @e[tag=champion,team=blue,type=!#unvalid,tag=!unvalid,tag=champion,tag=!dead] at @s anchored eyes run summon area_effect_cloud ^ ^-0.5 ^ {Duration:12,Tags:["soraka.r.fx","soraka.fx"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] as @e[tag=champion,team=red,type=!#unvalid,tag=!unvalid,tag=champion,tag=!dead] at @s anchored eyes run summon area_effect_cloud ^ ^-0.5 ^ {WaitTime:0,Duration:12,Tags:["soraka.r.fx","soraka.fx"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] as @e[tag=champion,team=blue,type=!#unvalid,tag=!unvalid,tag=champion,tag=!dead] at @s anchored eyes run summon area_effect_cloud ^ ^-0.5 ^ {WaitTime:0,Duration:12,Tags:["soraka.r.fx","soraka.fx"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
 
     execute if entity @s[team=red] run tag @e[tag=champion,team=red,type=!#unvalid,tag=!unvalid,tag=champion,tag=!dead] add is_heal_target
     execute if entity @s[team=blue] run tag @e[tag=champion,team=blue,type=!#unvalid,tag=!unvalid,tag=champion,tag=!dead] add is_heal_target
@@ -137,13 +137,12 @@ function use_w {
     execute if score @s hp.left > soraka.w.hp_cost temp run scoreboard players operation @s hp.left -= soraka.w.hp_cost temp
     execute if score @s hp.left <= soraka.w.hp_cost temp run scoreboard players set @s hp.left 1
 
-    execute at @e[tag=soraka.w.temp_target] anchored eyes run summon area_effect_cloud ^ ^-0.5 ^ {Duration:5,Tags:["soraka.w.fx","soraka.fx"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute at @e[tag=soraka.w.temp_target] anchored eyes run summon area_effect_cloud ^ ^-0.5 ^ {WaitTime:0,Duration:5,Tags:["soraka.w.fx","soraka.fx"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
 
-    execute if entity @s[team=red,scores={soraka.passive=1..}] run scoreboard players set @e[tag=soraka.w.temp_target,team=red,type=!#unvalid] soraka.passive 3
-    execute if entity @s[team=red] run tag @e[tag=soraka.w.temp_target,team=red,type=!#unvalid] add is_heal_target
-
-    execute if entity @s[team=blue,scores={soraka.passive=1..}] run scoreboard players set @e[tag=soraka.w.temp_target,team=blue,type=!#unvalid] soraka.passive 3
-    execute if entity @s[team=blue] run tag @e[tag=soraka.w.temp_target,team=blue,type=!#unvalid] add is_heal_target
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>,scores={soraka.passive=1..}] run scoreboard players set @e[tag=soraka.w.temp_target,team=<%team%>,type=!#unvalid] soraka.passive 3
+        execute if entity @s[team=<%team%>] run tag @e[tag=soraka.w.temp_target,team=<%team%>,type=!#unvalid] add is_heal_target
+    }
 
     function lc:champions/soraka/skills/w.healing
 }
@@ -201,5 +200,575 @@ predicate look_at_red {
             }
         },
         "minecraft:team": "red"
+    }
+}
+
+# ---- item: lc:champions/soraka/item/... ----------------------------------------------
+dir item {
+    function headwear {
+        clear @s iron_sword[minecraft:custom_data~{lol_item:1}]
+        execute if score .world lang matches 0 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[9999f]},minecraft:custom_name={text:"Soraka",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+        execute if score .world lang matches 1 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[9999f]},minecraft:custom_name={text:"Soraka",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+    }
+
+    function offhand {
+        clear @s carrot_on_a_stick[minecraft:custom_data~{lol_item:1}]
+        tag @s remove offhand_temp
+
+        item replace entity @s weapon.offhand with minecraft:carrot_on_a_stick[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[9999f]},minecraft:custom_name={text:".",color:"#1b0c1b"},minecraft:custom_data={lol_item:1,kill_item:1,offhand:1}]
+    }
+}
+
+# ---- skills: lc:champions/soraka/skills/... ------------------------------------------
+dir skills {
+    function e.animation {
+        tp @s ~ ~ ~ ~6 ~
+        particle end_rod ^ ^ ^3 0 0 0 0 1 force @a
+        particle end_rod ^ ^ ^-3 0 0 0 0 1 force @a
+
+        execute if entity @s[tag=red] positioned ~-3 ~-0.5 ~-3 run scoreboard players set @e[team=!red,type=!#unvalid,tag=!unvalid,dx=5,dz=5,dy=0] cc.silence 2
+        execute if entity @s[tag=blue] positioned ~-3 ~-0.5 ~-3 run scoreboard players set @e[team=!blue,type=!#unvalid,tag=!unvalid,dx=5,dz=5,dy=0] cc.silence 2
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>,tag=!spawned] positioned ~-3 ~-0.5 ~-3 run tag @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,dx=5,dz=5,dy=0] add soraka.e.hit
+            execute if entity @s[tag=<%team%>,tag=!spawned] run tag @e[team=!<%team%>,tag=soraka.e.hit] add soraka.e.temp_dmg
+            execute if entity @s[tag=<%team%>,tag=!spawned] if entity @e[tag=soraka.e.hit,team=!<%team%>] as @p[tag=soraka,team=<%team%>] run function lc:champions/soraka/skills/e.damage
+            execute if entity @s[tag=<%team%>,tag=!spawned] run tag @e[team=!<%team%>,tag=soraka.e.hit] remove soraka.e.hit
+        }
+
+        tag @s add spawned
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] unless data entity @s Passengers positioned ~-3 ~-0.5 ~-3 run tag @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,dx=5,dz=5,dy=0] add soraka.e.hit
+            execute if entity @s[tag=<%team%>] unless data entity @s Passengers run scoreboard players set @e[team=!<%team%>,tag=soraka.e.hit] cc.root 40
+            execute if entity @s[tag=<%team%>] unless data entity @s Passengers run tag @e[team=!<%team%>,tag=soraka.e.hit] add soraka.e.temp_dmg
+            execute if entity @s[tag=<%team%>] unless data entity @s Passengers if entity @e[tag=soraka.e.hit,team=!<%team%>] as @p[tag=soraka,team=<%team%>] run function lc:champions/soraka/skills/e.damage
+            execute if entity @s[tag=<%team%>] unless data entity @s Passengers run tag @e[team=!<%team%>,tag=soraka.e.hit] remove soraka.e.hit
+        }
+    }
+
+    function e.damage {
+        execute if entity @s[team=red] run damage @e[tag=soraka.e.hit,tag=soraka.e.temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+        execute if entity @s[team=blue] run damage @e[tag=soraka.e.hit,tag=soraka.e.temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+
+        scoreboard players operation @s dmg_magic.deal = @s ability_power
+        scoreboard players operation @s dmg_magic.deal *= 40 integer
+        scoreboard players operation @s dmg_magic.deal /= 100 integer
+        scoreboard players add @s dmg_magic.deal 170
+
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=soraka.e.hit,tag=has_health_bar,tag=soraka.e.temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=soraka.e.hit,tag=has_health_bar,tag=soraka.e.temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=red] run tag @e[team=!red,tag=soraka.e.hit,type=!#unvalid,tag=soraka.e.temp_dmg,limit=1,sort=nearest] remove soraka.e.temp_dmg
+
+        execute if entity @s[team=red] run execute if entity @e[tag=soraka.e.hit,tag=soraka.e.temp_dmg,type=!#unvalid,team=!red] run function lc:champions/soraka/skills/e.damage
+
+        ## BLUE
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=soraka.e.hit,tag=has_health_bar,tag=soraka.e.temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=soraka.e.hit,tag=has_health_bar,tag=soraka.e.temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=blue] run tag @e[team=!blue,tag=soraka.e.hit,type=!#unvalid,tag=soraka.e.temp_dmg,limit=1,sort=nearest] remove soraka.e.temp_dmg
+
+        execute if entity @s[team=blue] run execute if entity @e[tag=soraka.e.hit,tag=soraka.e.temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/soraka/skills/e.damage
+    }
+
+    function e.end {
+        execute if entity @s[tag=red] if entity @e[tag=leona.e.dmg,team=!red] at @p[tag=leona,team=red] run tag @e[tag=leona.e.dmg,team=!red,limit=1,sort=furthest] add leona.e.target
+        execute if entity @s[tag=red] if entity @e[tag=leona.e.dmg,team=!red] run tag @e[tag=leona.e.dmg,team=!red] remove leona.e.dmg
+
+        execute if entity @s[tag=red] if entity @e[tag=leona.e.target,team=!red] run scoreboard players set @e[tag=leona.e.target,team=!red] cc.root 10
+        execute if entity @s[tag=red] if entity @e[tag=leona.e.target,team=!red] as @p[tag=leona,team=red] at @s run function lc:champions/leona/use_e2
+
+        execute if entity @s[tag=blue] if entity @e[tag=leona.e.dmg,team=!blue] at @p[tag=leona,team=blue] run tag @e[tag=leona.e.dmg,team=!blue,limit=1,sort=furthest] add leona.e.target
+        execute if entity @s[tag=blue] if entity @e[tag=leona.e.dmg,team=!blue] run tag @e[tag=leona.e.dmg,team=!blue] remove leona.e.dmg
+
+        execute if entity @s[tag=blue] if entity @e[tag=leona.e.target,team=!blue] run scoreboard players set @e[tag=leona.e.target,team=!blue] cc.root 10
+        execute if entity @s[tag=blue] if entity @e[tag=leona.e.target,team=!blue] as @p[tag=leona,team=blue] at @s run function lc:champions/leona/use_e2
+    }
+
+    function e.position {
+        execute if block ~ ~ ~ #like_air unless block ~ ~-1 ~ #like_air run playsound soraka.sfx.e master @a ~ ~ ~
+        execute if block ~ ~ ~ #like_air unless block ~ ~-1 ~ #like_air on origin if entity @s[team=red] run summon item_display ~ ~ ~ {teleport_duration:1,item_display:"head",item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1100301f]}}},Tags:["lol.auto_clear","red","soraka.e"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:30,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if block ~ ~ ~ #like_air unless block ~ ~-1 ~ #like_air on origin if entity @s[team=blue] run summon item_display ~ ~ ~ {teleport_duration:1,item_display:"head",item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1100301f]}}},Tags:["lol.auto_clear","blue","soraka.e"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:30,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+        execute if block ~ ~ ~ #like_air if block ~ ~-1 ~ #like_air positioned ~ ~-1 ~ run function lc:champions/soraka/skills/e.position
+
+        execute unless block ~ ~ ~ #like_air positioned ~ ~1 ~ run function lc:champions/soraka/skills/e.position
+    }
+
+    function passive.healing {
+        scoreboard players operation @s healing = @s ability_power
+        scoreboard players operation @s healing *= 6 integer
+        scoreboard players operation @s healing /= 100 integer
+        scoreboard players add @s healing 48
+
+        execute if entity @s[team=red] at @e[tag=is_heal_target,team=red] anchored eyes run particle happy_villager ^ ^-0.5 ^ 0.2 0.2 0.2 0.1 20 force
+
+        execute if entity @s[team=blue] at @e[tag=is_heal_target,team=blue] anchored eyes run particle happy_villager ^ ^-0.5 ^ 0.2 0.2 0.2 0.1 20 force
+    }
+
+    function q.damage {
+        execute if entity @s[team=red] run damage @e[tag=soraka.q.hit,tag=soraka.q.temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+        execute if entity @s[team=blue] run damage @e[tag=soraka.q.hit,tag=soraka.q.temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+
+        scoreboard players operation @s dmg_magic.deal = @s ability_power
+        scoreboard players operation @s dmg_magic.deal *= 35 integer
+        scoreboard players operation @s dmg_magic.deal /= 100 integer
+        scoreboard players add @s dmg_magic.deal 225
+
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=soraka.q.hit,tag=has_health_bar,tag=soraka.q.temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=soraka.q.hit,tag=has_health_bar,tag=soraka.q.temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=red] run tag @e[team=!red,tag=soraka.q.hit,type=!#unvalid,tag=soraka.q.temp_dmg,limit=1,sort=nearest] remove soraka.q.temp_dmg
+
+        execute if entity @s[team=red] run execute if entity @e[tag=soraka.q.hit,tag=soraka.q.temp_dmg,type=!#unvalid,team=!red] run function lc:champions/soraka/skills/q.damage
+
+        ## BLUE
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=soraka.q.hit,tag=has_health_bar,tag=soraka.q.temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=soraka.q.hit,tag=has_health_bar,tag=soraka.q.temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=blue] run tag @e[team=!blue,tag=soraka.q.hit,type=!#unvalid,tag=soraka.q.temp_dmg,limit=1,sort=nearest] remove soraka.q.temp_dmg
+
+        execute if entity @s[team=blue] run execute if entity @e[tag=soraka.q.hit,tag=soraka.q.temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/soraka/skills/q.damage
+    }
+
+    function q.particle {
+        ### Particle Image Function
+        ### Version: 1.0.4
+        ### Width: 20
+        ### Height: 20
+        ### ParticleType: dust
+
+        ### This file was generated by Kemo431's Particle-Converter.
+        ### Download Link: https://github.com/kemo14331/Particle-Converter
+        #particle dust 0.918 0.475 0.404 1.5
+        #
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^0.5 0 0 0 0 1 force @a
+
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.5 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.5 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.5 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.5 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.5 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.25 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.25 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.25 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.25 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.25 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.25 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.25 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.25 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.25 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2.25 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^2 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.75 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.5 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1.25 ^0 ^2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^1 ^0 ^2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.75 ^0 ^2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^-2.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.5 ^0 ^2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^-2.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0.25 ^0 ^2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^-2.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^0 ^0 ^2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^-2.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.25 ^0 ^2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^-2.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.5 ^0 ^2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-0.75 ^0 ^2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1 ^0 ^2.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.25 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^-2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.5 ^0 ^2 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-1.75 ^0 ^1.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2 ^0 ^1.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2.25 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2.25 ^0 ^-1 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2.25 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2.25 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2.25 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2.25 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2.25 ^0 ^0.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2.25 ^0 ^0.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2.25 ^0 ^0.75 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[0.918,0.475,0.404],scale:1.5} ^-2.25 ^0 ^1 0 0 0 0 1 force @a
+    }
+
+    function q.position {
+        execute if block ~ ~ ~ #like_air unless block ~ ~-1 ~ #like_air on origin if entity @s[team=red] run summon item_display ~ ~ ~ {Tags:["lol.auto_clear","red","soraka.q"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:20,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if block ~ ~ ~ #like_air unless block ~ ~-1 ~ #like_air on origin if entity @s[team=blue] run summon item_display ~ ~ ~ {Tags:["lol.auto_clear","blue","soraka.q"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:20,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+        execute if block ~ ~ ~ #like_air if block ~ ~-1 ~ #like_air positioned ~ ~-1 ~ run function lc:champions/soraka/skills/q.position
+
+        execute unless block ~ ~ ~ #like_air positioned ~ ~1 ~ run function lc:champions/soraka/skills/q.position
+    }
+
+    function q.projectile {
+        particle end_rod ~ ~ ~ 0.2 0.2 0.2 0.01 2 force
+        particle dust{color:[0.918,0.475,0.404],scale:1.5} ~ ~ ~ 0.2 0.2 0.2 0 2 force
+
+        execute if entity @s[tag=red] as @e[tag=soraka.q,tag=red] at @s run particle end_rod ^ ^ ^3 0 0 0 0 1 force @a
+        execute if entity @s[tag=red] as @e[tag=soraka.q,tag=red] at @s run particle end_rod ^ ^ ^-3 0 0 0 0 1 force @a
+        execute if entity @s[tag=red] as @e[tag=soraka.q,tag=red] at @s run tp @s ~ ~ ~ ~9 ~
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] facing entity @e[tag=soraka.q,tag=<%team%>,limit=1] feet run tp @s ^ ^ ^0.5
+            execute if entity @s[tag=<%team%>] if entity @e[tag=soraka.q,tag=<%team%>,distance=..1] run stopsound @a master soraka.sfx.q
+            execute if entity @s[tag=<%team%>] if entity @e[tag=soraka.q,tag=<%team%>,distance=..1] run playsound soraka.sfx.q.hit master @a ~ ~ ~
+            execute if entity @s[tag=<%team%>] as @e[tag=soraka.q,tag=<%team%>,distance=..1] at @s run function lc:champions/soraka/skills/q.particle
+            execute if entity @s[tag=<%team%>] as @e[tag=soraka.q,tag=<%team%>,distance=..1] at @s positioned ~-3 ~-0.5 ~-3 run tag @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,dx=5,dz=5,dy=0] add soraka.q.hit
+            execute if entity @s[tag=<%team%>] if entity @e[tag=champion,tag=soraka.q.hit,team=!<%team%>] as @e[tag=soraka.q,tag=<%team%>,distance=..1] at @s run function lc:champions/soraka/skills/q.refund
+            execute if entity @s[tag=<%team%>] run effect give @e[team=!<%team%>,tag=soraka.q.hit] slowness 2 4 false
+            execute if entity @s[tag=<%team%>] run scoreboard players set @e[team=!<%team%>,tag=soraka.q.hit] fx.sight 10
+            execute if entity @s[tag=<%team%>] run tag @e[team=!<%team%>,tag=soraka.q.hit] add soraka.q.temp_dmg
+            execute if entity @s[tag=<%team%>] if entity @e[tag=soraka.q.hit,team=!<%team%>] as @p[tag=soraka,team=<%team%>] run function lc:champions/soraka/skills/q.damage
+            execute if entity @s[tag=<%team%>] run tag @e[team=!<%team%>,tag=soraka.q.hit] remove soraka.q.hit
+            execute if entity @s[tag=<%team%>] if entity @e[tag=soraka.q,tag=<%team%>,distance=..1] run kill @s
+        }
+    }
+
+    function q.refund {
+        summon item_display ~ ~1 ~ {teleport_duration:1,Tags:["soraka.q.refund","homing","temp","block_by_windwall"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+        summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:1,Tags:["temp_entity"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[tag=red] as @p[tag=soraka,team=red] run data modify entity @e[tag=temp_entity,limit=1,sort=nearest,type=area_effect_cloud] Owner set from entity @s UUID
+        execute if entity @s[tag=blue] as @p[tag=soraka,team=blue] run data modify entity @e[tag=temp_entity,limit=1,sort=nearest,type=area_effect_cloud] Owner set from entity @s UUID
+
+        execute as @e[tag=soraka.q.refund,tag=temp,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=initial] Owner set from entity @e[type=area_effect_cloud,tag=temp_entity,limit=1,sort=nearest] Owner
+        execute as @e[tag=soraka.q.refund,tag=temp,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=target] Owner set from entity @e[type=area_effect_cloud,tag=temp_entity,limit=1,sort=nearest] Owner
+        tag @e[tag=soraka.q.refund,tag=temp,limit=1,sort=nearest] remove temp
+    }
+
+    function r.cast {
+        execute if entity @s[tag=soraka.r.fx] run particle wax_on ~ ~10 ~ 0.5 10 0.5 0.5 200 force @a
+
+        execute rotated ~ ~ run particle happy_villager ^ ^ ^1 0 0 0 0 1 force @a
+        execute rotated ~-40 ~ run particle happy_villager ^ ^-0.16 ^1 0 0 0 0 1 force @a
+        execute rotated ~-30 ~ run particle happy_villager ^ ^-0.12 ^1 0 0 0 0 1 force @a
+        execute rotated ~-20 ~ run particle happy_villager ^ ^-0.08 ^1 0 0 0 0 1 force @a
+        execute rotated ~-10 ~ run particle happy_villager ^ ^-0.04 ^1 0 0 0 0 1 force @a
+
+        tp @s ~ ~0.2 ~ ~45 ~
+    }
+
+    function r.healing {
+        scoreboard players operation @s healing = @s ability_power
+        scoreboard players operation @s healing *= 50 integer
+        scoreboard players operation @s healing /= 100 integer
+        scoreboard players add @s healing 500
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] at @e[tag=is_heal_target,team=<%team%>] anchored eyes run particle heart ^ ^-0.5 ^ 0.2 0.2 0.2 1 5 force
+            execute if entity @s[team=<%team%>] at @e[tag=is_heal_target,team=<%team%>] anchored eyes run particle happy_villager ^ ^-0.5 ^ 0.5 0.5 0.5 0.1 50 force
+        }
+    }
+
+    function w.healing {
+        scoreboard players operation @s healing = @s ability_power
+        scoreboard players operation @s healing *= 50 integer
+        scoreboard players operation @s healing /= 100 integer
+        scoreboard players add @s healing 170
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] at @e[tag=is_heal_target,team=<%team%>] anchored eyes run particle heart ^ ^-0.5 ^ 0.2 0.2 0.2 1 5 force
+            execute if entity @s[team=<%team%>] at @e[tag=is_heal_target,team=<%team%>] anchored eyes run particle happy_villager ^ ^-0.5 ^ 0.5 0.5 0.5 0.1 20 force
+        }
     }
 }

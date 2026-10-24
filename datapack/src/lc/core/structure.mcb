@@ -416,8 +416,8 @@ dir tower {
     function shot {
         scoreboard players set @s aa.cd 30
 
-        execute if entity @s[tag=red] run summon area_effect_cloud ~ ~ ~ {Duration:2147483647,Tags:["tower.shot","temp","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-        execute if entity @s[tag=blue] run summon area_effect_cloud ~ ~ ~ {Duration:2147483647,Tags:["tower.shot","temp","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[tag=red] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:2147483647,Tags:["tower.shot","temp","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[tag=blue] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:2147483647,Tags:["tower.shot","temp","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
 
         scoreboard players operation @e[tag=tower.shot,tag=temp,limit=1,sort=nearest,type=area_effect_cloud] attack_damage = @s attack_damage
         scoreboard players operation @e[tag=tower.shot,tag=temp,limit=1,sort=nearest,type=area_effect_cloud] armor.pen = @s armor.pen
@@ -551,7 +551,7 @@ dir tower {
     function stun {
         tag @s add is_stunned
 
-        execute positioned ^ ^10 ^ unless entity @e[tag=particle.stun,limit=1,sort=nearest,distance=..1] run summon area_effect_cloud ~ ~ ~ {Duration:999999,Tags:["particle.stun"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute positioned ^ ^10 ^ unless entity @e[tag=particle.stun,limit=1,sort=nearest,distance=..1] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:999999,Tags:["particle.stun"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
         execute positioned ^ ^10 ^ as @e[tag=particle.stun,limit=1,sort=nearest] rotated as @s run tp @s ~ ~ ~ ~20 ~
         execute positioned ^ ^10 ^ as @e[tag=particle.stun,limit=1,sort=nearest] at @s run particle crit ^ ^ ^1 0.1 0.1 0.1 0 5 force
 
@@ -563,7 +563,7 @@ dir tower {
         function attack {
             execute on passengers as @s[tag=tower.target] on origin run scoreboard players set @s fx.sight 2
 
-            #execute positioned ^-1.5 ^10.5 ^1.5 run summon area_effect_cloud ~ ~ ~ {Duration:1,Tags:["lol.tower_beam"]}
+            #execute positioned ^-1.5 ^10.5 ^1.5 run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:1,Tags:["lol.tower_beam"]}
             execute positioned ^-1.5 ^10.5 ^1.5 on passengers as @s[tag=tower.target] on origin facing entity @s feet run function lc:core/structure/tower/beam
 
             execute if score @s aa.cd matches 0 on passengers if entity @s[tag=lol.animation,tag=ready_to_attack] on vehicle positioned ^-1.5 ^10.5 ^1.5 run function lc:core/structure/tower/shot
@@ -574,7 +574,7 @@ dir tower {
 
             tag @s add has_target
             tag @s add is_targeting_champion
-            execute at @s run summon area_effect_cloud ~ ~ ~ {Tags:["tower.target"],Duration:999999,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+            execute at @s run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Tags:["tower.target"],Duration:999999,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
             ride @e[tag=tower.target,limit=1,sort=nearest,type=area_effect_cloud] mount @s
 
             ## RED TOWER
@@ -601,7 +601,7 @@ dir tower {
 
         function check {
             tag @s add has_target
-            execute at @s run summon area_effect_cloud ~ ~ ~ {Tags:["tower.target"],Duration:999999,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+            execute at @s run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Tags:["tower.target"],Duration:999999,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
             execute at @s run ride @e[tag=tower.target,limit=1,sort=nearest,type=area_effect_cloud] mount @s
 
             ## RED TOWER

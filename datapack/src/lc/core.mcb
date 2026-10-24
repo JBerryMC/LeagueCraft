@@ -267,6 +267,9 @@ function main_2t {
 }
 
 function reload {
+    # Head bars are off for now: remove any left from before.
+    execute as @e[tag=lol.bar_display,type=block_display] on passengers run kill @s
+    kill @e[tag=lol.bar_display,type=block_display]
     function lc:core/setup
     #execute if score .world lang matches 0 run function lc:core/lang/eng.load
     #execute if score .world lang matches 1 run function lc:core/lang/vie.load
@@ -318,6 +321,16 @@ function setup {
     scoreboard objectives add aa.range.count dummy
     scoreboard objectives add ammo.max dummy
     scoreboard objectives add ammo.reload dummy
+    scoreboard objectives add aim.q dummy
+    scoreboard objectives add aim.q.radius dummy
+    scoreboard objectives add aim.w dummy
+    scoreboard objectives add aim.w.radius dummy
+    scoreboard objectives add aim.e dummy
+    scoreboard objectives add aim.e.radius dummy
+    scoreboard objectives add aim.r dummy
+    scoreboard objectives add aim.r.radius dummy
+    scoreboard objectives add ammo.left dummy
+    scoreboard objectives add ammo.reloading dummy
     scoreboard objectives add motion.x dummy
     scoreboard objectives add motion.y dummy
     scoreboard objectives add motion.z dummy

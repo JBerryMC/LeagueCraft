@@ -71,8 +71,8 @@ dir caster {
     function aa {
         execute on passengers as @s[tag=lol.animation] run function animated_java:minion.caster/animations/aa/tween_play
 
-        execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.minion.caster","aa","homing","red","temp","speed.slow","block_by_windwall"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
-        execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.minion.caster","aa","homing","blue","temp","speed.slow","block_by_windwall"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.minion.caster","aa","homing","red","temp","speed.slow","block_by_windwall"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.minion.caster","aa","homing","blue","temp","speed.slow","block_by_windwall"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
     }
 
     function dead {
@@ -228,8 +228,8 @@ dir siege {
     function aa {
         execute on passengers as @s[tag=lol.animation] run function animated_java:minion.siege/animations/aa/tween_play
 
-        execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.minion.siege","aa","homing","red","temp","speed.slow","block_by_windwall"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
-        execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.minion.siege","aa","homing","blue","temp","speed.slow","block_by_windwall"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.minion.siege","aa","homing","red","temp","speed.slow","block_by_windwall"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.minion.siege","aa","homing","blue","temp","speed.slow","block_by_windwall"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
     }
 
     function dead {

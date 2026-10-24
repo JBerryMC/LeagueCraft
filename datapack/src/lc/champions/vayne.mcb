@@ -13,8 +13,8 @@ function pick {
 function aa {
     playsound vayne.sfx.aa master @a ~ ~ ~
 
-    execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.vayne","aa","homing","red","temp"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
-    execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.vayne","aa","homing","blue","temp"],Passengers:[{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.vayne","aa","homing","red","temp"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.vayne","aa","homing","blue","temp"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
 }
 
 function hud {
@@ -68,11 +68,10 @@ function main {
 
 function passive {
     attribute @s[tag=!p.active] minecraft:movement_speed base set 0.1
-    execute if entity @s[team=red] unless entity @e[tag=red,tag=vayne.r.cd] run attribute @s[tag=p.active] minecraft:movement_speed base set 0.13
-    execute if entity @s[team=red] if entity @e[tag=red,tag=vayne.r.cd] run attribute @s[tag=p.active] minecraft:movement_speed base set 0.19
-
-    execute if entity @s[team=blue] unless entity @e[tag=blue,tag=vayne.r.cd] run attribute @s[tag=p.active] minecraft:movement_speed base set 0.13
-    execute if entity @s[team=blue] if entity @e[tag=blue,tag=vayne.r.cd] run attribute @s[tag=p.active] minecraft:movement_speed base set 0.19
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] unless entity @e[tag=<%team%>,tag=vayne.r.cd] run attribute @s[tag=p.active] minecraft:movement_speed base set 0.13
+        execute if entity @s[team=<%team%>] if entity @e[tag=<%team%>,tag=vayne.r.cd] run attribute @s[tag=p.active] minecraft:movement_speed base set 0.19
+    }
 
     tag @s remove p.active
 }
@@ -83,51 +82,36 @@ function use_e {
 
     playsound minecraft:vayne.sfx.e master @a ~ ~ ~
 
-    execute if entity @s[team=red] if entity @e[tag=vayne.r.cd,tag=red] run effect clear @s invisibility
-    execute if entity @s[team=red] if entity @e[tag=vayne.r.cd,tag=red] run kill @e[tag=vayne.q.fx.invis.cd,tag=red]
-    execute if entity @s[team=red] if entity @e[tag=vayne.r.cd,tag=red] run item replace entity @s weapon.offhand with minecraft:air
-    execute if entity @s[team=red] run summon arrow ^ ^1.2 ^1 {SoundEvent:"minecraft:entity.player.attack.weak",Tags:["vayne.aa","e_active"],NoGravity:1,LeftOwner:0,damage:0.2,crit:0,Passengers:[{Tags:["vayne.aa","unvalid","e_active"],id:"armor_stand",Passengers:[{id:"area_effect_cloud",Duration:20,Tags:["aa.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],Team:"red",Marker:1,Invisible:1}]}
-    execute if entity @s[team=red] run data modify entity @e[tag=vayne.aa,type=armor_stand,limit=1,sort=nearest,team=red] Rotation[0] set from entity @p[tag=vayne,team=red] Rotation[0]
-
-    execute if entity @s[team=blue] if entity @e[tag=vayne.r.cd,tag=blue] run effect clear @s invisibility
-    execute if entity @s[team=blue] if entity @e[tag=vayne.r.cd,tag=blue] run kill @e[tag=vayne.q.fx.invis.cd,tag=blue]
-    execute if entity @s[team=blue] if entity @e[tag=vayne.r.cd,tag=blue] run item replace entity @s weapon.offhand with minecraft:air
-    execute if entity @s[team=blue] run summon arrow ^ ^1.2 ^1 {SoundEvent:"minecraft:entity.player.attack.weak",Tags:["vayne.aa","e_active"],NoGravity:1,LeftOwner:0,damage:0.2,crit:0,Passengers:[{Tags:["vayne.aa","unvalid","e_active"],id:"armor_stand",Passengers:[{id:"area_effect_cloud",Duration:20,Tags:["aa.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],Team:"blue",Marker:1,Invisible:1}]}
-    execute if entity @s[team=blue] run data modify entity @e[tag=vayne.aa,type=armor_stand,limit=1,sort=nearest,team=blue] Rotation[0] set from entity @p[tag=vayne,team=blue] Rotation[0]
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] if entity @e[tag=vayne.r.cd,tag=<%team%>] run effect clear @s invisibility
+        execute if entity @s[team=<%team%>] if entity @e[tag=vayne.r.cd,tag=<%team%>] run kill @e[tag=vayne.q.fx.invis.cd,tag=<%team%>]
+        execute if entity @s[team=<%team%>] if entity @e[tag=vayne.r.cd,tag=<%team%>] run item replace entity @s weapon.offhand with minecraft:air
+        execute if entity @s[team=<%team%>] run summon arrow ^ ^1.2 ^1 {SoundEvent:"minecraft:entity.player.attack.weak",Tags:["vayne.aa","e_active"],NoGravity:1,LeftOwner:0,damage:0.2,crit:0,Passengers:[{Tags:["vayne.aa","unvalid","e_active"],id:"armor_stand",Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:20,Tags:["aa.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],Team:"<%team%>",Marker:1,Invisible:1}]}
+        execute if entity @s[team=<%team%>] run data modify entity @e[tag=vayne.aa,type=armor_stand,limit=1,sort=nearest,team=<%team%>] Rotation[0] set from entity @p[tag=vayne,team=<%team%>] Rotation[0]
+    }
 }
 
 function use_q {
-    execute if entity @s[team=red] unless entity @e[tag=red,tag=vayne.r.cd] run scoreboard players set @s cd_q 2
-    execute if entity @s[team=red] unless entity @e[tag=red,tag=vayne.r.cd] run playsound vayne.sfx.q master @a ~ ~ ~
-    execute if entity @s[team=red] if entity @e[tag=red,tag=vayne.r.cd] run scoreboard players set @s cd_q 1
-    execute if entity @s[team=red] if entity @e[tag=red,tag=vayne.r.cd] run playsound vayne.sfx.q.fx.invis master @a ~ ~ ~
-
-    execute if entity @s[team=blue] unless entity @e[tag=blue,tag=vayne.r.cd] run scoreboard players set @s cd_q 2
-    execute if entity @s[team=blue] unless entity @e[tag=blue,tag=vayne.r.cd] run playsound vayne.sfx.q master @a ~ ~ ~
-    execute if entity @s[team=blue] if entity @e[tag=blue,tag=vayne.r.cd] run scoreboard players set @s cd_q 1
-    execute if entity @s[team=blue] if entity @e[tag=blue,tag=vayne.r.cd] run playsound vayne.sfx.q.fx.invis master @a ~ ~ ~
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] unless entity @e[tag=<%team%>,tag=vayne.r.cd] run scoreboard players set @s cd_q 2
+        execute if entity @s[team=<%team%>] unless entity @e[tag=<%team%>,tag=vayne.r.cd] run playsound vayne.sfx.q master @a ~ ~ ~
+        execute if entity @s[team=<%team%>] if entity @e[tag=<%team%>,tag=vayne.r.cd] run scoreboard players set @s cd_q 1
+        execute if entity @s[team=<%team%>] if entity @e[tag=<%team%>,tag=vayne.r.cd] run playsound vayne.sfx.q.fx.invis master @a ~ ~ ~
+    }
 
     scoreboard players remove @s mana 30
 
-    execute if entity @s[team=red] if entity @e[tag=red,tag=vayne.r.cd] run effect give @s invisibility 1 0 true
-    execute if entity @s[team=red] if entity @e[tag=red,tag=vayne.r.cd] run effect give @e[tag=vayne.r.silverfish,tag=red] invisibility 1 0 true
-    execute if entity @s[team=red] if entity @e[tag=red,tag=vayne.r.cd] run item replace entity @s armor.head with minecraft:air
-    execute if entity @s[team=red] if entity @e[tag=red,tag=vayne.r.cd] run item replace entity @s weapon.offhand with minecraft:air
-    execute if entity @s[team=red] if entity @e[tag=red,tag=vayne.r.cd] run summon area_effect_cloud ~ ~ ~ {Duration:21,Tags:["red","vayne.q.fx.invis.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[team=red] run kill @e[tag=red,tag=vayne.q.cd]
-    execute if entity @s[team=red] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:140,Tags:["red","vayne.q.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[team=red] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:5,Tags:["red","vayne.q.dash"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[team=red] run tp @e[tag=red,tag=vayne.q.dash,type=minecraft:area_effect_cloud] ~ ~0.1 ~ ~ 0
-
-    execute if entity @s[team=blue] if entity @e[tag=blue,tag=vayne.r.cd] run effect give @s invisibility 1 0 true
-    execute if entity @s[team=blue] if entity @e[tag=blue,tag=vayne.r.cd] run effect give @e[tag=vayne.r.silverfish,tag=blue] invisibility 1 0 true
-    execute if entity @s[team=blue] if entity @e[tag=blue,tag=vayne.r.cd] run item replace entity @s armor.head with minecraft:air
-    execute if entity @s[team=blue] if entity @e[tag=blue,tag=vayne.r.cd] run item replace entity @s weapon.offhand with minecraft:air
-    execute if entity @s[team=blue] if entity @e[tag=blue,tag=vayne.r.cd] run summon area_effect_cloud ~ ~ ~ {Duration:21,Tags:["blue","vayne.q.fx.invis.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[team=blue] run kill @e[tag=blue,tag=vayne.q.cd]
-    execute if entity @s[team=blue] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:140,Tags:["blue","vayne.q.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[team=blue] run summon minecraft:area_effect_cloud ~ ~ ~ {Duration:5,Tags:["blue","vayne.q.dash"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[team=blue] run tp @e[tag=blue,tag=vayne.q.dash,type=minecraft:area_effect_cloud] ~ ~0.1 ~ ~ 0
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] if entity @e[tag=<%team%>,tag=vayne.r.cd] run effect give @s invisibility 1 0 true
+        execute if entity @s[team=<%team%>] if entity @e[tag=<%team%>,tag=vayne.r.cd] run effect give @e[tag=vayne.r.silverfish,tag=<%team%>] invisibility 1 0 true
+        execute if entity @s[team=<%team%>] if entity @e[tag=<%team%>,tag=vayne.r.cd] run item replace entity @s armor.head with minecraft:air
+        execute if entity @s[team=<%team%>] if entity @e[tag=<%team%>,tag=vayne.r.cd] run item replace entity @s weapon.offhand with minecraft:air
+        execute if entity @s[team=<%team%>] if entity @e[tag=<%team%>,tag=vayne.r.cd] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:21,Tags:["<%team%>","vayne.q.fx.invis.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[team=<%team%>] run kill @e[tag=<%team%>,tag=vayne.q.cd]
+        execute if entity @s[team=<%team%>] run summon minecraft:area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:140,Tags:["<%team%>","vayne.q.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[team=<%team%>] run summon minecraft:area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:5,Tags:["<%team%>","vayne.q.dash"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[team=<%team%>] run tp @e[tag=<%team%>,tag=vayne.q.dash,type=minecraft:area_effect_cloud] ~ ~0.1 ~ ~ 0
+    }
 }
 
 function use_r {
@@ -144,8 +128,8 @@ function use_r {
     execute if entity @s[team=red] run bossbar set red.vayne.r players @s
     execute if entity @s[team=red] run bossbar set red.vayne.r visible true
 
-    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:240,Tags:["red","vayne.r.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:10,Tags:["red","vayne.r.animation"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:240,Tags:["red","vayne.r.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:10,Tags:["red","vayne.r.animation"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     execute if entity @s[team=red] rotated ~ 0 run summon silverfish ^1 ^ ^ {Silent:1,NoAI:1,Team:"nocollision",Tags:["vayne.r.silverfish","unvalid","red","vayne.r.bat1"]}
     execute if entity @s[team=red] rotated ~ 0 run summon silverfish ^-1 ^ ^ {Silent:1,NoAI:1,Team:"nocollision",Tags:["vayne.r.silverfish","unvalid","red","vayne.r.bat2"]}
 
@@ -156,11 +140,166 @@ function use_r {
     execute if entity @s[team=blue] run bossbar set blue.vayne.r players @s
     execute if entity @s[team=blue] run bossbar set blue.vayne.r visible true
 
-    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:240,Tags:["blue","vayne.r.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:10,Tags:["blue","vayne.r.animation"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:240,Tags:["blue","vayne.r.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:10,Tags:["blue","vayne.r.animation"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     execute if entity @s[team=blue] rotated ~ 0 run summon silverfish ^1 ^ ^ {Silent:1,NoAI:1,Team:"nocollision",Tags:["vayne.r.silverfish","unvalid","blue","vayne.r.bat1"]}
     execute if entity @s[team=blue] rotated ~ 0 run summon silverfish ^-1 ^ ^ {Silent:1,NoAI:1,Team:"nocollision",Tags:["vayne.r.silverfish","unvalid","blue","vayne.r.bat2"]}
 }
 
 function use_w {
+}
+
+# ---- item: lc:champions/vayne/item/... -----------------------------------------------
+dir item {
+    function headwear {
+        clear @s iron_sword[minecraft:custom_data~{lol_item:1}]
+        execute if score .world lang matches 0 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[600001f]},minecraft:custom_name={text:"Jhin",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+        execute if score .world lang matches 1 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[600001f]},minecraft:custom_name={text:"Jhin",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+    }
+
+    function offhand {
+        clear @s carrot_on_a_stick[minecraft:custom_data~{lol_item:1}]
+        tag @s remove offhand_temp
+
+        item replace entity @s weapon.offhand with minecraft:carrot_on_a_stick[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[9999f]},minecraft:custom_name={text:".",color:"#1b0c1b"},minecraft:custom_data={lol_item:1,kill_item:1,offhand:1}]
+    }
+}
+
+# ---- skills: lc:champions/vayne/skills/... -------------------------------------------
+dir skills {
+    function e.animation {
+        execute if block ^ ^0.1 ^1.5 #like_air run tp @s ^ ^ ^1.5
+        execute if entity @s[tag=red] run tp @e[tag=vayne.e.target,limit=1,team=!red] ~ ~0.1 ~
+
+        execute unless block ^ ^0.1 ^1.5 #like_air run playsound vayne.sfx.e.stun master @a ~ ~ ~
+
+        execute if entity @s[tag=red] unless block ^ ^0.1 ^1.5 #like_air run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:31,Tags:["vayne.e.stun.cd","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[tag=red] unless block ^ ^0.1 ^1.5 #like_air run tag @e[tag=vayne.e.target,limit=1,team=!red] add stun
+        execute if entity @s[tag=red] unless block ^ ^0.1 ^1.5 #like_air run kill @s
+
+        execute if entity @s[tag=red,nbt={Age:4}] run tag @e[tag=vayne.e.target,limit=1,team=!red] remove vayne.e.target
+
+        execute if entity @s[tag=blue] run tp @e[tag=vayne.e.target,limit=1,team=!blue] ~ ~0.1 ~
+
+        execute if entity @s[tag=blue] unless block ^ ^0.1 ^1.5 #like_air run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:31,Tags:["vayne.e.stun.cd","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[tag=blue] unless block ^ ^0.1 ^1.5 #like_air run tag @e[tag=vayne.e.target,limit=1,team=!blue] add stun
+        execute if entity @s[tag=blue] unless block ^ ^0.1 ^1.5 #like_air run kill @s
+
+        execute if entity @s[tag=blue,nbt={Age:4}] run tag @e[tag=vayne.e.target,limit=1,team=!blue] remove vayne.e.target
+    }
+
+    function e.knockback {
+        particle witch ~ ~1.2 ~ 0 0 0 0.5 50 force
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run tag @e[tag=vayne.aa.target,team=!<%team%>,limit=1] add vayne.e.target
+            execute if entity @s[team=<%team%>] run tag @e[tag=vayne.e.target,team=!<%team%>,limit=1] add airborne
+            execute if entity @s[team=<%team%>] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:5,Tags:["vayne.e.knockback","<%team%>"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+            execute if entity @s[team=<%team%>] rotated as @s run tp @e[tag=vayne.e.knockback,tag=<%team%>] ~ ~ ~ ~ ~
+        }
+    }
+
+    function e.stun {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>,nbt={Age:30}] run tag @e[tag=vayne.e.target,limit=1,team=!<%team%>] remove stun
+            execute if entity @s[tag=<%team%>,nbt={Age:30}] run tag @e[tag=vayne.e.target,limit=1,team=!<%team%>] remove vayne.e.target
+        }
+    }
+
+    function p.raycasting {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>,distance=..20] unless entity @e[tag=!unvalid,type=!#unvalid,distance=..1.5,team=!<%team%>] positioned ^ ^ ^1 run function lc:champions/vayne/skills/p.raycasting
+            execute if entity @s[team=<%team%>,distance=..20] if entity @e[tag=!unvalid,type=!#unvalid,distance=..1.5,team=!<%team%>] run tag @s add p.active
+        }
+    }
+
+    function q.dash {
+        execute if block ^ ^ ^1 #like_air run tp @s ^ ^ ^1
+        execute if entity @s[tag=red] run tp @p[team=red,tag=vayne] ~ ~ ~ ~ ~
+        execute if entity @s[tag=blue] run tp @p[team=blue,tag=vayne] ~ ~ ~ ~ ~
+    }
+
+    function r.animation {
+        tp @s ~ ~0.2 ~ ~30 0
+        particle witch ^1 ^ ^ 0 0 0 1 2 force
+        particle witch ^-1 ^ ^ 0 0 0 1 2 force
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] run tp @e[tag=<%team%>,tag=vayne.r.bat1,type=silverfish] ^1 ^ ^
+            execute if entity @s[tag=<%team%>] run tp @e[tag=<%team%>,tag=vayne.r.bat2,type=silverfish] ^-1 ^ ^
+        }
+    }
+
+    function r.bat {
+        execute if entity @s[tag=red,tag=vayne.r.bat1] unless entity @e[tag=vayne.r.animation,tag=red] at @p[tag=vayne,team=red] rotated ~ 0 run tp @s ^1 ^1.5 ^ ~ ~
+        execute if entity @s[tag=red,tag=vayne.r.bat2] unless entity @e[tag=vayne.r.animation,tag=red] at @p[tag=vayne,team=red] rotated ~ 0 run tp @s ^-1 ^1.5 ^ ~ ~
+        execute if entity @s[tag=red] unless entity @e[tag=vayne.r.cd,tag=red] run function lc:champions/vayne/skills/r.end
+        execute if entity @s[tag=red] unless entity @e[tag=vayne.q.fx.invis.cd,tag=red] positioned as @p[tag=vayne,team=red] run particle witch ~ ~ ~ 0.2 0 0.2 0 2 force
+
+        execute if entity @s[tag=red,tag=vayne.r.bat1] run scoreboard players remove @p[scores={vayne.r.duration=1..}] vayne.r.duration 1
+        execute if entity @s[tag=red,tag=vayne.r.bat2] store result bossbar red.vayne.r value run scoreboard players get @p[tag=vayne,team=red] vayne.r.duration
+
+        execute if entity @s[tag=blue,tag=vayne.r.bat1] unless entity @e[tag=vayne.r.animation,tag=blue] at @p[tag=vayne,team=blue] rotated ~ 0 run tp @s ^1 ^1.5 ^ ~ ~
+        execute if entity @s[tag=blue,tag=vayne.r.bat2] unless entity @e[tag=vayne.r.animation,tag=blue] at @p[tag=vayne,team=blue] rotated ~ 0 run tp @s ^-1 ^1.5 ^ ~ ~
+        execute if entity @s[tag=blue] unless entity @e[tag=vayne.r.cd,tag=blue] run function lc:champions/vayne/skills/r.end
+        execute if entity @s[tag=blue] unless entity @e[tag=vayne.q.fx.invis.cd,tag=blue] positioned as @p[tag=vayne,team=blue] run particle witch ~ ~ ~ 0.2 0 0.2 0 2 force
+
+        execute if entity @s[tag=blue,tag=vayne.r.bat1] run scoreboard players remove @p[scores={vayne.r.duration=1..}] vayne.r.duration 1
+        execute if entity @s[tag=blue,tag=vayne.r.bat2] store result bossbar blue.vayne.r value run scoreboard players get @p[tag=vayne,team=blue] vayne.r.duration
+    }
+
+    function r.end {
+        execute if entity @s[tag=red] run bossbar remove red.vayne.r
+        execute if entity @s[tag=blue] run bossbar remove blue.vayne.r
+
+        tp @s ~ -100 ~
+        kill @s
+    }
+
+    function r.extend {
+        scoreboard players add @s vayne.r.duration 20
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] as @e[tag=<%team%>,tag=vayne.r.cd,limit=1] store result score @s temp run data get entity @s Age
+            execute if entity @s[team=<%team%>] as @e[tag=<%team%>,tag=vayne.r.cd,limit=1] run scoreboard players remove @s temp 20
+            execute if entity @s[team=<%team%>] as @e[tag=<%team%>,tag=vayne.r.cd,limit=1] store result entity @s Age int 1 run scoreboard players get @s temp
+        }
+    }
+
+    function w.stack.full {
+        playsound vayne.sfx.w master @a ~ ~ ~
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] if entity @e[tag=<%team%>,tag=vayne.r.cd] as @p[tag=vayne,team=<%team%>] run function lc:champions/vayne/skills/r.extend
+            execute if entity @s[team=<%team%>] run kill @e[tag=vayne.w.passive,team=<%team%>]
+            execute if entity @s[team=<%team%>] positioned as @e[tag=vayne.aa.target,team=!<%team%>] run particle crit ~ ~1.2 ~ 0 0 0 0.5 50 force
+            execute if entity @s[team=<%team%>] run effect give @e[tag=vayne.aa.target,type=!#undead,team=!<%team%>] instant_damage 1 0 true
+            execute if entity @s[team=<%team%>] run effect give @e[tag=vayne.aa.target,type=#undead,team=!<%team%>] instant_health 1 0 true
+            execute if entity @s[team=<%team%>] run scoreboard players set @p[team=<%team%>,tag=vayne] vayne.w.stack 0
+            execute if entity @s[team=<%team%>] run kill @e[tag=vayne.w.stack.cd,tag=<%team%>]
+            execute if entity @s[team=<%team%>] run tag @e[tag=vayne.aa.target,team=!<%team%>] remove vayne.aa.target
+        }
+    }
+
+    function w.stack.gain {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run kill @e[tag=vayne.w.stack.cd,tag=<%team%>]
+            execute if entity @s[team=<%team%>] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:70,Tags:["vayne.w.stack.cd","<%team%>"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+            execute if entity @s[team=<%team%>] if entity @e[type=!#unvalid,tag=vayne.aa.target,distance=..2,team=!<%team%>,limit=1,sort=nearest] run scoreboard players add @p[tag=vayne,team=<%team%>,scores={vayne.w.stack=..2}] vayne.w.stack 1
+            execute if entity @s[team=<%team%>] if entity @e[type=!#unvalid,tag=!vayne.aa.target,distance=..2,team=!<%team%>,limit=1,sort=nearest] run scoreboard players set @p[tag=vayne,team=<%team%>] vayne.w.stack 1
+            execute if entity @s[team=<%team%>] if entity @e[type=!#unvalid,tag=!vayne.aa.target,distance=..2,team=!<%team%>,limit=1,sort=nearest] run tag @e[type=!#unvalid,tag=vayne.aa.target,team=!<%team%>] remove vayne.aa.target
+            execute if entity @s[team=<%team%>] if entity @e[type=!#unvalid,tag=!vayne.aa.target,distance=..2,team=!<%team%>,limit=1,sort=nearest] run tag @e[type=!#unvalid,tag=!vayne.aa.target,distance=..2,team=!<%team%>,limit=1,sort=nearest] add vayne.aa.target
+            execute if entity @s[team=<%team%>,tag=e_active] positioned as @e[tag=vayne.aa.target,limit=1,team=!<%team%>] run function lc:champions/vayne/skills/e.knockback
+            execute if entity @s[team=<%team%>] if entity @p[tag=vayne,team=<%team%>,scores={vayne.w.stack=1}] unless entity @e[tag=vayne.w.passive,team=<%team%>] run summon armor_stand ~ ~ ~ {Tags:["unvalid","vayne.w.passive"],Marker:1,Invisible:1,Team:'<%team%>',equipment:{head:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[600001f]}}}}}
+            execute if entity @s[team=<%team%>] if entity @p[tag=vayne,team=<%team%>,scores={vayne.w.stack=2}] run data modify entity @e[tag=vayne.w.passive,team=<%team%>,limit=1] equipment.head.components."minecraft:custom_model_data" set value {floats:[600002f]}
+            execute if entity @s[team=<%team%>] if entity @p[tag=vayne,team=<%team%>,scores={vayne.w.stack=3}] run function lc:champions/vayne/skills/w.stack.full
+        }
+    }
+
+    function w.stack.lost {
+        scoreboard players set @s vayne.w.stack 0
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run kill @e[tag=vayne.w.passive,team=<%team%>]
+            execute if entity @s[team=<%team%>] run tag @e[tag=vayne.aa.target,team=!<%team%>] remove vayne.aa.target
+        }
+    }
 }

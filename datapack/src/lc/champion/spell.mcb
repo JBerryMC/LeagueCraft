@@ -8,7 +8,7 @@ function barrier {
 
     tag @s add update.shield.barrier
 
-    summon area_effect_cloud ~ ~ ~ {Duration:999999,Tags:["shield.all","new"],Passengers:[{id:"area_effect_cloud",Tags:["cd"],Duration:40,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:999999,Tags:["shield.all","new"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Tags:["cd"],Duration:40,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     data modify entity @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] Owner set from entity @s UUID
     scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all = @s hp.max
     scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all /= 6 integer
@@ -88,7 +88,7 @@ function flash {
     particle dust{color:[1,1,0],scale:4.0} ~ ~ ~ 0.5 0.5 0.5 1 20 force
     particle firework ~ ~ ~ 0 0 0 0.2 10 force
 
-    execute anchored eyes positioned ^ ^ ^8 run summon area_effect_cloud ~ ~ ~ {Duration:2,Tags:["flash"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute anchored eyes positioned ^ ^ ^8 run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:2,Tags:["flash"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     execute anchored eyes positioned ^ ^ ^8 run data modify entity @e[tag=flash,type=area_effect_cloud,limit=1,sort=nearest] Owner set from entity @s UUID
     execute anchored eyes positioned ^ ^ ^8 as @e[tag=flash,type=area_effect_cloud,limit=1,sort=nearest] at @s run function lc:core/spell/flash
 }
@@ -129,10 +129,10 @@ function ignite {
 
     playsound spell.ignite master @a ~ ~ ~
 
-    execute if entity @s[team=red] run summon item_display ~ ~ ~ {Tags:["dot.ignite","dot","red","temp","lol.auto_clear","do_not_clear"],Passengers:[{id:"area_effect_cloud",Duration:1,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
-    execute if entity @s[team=blue] run summon item_display ~ ~ ~ {Tags:["dot.ignite","dot","blue","temp","lol.auto_clear","do_not_clear"],Passengers:[{id:"area_effect_cloud",Duration:1,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=red] run summon item_display ~ ~ ~ {Tags:["dot.ignite","dot","red","temp","lol.auto_clear","do_not_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:1,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run summon item_display ~ ~ ~ {Tags:["dot.ignite","dot","blue","temp","lol.auto_clear","do_not_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:1,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
 
-    execute at @s run summon area_effect_cloud ~ ~ ~ {Duration:1,Tags:["temp_entity"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute at @s run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:1,Tags:["temp_entity"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     data modify entity @e[tag=temp_entity,limit=1,sort=nearest,type=area_effect_cloud] Owner set from entity @s UUID
 
     execute if entity @s[team=red] as @e[tag=dot.ignite,tag=temp,tag=red,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=initial] Owner set from entity @e[type=area_effect_cloud,tag=temp_entity,limit=1,sort=nearest] Owner

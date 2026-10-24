@@ -57,12 +57,33 @@ final class Datapack {
                 "execute as " + player.getUniqueId() + " at @s run function " + function);
     }
 
+    /** Runs a command like the console does (quietly). Returns false if it failed. */
+    boolean command(String command) {
+        return Bukkit.dispatchCommand(silentSender, command);
+    }
+
+    /** A score of a fake player (like waittime in objective queue), or {@code fallback}. */
+    int score(String holder, String objective, int fallback) {
+        Objective o = scoreboard().getObjective(objective);
+        if (o == null) return fallback;
+        Score score = o.getScore(holder);
+        return score.isScoreSet() ? score.getScore() : fallback;
+    }
+
     /** An entity's score, or {@code fallback} if the objective or the score isn't there. */
     int score(Entity entity, String objective, int fallback) {
         Objective o = scoreboard().getObjective(objective);
         if (o == null) return fallback;
         Score score = o.getScore(entity instanceof Player player ? player.getName() : entity.getUniqueId().toString());
         return score.isScoreSet() ? score.getScore() : fallback;
+    }
+
+    /** Sets an entity's score, if the datapack made the objective and it isn't that already. */
+    void setScore(Entity entity, String objective, int value) {
+        Objective o = scoreboard().getObjective(objective);
+        if (o == null) return;
+        Score score = o.getScore(entity instanceof Player player ? player.getName() : entity.getUniqueId().toString());
+        if (!score.isScoreSet() || score.getScore() != value) score.setScore(value);
     }
 
     /** The attack sound (and Aatrox's attack animation), once per basic attack. */

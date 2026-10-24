@@ -1,0 +1,14 @@
+# lc:core/model/  Models worn by champions.
+#
+# The LeagueCraft plugin puts a model on every champion (a placeholder mannequin for now). An
+# ability can swap in its own Animated Java model for a while, like Aatrox's R: summon the rig, then
+# run lc:core/model/wear as the champion. At the end of the tick the plugin mounts the rig on the
+# champion, on an interaction entity that keeps its feet at the champion's feet, and turns it with
+# them. Removing the rig (animated_java:<rig>/remove/this) gives the champion their usual model back.
+
+# lc:core/model/wear {tag:"<tag>"}: run as a champion, right after summoning the rig whose root has
+# that tag (the nearest one). Riders can't be put on players with /ride; the plugin does it.
+function wear {
+    $tag @e[type=item_display,tag=$(tag),limit=1,sort=nearest] add lc.wear
+    tag @s add lc.wearer
+}

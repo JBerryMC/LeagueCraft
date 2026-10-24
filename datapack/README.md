@@ -26,7 +26,7 @@ datapack/
 │  └─ lc/               ← everything else, namespace lc
 │     ├─ core.mcb, core/            lc:core/...       loops, setup, champion setup, minions, towers, effects, motion
 │     ├─ champion.mcb, champion/    lc:champion/...   HUD, basic attack, abilities input, damage, HP/mana
-│     ├─ champions/<name>.mcb, champions/<name>/   lc:champions/<name>/...   the 15 champions
+│     ├─ champions/<name>.mcb       lc:champions/<name>/...   one file per champion (dir skills { } inside)
 │     ├─ game.mcb, game/            lc:game/...       queue, match, lobby
 │     ├─ menu.mcb, menu/            lc:menu/...       settings menu and champion pick
 │     ├─ animation.mcb, animation/  lc:animation/...
@@ -40,7 +40,17 @@ datapack/
 └─ data/                ← build output (don't edit)
 ```
 
-MC-Build names every function after its file: `src/lc/champions/ashe/skills.mcb` holds `lc:champions/ashe/skills/...`. Before 0.7.0 each of these was its own namespace; the old ids map like this:
+Code that does the same for both teams is written once with MC-Build's compile-time loop:
+
+```
+REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+    execute if entity @s[team=<%team%>] run tag @e[tag=<%enemy%>,team=!<%team%>] add x
+}
+```
+
+builds the red line, then the blue line. Every champion uses it where a block of red lines was followed by the same block for blue; each champion was converted on its own and checked to build byte-for-byte the same datapack. Red/blue lines that alternate one by one are left as they are (a loop would reorder them).
+
+MC-Build names every function after its file, plus any `dir <name> { }` block around it: `src/lc/champions/ashe.mcb` holds `lc:champions/ashe/...`, and its `dir skills { }` block `lc:champions/ashe/skills/...`. Before 0.7.0 each of these was its own namespace; the old ids map like this:
 
 | Before | Now |
 |---|---|
@@ -65,13 +75,25 @@ mcb build        # or: mcb watch
 
 ## Champion stats (`src/settings.mcb`)
 
-Every champion's stats are in one chart: four tables (health and resource, offense and movement, abilities, basic attack) with one row per champion. Change a number, run `mcb build`, then `/reload` in game. The chart is applied again to everyone already playing that champion (current HP and mana are kept, capped at the new maximum), and to everyone who picks one. Each column is explained above its table.
+Every champion's stats are in one chart: five tables (health and resource, offense and movement, abilities, basic attack, ground-targeted abilities) with one row per champion. Change a number, run `mcb build`, then `/reload` in game. The chart is applied again to everyone already playing that champion (current HP and mana are kept, capped at the new maximum), and to everyone who picks one. Each column is explained above its table.
 
 The plugin reads the basic-attack columns (`attack_speed`, `range`, `ammo`, `reload`) from scores the chart sets. Melee champions have 0 ammo, so they never reload.
 
 ## Moving players (`lc:core/motion`)
 
 Dashes and knockups used to mount the player on an entity. A datapack can't set a player's velocity, so now it asks the plugin to: `lc:core/motion/push {x, y, z, ticks}` (thousandths of a block per tick; `ticks` above 1 holds it), `throw {speed, ticks}` (the way the execution faces) and `halt`. Dashes keep their dash entity, and the player follows it with `lc:core/motion/follow` every tick. *Dash Looking* faces the camera; *Dash Moving* (Aatrox E) faces the WASD keys (`lc:core/motion/face_moving`, through player input predicates). The comments in `src/lc/core/motion.mcb` explain the rest.
+
+## Head bars
+
+The HP and mana bar above each player's head is off for now, for visibility: the three places that summoned it (`lc:core/champion/_choose`, respawn, lobby) have the summon commented out, and `/reload` removes bars left from before. The `has_display_bar` tag is still set, since shields and marks check it.
+
+## Timers (area effect clouds)
+
+The datapack times almost everything with area effect clouds: summoned with a `Duration`, they remove themselves. A cloud lives `Duration + WaitTime` ticks. 1.20.2 read a missing `WaitTime` as 0, but 26.x defaults it to 20, so after the update **every timer ran 20 ticks (1 second) longer** than written: a 6-tick dash lasted 26. Every cloud the datapack summons now says `WaitTime:0`; keep that on new ones.
+
+## Aatrox's R
+
+Aatrox used to ride an invisible horse during R, carrying the big R model. Now he grows instead: `scale` +50%, `movement_speed` +50%, `step_height` +0.5 and `jump_strength` +0.2 (attribute modifiers `lol:aatrox.r`, removed when R ends), and the R model is mounted on him by the plugin (`lc:core/model/wear`). He's tagged `aatrox.r` while it lasts, the tag the horse had.
 
 ## Server settings
 

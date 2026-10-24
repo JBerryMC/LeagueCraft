@@ -132,6 +132,11 @@ final class BasicAttackListener implements Listener {
             dev.ignored(player, input, "duplicate event this tick (already attacked)");
             return;
         }
+        // Left click while aiming a ground-targeted ability casts it instead of attacking.
+        if (this.input.confirmAim(player, input)) {
+            lastShot.put(id, tick);
+            return;
+        }
         Set<String> tags = player.getScoreboardTags();
         if (tags.contains("cced") || tags.contains("airborne")) {
             dev.ignored(player, input, "crowd controlled");

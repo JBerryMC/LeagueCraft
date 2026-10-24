@@ -14,10 +14,13 @@ function cc_immune {
     execute if score @s fx.cc_immune matches 0 run tag @s remove unstoppable
 }
 
+# Channeling, root and stun take 99% of the speed, not 100%: still frozen in practice (about 0.04
+# blocks a second), but never exactly 0, so the plugin can keep a zoomed view through a cast (the
+# client works the view out from the speed, and a speed of 0 leaves it no zoom but a fixed one).
 function channeling {
-    execute unless predicate lc:core/is_flying run attribute @s minecraft:movement_speed modifier add lol:channeling -1 add_multiplied_total
+    execute unless predicate lc:core/is_flying run attribute @s minecraft:movement_speed modifier add lol:channeling -0.99 add_multiplied_total
 
-    execute if predicate lc:core/is_flying on vehicle run attribute @s minecraft:movement_speed modifier add lol:channeling -1 add_multiplied_total
+    execute if predicate lc:core/is_flying on vehicle run attribute @s minecraft:movement_speed modifier add lol:channeling -0.99 add_multiplied_total
 
     execute if score @s channeling matches 0 on vehicle run attribute @s minecraft:movement_speed modifier remove lol:channeling
     execute if score @s channeling matches 0 run attribute @s minecraft:movement_speed modifier remove lol:channeling
@@ -56,7 +59,7 @@ function exhaust {
     execute unless predicate lc:core/is_flying run effect give @s slowness 1 1 false
     execute if predicate lc:core/is_flying on vehicle run effect give @s slowness 1 1 false
 
-    execute anchored eyes positioned ^ ^0.5 ^ unless entity @e[tag=particle.exhaust,limit=1,sort=nearest,distance=..1] run summon area_effect_cloud ~ ~ ~ {Duration:999999,Tags:["particle.exhaust"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute anchored eyes positioned ^ ^0.5 ^ unless entity @e[tag=particle.exhaust,limit=1,sort=nearest,distance=..1] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:999999,Tags:["particle.exhaust"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     execute anchored eyes positioned ^ ^0.5 ^ as @e[tag=particle.exhaust,limit=1,sort=nearest] rotated as @s run tp @s ~ ~ ~ ~7 ~
     execute anchored eyes positioned ^ ^0.5 ^ as @e[tag=particle.exhaust,limit=1,sort=nearest] at @s run particle enchanted_hit ^ ^-0.2 ^0.5 0 0 0 0 2 force
     execute anchored eyes positioned ^ ^0.5 ^ as @e[tag=particle.exhaust,limit=1,sort=nearest] at @s run particle enchanted_hit ^ ^-0.2 ^-0.5 0 0 0 0 2 force
@@ -105,7 +108,7 @@ function ignite {
     execute if entity @s[tag=!is_ignited] run playsound spell.ignite.start master @a ~ ~ ~
     execute if entity @s[tag=!is_ignited] run tag @s add is_ignited
 
-    execute anchored eyes positioned ^ ^0.5 ^ unless entity @e[tag=particle.ignite,limit=1,sort=nearest,distance=..1,type=item_display] run summon item_display ~ ~ ~ {interpolation_duration:10,item_display:"head",item:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[1500101f]}}},Tags:["particle.ignite","spin1"],Passengers:[{id:"area_effect_cloud",Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",Duration:80,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute anchored eyes positioned ^ ^0.5 ^ unless entity @e[tag=particle.ignite,limit=1,sort=nearest,distance=..1,type=item_display] run summon item_display ~ ~ ~ {interpolation_duration:10,item_display:"head",item:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[1500101f]}}},Tags:["particle.ignite","spin1"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:80,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
 
     execute if score @s cc.ignite matches 0 run playsound spell.ignite.end master @a ~ ~ ~
     execute if score @s cc.ignite matches 0 run tag @s remove is_ignited
@@ -131,10 +134,10 @@ function invis {
 }
 
 function root {
-    execute unless predicate lc:core/is_flying run attribute @s minecraft:movement_speed modifier add lol:root -1 add_multiplied_total
+    execute unless predicate lc:core/is_flying run attribute @s minecraft:movement_speed modifier add lol:root -0.99 add_multiplied_total
 
-    execute if predicate lc:core/is_flying on vehicle run attribute @s minecraft:movement_speed modifier add lol:root -1 add_multiplied_total
-    execute anchored feet positioned ^ ^0.1 ^ unless entity @e[tag=particle.root,limit=1,sort=nearest,distance=..1] run summon area_effect_cloud ~ ~ ~ {Duration:999999,Tags:["particle.root"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if predicate lc:core/is_flying on vehicle run attribute @s minecraft:movement_speed modifier add lol:root -0.99 add_multiplied_total
+    execute anchored feet positioned ^ ^0.1 ^ unless entity @e[tag=particle.root,limit=1,sort=nearest,distance=..1] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:999999,Tags:["particle.root"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     execute anchored feet positioned ^ ^0.1 ^ as @e[tag=particle.root,limit=1,sort=nearest] rotated as @s run tp @s ~ ~ ~ ~20 ~
     execute anchored feet positioned ^ ^0.1 ^ as @e[tag=particle.root,limit=1,sort=nearest] at @s run particle crit ^ ^ ^0.5 0 0 0 1 0 force
 
@@ -164,12 +167,12 @@ function silence {
 
 function stun {
     tag @s add cced
-    execute unless predicate lc:core/is_flying run attribute @s minecraft:movement_speed modifier add lol:stun -1 add_multiplied_total
+    execute unless predicate lc:core/is_flying run attribute @s minecraft:movement_speed modifier add lol:stun -0.99 add_multiplied_total
 
-    execute if predicate lc:core/is_flying on vehicle run attribute @s minecraft:movement_speed modifier add lol:stun -1 add_multiplied_total
+    execute if predicate lc:core/is_flying on vehicle run attribute @s minecraft:movement_speed modifier add lol:stun -0.99 add_multiplied_total
 
     effect give @s weakness 1 127 true
-    execute anchored eyes positioned ^ ^0.5 ^ unless entity @e[tag=particle.stun,limit=1,sort=nearest,distance=..1] run summon area_effect_cloud ~ ~ ~ {Duration:999999,Tags:["particle.stun"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute anchored eyes positioned ^ ^0.5 ^ unless entity @e[tag=particle.stun,limit=1,sort=nearest,distance=..1] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:999999,Tags:["particle.stun"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     execute anchored eyes positioned ^ ^0.5 ^ as @e[tag=particle.stun,limit=1,sort=nearest] rotated as @s run tp @s ~ ~ ~ ~20 ~
     execute anchored eyes positioned ^ ^0.5 ^ as @e[tag=particle.stun,limit=1,sort=nearest] at @s run particle crit ^ ^ ^0.5 0 0 0 1 0 force
 

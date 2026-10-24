@@ -267,7 +267,7 @@ function ranged.homing {
 }
 
 function ranged.initial {
-    execute at @s run summon area_effect_cloud ~ ~ ~ {Duration:1,Tags:["temp_entity"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute at @s run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:1,Tags:["temp_entity"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     data modify entity @e[tag=temp_entity,limit=1,sort=nearest,type=area_effect_cloud] Owner set from entity @s UUID
 
     execute if entity @s[team=red] as @e[tag=aa,tag=temp,tag=red,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=initial] Owner set from entity @e[type=area_effect_cloud,tag=temp_entity,limit=1,sort=nearest] Owner
@@ -281,7 +281,7 @@ function ranged.initial {
 }
 
 function ranged.initial_structure {
-    execute at @s run summon area_effect_cloud ~ ~ ~ {Duration:1,Tags:["temp_entity"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute at @s run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:1,Tags:["temp_entity"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     data modify entity @e[tag=temp_entity,limit=1,sort=nearest,type=area_effect_cloud] Owner set from entity @s UUID
 
     execute if entity @s[team=red] as @e[tag=aa,tag=temp,tag=red,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=initial] Owner set from entity @e[type=area_effect_cloud,tag=temp_entity,limit=1,sort=nearest] Owner

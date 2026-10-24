@@ -1,8 +1,5 @@
 package me.jberrymc.leaguecraft;
 
-import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Input;
 import org.bukkit.entity.Player;
@@ -17,12 +14,15 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 /**
- * Ammo for champions' basic attacks, shown in a boss bar.
+ * Ammo for champions' basic attacks.
  *
  * <p>How much ammo and how long a reload takes are stats in the datapack's stats chart
  * (settings.mcb), which sets the {@code ammo.max} and {@code ammo.reload} (ticks) scores. A champion
  * with {@code ammo.max} 0 (melee) never runs out. A reload starts by itself when the last shot is
  * fired, or early with the reload key (sprint by default); it refills the whole magazine.
+ *
+ * <p>For the HUD, the plugin keeps two scores up to date: {@code ammo.left} (shots left) and
+ * {@code ammo.reloading} (ticks until the reload ends, 0 when not reloading).
  */
 final class Ammo implements Listener {
     private static final int FALLBACK_RELOAD_TICKS = 30;
@@ -38,8 +38,6 @@ final class Ammo implements Listener {
         int reloadTicks;
         /** Server tick the current reload ends, or -1 when not reloading. */
         long reloadEnd = -1;
-        final BossBar bar = BossBar.bossBar(Component.empty(), 1f, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS);
-        boolean shown;
         /** Whether the reload key was down at the last input update, so a held key reloads once. */
         boolean keyDown;
     }
@@ -50,14 +48,9 @@ final class Ammo implements Listener {
         this.settings = settings;
     }
 
-    /** Called every few ticks for each champion: picks up stat changes and shows the bar if they have ammo. */
+    /** Called every few ticks for each champion: picks up stat changes. */
     void apply(Player player) {
-        State s = sync(player);
-        boolean show = s.max > 0;
-        if (show && !s.shown) player.showBossBar(s.bar);
-        if (!show && s.shown) player.hideBossBar(s.bar);
-        s.shown = show;
-        draw(s);
+        publish(player, sync(player));
     }
 
     /** Takes one shot. False (and nothing is fired) while reloading; an empty magazine starts a reload. */
@@ -75,30 +68,29 @@ final class Ammo implements Listener {
         }
         s.left--;
         if (s.left == 0) startReload(player, s, "magazine empty");
-        draw(s);
+        publish(player, s);
         return true;
     }
 
-    /** Every tick: finishes reloads. */
+    /** Every tick: counts reloads down and finishes them. */
     void tick() {
         long now = Bukkit.getCurrentTick();
         for (Map.Entry<UUID, State> entry : states.entrySet()) {
             State s = entry.getValue();
             if (s.reloadEnd < 0) continue;
+            Player player = Bukkit.getPlayer(entry.getKey());
             if (now >= s.reloadEnd) {
                 s.reloadEnd = -1;
                 s.left = s.max;
-                Player player = Bukkit.getPlayer(entry.getKey());
                 if (player != null) dev.ammo(player, "reloaded", s.left, s.max);
             }
-            draw(s);
+            if (player != null) publish(player, s);
         }
     }
 
-    /** Hides the bar and forgets the player once they aren't playing a champion. */
+    /** Forgets the player once they aren't playing a champion. */
     void remove(Player player) {
-        State s = states.remove(player.getUniqueId());
-        if (s != null && s.shown) player.hideBossBar(s.bar);
+        states.remove(player.getUniqueId());
     }
 
     @EventHandler
@@ -141,20 +133,12 @@ final class Ammo implements Listener {
     private void startReload(Player player, State s, String why) {
         s.reloadEnd = Bukkit.getCurrentTick() + s.reloadTicks;
         dev.ammo(player, "reloading (" + why + ", " + s.reloadTicks + " ticks)", s.left, s.max);
-        draw(s);
+        publish(player, s);
     }
 
-    private static void draw(State s) {
-        if (s.max <= 0) return;
-        if (s.reloadEnd >= 0) {
-            long left = Math.max(0, s.reloadEnd - Bukkit.getCurrentTick());
-            s.bar.name(Component.text("Reloading", NamedTextColor.YELLOW));
-            s.bar.progress(Math.clamp(1f - (float) left / s.reloadTicks, 0f, 1f));
-            s.bar.color(BossBar.Color.YELLOW);
-        } else {
-            s.bar.name(Component.text("Ammo  " + s.left + " / " + s.max, s.left == 0 ? NamedTextColor.RED : NamedTextColor.WHITE));
-            s.bar.progress(Math.clamp((float) s.left / s.max, 0f, 1f));
-            s.bar.color(BossBar.Color.WHITE);
-        }
+    /** Writes ammo.left and ammo.reloading for the HUD. */
+    private void publish(Player player, State s) {
+        datapack.setScore(player, "ammo.left", s.left);
+        datapack.setScore(player, "ammo.reloading", s.reloadEnd < 0 ? 0 : (int) Math.max(0, s.reloadEnd - Bukkit.getCurrentTick()));
     }
 }

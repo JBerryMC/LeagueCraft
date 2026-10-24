@@ -7,8 +7,8 @@ function spin1 {
     data modify entity @s start_interpolation set value -1
     tag @s add spin2
     tag @s remove spin1
-    execute if entity @s[tag=!spin_lv_2] run summon area_effect_cloud ~ ~ ~ {Tags:["spin2","temp"],Duration:10,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[tag=spin_lv_2] run summon area_effect_cloud ~ ~ ~ {Tags:["spin2","temp"],Duration:5,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=!spin_lv_2] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Tags:["spin2","temp"],Duration:10,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=spin_lv_2] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Tags:["spin2","temp"],Duration:5,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     ride @e[tag=spin2,type=area_effect_cloud,limit=1,sort=nearest,tag=temp] mount @s
     execute on passengers run tag @s remove temp
 }
@@ -20,8 +20,8 @@ function spin2 {
     data modify entity @s start_interpolation set value -1
     tag @s add spin3
     tag @s remove spin2
-    execute if entity @s[tag=!spin_lv_2] run summon area_effect_cloud ~ ~ ~ {Tags:["spin3","temp"],Duration:10,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[tag=spin_lv_2] run summon area_effect_cloud ~ ~ ~ {Tags:["spin3","temp"],Duration:5,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=!spin_lv_2] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Tags:["spin3","temp"],Duration:10,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=spin_lv_2] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Tags:["spin3","temp"],Duration:5,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     ride @e[tag=spin3,type=area_effect_cloud,limit=1,sort=nearest,tag=temp] mount @s
     execute on passengers run tag @s remove temp
 }
@@ -33,8 +33,8 @@ function spin3 {
     data modify entity @s start_interpolation set value -1
     tag @s add spin4
     tag @s remove spin3
-    execute if entity @s[tag=!spin_lv_2] run summon area_effect_cloud ~ ~ ~ {Tags:["spin4","temp"],Duration:10,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[tag=spin_lv_2] run summon area_effect_cloud ~ ~ ~ {Tags:["spin4","temp"],Duration:5,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=!spin_lv_2] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Tags:["spin4","temp"],Duration:10,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=spin_lv_2] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Tags:["spin4","temp"],Duration:5,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     ride @e[tag=spin4,type=area_effect_cloud,limit=1,sort=nearest,tag=temp] mount @s
     execute on passengers run tag @s remove temp
 }
@@ -46,8 +46,8 @@ function spin4 {
     data modify entity @s start_interpolation set value -1
     tag @s add spin1
     tag @s remove spin4
-    execute if entity @s[tag=!spin_lv_2] run summon area_effect_cloud ~ ~ ~ {Tags:["spin1","temp"],Duration:10,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[tag=spin_lv_2] run summon area_effect_cloud ~ ~ ~ {Tags:["spin1","temp"],Duration:5,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=!spin_lv_2] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Tags:["spin1","temp"],Duration:10,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[tag=spin_lv_2] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Tags:["spin1","temp"],Duration:5,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     ride @e[tag=spin1,type=area_effect_cloud,limit=1,sort=nearest,tag=temp] mount @s
     execute on passengers run tag @s remove temp
 }

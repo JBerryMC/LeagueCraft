@@ -101,14 +101,13 @@ function use_e {
     scoreboard players operation @s garen.e.count = @s garen.e.duration
     scoreboard players operation @s garen.e.count /= temp aa.spd
 
-    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:60,Tags:["garen.e.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:60,Tags:["garen.e.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:60,Tags:["garen.e.particle","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:60,Tags:["garen.e.particle","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
 
-    execute if entity @s[team=red] run summon item_display ~ ~ ~ {Tags:["red","garen.e.cd","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:60,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
-    execute if entity @s[team=red] run function lc:champions/garen/skills/e.spin
-
-    execute if entity @s[team=blue] run summon item_display ~ ~ ~ {Tags:["blue","garen.e.cd","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:60,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
-    execute if entity @s[team=blue] run function lc:champions/garen/skills/e.spin
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] run summon item_display ~ ~ ~ {Tags:["<%team%>","garen.e.cd","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:60,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[team=<%team%>] run function lc:champions/garen/skills/e.spin
+    }
 }
 
 function use_q {
@@ -120,8 +119,8 @@ function use_q {
     scoreboard players set @s aa.cd 0
 
     tag @s add garen.q
-    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {Duration:72,Tags:["garen.q.cd","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {Duration:72,Tags:["garen.q.cd","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:72,Tags:["garen.q.cd","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:72,Tags:["garen.q.cd","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
 }
 
 function use_r {
@@ -134,17 +133,17 @@ function use_r {
 
     execute if entity @s[tag=garen.e,team=red] as @e[tag=garen.e.cd,tag=red] run function lc:champions/garen/skills/e.end
 
-    execute if entity @s[team=red] run summon item_display ~ ~ ~ {Tags:["red","garen.r","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=red] run summon item_display ~ ~ ~ {Tags:["red","garen.r","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
     execute if entity @s[team=red] run tag @e[tag=garen.r.temp_target,team=!red] add garen.r.target
     execute if entity @s[team=red] run scoreboard players set @e[tag=garen.r.target,team=!red] fx.sight 20
-    execute if entity @s[team=red] positioned as @e[tag=garen.r.target,team=!red,limit=1,sort=nearest] run summon item_display ~ ~20 ~ {teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1200401f]}}},Tags:["red","garen.r.fx","temp","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=red] positioned as @e[tag=garen.r.target,team=!red,limit=1,sort=nearest] run summon item_display ~ ~20 ~ {teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1200401f]}}},Tags:["red","garen.r.fx","temp","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
 
     execute if entity @s[tag=garen.e,team=blue] as @e[tag=garen.e.cd,tag=blue] run function lc:champions/garen/skills/e.end
 
-    execute if entity @s[team=blue] run summon item_display ~ ~ ~ {Tags:["blue","garen.r","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run summon item_display ~ ~ ~ {Tags:["blue","garen.r","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
     execute if entity @s[team=blue] run tag @e[tag=garen.r.temp_target,team=!blue] add garen.r.target
     execute if entity @s[team=blue] run scoreboard players set @e[tag=garen.r.target,team=!blue] fx.sight 20
-    execute if entity @s[team=blue] positioned as @e[tag=garen.r.target,team=!blue,limit=1,sort=nearest] run summon item_display ~ ~20 ~ {teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1200401f]}}},Tags:["blue","garen.r.fx","temp","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] positioned as @e[tag=garen.r.target,team=!blue,limit=1,sort=nearest] run summon item_display ~ ~20 ~ {teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1200401f]}}},Tags:["blue","garen.r.fx","temp","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:10,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
 }
 
 function use_r.check {
@@ -186,19 +185,725 @@ function use_w {
 
     scoreboard players operation @s magic_resist += garen.w.mr temp
 
-    execute if entity @s[team=red] run scoreboard players operation red.garen.w.armor temp = garen.w.armor temp
-    execute if entity @s[team=red] run scoreboard players operation red.garen.w.mr temp = garen.w.mr temp
-    execute if entity @s[team=red] run summon item_display ~ ~ ~ {Tags:["red","garen.w","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:80,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] run scoreboard players operation <%team%>.garen.w.armor temp = garen.w.armor temp
+        execute if entity @s[team=<%team%>] run scoreboard players operation <%team%>.garen.w.mr temp = garen.w.mr temp
+        execute if entity @s[team=<%team%>] run summon item_display ~ ~ ~ {Tags:["<%team%>","garen.w","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:80,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    }
 
-    execute if entity @s[team=blue] run scoreboard players operation blue.garen.w.armor temp = garen.w.armor temp
-    execute if entity @s[team=blue] run scoreboard players operation blue.garen.w.mr temp = garen.w.mr temp
-    execute if entity @s[team=blue] run summon item_display ~ ~ ~ {Tags:["blue","garen.w","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Duration:80,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
-
-    summon area_effect_cloud ~ ~ ~ {Duration:999999,Tags:["shield.all","new"],Passengers:[{id:"area_effect_cloud",Tags:["cd"],Duration:15,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:999999,Tags:["shield.all","new"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Tags:["cd"],Duration:15,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     data modify entity @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] Owner set from entity @s UUID
     scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all = @s hp.max
     scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all *= 8 integer
     scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all /= 100 integer
     scoreboard players operation @s shield.all += @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all
     tag @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] remove new
+}
+
+# ---- item: lc:champions/garen/item/... -----------------------------------------------
+dir item {
+    function headwear {
+        clear @s iron_sword[minecraft:custom_data~{lol_item:1}]
+        execute if score .world lang matches 0 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[9999f]},minecraft:custom_name={text:"Garen",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+        execute if score .world lang matches 1 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[9999f]},minecraft:custom_name={text:"Garen",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+    }
+
+    function offhand {
+        clear @s carrot_on_a_stick[minecraft:custom_data~{lol_item:1}]
+        tag @s remove offhand_temp
+
+        item replace entity @s weapon.offhand with minecraft:carrot_on_a_stick[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[1200001f]},minecraft:custom_name={text:" ",color:"#1b0c1b"},minecraft:custom_data={lol_item:1,kill_item:1,offhand:1}]
+    }
+}
+
+# ---- skills: lc:champions/garen/skills/... -------------------------------------------
+dir skills {
+    function e.damage {
+        execute if entity @s[team=red] run damage @e[tag=garen.e.hit,tag=garen.e.temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 2 lc:core/dmg_physical by @s
+        execute if entity @s[team=blue] run damage @e[tag=garen.e.hit,tag=garen.e.temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 2 lc:core/dmg_physical by @s
+
+        scoreboard players operation temp attack_damage = @s attack_damage
+        scoreboard players operation temp attack_damage *= 40 integer
+        scoreboard players operation temp attack_damage /= 100 integer
+
+        scoreboard players add temp attack_damage 30
+        scoreboard players operation @s dmg_physical.deal = temp attack_damage
+
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=garen.e.hit,tag=has_health_bar,tag=garen.e.temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=garen.e.hit,tag=has_health_bar,tag=garen.e.temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+        execute if entity @s[team=red] run tag @e[team=!red,tag=garen.e.hit,type=!#unvalid,tag=garen.e.temp_dmg,limit=1,sort=nearest] remove garen.e.temp_dmg
+
+        execute if entity @s[team=red] run execute if entity @e[tag=garen.e.hit,tag=garen.e.temp_dmg,type=!#unvalid,team=!red] run function lc:champions/garen/skills/e.damage
+
+        ## BLUE
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=garen.e.hit,tag=has_health_bar,tag=garen.e.temp_dmg,limit=1,sort=nearest] armor.reduced = @s armor.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=garen.e.hit,tag=has_health_bar,tag=garen.e.temp_dmg,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+        execute if entity @s[team=blue] run tag @e[team=!blue,tag=garen.e.hit,type=!#unvalid,tag=garen.e.temp_dmg,limit=1,sort=nearest] remove garen.e.temp_dmg
+
+        execute if entity @s[team=blue] run execute if entity @e[tag=garen.e.hit,tag=garen.e.temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/garen/skills/e.damage
+    }
+
+    function e.end {
+        stopsound @a master garen.sfx.e
+
+        execute if entity @s[tag=red] as @p[tag=garen,team=red] run tag @s add remove.fx.garen.e
+        execute if entity @s[tag=red] as @p[tag=garen,team=red] run scoreboard players set @s status.weapon 1200102
+
+        execute if entity @s[tag=red] as @e[tag=garen.e,tag=red] on passengers run kill @s
+        execute if entity @s[tag=red] as @e[tag=garen.e,tag=red] run kill @s
+        execute if entity @s[tag=red] as @p[tag=garen,team=red] run scoreboard players operation @s garen.e.duration /= 20 integer
+        execute if entity @s[tag=red] as @p[tag=garen,team=red] run scoreboard players operation @s cd_e -= @s garen.e.duration
+        execute if entity @s[tag=red] run tag @p[tag=garen,team=red] remove garen.e
+        execute if entity @s[tag=red] run scoreboard players set @p[tag=garen,team=red] aa.cd 0
+        execute if entity @s[tag=red] on passengers run kill @s
+        execute if entity @s[tag=red] run kill @s
+
+        execute if entity @s[tag=blue] as @p[tag=garen,team=blue] run tag @s add remove.fx.garen.e
+        execute if entity @s[tag=blue] as @p[tag=garen,team=blue] run scoreboard players set @s status.weapon 1200102
+        execute if entity @s[tag=blue] as @e[tag=garen.e,tag=blue] on passengers run kill @s
+        execute if entity @s[tag=blue] as @e[tag=garen.e,tag=blue] run kill @s
+        execute if entity @s[tag=blue] as @p[tag=garen,team=blue] run scoreboard players operation @s garen.e.duration /= 20 integer
+        execute if entity @s[tag=blue] as @p[tag=garen,team=blue] run scoreboard players operation @s cd_e -= @s garen.e.duration
+        execute if entity @s[tag=blue] run tag @p[tag=garen,team=blue] remove garen.e
+        execute if entity @s[tag=blue] run scoreboard players set @p[tag=garen,team=blue] aa.cd 0
+        execute if entity @s[tag=blue] on passengers run kill @s
+        execute if entity @s[tag=blue] run kill @s
+    }
+
+    function e.particle {
+        tp @s ~ ~ ~ ~-36 0
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] positioned as @p[tag=garen.e,team=<%team%>] rotated ~ ~ positioned ^ ^1 ^2 run particle dust{color:[1,0.867,0],scale:1.5} ^ ^ ^ 0 0 0 0 1 force
+            execute if entity @s[tag=<%team%>] positioned as @p[tag=garen.e,team=<%team%>] rotated ~6 ~ positioned ^ ^1 ^2 run particle dust{color:[1,0.867,0],scale:1.25} ^ ^ ^ 0 0 0 0 1 force
+            execute if entity @s[tag=<%team%>] positioned as @p[tag=garen.e,team=<%team%>] rotated ~12 ~ positioned ^ ^1 ^2 run particle dust{color:[1,0.867,0],scale:1} ^ ^ ^ 0 0 0 0 1 force
+            execute if entity @s[tag=<%team%>] positioned as @p[tag=garen.e,team=<%team%>] rotated ~18 ~ positioned ^ ^1 ^2 run particle dust{color:[1,0.867,0],scale:0.75} ^ ^ ^ 0 0 0 0 1 force
+            execute if entity @s[tag=<%team%>] positioned as @p[tag=garen.e,team=<%team%>] rotated ~24 ~ positioned ^ ^1 ^2 run particle dust{color:[1,0.867,0],scale:0.5} ^ ^ ^ 0 0 0 0 1 force
+            execute if entity @s[tag=<%team%>] positioned as @p[tag=garen.e,team=<%team%>] rotated ~30 ~ positioned ^ ^1 ^2 run particle dust{color:[1,0.867,0],scale:0.25} ^ ^ ^ 0 0 0 0 1 force
+        }
+    }
+
+    function e.spin {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] positioned ~-2.5 ~ ~-2.5 run tag @e[team=!<%team%>,dx=4,dz=4,dy=1,type=!#unvalid,tag=!unvalid] add garen.e.hit
+            execute if entity @s[team=<%team%>] run tag @e[team=!<%team%>,tag=garen.e.hit] add garen.e.temp_dmg
+            execute if entity @s[team=<%team%>] if entity @e[team=!<%team%>,tag=garen.e.hit] run function lc:champions/garen/skills/e.damage
+            execute if entity @s[team=<%team%>] run tag @e[team=!<%team%>,tag=garen.e.hit] remove garen.e.hit
+            execute if entity @s[team=<%team%>] run summon item_display ~ ~ ~ {Tags:["<%team%>","garen.e","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:9999,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+            execute if entity @s[team=<%team%>] as @e[tag=garen.e,type=item_display,tag=<%team%>] on passengers store result entity @s Duration int 1 run scoreboard players get @p[tag=garen,team=<%team%>] garen.e.count
+        }
+    }
+
+    function passive.healing {
+        scoreboard players operation @s healing = @s hp.max
+        scoreboard players operation @s healing *= 2 integer
+        scoreboard players operation @s healing /= 100 integer
+    }
+
+    function q.damage {
+        function lc:champions/garen/skills/q.end
+        execute if entity @s[team=red] run scoreboard players add @e[team=!red,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] cc.silence 30
+        execute if entity @s[team=blue] run scoreboard players add @e[team=!blue,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] cc.silence 30
+
+        scoreboard players operation garen.q.temp_dmg attack_damage = @s attack_damage
+        scoreboard players operation garen.q.temp_dmg attack_damage *= 50 integer
+        scoreboard players operation garen.q.temp_dmg attack_damage /= 100 integer
+        scoreboard players add garen.q.temp_dmg attack_damage 150
+
+        scoreboard players operation @s dmg_physical.deal += garen.q.temp_dmg attack_damage
+    }
+
+    function q.end {
+        function lc:champion/abilities/cooldown/q
+        stopsound @a master garen.sfx.q
+
+        effect clear @s speed
+        execute if entity @s[team=red] run kill @e[tag=garen.q.cd,tag=red]
+        execute if entity @s[team=blue] run kill @e[tag=garen.q.cd,tag=blue]
+        tag @s remove garen.q
+    }
+
+    function r.animation {
+        tp @s ~ ~-2 ~ ~20 0
+        execute if entity @s[tag=red] run data modify entity @s Pos[0] set from entity @e[tag=garen.r.target,team=!red,limit=1,sort=nearest] Pos[0]
+        execute if entity @s[tag=red] run data modify entity @s Pos[2] set from entity @e[tag=garen.r.target,team=!red,limit=1,sort=nearest] Pos[2]
+
+        execute if entity @s[tag=blue] run data modify entity @s Pos[0] set from entity @e[tag=garen.r.target,team=!red,limit=1,sort=nearest] Pos[0]
+        execute if entity @s[tag=blue] run data modify entity @s Pos[2] set from entity @e[tag=garen.r.target,team=!blue,limit=1,sort=nearest] Pos[2]
+    }
+
+    function r.damage {
+        execute if entity @s[team=red] run damage @e[tag=garen.r.target,type=!#unvalid,team=!red,limit=1,sort=nearest] 10 lc:core/dmg_true by @s
+        execute if entity @s[team=blue] run damage @e[tag=garen.r.target,type=!#unvalid,team=!blue,limit=1,sort=nearest] 10 lc:core/dmg_true by @s
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run scoreboard players operation temp1 dmg_true.raw = @e[tag=garen.r.target,type=!#unvalid,team=!<%team%>,limit=1,sort=nearest] hp.max
+            execute if entity @s[team=<%team%>] run scoreboard players operation temp2 dmg_true.raw = @e[tag=garen.r.target,type=!#unvalid,team=!<%team%>,limit=1,sort=nearest] hp.left
+        }
+
+        scoreboard players operation temp1 dmg_true.raw -= temp2 dmg_true.raw
+        scoreboard players operation temp1 dmg_true.raw *= 30 integer
+        scoreboard players operation temp1 dmg_true.raw /= 100 integer
+
+        scoreboard players add temp1 dmg_true.raw 450
+
+        scoreboard players operation @s dmg_true.deal = temp1 dmg_true.raw
+
+        function lc:champion/dmg/calc.debuff
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run scoreboard players operation @e[team=!<%team%>,tag=garen.r.target,tag=has_health_bar,limit=1,sort=nearest] dmg_true.raw = @s dmg_true.deal
+            execute if entity @s[team=<%team%>] run tag @e[team=!<%team%>,tag=garen.r.target,tag=has_health_bar,limit=1,sort=nearest] remove garen.r.target
+        }
+    }
+
+    function r.particle {
+        ### Particle Image Function
+        ### Version: 1.0.4
+        ### Width: 20
+        ### Height: 20
+        ### ParticleType: dust
+
+        ### This file was generated by Kemo431's Particle-Converter.
+        ### Download Link: https://github.com/kemo14331/Particle-Converter
+        particle instant_effect ^ ^ ^ 0 0 0 1 100 force @a
+
+        particle campfire_cosy_smoke ^2.5 ^0 ^-0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.5 ^0 ^-0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.5 ^0 ^0 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.5 ^0 ^0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.5 ^0 ^0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^-1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^-1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^-0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^-0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^-0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^0 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^-1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^-1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^-0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^-0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^-0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^0 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^0 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^-2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^-1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^-2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^-2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^-2.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^-2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^-2.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^-2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^-2.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^-2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^-2.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^-2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^-2.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^-2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^-2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^-2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^2.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^-1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^-1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^2 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^0 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^1.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^-1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^-1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^-1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^-0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^-0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^-0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^0 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^1.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^-1.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^-1 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^-0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^-0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^-0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^0 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^0.25 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^0.5 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^0.75 0 0 0 0.01 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^1 0 0 0 0.01 1 force @a
+    }
+
+    function r.particle.end {
+        ### Particle Image Function
+        ### Version: 1.0.4
+        ### Width: 32
+        ### Height: 32
+        ### ParticleType: dust
+
+        ### This file was generated by Kemo431's Particle-Converter.
+        ### Download Link: https://github.com/kemo14331/Particle-Converter
+
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.5 ^0 ^-0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.34375 ^0 ^-1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.34375 ^0 ^-0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.34375 ^0 ^0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.34375 ^0 ^0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.1875 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.1875 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.1875 ^0 ^0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.1875 ^0 ^0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.1875 ^0 ^0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.1875 ^0 ^0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.1875 ^0 ^0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.1875 ^0 ^1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.1875 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.03125 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.03125 ^0 ^-1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.03125 ^0 ^-0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.03125 ^0 ^-0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.03125 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.03125 ^0 ^0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.03125 ^0 ^0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^2.03125 ^0 ^0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.875 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.875 ^0 ^-1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.875 ^0 ^-0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.875 ^0 ^-0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.875 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.875 ^0 ^0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.875 ^0 ^0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.875 ^0 ^0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.875 ^0 ^0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.875 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.875 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.875 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.71875 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.71875 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.71875 ^0 ^-0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.71875 ^0 ^-0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.71875 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.71875 ^0 ^0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.71875 ^0 ^0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.71875 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.71875 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.5625 ^0 ^-1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.5625 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.5625 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.5625 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.5625 ^0 ^-0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.5625 ^0 ^-0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.5625 ^0 ^-0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.5625 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.40625 ^0 ^-1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.40625 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.40625 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.40625 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.40625 ^0 ^-0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.40625 ^0 ^-0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.40625 ^0 ^-0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.25 ^0 ^-2.1875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.25 ^0 ^-1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.25 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.25 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.25 ^0 ^-0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.25 ^0 ^-0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.25 ^0 ^0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.25 ^0 ^0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.25 ^0 ^0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.25 ^0 ^1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.25 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^-1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^-0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^1.09375 ^0 ^1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^-1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^-0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^-0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.9375 ^0 ^1.875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.78125 ^0 ^-1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.78125 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.78125 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.78125 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.78125 ^0 ^-0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.78125 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.78125 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.78125 ^0 ^1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.78125 ^0 ^1.875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.78125 ^0 ^2.03125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.78125 ^0 ^2.1875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.625 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.625 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.625 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.625 ^0 ^0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.625 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.625 ^0 ^1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.625 ^0 ^1.875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.625 ^0 ^2.03125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.625 ^0 ^2.34375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.46875 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.46875 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.46875 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.46875 ^0 ^0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.46875 ^0 ^0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.46875 ^0 ^1.875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.46875 ^0 ^2.1875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.3125 ^0 ^-2.1875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.3125 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.3125 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.3125 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.3125 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.3125 ^0 ^1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.3125 ^0 ^2.03125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.3125 ^0 ^2.34375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.15625 ^0 ^-2.5 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.15625 ^0 ^-2.1875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.15625 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.15625 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.15625 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.15625 ^0 ^1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.15625 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.15625 ^0 ^2.03125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.15625 ^0 ^2.1875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0.15625 ^0 ^2.34375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0 ^0 ^-2.1875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0 ^0 ^0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^0 ^0 ^2.1875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.15625 ^0 ^-2.34375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.15625 ^0 ^-2.03125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.15625 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.15625 ^0 ^-1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.15625 ^0 ^-0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.15625 ^0 ^0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.15625 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.15625 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.15625 ^0 ^2.1875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.3125 ^0 ^-2.1875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.3125 ^0 ^-2.03125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.3125 ^0 ^-1.875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.3125 ^0 ^-1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.3125 ^0 ^-0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.3125 ^0 ^0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.3125 ^0 ^0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.3125 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.3125 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.46875 ^0 ^-2.34375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.46875 ^0 ^-2.03125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.46875 ^0 ^-1.875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.46875 ^0 ^-1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.46875 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.46875 ^0 ^-0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.46875 ^0 ^0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.46875 ^0 ^0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.46875 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.46875 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.46875 ^0 ^2.34375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.625 ^0 ^-2.1875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.625 ^0 ^-2.03125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.625 ^0 ^-1.875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.625 ^0 ^-1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.625 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.625 ^0 ^-0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.625 ^0 ^0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.625 ^0 ^0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.625 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.625 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.625 ^0 ^2.34375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.78125 ^0 ^-2.03125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.78125 ^0 ^-1.875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.78125 ^0 ^-1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.78125 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.78125 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.78125 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.78125 ^0 ^0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.78125 ^0 ^0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.78125 ^0 ^0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.78125 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.78125 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.78125 ^0 ^1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^-1.875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^-1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^-1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^-0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^-0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^-0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-0.9375 ^0 ^1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^-1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^-0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^-0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^-0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^-0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.09375 ^0 ^1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.25 ^0 ^0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.25 ^0 ^0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.25 ^0 ^0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.25 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.25 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.25 ^0 ^1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.40625 ^0 ^-2.03125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.40625 ^0 ^0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.40625 ^0 ^0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.40625 ^0 ^0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.40625 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.40625 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.40625 ^0 ^1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.5625 ^0 ^-1.875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.5625 ^0 ^-1.71875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.5625 ^0 ^-0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.5625 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.5625 ^0 ^0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.5625 ^0 ^0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.5625 ^0 ^0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.5625 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.5625 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^-1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^-1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^-0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^-0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^-0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^-0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.71875 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^-1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^-0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^-0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^-0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^-0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^-0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^1.40625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-1.875 ^0 ^1.5625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.03125 ^0 ^-0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.03125 ^0 ^-0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.03125 ^0 ^-0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.03125 ^0 ^-0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.03125 ^0 ^-0.15625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.03125 ^0 ^0 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.03125 ^0 ^0.78125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.03125 ^0 ^0.9375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.03125 ^0 ^1.25 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.1875 ^0 ^-0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.1875 ^0 ^-0.46875 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.1875 ^0 ^-0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.1875 ^0 ^0.625 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.1875 ^0 ^1.09375 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.34375 ^0 ^0.3125 0 0 0 0 1 force @a
+        particle minecraft:dust{color:[1,0.918,0],scale:1} ^-2.34375 ^0 ^0.46875 0 0 0 0 1 force @a
+    }
+
+    function r.spawn {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] at @e[tag=garen.r.target,team=!<%team%>] rotated ~ 0 positioned ~ ~0.5 ~ run function lc:champions/garen/skills/r.particle
+            execute if entity @s[tag=<%team%>] at @e[tag=garen.r.target,team=!<%team%>] rotated ~ 0 positioned ~ ~0.5 ~ run function lc:champions/garen/skills/r.particle.end
+            execute if entity @s[tag=<%team%>] at @e[tag=garen.r.target,team=!<%team%>] run particle flash{color:[1.0f,1.0f,1.0f,1.0f]} ~ ~ ~ 0 0 0 1 10 force
+            execute if entity @s[tag=<%team%>] at @e[tag=garen.r.target,team=!<%team%>] run particle explosion ~ ~ ~ 0 0 0 1 10 force
+            execute if entity @s[tag=<%team%>] as @p[tag=garen,team=<%team%>] run function lc:champions/garen/skills/r.damage
+            execute if entity @s[tag=<%team%>] run tag @p[tag=garen,team=<%team%>] remove r.animation
+        }
+    }
+
+    function w.end {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] run scoreboard players remove @p[tag=garen,team=<%team%>] dmg_reduction 30
+            execute if entity @s[tag=<%team%>] run scoreboard players operation @p[tag=garen,team=<%team%>] armor -= <%team%>.garen.w.armor temp
+            execute if entity @s[tag=<%team%>] run scoreboard players operation @p[tag=garen,team=<%team%>] magic_resist -= <%team%>.garen.w.mr temp
+            execute if entity @s[tag=<%team%>] run tag @p[tag=garen,team=<%team%>] remove garen.w
+        }
+    }
 }

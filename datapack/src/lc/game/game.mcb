@@ -67,7 +67,7 @@ function clean_up {
     scoreboard players set @s jhin.aa.count 1
 
     ## Aatrox
-    execute as @e[tag=aatrox.r,type=horse] at @s run function lc:champions/aatrox/skills/r.end
+    execute as @a[tag=aatrox.r] at @s run function lc:champions/aatrox/skills/r.end
 
     ## Leona
     execute if entity @s[tag=leona.q] at @s run function lc:champions/leona/skills/q.end
@@ -209,8 +209,8 @@ function endgame_animation {
     kill @e[tag=lol.structure.entity,type=silverfish]
     function lc:menu/move/practice/show_stats
 
-    execute rotated as @s positioned ^10 ^10 ^10 run summon area_effect_cloud ~ ~ ~ {Tags:["endgame_animation"],Duration:300,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
-    execute as @a[tag=is_ingame] at @s run summon item_display ~ ~ ~ {teleport_duration:1,Tags:["endgame_pov","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",Tags:["cd"],Duration:300,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute rotated as @s positioned ^10 ^10 ^10 run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Tags:["endgame_animation"],Duration:300,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute as @a[tag=is_ingame] at @s run summon item_display ~ ~ ~ {teleport_duration:1,Tags:["endgame_pov","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Tags:["cd"],Duration:300,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
 
     execute as @a[tag=is_ingame] at @s run function lc:core/effect/cleanse
     scoreboard players set @a[tag=is_ingame] channeling 0

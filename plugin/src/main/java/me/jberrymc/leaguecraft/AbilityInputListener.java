@@ -2,6 +2,11 @@ package me.jberrymc.leaguecraft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.event.player.PlayerInputEvent;
+import org.bukkit.entity.Marker;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -38,16 +43,32 @@ final class AbilityInputListener implements Listener {
     private final WeaponDisplay weapon;
     private final DevLog dev;
     private final Supplier<InputSettings> settings;
+    private final Supplier<CombatSettings> combat;
+    private final AimPoint aimPoint;
     private final Logger log;
     /** Last server tick each player triggered each action: one click can arrive as two events. */
     private final Map<UUID, Map<KeyAction, Long>> lastTick = new HashMap<>();
+    /** Tag of the marker a ground-targeted ability reads its target from. */
+    static final String GROUND_TARGET = "lc.ground_target";
+    /** Tag of the marker a skill shot reads the crosshair's aim point from. */
+    static final String AIM_TARGET = "lc.aim_target";
+
+    /** A ground-targeted ability being aimed (first press seen, waiting for the confirming one). */
+    private record Aiming(Ability ability) {}
+
+    private final Map<UUID, Aiming> aiming = new HashMap<>();
+    /** Whether Shift was down at the last input update, so a held Shift cancels once. */
+    private final Map<UUID, Boolean> sneakDown = new HashMap<>();
 
     AbilityInputListener(Datapack datapack, WeaponDisplay weapon, DevLog dev,
-                         Supplier<InputSettings> settings, Logger log) {
+                         Supplier<InputSettings> settings, Supplier<CombatSettings> combat, AimPoint aimPoint,
+                         Logger log) {
         this.datapack = datapack;
         this.weapon = weapon;
         this.dev = dev;
         this.settings = settings;
+        this.combat = combat;
+        this.aimPoint = aimPoint;
         this.log = log;
     }
 
@@ -103,6 +124,8 @@ final class AbilityInputListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         lastTick.remove(event.getPlayer().getUniqueId());
+        aiming.remove(event.getPlayer().getUniqueId());
+        sneakDown.remove(event.getPlayer().getUniqueId());
         dev.forget(event.getPlayer());
     }
 
@@ -142,12 +165,91 @@ final class AbilityInputListener implements Listener {
             return;
         }
 
+        // Ground-targeted abilities in confirm mode: the first press aims (Indicators shows where it
+        // lands), a second press of the same key or a left click casts, Shift cancels. Abilities that
+        // can't be cast (on cooldown, not enough mana) cast straight away, so the datapack can say so.
+        Ability ability = action.ability();
+        if (ability != null && combat.get().groundCast() == CombatSettings.GroundCast.CONFIRM
+                && datapack.score(player, "aim." + ability.id(), 0) > 0 && castable(datapack, player, ability)) {
+            Aiming current = aiming.get(player.getUniqueId());
+            if (current == null || current.ability() != ability) {
+                aiming.put(player.getUniqueId(), new Aiming(ability));
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.4f, 1.6f);
+                dev.ignored(player, input, "aiming " + action.id() + ": press again or left click to cast, Shift to cancel");
+                return;
+            }
+        }
+        aiming.remove(player.getUniqueId());
+        cast(player, action, input, config);
+    }
+
+    /** The ground-targeted ability this player is aiming, or null. */
+    Ability aiming(Player player) {
+        Aiming a = aiming.get(player.getUniqueId());
+        return a == null ? null : a.ability();
+    }
+
+    /** A left click while aiming casts the aimed ability. True if it did (so no basic attack). */
+    boolean confirmAim(Player player, String input) {
+        Aiming a = aiming.remove(player.getUniqueId());
+        if (a == null) return false;
+        cast(player, KeyAction.of(a.ability()), input + " (confirms " + a.ability().id() + ")", settings.get());
+        return true;
+    }
+
+    /** Off cooldown and enough mana (or energy) for it: the datapack's own checks. */
+    static boolean castable(Datapack datapack, Player player, Ability ability) {
+        return datapack.score(player, "cd_" + ability.id(), 0) <= 0
+                && datapack.score(player, "mana", 0) >= datapack.score(player, "mana_" + ability.id(), 0);
+    }
+
+    @EventHandler
+    public void onInput(PlayerInputEvent event) {
+        Player player = event.getPlayer();
+        boolean down = event.getInput().isSneak();
+        boolean was = Boolean.TRUE.equals(sneakDown.put(player.getUniqueId(), down));
+        if (down && !was && aiming.remove(player.getUniqueId()) != null) {
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.4f, 0.8f);
+            dev.ignored(player, "Shift", "aim cancelled");
+        }
+    }
+
+    private void cast(Player player, KeyAction action, String input, InputSettings config) {
         String function = switch (action) {
             case SUMMONER_1 -> config.summonerOneFunction();
             case SUMMONER_2 -> config.summonerTwoFunction();
             default -> config.functionFor(action.ability());
         };
-        boolean ok = datapack.runAs(player, function);
+        // A ground-targeted ability (aim.<key> above 0) lands where the crosshair meets the ground:
+        // a marker there for the datapack to read while the ability runs (lc.ground_target).
+        Marker target = null;
+        int aimRange = action.ability() == null ? 0 : datapack.score(player, "aim." + action.ability().id(), 0);
+        if (aimRange > 0) {
+            Location at = GroundTarget.find(player, combat.get(), aimRange / 10.0);
+            if (at == null) {
+                dev.ignored(player, input, "no ground to cast " + action.id() + " on within " + aimRange / 10.0 + " blocks");
+                return;
+            }
+            target = at.getWorld().spawn(at, Marker.class, m -> {
+                m.setPersistent(false);
+                m.addScoreboardTag(GROUND_TARGET);
+            });
+        }
+        // Skill shots fire at what the crosshair points at: a marker there (lc.aim_target).
+        Marker aim = null;
+        if (action.ability() != null) {
+            aim = player.getWorld().spawn(aimPoint.find(player), Marker.class, m -> {
+                m.setPersistent(false);
+                m.addScoreboardTag(AIM_TARGET);
+            });
+        }
+        boolean ok;
+        try {
+            ok = datapack.runAs(player, function);
+        } finally {
+            if (target != null) target.remove();
+            if (aim != null) aim.remove();
+        }
         if (action.ability() != null) {
             // use_<x> rebuilds the ability items and resets the HUD labels.
             weapon.apply(player);

@@ -30,7 +30,9 @@ public final class LeagueCraftPlugin extends JavaPlugin {
             "<gold><bold>LeagueCraft controls</bold></gold>\n"
             + "<gray>Press <white>F5</white> for the over-the-shoulder view. Aim with the crosshair; hold <white>right click</white> to zoom.\n"
             + "<gray>Left click <white>attack</white> · <white>1 2 3 4</white> abilities Q W E R · "
-            + "Q <white>summoner 1</white> · F <white>summoner 2</white>\n"
+            + "Q <white>summoner 1</white> · F <white>summoner 2</white> · Ctrl <white>reload</white>\n"
+            + "<gray>Abilities cast on the ground: press once to aim, again or <white>left click</white> to cast, "
+            + "<white>Shift</white> to cancel.\n"
             + "<gray>Abilities follow your <white>Hotbar Slot 1-4</white> binds, so you can move them to other keys in "
             + "<white>Options › Controls › Key Binds</white>; the HUD shows your keys. <white>/lc keys</white> shows this again.";
 
@@ -58,20 +60,25 @@ public final class LeagueCraftPlugin extends JavaPlugin {
         datapack = new Datapack(getLogger(), () -> settings.debug());
         weapon = new WeaponDisplay(this);
         thirdPerson = new ThirdPerson(datapack, dev, () -> combat, getLogger());
-        movementLock = new MovementLock(() -> combat, getLogger());
+        movementLock = new MovementLock(() -> combat, thirdPerson::zoomView, getLogger());
         ammo = new Ammo(datapack, dev, () -> combat);
         tipShown = new NamespacedKey(this, "key_tip_shown");
 
-        input = new AbilityInputListener(datapack, weapon, dev, () -> settings, getLogger());
+        input = new AbilityInputListener(datapack, weapon, dev, () -> settings, () -> combat,
+                new AimPoint(() -> combat, getLogger()), getLogger());
         getServer().getPluginManager().registerEvents(input, this);
         getServer().getPluginManager().registerEvents(
                 new BasicAttackListener(input, datapack, ammo, dev, () -> settings, () -> combat), this);
         getServer().getPluginManager().registerEvents(ammo, this);
         getServer().getPluginManager().registerEvents(new Motion(datapack), this);
+        getServer().getPluginManager().registerEvents(new MenuListener(datapack), this);
         Bukkit.getScheduler().runTaskTimer(this, ammo::tick, 1, 1);
         getServer().getPluginManager().registerEvents(thirdPerson, this);
         getServer().getPluginManager().registerEvents(movementLock, this);
         Bukkit.getScheduler().runTaskTimer(this, thirdPerson::tick, 1, 1);
+
+        Indicators indicators = new Indicators(datapack, () -> combat, input::aiming);
+        Bukkit.getScheduler().runTaskTimer(this, indicators::tick, 2, 2);
         try {
             rigTest = new RigTest(Rig.load(this, "aatrox"), dev);
             getServer().getPluginManager().registerEvents(rigTest, this);
@@ -177,21 +184,45 @@ public final class LeagueCraftPlugin extends JavaPlugin {
                 changes.add("removed " + removed + " (now a champion stat in the datapack's settings.mcb)");
             }
         }
-        // 0.7.0: zoom values are a slowdown (0-1), not a camera distance.
-        for (String path : List.of("zoom.melee", "zoom.ranged")) {
-            if (config.isSet(path) && !CombatSettings.isSlowdown(config.getDouble(path))) {
-                config.set(path, null);
-                changes.add("reset " + path + " (zoom is a slowdown now, not a camera distance)");
+        // 0.7.3: indicators no longer follow the zoom; only the aimed ability shows, or every ready one.
+        String indicators = config.getString("abilities.indicators", "aimed");
+        if (indicators.equalsIgnoreCase("zoom") || indicators.equalsIgnoreCase("off")) {
+            config.set("abilities.indicators", "aimed");
+            changes.add("abilities.indicators " + indicators + " -> aimed");
+        }
+        // 0.7.2: zoom.slowdown is per champion (melee / ranged / champions), not one number.
+        if (config.isSet("zoom.slowdown") && !config.isConfigurationSection("zoom.slowdown")) {
+            double old = config.getDouble("zoom.slowdown");
+            config.set("zoom.slowdown", null);
+            config.set("zoom.slowdown.melee", old > 0 ? old : 0.2);
+            config.set("zoom.slowdown.ranged", old > 0 ? old : 0.5);
+            config.set("zoom.slowdown.champions", new java.util.HashMap<String, Double>());
+            changes.add("zoom.slowdown " + old + " -> melee " + config.getDouble("zoom.slowdown.melee")
+                    + ", ranged " + config.getDouble("zoom.slowdown.ranged"));
+        }
+        // 0.7.1: zoom narrows the view without slowing (zoom.view.*); the old zoom.melee/ranged/champions
+        // were slowdowns, which narrowed the view by half as much. (Before 0.7.0 they were camera
+        // distances of 1 or more, which are dropped.)
+        for (String key : List.of("melee", "ranged")) {
+            String path = "zoom." + key;
+            if (!config.isSet(path)) continue;
+            double old = config.getDouble(path);
+            config.set(path, null);
+            if (old > 0 && old < 1) {
+                config.set("zoom.view." + key, Math.min(CombatSettings.MAX_ZOOM, old / 2));
+                changes.add(path + " " + old + " -> zoom.view." + key + " " + config.getDouble("zoom.view." + key));
+            } else {
+                changes.add("removed " + path);
             }
         }
         ConfigurationSection zoomChampions = config.getConfigurationSection("zoom.champions");
         if (zoomChampions != null) {
             for (String champion : zoomChampions.getKeys(false)) {
-                if (!CombatSettings.isSlowdown(zoomChampions.getDouble(champion, -1))) {
-                    zoomChampions.set(champion, null);
-                    changes.add("removed zoom.champions." + champion + " (was a camera distance)");
-                }
+                double old = zoomChampions.getDouble(champion, -1);
+                if (old > 0 && old < 1) config.set("zoom.view.champions." + champion, Math.min(CombatSettings.MAX_ZOOM, old / 2));
             }
+            config.set("zoom.champions", null);
+            changes.add("moved zoom.champions to zoom.view.champions");
         }
         if (changes.isEmpty()) return;
         saveConfig();

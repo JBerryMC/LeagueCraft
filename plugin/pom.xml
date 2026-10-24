@@ -6,7 +6,7 @@
 
     <groupId>me.jberrymc</groupId>
     <artifactId>leaguecraft</artifactId>
-    <version>0.7.0</version>
+    <version>0.7.4</version>
     <packaging>jar</packaging>
 
     <name>LeagueCraft</name>

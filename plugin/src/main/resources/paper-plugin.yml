@@ -5,6 +5,13 @@ description: League-style controls for the LeagueCraft datapack
 author: JBerryMC
 api-version: '26.3'
 
+dependencies:
+  server:
+    # Optional: skill shots aim with ShoulderCam's aim API when it's installed.
+    ShoulderCam:
+      load: BEFORE
+      required: false
+
 permissions:
   leaguecraft.admin:
     description: Allows /leaguecraft reload and /leaguecraft debug

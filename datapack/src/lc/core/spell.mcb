@@ -16,7 +16,7 @@ function ignite {
     execute if entity @s[type=item_display] on passengers as @s[tag=target] on origin run tag @s add ignite.temp_target
     execute if entity @s[type=item_display] on passengers as @s[tag=initial] on origin run function lc:core/spell/ignite
 
-    execute if entity @s[type=item_display] run summon area_effect_cloud ~ ~ ~ {Duration:20,Tags:["cd","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[type=item_display] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:20,Tags:["cd","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
     execute if entity @s[type=item_display] run ride @e[tag=cd,limit=1,sort=nearest,type=area_effect_cloud,tag=temp] mount @s
     execute if entity @s[type=item_display] run tag @e[tag=cd,limit=1,sort=nearest,type=area_effect_cloud,tag=temp] remove temp
 

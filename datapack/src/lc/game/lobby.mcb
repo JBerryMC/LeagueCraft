@@ -14,7 +14,7 @@ function respawn {
     tag @s remove has_display_bar
     tag @s remove has_health_bar
 
-    execute if entity @s[tag=!has_display_bar] run summon block_display ~ ~ ~ {Tags:["temp","lol.bar_display"],Passengers:[{id:"area_effect_cloud",Tags:["bar_owner"],Duration:2147483647,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"text_display",Tags:["hp","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["mana","stats_bar"],background:0,billboard:"vertical"},{id:"text_display",Tags:["shield_all","stats_bar"],background:0,billboard:"vertical"}]}
+    # The HP/mana bar above the head is off for now (better visibility); this line summoned it.
     execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[0.325,0.375,0.325]}}
     execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=mana] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,0.0,0.0001]}}
     execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=shield_all] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,0.0,0.0001]}}
