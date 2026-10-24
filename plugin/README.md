@@ -4,7 +4,7 @@ This plugin is a server-side helper for the LeagueCraft datapack. The datapack s
 
 ## Install
 
-1. Put `LeagueCraft-0.5.0.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version; delete the old `plugins/LeagueCraft/config.yml` so the new one is written.
+1. Put `LeagueCraft-0.6.0.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version; delete the old `plugins/LeagueCraft/config.yml` so the new one is written.
 2. Use the LeagueCraft 26.3 datapack and resource pack from the same commit. The HUD has the summoner-spell label and the crosshair slot the plugin writes to, and the resource pack carries the ShoulderCam shaders. The datapack now needs the plugin: champions' basic attack and summoner spell 1 come from it.
 3. Start the server. Run `/lc` to check that it shows **Datapack detected: yes**.
 
@@ -61,6 +61,15 @@ This replaced the datapack's old basic attack, which re-summoned an invisible in
 
 `/lc dev` shows each attack's aim start and aim point next to what it hit.
 
+## Rig test (`/lc rigtest`)
+
+A first step towards Animated Java models for champions, played by the plugin. It mounts the Aatrox ultimate rig (34 bones) on you as passengers, to check that a model riding the player follows smoothly. The vanilla `/ride` command refuses to put anything on a player, but the plugin API allows it, and each client moves passengers along with its own view of the player.
+
+- Only the rest pose shows; nothing animates yet. Your own body is hidden (armor and held items still show). Press F5 to see the model.
+- Each tick the plugin works out which animation *would* play: `idle`, `walk`, `sprint`, `sneak`, `sneak_walk`, `jump` or `fall`. With `/lc dev` on, every change shows in chat with the keys you're holding, e.g. `animation idle → walk (keys: W A)`.
+- The bones are moved down by your hitbox height (passengers sit on top of it) and turn with your yaw. If a teleport, death or world change drops them, they're put back the next tick.
+- The rig comes from `src/main/resources/rigs/aatrox.json`, extracted from the Animated Java datapack with `python3 plugin/tools/extract_aj_rig.py aatrox`.
+
 ## Config (`plugins/LeagueCraft/config.yml`)
 
 Every mapping can be changed. Run `/lc reload` afterwards; no restart needed.
@@ -109,6 +118,7 @@ Hotbar keys 7, 8 and 9 are reserved: the hand rests on 8 and the scroll wheel re
 | `/lc keys` | everyone | The controls |
 | `/lc` | everyone | Status: datapack detected, match running, current key mapping |
 | `/lc dev` | `leaguecraft.dev` (op) | Toggle dev mode: every input you make is echoed to your chat with what it did (cast, ignored and why, or what a basic attack hit). Per player, off after a restart. From the console: `execute as <player> run lc dev` |
+| `/lc rigtest` | `leaguecraft.dev` (op) | Mount the Aatrox ultimate rig on yourself (see *Rig test*). Run again to take it off |
 | `/lc reload` | `leaguecraft.admin` (op) | Re-read config.yml |
 | `/lc debug on\|off` | `leaguecraft.admin` (op) | Log each cast to the console |
 
@@ -128,7 +138,7 @@ Controls (0.3.x) were tested on Paper 26.3 build 214 with the LeagueCraft 26.3 d
 ## Building from source
 
 ```
-mvn package          # needs JDK 25; runs the tests; output: target/LeagueCraft-0.5.0.jar
+mvn package          # needs JDK 25; runs the tests; output: target/LeagueCraft-0.6.0.jar
 ```
 
 ## Where this goes next

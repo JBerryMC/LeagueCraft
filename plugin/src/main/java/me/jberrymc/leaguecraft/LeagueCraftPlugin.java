@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+
 /**
  * LeagueCraft's server-side helper. The datapack stays the source of truth for champion logic;
  * the plugin takes over the parts a datapack can only fake: input, the third-person view and the
@@ -32,6 +34,7 @@ public final class LeagueCraftPlugin extends JavaPlugin {
     private Datapack datapack;
     private WeaponDisplay weapon;
     private ThirdPerson thirdPerson;
+    private RigTest rigTest;
     private final DevLog dev = new DevLog();
     private AbilityInputListener input;
     private NamespacedKey tipShown;
@@ -52,6 +55,13 @@ public final class LeagueCraftPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(
                 new BasicAttackListener(input, dev, () -> settings, () -> combat), this);
         getServer().getPluginManager().registerEvents(thirdPerson, this);
+        try {
+            rigTest = new RigTest(Rig.load(this, "aatrox"), dev);
+            getServer().getPluginManager().registerEvents(rigTest, this);
+            Bukkit.getScheduler().runTaskTimer(this, rigTest::tick, 1, 1);
+        } catch (IOException | RuntimeException e) {
+            getLogger().warning("Couldn't load the aatrox rig for /lc rigtest: " + e.getMessage());
+        }
 
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
                 event -> LeagueCraftCommand.register(event.registrar(), this));
@@ -74,6 +84,7 @@ public final class LeagueCraftPlugin extends JavaPlugin {
             weapon.remove(player);
             thirdPerson.remove(player);
         }
+        if (rigTest != null) rigTest.removeAll();
     }
 
     InputSettings settings() {
@@ -82,6 +93,11 @@ public final class LeagueCraftPlugin extends JavaPlugin {
 
     CombatSettings combat() {
         return combat;
+    }
+
+    /** Null if the test rig failed to load. */
+    RigTest rigTest() {
+        return rigTest;
     }
 
     Datapack datapack() {

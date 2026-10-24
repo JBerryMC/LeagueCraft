@@ -63,6 +63,14 @@ final class DevLog {
                         format(shot.aimOrigin()), format(shot.aimPoint())));
     }
 
+    /** The animation a champion's model should be playing changed (see {@link MovementState}). */
+    void animation(Player player, String from, String to, String detail) {
+        if (!on(player)) return;
+        send(player, "<dark_gray>[dev]</dark_gray> <light_purple>animation</light_purple> <gray><input> → "
+                        + "</gray><gold><action></gold> <dark_gray>(<reason>)",
+                from, to, detail);
+    }
+
     private static String format(Vec3 v) {
         return String.format(Locale.ROOT, "%.2f %.2f %.2f", v.x(), v.y(), v.z());
     }

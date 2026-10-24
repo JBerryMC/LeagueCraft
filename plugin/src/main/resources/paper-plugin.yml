@@ -10,5 +10,5 @@ permissions:
     description: Allows /leaguecraft reload and /leaguecraft debug
     default: op
   leaguecraft.dev:
-    description: Allows /leaguecraft dev (echo every input to chat)
+    description: Allows /leaguecraft dev (echo every input to chat) and /leaguecraft rigtest
     default: op
