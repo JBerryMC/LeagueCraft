@@ -60,6 +60,11 @@ final class RigTest implements Listener {
         return rig.name();
     }
 
+    /** True while this player wears the test rig. */
+    boolean has(Player player) {
+        return mounted.containsKey(player.getUniqueId());
+    }
+
     /** Mounts the rig, or takes it off if it's already on. Returns true if it's now on. */
     boolean toggle(Player player) {
         if (remove(player)) return false;

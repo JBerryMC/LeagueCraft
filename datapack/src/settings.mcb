@@ -1,0 +1,123 @@
+# settings: game settings and the champion stats chart.
+#
+# Change a number, run `mcb build` in the datapack folder, then /reload in game. The new stats apply
+# straight away, also to champions already in a match (current HP and mana are kept, but capped at
+# the new maximum). Each table has one row per champion; keep the name: in every row.
+
+function load {
+    data remove storage lc:stats health
+    data remove storage lc:stats offense
+    data remove storage lc:stats abilities
+    data remove storage lc:stats attack
+    data remove storage lc:stats aim
+
+    # ---- Health and resource ------------------------------------------------------------------
+    # id         menu number (0 = not in the menu)
+    # hp         max health                       hp_regen    health back every second
+    # mana       max mana (or energy)             mana_regen  mana back every second
+    # armor, mr  damage taken = damage x 100 / (100 + armor)   (mr does the same for magic damage)
+    data modify storage lc:stats health append value {name: "aatrox",    id: 9,   hp: 3500,  hp_regen: 4,   mana: 200,   mana_regen: 0,   armor: 114,  mr: 67}
+    data modify storage lc:stats health append value {name: "annie",     id: 15,  hp: 2294,  hp_regen: 3,   mana: 3000,  mana_regen: 20,  armor: 98,   mr: 52}
+    data modify storage lc:stats health append value {name: "ashe",      id: 5,   hp: 2357,  hp_regen: 3,   mana: 875,   mana_regen: 4,   armor: 104,  mr: 52}
+    data modify storage lc:stats health append value {name: "ezreal",    id: 7,   hp: 2334,  hp_regen: 3,   mana: 2000,  mana_regen: 20,  armor: 104,  mr: 52}
+    data modify storage lc:stats health append value {name: "garen",     id: 12,  hp: 3000,  hp_regen: 3,   mana: 0,     mana_regen: 0,   armor: 150,  mr: 100}
+    data modify storage lc:stats health append value {name: "jhin",      id: 0,   hp: 2474,  hp_regen: 3,   mana: 1150,  mana_regen: 4,   armor: 104,  mr: 52}
+    data modify storage lc:stats health append value {name: "leesin",    id: 2,   hp: 2430,  hp_regen: 4,   mana: 200,   mana_regen: 10,  armor: 119,  mr: 67}
+    data modify storage lc:stats health append value {name: "leona",     id: 10,  hp: 4000,  hp_regen: 15,  mana: 982,   mana_regen: 4,   armor: 200,  mr: 150}
+    data modify storage lc:stats health append value {name: "lux",       id: 14,  hp: 2000,  hp_regen: 3,   mana: 1500,  mana_regen: 4,   armor: 109,  mr: 52}
+    data modify storage lc:stats health append value {name: "malphite",  id: 13,  hp: 2412,  hp_regen: 3,   mana: 1300,  mana_regen: 3,   armor: 300,  mr: 63}
+    data modify storage lc:stats health append value {name: "soraka",    id: 11,  hp: 2101,  hp_regen: 2,   mana: 1105,  mana_regen: 16,  armor: 117,  mr: 52}
+    data modify storage lc:stats health append value {name: "vayne",     id: 0,   hp: 2301,  hp_regen: 3,   mana: 827,   mana_regen: 3,   armor: 101,  mr: 52}
+    data modify storage lc:stats health append value {name: "yasuo",     id: 1,   hp: 2460,  hp_regen: 4,   mana: 500,   mana_regen: 0,   armor: 108,  mr: 67}
+    data modify storage lc:stats health append value {name: "yone",      id: 4,   hp: 2405,  hp_regen: 4,   mana: 100,   mana_regen: 0,   armor: 108,  mr: 67}
+    data modify storage lc:stats health append value {name: "zed",       id: 3,   hp: 2337,  hp_regen: 4,   mana: 200,   mana_regen: 10,  armor: 112,  mr: 64}
+
+    # ---- Offense and movement -----------------------------------------------------------------
+    # ad, ap               attack damage and ability power
+    # armor_pen, mr_pen    % of the target's armor / magic resist ignored
+    # omnivamp             % of damage dealt healed back
+    # haste                ability haste: cooldown = cd x 100 / (100 + haste)
+    # speed                walking speed (vanilla is 0.1)
+    # jump                 jump strength (vanilla is 0.42; 0.55 jumps about 1.6 blocks)
+    data modify storage lc:stats offense append value {name: "aatrox",    ad: 300,  ap: 0,    armor_pen: 0,   mr_pen: 0,   omnivamp: 25,  haste: 40,  speed: 0.1345,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "annie",     ad: 95,   ap: 400,  armor_pen: 0,   mr_pen: 20,  omnivamp: 0,   haste: 30,  speed: 0.1344,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "ashe",      ad: 200,  ap: 0,    armor_pen: 20,  mr_pen: 0,   omnivamp: 20,  haste: 30,  speed: 0.1342,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "ezreal",    ad: 300,  ap: 50,   armor_pen: 20,  mr_pen: 0,   omnivamp: 20,  haste: 50,  speed: 0.1342,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "garen",     ad: 200,  ap: 0,    armor_pen: 0,   mr_pen: 0,   omnivamp: 0,   haste: 30,  speed: 0.1344,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "jhin",      ad: 134,  ap: 0,    armor_pen: 0,   mr_pen: 0,   omnivamp: 0,   haste: 0,   speed: 0.1343,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "leesin",    ad: 200,  ap: 0,    armor_pen: 0,   mr_pen: 0,   omnivamp: 20,  haste: 50,  speed: 0.1345,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "leona",     ad: 111,  ap: 50,   armor_pen: 0,   mr_pen: 0,   omnivamp: 0,   haste: 50,  speed: 0.1344,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "lux",       ad: 110,  ap: 400,  armor_pen: 0,   mr_pen: 20,  omnivamp: 0,   haste: 30,  speed: 0.1343,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "malphite",  ad: 130,  ap: 50,   armor_pen: 0,   mr_pen: 0,   omnivamp: 0,   haste: 40,  speed: 0.1344,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "soraka",    ad: 101,  ap: 100,  armor_pen: 0,   mr_pen: 0,   omnivamp: 0,   haste: 50,  speed: 0.1342,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "vayne",     ad: 100,  ap: 0,    armor_pen: 0,   mr_pen: 0,   omnivamp: 0,   haste: 0,   speed: 0.1343,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "yasuo",     ad: 150,  ap: 0,    armor_pen: 0,   mr_pen: 0,   omnivamp: 20,  haste: 30,  speed: 0.1349,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "yone",      ad: 150,  ap: 0,    armor_pen: 0,   mr_pen: 0,   omnivamp: 20,  haste: 30,  speed: 0.1345,  jump: 0.55}
+    data modify storage lc:stats offense append value {name: "zed",       ad: 250,  ap: 0,    armor_pen: 20,  mr_pen: 0,   omnivamp: 0,   haste: 50,  speed: 0.1345,  jump: 0.55}
+
+    # ---- Abilities ----------------------------------------------------------------------------
+    # cost_q..cost_r   mana (or energy) per cast
+    # cd_q..cd_r       base cooldown in seconds, before haste
+    # weapon           custom model data of the weapon
+    data modify storage lc:stats abilities append value {name: "aatrox",    cost_q: 0,   cost_w: 0,    cost_e: 0,    cost_r: 0,    cd_q: 6,  cd_w: 12,  cd_e: 5,   cd_r: 80,   weapon: 900101}
+    data modify storage lc:stats abilities append value {name: "annie",     cost_q: 80,  cost_w: 110,  cost_e: 80,   cost_r: 100,  cd_q: 4,  cd_w: 8,   cd_e: 10,  cd_r: 100,  weapon: 1500101}
+    data modify storage lc:stats abilities append value {name: "ashe",      cost_q: 30,  cost_w: 55,   cost_e: 0,    cost_r: 100,  cd_q: 0,  cd_w: 4,   cd_e: 25,  cd_r: 60,   weapon: 500101}
+    data modify storage lc:stats abilities append value {name: "ezreal",    cost_q: 40,  cost_w: 50,   cost_e: 90,   cost_r: 100,  cd_q: 4,  cd_w: 12,  cd_e: 14,  cd_r: 90,   weapon: 700101}
+    data modify storage lc:stats abilities append value {name: "garen",     cost_q: 0,   cost_w: 0,    cost_e: 0,    cost_r: 0,    cd_q: 8,  cd_w: 15,  cd_e: 9,   cd_r: 80,   weapon: 1200102}
+    data modify storage lc:stats abilities append value {name: "jhin",      cost_q: 60,  cost_w: 70,   cost_e: 30,   cost_r: 100,  cd_q: 5,  cd_w: 12,  cd_e: 14,  cd_r: 90,   weapon: 800101}
+    data modify storage lc:stats abilities append value {name: "leesin",    cost_q: 50,  cost_w: 50,   cost_e: 50,   cost_r: 0,    cd_q: 6,  cd_w: 12,  cd_e: 9,   cd_r: 60,   weapon: 200101}
+    data modify storage lc:stats abilities append value {name: "leona",     cost_q: 55,  cost_w: 60,   cost_e: 60,   cost_r: 100,  cd_q: 5,  cd_w: 10,  cd_e: 6,   cd_r: 60,   weapon: 1000101}
+    data modify storage lc:stats abilities append value {name: "lux",       cost_q: 50,  cost_w: 80,   cost_e: 110,  cost_r: 100,  cd_q: 9,  cd_w: 10,  cd_e: 8,   cd_r: 40,   weapon: 1400101}
+    data modify storage lc:stats abilities append value {name: "malphite",  cost_q: 60,  cost_w: 50,   cost_e: 50,   cost_r: 100,  cd_q: 8,  cd_w: 8,   cd_e: 7,   cd_r: 80,   weapon: 1300101}
+    data modify storage lc:stats abilities append value {name: "soraka",    cost_q: 65,  cost_w: 60,   cost_e: 90,   cost_r: 100,  cd_q: 4,  cd_w: 2,   cd_e: 16,  cd_r: 120,  weapon: 1100101}
+    data modify storage lc:stats abilities append value {name: "vayne",     cost_q: 30,  cost_w: 0,    cost_e: 90,   cost_r: 80,   cd_q: 3,  cd_w: 0,   cd_e: 12,  cd_r: 70,   weapon: 600101}
+    data modify storage lc:stats abilities append value {name: "yasuo",     cost_q: 0,   cost_w: 0,    cost_e: 0,    cost_r: 0,    cd_q: 4,  cd_w: 17,  cd_e: 2,   cd_r: 30,   weapon: 100101}
+    data modify storage lc:stats abilities append value {name: "yone",      cost_q: 0,   cost_w: 0,    cost_e: 0,    cost_r: 0,    cd_q: 4,  cd_w: 14,  cd_e: 10,  cd_r: 60,   weapon: 400101}
+    data modify storage lc:stats abilities append value {name: "zed",       cost_q: 55,  cost_w: 20,   cost_e: 40,   cost_r: 0,    cd_q: 6,  cd_w: 17,  cd_e: 3,   cd_r: 80,   weapon: 300101}
+
+    # ---- Basic attack -------------------------------------------------------------------------
+    # type           melee: hits every enemy in front, within range
+    #                ranged: hits the first target the crosshair is on
+    # attack_speed   attacks per second
+    # range          blocks
+    # ammo           shots before reloading (0 = no ammo, never reloads)
+    # reload         seconds to reload
+    data modify storage lc:stats attack append value {name: "aatrox",    type: "melee",   attack_speed: 1.0,  range: 4.0,   ammo: 0,   reload: 0}
+    data modify storage lc:stats attack append value {name: "annie",     type: "ranged",  attack_speed: 1.0,  range: 29.0,  ammo: 6,   reload: 1.5}
+    data modify storage lc:stats attack append value {name: "ashe",      type: "ranged",  attack_speed: 2.5,  range: 28.0,  ammo: 10,  reload: 1.5}
+    data modify storage lc:stats attack append value {name: "ezreal",    type: "ranged",  attack_speed: 1.0,  range: 25.6,  ammo: 8,   reload: 1.5}
+    data modify storage lc:stats attack append value {name: "garen",     type: "melee",   attack_speed: 1.0,  range: 4.0,   ammo: 0,   reload: 0}
+    data modify storage lc:stats attack append value {name: "jhin",      type: "ranged",  attack_speed: 1.0,  range: 25.6,  ammo: 4,   reload: 2.5}
+    data modify storage lc:stats attack append value {name: "leesin",    type: "melee",   attack_speed: 1.0,  range: 3.0,   ammo: 0,   reload: 0}
+    data modify storage lc:stats attack append value {name: "leona",     type: "melee",   attack_speed: 1.0,  range: 3.0,   ammo: 0,   reload: 0}
+    data modify storage lc:stats attack append value {name: "lux",       type: "ranged",  attack_speed: 1.0,  range: 25.6,  ammo: 6,   reload: 1.5}
+    data modify storage lc:stats attack append value {name: "malphite",  type: "melee",   attack_speed: 1.0,  range: 3.0,   ammo: 0,   reload: 0}
+    data modify storage lc:stats attack append value {name: "soraka",    type: "ranged",  attack_speed: 1.0,  range: 26.0,  ammo: 6,   reload: 1.5}
+    data modify storage lc:stats attack append value {name: "vayne",     type: "ranged",  attack_speed: 1.0,  range: 25.6,  ammo: 8,   reload: 1.25}
+    data modify storage lc:stats attack append value {name: "yasuo",     type: "melee",   attack_speed: 2.5,  range: 4.0,   ammo: 0,   reload: 0}
+    data modify storage lc:stats attack append value {name: "yone",      type: "melee",   attack_speed: 2.5,  range: 4.0,   ammo: 0,   reload: 0}
+    data modify storage lc:stats attack append value {name: "zed",       type: "melee",   attack_speed: 1.0,  range: 3.0,   ammo: 0,   reload: 0}
+
+    # ---- Ground-targeted abilities ----------------------------------------------------------------
+    # q..r           range in blocks for an ability cast on the ground (0 = not ground-targeted).
+    #                The target is where the crosshair meets the ground: never behind a wall, never
+    #                on a ceiling; past the range it drops to the ground below the end of the range.
+    # q_radius..     size of the indicator circle, in blocks (only what the caster sees)
+    data modify storage lc:stats aim append value {name: "aatrox",    q: 0.0,   w: 0.0,   e: 0.0,   r: 0.0,   q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 0.0}
+    data modify storage lc:stats aim append value {name: "annie",     q: 0.0,   w: 0.0,   e: 0.0,   r: 6.0,   q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 1.5}
+    data modify storage lc:stats aim append value {name: "ashe",      q: 0.0,   w: 0.0,   e: 0.0,   r: 0.0,   q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 0.0}
+    data modify storage lc:stats aim append value {name: "ezreal",    q: 0.0,   w: 0.0,   e: 0.0,   r: 0.0,   q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 0.0}
+    data modify storage lc:stats aim append value {name: "garen",     q: 0.0,   w: 0.0,   e: 0.0,   r: 0.0,   q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 0.0}
+    data modify storage lc:stats aim append value {name: "jhin",      q: 0.0,   w: 0.0,   e: 0.0,   r: 0.0,   q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 0.0}
+    data modify storage lc:stats aim append value {name: "leesin",    q: 0.0,   w: 0.0,   e: 0.0,   r: 0.0,   q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 0.0}
+    data modify storage lc:stats aim append value {name: "leona",     q: 0.0,   w: 0.0,   e: 0.0,   r: 12.0,  q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 3.0}
+    data modify storage lc:stats aim append value {name: "lux",       q: 0.0,   w: 0.0,   e: 11.0,  r: 0.0,   q_radius: 0.0,   w_radius: 0.0,   e_radius: 3.0,   r_radius: 0.0}
+    data modify storage lc:stats aim append value {name: "malphite",  q: 0.0,   w: 0.0,   e: 0.0,   r: 10.0,  q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 2.5}
+    data modify storage lc:stats aim append value {name: "soraka",    q: 8.0,   w: 0.0,   e: 9.25,  r: 0.0,   q_radius: 2.0,   w_radius: 0.0,   e_radius: 2.5,   r_radius: 0.0}
+    data modify storage lc:stats aim append value {name: "vayne",     q: 0.0,   w: 0.0,   e: 0.0,   r: 0.0,   q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 0.0}
+    data modify storage lc:stats aim append value {name: "yasuo",     q: 0.0,   w: 0.0,   e: 0.0,   r: 0.0,   q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 0.0}
+    data modify storage lc:stats aim append value {name: "yone",      q: 0.0,   w: 0.0,   e: 0.0,   r: 0.0,   q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 0.0}
+    data modify storage lc:stats aim append value {name: "zed",       q: 0.0,   w: 0.0,   e: 0.0,   r: 0.0,   q_radius: 0.0,   w_radius: 0.0,   e_radius: 0.0,   r_radius: 0.0}
+
+    function lc:core/champion/stats/reapply
+}

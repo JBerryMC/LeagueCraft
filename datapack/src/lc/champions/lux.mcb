@@ -1,0 +1,1984 @@
+# lc:champions/lux/  (converted from the 1.20.2 LeagueCraft datapack)
+
+# What's special about picking lux; the stats are in settings.mcb.
+function pick {
+    execute if score .world lang matches 0 as @s run function lc:core/lang/champion/eng.lux
+    execute if score .world lang matches 1 as @s run function lc:core/lang/champion/vie.lux
+    tag @s add useMana
+    scoreboard players operation @s mana = @s mana.max
+    playsound minecraft:lux.select master @a ~ ~ ~
+    playsound minecraft:lux.sfx.select master @a ~ ~ ~
+}
+
+function aa {
+    playsound lux.sfx.aa master @a ~ ~ ~
+
+    execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.lux","aa","homing","red","temp"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.lux","aa","homing","blue","temp"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+}
+
+function hud {
+    $title @s actionbar ["",{translate:"space.-60"},{text:"i",font:"minecraft:lux"},{translate:"space.16"},{score:{name:"@s",objective:"status.p"},font:"lol:lux/p"},{translate:"space.5"},{score:{name:"@s",objective:"status.q"},font:"lol:lux/q"},{translate:"space.6"},{score:{name:"@s",objective:"status.w"},font:"lol:lux/w"},{translate:"space.6"},{score:{name:"@s",objective:"status.e"},font:"lol:lux/e"},{translate:"space.6"},{score:{name:"@s",objective:"status.r"},font:"lol:lux/r"},{translate:"space.9"},{score:{name:"@s",objective:"status.spell.1"},font:"minecraft:lol"},{translate:"space.5"},{score:{name:"@s",objective:"status.spell.2"},font:"minecraft:lol"},{translate:"space.-253"},{text:"M",font:"minecraft:lol"},{translate:"space.-274"},{score:{name:"@s",objective:"status.hotbar"},font:"minecraft:hotbar"},{translate:"space.-207"},{storage:"lol:main",nbt:"hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:hp_display"},{translate:"space.-252"},{storage:"lol:main",nbt:"mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:mana_display"},{translate:"space.-183"},{score:{name:"@s",objective:"cd_p"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.passive"},font:"space:default"},{score:{name:"@s",objective:"cd_q"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.q"},font:"space:default"},{score:{name:"@s",objective:"cd_w"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.w"},font:"space:default"},{score:{name:"@s",objective:"cd_e"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.e"},font:"space:default"},{score:{name:"@s",objective:"cd_r"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.r"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.1"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.1"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.2"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.2"},font:"space:default"},{translate:"space.-138"},{score:{name:"@s",objective:"space.hp1"},font:"space:default"},{score:{name:"@s",objective:"hp.left"},font:"minecraft:custom/hp"},{text:"/",font:"minecraft:custom/hp"},{score:{name:"@s",objective:"hp.max"},font:"minecraft:custom/hp"},{score:{name:"@s",objective:"space.hp2"},font:"space:default"},{translate:"space.-78"},{score:{name:"@s",objective:"space.mana1"},font:"space:default"},{score:{name:"@s",objective:"mana"},font:"minecraft:custom/mana"},{text:"/",font:"minecraft:custom/mana"},{score:{name:"@s",objective:"mana.max"},font:"minecraft:custom/mana"},{score:{name:"@s",objective:"space.mana2"},font:"space:default"},{translate:"space.-112"},{storage:"lol:main",nbt:"keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.24"},{storage:"lol:main",nbt:"keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.25"},{nbt:"keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",storage:"lol:main",interpret:true},{translate:"space.18"},{keybind:"key.swapOffhand",font:"minecraft:custom/keybind_small",bold:true,color:"#ffd821"},{storage:"lol:main",nbt:"crosshair.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true}]
+}
+
+function hud_display {
+    function lc:champion/hud
+
+    ## E
+    execute if entity @s[team=red] if entity @e[tag=lux.e.area,tag=red,type=item_display] run scoreboard players set @s status.e 2
+    execute if entity @s[team=blue] if entity @e[tag=lux.e.area,tag=blue,type=item_display] run scoreboard players set @s status.e 2
+
+    function lc:champions/lux/hud with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+}
+
+function loop {
+    execute as @e[type=#has_health_bar,type=!#unvalid,tag=!unvalid,scores={lux.passive=1..}] at @s anchored eyes run particle electric_spark ^ ^-0.5 ^ 0.2 0.2 0.2 0 2 force
+
+    execute as @e[tag=lux.q,type=item_display] at @s run function lc:champions/lux/skills/q.animation
+
+    execute as @e[tag=lux.w,type=item_display] at @s run function lc:champions/lux/skills/w.animation
+    execute as @e[tag=lux.w.fx,type=area_effect_cloud] at @s run function lc:champions/lux/skills/w.particle
+
+    execute as @e[tag=lux.e.projectile] at @s run function lc:champions/lux/skills/e.projectile
+    execute as @e[tag=lux.e.area,type=item_display] at @s run function lc:champions/lux/skills/e.animation
+
+    execute as @e[tag=lux.r.fx,type=item_display] at @s run function lc:champions/lux/skills/r.animation
+    execute as @e[tag=lux.r,type=item_display] at @s run particle electric_spark ~ ~ ~ 0.2 0.2 0.2 0.1 10 force
+}
+
+function main {
+    # Cooldown
+    function lc:champions/lux/hud_display
+
+    ## Item Handling
+    execute unless predicate lc:champion/slot/head run function lc:champions/lux/item/headwear
+    execute unless predicate lc:champion/slot/offhand run function lc:champions/lux/item/offhand
+
+    ## Re-use
+    execute if predicate lc:champion/hold_q if score @s use_ability matches 1.. run function lc:champion/abilities/use_q
+    execute if predicate lc:champion/hold_w if score @s use_ability matches 1.. run function lc:champion/abilities/use_w
+    execute if predicate lc:champion/hold_e if score @s use_ability matches 1.. run function lc:champion/abilities/use_e
+    execute if predicate lc:champion/hold_r if score @s use_ability matches 1.. run function lc:champion/abilities/use_r
+
+    ## First use
+    execute if predicate lc:champion/use_q run function lc:champion/abilities/use_q
+
+    execute if predicate lc:champion/use_w run function lc:champion/abilities/use_w
+
+    execute if predicate lc:champion/use_e run function lc:champion/abilities/use_e
+
+    execute if predicate lc:champion/use_r run function lc:champion/abilities/use_r
+}
+
+function passive {
+    playsound lux.sfx.p master @a ~ ~ ~
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] as @e[team=!<%team%>,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] at @s run particle end_rod ~ ~1 ~ 0 0 0 0.1 10 force
+        execute if entity @s[team=<%team%>] run scoreboard players set @e[team=!<%team%>,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] lux.passive 0
+    }
+
+    scoreboard players set @s dmg_magic.deal 0
+
+    scoreboard players operation lux.p.dmg temp = @s ability_power
+    scoreboard players operation lux.p.dmg temp *= 30 integer
+    scoreboard players operation lux.p.dmg temp /= 100 integer
+
+    scoreboard players add lux.p.dmg temp 200
+
+    scoreboard players operation @s dmg_magic.deal += lux.p.dmg temp
+
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+    execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+    execute if entity @s[team=red] as @e[team=!red,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] run function lc:champion/dmg/calc.magic
+    execute if entity @s[team=red] as @e[team=!red,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] run function lc:champion/dmg/taken/magic
+
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+    execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+    execute if entity @s[team=blue] as @e[team=!blue,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] run function lc:champion/dmg/calc.magic
+    execute if entity @s[team=blue] as @e[team=!blue,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] run function lc:champion/dmg/taken/magic
+
+    scoreboard players set @s dmg_magic.deal 0
+}
+
+function use_e {
+    #scoreboard players set @s cd_e 14
+    #coreboard players remove @s mana 90
+    function lc:champion/abilities/cooldown/e
+    scoreboard players add @s channeling 5
+    playsound minecraft:lux.sfx.e master @a ~ ~ ~
+
+    execute positioned as @e[type=marker,tag=lc.ground_target,limit=1] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:2,Tags:["lux.e.position"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute positioned as @e[type=marker,tag=lc.ground_target,limit=1] run data modify entity @e[tag=lux.e.position,type=area_effect_cloud,limit=1,sort=nearest] Owner set from entity @s UUID
+    execute positioned as @e[type=marker,tag=lc.ground_target,limit=1] as @e[tag=lux.e.position,type=area_effect_cloud,limit=1,sort=nearest] at @s run function lc:champions/lux/skills/e.position
+
+    execute if entity @s[team=red] anchored eyes run summon area_effect_cloud ^ ^ ^ {WaitTime:0,Duration:20,Tags:["lux.e.projectile","red","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] anchored eyes run summon area_effect_cloud ^ ^ ^ {WaitTime:0,Duration:20,Tags:["lux.e.projectile","blue","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+}
+
+function use_q {
+    #scoreboard players set @s cd_q 4
+    #scoreboard players remove @s mana 40
+    function lc:champion/abilities/cooldown/q
+    scoreboard players set @s channeling 5
+    playsound lux.sfx.q master @a ~ ~ ~
+
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] run summon item_display ~ ~ ~ {teleport_duration:1,Tags:["<%team%>","lux.q","temp","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:20,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[team=<%team%>] anchored eyes run tp @e[tag=<%team%>,tag=lux.q,limit=1,sort=nearest] ^ ^ ^ ~ ~
+    }
+}
+
+function use_r {
+    #scoreboard players set @s cd_r 90
+    #scoreboard players remove @s mana 100
+    function lc:champion/abilities/cooldown/r
+    scoreboard players set @s channeling 20
+    scoreboard players set @s status.weapon 9999
+    playsound minecraft:lux.ultimate master @a ~ ~ ~
+    playsound minecraft:lux.sfx.r master @a ~ ~ ~ 4
+
+    tag @s add r.animation
+
+    execute if entity @s[team=red] anchored eyes run summon item_display ^ ^ ^1 {teleport_duration:1,item_display:"head",item:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[1400101f]}}},Tags:["red","lux.r.anim","lol.auto_clear","lux.r.fx"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:20,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] anchored eyes run summon item_display ^ ^ ^1 {teleport_duration:1,item_display:"head",item:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[1400101f]}}},Tags:["blue","lux.r.anim","lol.auto_clear","lux.r.fx"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:20,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute anchored eyes positioned ^ ^ ^1 run tp @e[tag=lux.r.anim,limit=1,sort=nearest] ~ ~ ~ ~90 ~
+    execute anchored eyes positioned ^ ^ ^ run function lc:champions/lux/skills/r.cast
+}
+
+function use_w {
+    #scoreboard players set @s cd_w 12
+    #scoreboard players remove @s mana 50
+    function lc:champion/abilities/cooldown/w
+    scoreboard players set @s channeling 5
+    playsound minecraft:lux.sfx.w master @a ~ ~ ~
+
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:40,Tags:["red","lux.w.fx","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:40,Tags:["blue","lux.w.fx","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,brightness:{sky:10,block:10},item_display:"head",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1400201f]}}},Tags:["<%team%>","lux.w","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:20,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[team=<%team%>] anchored eyes run tp @e[tag=<%team%>,tag=lux.w,limit=1,sort=nearest] ^ ^ ^ ~ ~
+    }
+}
+
+# ---- item: lc:champions/lux/item/... -------------------------------------------------
+dir item {
+    function headwear {
+        clear @s iron_sword[minecraft:custom_data~{lol_item:1}]
+        execute if score .world lang matches 0 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[9999f]},minecraft:custom_name={text:"Lux",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+        execute if score .world lang matches 1 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[700001f]},minecraft:custom_name={text:"Ezreal",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+    }
+
+    function offhand {
+        clear @s carrot_on_a_stick[minecraft:custom_data~{lol_item:1}]
+        tag @s remove offhand_temp
+
+        item replace entity @s weapon.offhand with minecraft:carrot_on_a_stick[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[9999f]},minecraft:custom_name={text:".",color:"#1b0c1b"},minecraft:custom_data={lol_item:1,kill_item:1,offhand:1}]
+    }
+}
+
+# ---- skills: lc:champions/lux/skills/... ---------------------------------------------
+dir skills {
+    function e.animation {
+        function lc:champions/lux/skills/e.particle
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] positioned ~-3 ~-0.5 ~-3 run effect give @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,dx=5,dz=5,dy=0] slowness 2 2 false
+            execute if entity @s[tag=<%team%>] positioned ~-3 ~-0.5 ~-3 run scoreboard players set @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,dx=5,dz=5,dy=0] fx.sight 2
+        }
+    }
+
+    function e.damage {
+        execute if entity @s[team=red] run effect give @e[team=!red,type=!#unvalid,tag=lux.e.hit,tag=lux.e.temp_dmg,limit=1,sort=nearest] slowness 1 2 false
+        execute if entity @s[team=red] run scoreboard players set @e[team=!red,type=!#unvalid,tag=lux.e.hit,tag=lux.e.temp_dmg,limit=1,sort=nearest] lux.passive 6
+        execute if entity @s[team=blue] run scoreboard players set @e[team=!blue,type=!#unvalid,tag=lux.e.hit,tag=lux.e.temp_dmg,limit=1,sort=nearest] lux.passive 6
+        execute if entity @s[team=blue] run effect give @e[team=!blue,type=!#unvalid,tag=lux.e.hit,tag=lux.e.temp_dmg,limit=1,sort=nearest] slowness 1 2 false
+
+        execute if entity @s[team=red] run damage @e[tag=lux.e.hit,tag=lux.e.temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+        execute if entity @s[team=blue] run damage @e[tag=lux.e.hit,tag=lux.e.temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+
+        scoreboard players operation @s dmg_magic.deal = @s ability_power
+        scoreboard players operation @s dmg_magic.deal *= 80 integer
+        scoreboard players operation @s dmg_magic.deal /= 100 integer
+        scoreboard players add @s dmg_magic.deal 265
+
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=lux.e.hit,tag=has_health_bar,tag=lux.e.temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=lux.e.hit,tag=has_health_bar,tag=lux.e.temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=red] run tag @e[team=!red,tag=lux.e.hit,type=!#unvalid,tag=lux.e.temp_dmg,limit=1,sort=nearest] remove lux.e.temp_dmg
+
+        execute if entity @s[team=red] run execute if entity @e[tag=lux.e.hit,tag=lux.e.temp_dmg,type=!#unvalid,team=!red] run function lc:champions/lux/skills/e.damage
+
+        ## BLUE
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=lux.e.hit,tag=has_health_bar,tag=lux.e.temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=lux.e.hit,tag=has_health_bar,tag=lux.e.temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=blue] run tag @e[team=!blue,tag=lux.e.hit,type=!#unvalid,tag=lux.e.temp_dmg,limit=1,sort=nearest] remove lux.e.temp_dmg
+
+        execute if entity @s[team=blue] run execute if entity @e[tag=lux.e.hit,tag=lux.e.temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/lux/skills/e.damage
+    }
+
+    function e.end {
+        particle flash{color:[1.0f,1.0f,1.0f,1.0f]} ~ ~ ~ 0 0 0 1 1 force
+        particle end_rod ~ ~ ~ 0 0 0 0.2 20 force
+        stopsound @a master lux.sfx.e.lingering
+        playsound lux.sfx.e.end master @a ~ ~ ~
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] positioned ~-3 ~-0.5 ~-3 run tag @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,dx=5,dz=5,dy=0] add lux.e.hit
+            execute if entity @s[tag=<%team%>] run tag @e[team=!<%team%>,tag=lux.e.hit] add lux.e.temp_dmg
+            execute if entity @s[tag=<%team%>] if entity @e[tag=lux.e.hit,team=!<%team%>] as @p[tag=lux,team=<%team%>] run function lc:champions/lux/skills/e.damage
+            execute if entity @s[tag=<%team%>] run tag @e[team=!<%team%>,tag=lux.e.hit] remove lux.e.hit
+        }
+
+        execute on passengers run kill @s
+        kill @s
+    }
+
+    function e.particle {
+        ### Particle Image Function
+        ### Version: 1.0.4
+        ### Width: 64
+        ### Height: 64
+        ### ParticleType: dust
+
+        ### This file was generated by Kemo431's Particle-Converter.
+        ### Download Link: https://github.com/kemo14331/Particle-Converter
+        particle enchant ~ ~ ~ 0 0 0 1 10 force @a
+
+        particle minecraft:electric_spark ^3.09375 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^3.09375 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.953125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.8125 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.671875 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.53125 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.390625 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.25 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^2.109375 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.96875 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.828125 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.6875 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.546875 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.40625 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.265625 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^1.125 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.984375 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.84375 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.703125 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.5625 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.421875 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.28125 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-3.09375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0.140625 ^0 ^2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-3.09375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^0 ^0 ^2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.140625 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.28125 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.421875 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.5625 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.703125 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-2.953125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.84375 ^0 ^2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-0.984375 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-2.8125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.125 ^0 ^2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.265625 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-2.671875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.40625 ^0 ^2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.546875 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-2.53125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.6875 ^0 ^2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-2.390625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.828125 ^0 ^2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-2.25 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-1.96875 ^0 ^2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-2.109375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.109375 ^0 ^1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-1.96875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.25 ^0 ^1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-1.828125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.390625 ^0 ^1.6875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^-1.546875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^-1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.53125 ^0 ^1.40625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^-1.265625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^-1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.671875 ^0 ^1.125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^-0.984375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^-0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^-0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^-0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^-0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^-0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^0 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^0.28125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^0.421875 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^0.5625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^0.703125 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.8125 ^0 ^0.84375 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.953125 ^0 ^-0.140625 0 0 0 0 0 force @a
+        particle minecraft:electric_spark ^-2.953125 ^0 ^0 0 0 0 0 0 force @a
+    }
+
+    function e.position {
+        execute if block ~ ~ ~ #like_air unless block ~ ~-1 ~ #like_air run playsound lux.sfx.e.lingering master @a ~ ~ ~
+        execute if block ~ ~ ~ #like_air unless block ~ ~-1 ~ #like_air on origin if entity @s[team=red] run summon item_display ~ ~ ~ {Tags:["lol.auto_clear","red","lux.e"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:20,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if block ~ ~ ~ #like_air unless block ~ ~-1 ~ #like_air on origin if entity @s[team=blue] run summon item_display ~ ~ ~ {Tags:["lol.auto_clear","blue","lux.e"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:20,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+        execute if block ~ ~ ~ #like_air if block ~ ~-1 ~ #like_air positioned ~ ~-1 ~ run function lc:champions/lux/skills/e.position
+
+        execute unless block ~ ~ ~ #like_air positioned ~ ~1 ~ run function lc:champions/lux/skills/e.position
+    }
+
+    function e.projectile {
+        particle minecraft:electric_spark ^ ^ ^0.5 0 0 0 0 1 force
+        particle minecraft:electric_spark ^ ^ ^0.75 0 0 0 0 1 force
+        particle minecraft:electric_spark ^ ^ ^1 0.05 0.05 0.05 0 2 force
+        particle minecraft:electric_spark ^ ^ ^1.25 0.05 0.05 0.05 0 2 force
+        particle minecraft:electric_spark ^ ^ ^1.5 0.1 0.1 0.1 0 3 force
+        particle minecraft:electric_spark ^ ^ ^1.75 0.05 0.05 0.05 0 2 force
+        particle minecraft:electric_spark ^ ^ ^2 0.05 0.05 0.05 0 2 force
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] facing entity @e[tag=lux.e,tag=<%team%>,limit=1] feet run tp @s ^ ^ ^1.2
+            execute if entity @s[tag=<%team%>] as @e[tag=lux.e,tag=<%team%>,distance=..1] at @s run function lc:champions/lux/skills/e.spawn
+            execute if entity @s[tag=<%team%>] if entity @e[tag=lux.e,tag=<%team%>,distance=..1] run kill @s
+        }
+    }
+
+    function e.spawn {
+        execute on passengers run kill @s[tag=cd]
+
+        execute if entity @s[tag=red] run summon item_display ~ ~ ~ {Tags:["lol.auto_clear","red","lux.e.area"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:100,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[tag=blue] run summon item_display ~ ~ ~ {Tags:["lol.auto_clear","blue","lux.e.area"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:100,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    }
+
+    function q.animation {
+        tp @s ^ ^ ^1.2 ~ ~
+        particle minecraft:electric_spark ^ ^ ^0.5 0 0 0 0 1 force
+        particle minecraft:electric_spark ^ ^ ^0.75 0 0 0 0 1 force
+        particle minecraft:electric_spark ^ ^ ^1 0.05 0.05 0.05 0 2 force
+        particle minecraft:electric_spark ^ ^ ^1.25 0.05 0.05 0.05 0 2 force
+        particle minecraft:electric_spark ^ ^ ^1.5 0.1 0.1 0.1 0 3 force
+        particle minecraft:electric_spark ^ ^ ^1.75 0.05 0.05 0.05 0 2 force
+        particle minecraft:electric_spark ^ ^ ^2 0.05 0.05 0.05 0 2 force
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute as @s[tag=<%team%>] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[team=!<%team%>,dx=0,type=!#unvalid,tag=!unvalid,tag=!lux.q.hit] add lux.q.hit
+            execute as @s[tag=<%team%>] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[team=!<%team%>,tag=lux.q.hit,tag=!lux.q.damage] at @s run function lc:champions/lux/skills/q.hit
+        }
+    }
+
+    function q.clear {
+        execute if entity @s[tag=red] run tag @e[tag=lux.q.damage,team=!red,type=!#unvalid] remove lux.q.damage
+
+        execute if entity @s[tag=blue] run tag @e[tag=lux.q.damage,team=!blue,type=!#unvalid] remove lux.q.damage
+
+        kill @s
+    }
+
+    function q.damage {
+        execute if entity @s[team=red] run scoreboard players set @e[team=!red,type=!#unvalid,tag=lux.q.hit,tag=temp_dmg,limit=1,sort=nearest] lux.passive 6
+        execute if entity @s[team=blue] run scoreboard players set @e[team=!blue,type=!#unvalid,tag=lux.q.hit,tag=temp_dmg,limit=1,sort=nearest] lux.passive 6
+
+        execute if entity @s[team=red] run damage @e[team=!red,type=!#unvalid,tag=lux.q.hit,tag=temp_dmg,limit=1,sort=nearest] 1 lc:core/dmg_magic by @s
+        execute if entity @s[team=blue] run damage @e[team=!blue,type=!#unvalid,tag=lux.q.hit,tag=temp_dmg,limit=1,sort=nearest] 1 lc:core/dmg_magic by @s
+
+        scoreboard players operation temp ability_power = @s ability_power
+        scoreboard players operation temp ability_power *= 65 integer
+        scoreboard players operation temp ability_power /= 100 integer
+
+        scoreboard players add temp ability_power 240
+
+        scoreboard players operation @s dmg_magic.deal = temp ability_power
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=has_health_bar,tag=lux.q.hit,tag=temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=has_health_bar,tag=lux.q.hit,tag=temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=red] run tag @e[team=!red,tag=has_health_bar,tag=lux.q.hit,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+        execute if entity @s[team=red] if entity @e[tag=lux.q.hit,tag=temp_dmg,type=!#unvalid,team=!red] run function lc:champions/lux/skills/q.damage
+
+        ## BLUE
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=has_health_bar,tag=lux.q.hit,tag=temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=has_health_bar,tag=lux.q.hit,tag=temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=blue] run tag @e[team=!blue,tag=has_health_bar,tag=lux.q.hit,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+    }
+
+    function q.hit {
+        playsound lux.sfx.q.hit master @a ~ ~ ~
+
+        execute if entity @s[tag=lux.q.hit_once] on passengers run kill @s[tag=cd]
+        tag @s add lux.q.hit_once
+        execute if entity @s[tag=red] run scoreboard players set @e[tag=lux.q.hit,team=!red,type=!#unvalid,tag=!lux.q.damage] cc.root 40
+        execute if entity @s[tag=red] if entity @e[tag=lux.q.hit,team=!red,type=!#unvalid] run tag @e[tag=lux.q.hit,type=!#unvalid,team=!red,tag=!lux.q.damage] add temp_dmg
+        execute if entity @s[tag=red] if entity @e[tag=lux.q.hit,team=!red,type=!#unvalid] as @p[tag=lux,team=red] run function lc:champions/lux/skills/q.damage
+
+        execute if entity @s[tag=red] if entity @e[tag=lux.q.hit,team=!red,type=!#unvalid] run tag @e[tag=lux.q.hit,type=!#unvalid,team=!red] add lux.q.damage
+        execute if entity @s[tag=red] if entity @e[tag=lux.q.hit,team=!red,type=!#unvalid] run tag @e[tag=lux.q.hit,type=!#unvalid,team=!red] remove lux.q.hit
+
+        execute if entity @s[tag=blue] run scoreboard players set @e[tag=lux.q.hit,team=!blue,type=!#unvalid,tag=!lux.q.damage] cc.root 40
+        execute if entity @s[tag=blue] if entity @e[tag=lux.q.hit,team=!blue,type=!#unvalid] run tag @e[tag=lux.q.hit,type=!#unvalid,team=!blue,tag=!lux.q.damage] add temp_dmg
+        execute if entity @s[tag=blue] if entity @e[tag=lux.q.hit,team=!blue,type=!#unvalid] as @p[tag=lux,team=blue] run function lc:champions/lux/skills/q.damage
+
+        execute if entity @s[tag=blue] if entity @e[tag=lux.q.hit,team=!blue,type=!#unvalid] run tag @e[tag=lux.q.hit,type=!#unvalid,team=!blue] add lux.q.damage
+        execute if entity @s[tag=blue] if entity @e[tag=lux.q.hit,team=!blue,type=!#unvalid] run tag @e[tag=lux.q.hit,type=!#unvalid,team=!blue] remove lux.q.hit
+    }
+
+    function r.animation {
+        tp @s[tag=!loop] ~ ~ ~ ~ ~30
+        tp @s[tag=loop] ~ ~ ~ ~ ~-30
+
+        execute if entity @s[x_rotation=90,tag=!loop] run tp @s ~ ~ ~ ~180 90
+        execute if entity @s[x_rotation=90,tag=!loop] run tag @s add loop
+
+        execute if entity @s[x_rotation=-90,tag=loop] run tp @s ~ ~ ~ ~180 -90
+        execute if entity @s[x_rotation=-90,tag=loop] run tag @s remove loop
+    }
+
+    function r.cast {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run summon item_display ~ ~ ~ {interpolation_duration:2,brightness:{sky:15,block:15},transformation:{scale:[0.0f,0.0f,1.0f],translation:[0.0f,0.0f,0.0f],right_rotation:[0.0f,0.0f,0.0f,1.0f],left_rotation:[0.0f,0.0f,0.0f,1.0f]},item_display:"head",item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[1400401f]}}},Tags:["do_not_clear","lol.auto_clear","<%team%>","lux.r","temp"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:20,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+            execute if entity @s[team=<%team%>] rotated as @s as @e[tag=lux.r,sort=nearest,tag=temp,limit=1,tag=<%team%>] positioned as @s run tp @s ~ ~ ~ ~ ~
+            execute if entity @s[team=<%team%>] run tag @e[tag=lux.r,sort=nearest,tag=temp,limit=1,tag=<%team%>] remove temp
+        }
+
+        execute if entity @s[distance=..34] positioned ^ ^ ^0.5 run function lc:champions/lux/skills/r.cast
+    }
+
+    function r.damage {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run scoreboard players set @e[team=!<%team%>,type=!#unvalid,tag=lux.r.hit,tag=lux.r.dmg,limit=1,sort=nearest] fx.sight 20
+            execute if entity @s[team=<%team%>] run scoreboard players set @e[team=!<%team%>,type=!#unvalid,tag=lux.r.hit,tag=lux.r.dmg,limit=1,sort=nearest] lux.passive 6
+        }
+
+        execute if entity @s[team=red] run damage @e[tag=lux.r.hit,tag=lux.r.dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+        execute if entity @s[team=blue] run damage @e[tag=lux.r.hit,tag=lux.r.dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+
+        scoreboard players operation @s dmg_magic.deal = @s ability_power
+        scoreboard players operation @s dmg_magic.deal *= 120 integer
+        scoreboard players operation @s dmg_magic.deal /= 100 integer
+        scoreboard players add @s dmg_magic.deal 500
+
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=lux.r.hit,tag=has_health_bar,tag=lux.r.dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=lux.r.hit,tag=has_health_bar,tag=lux.r.dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=red] run tag @e[team=!red,tag=lux.r.hit,type=!#unvalid,tag=lux.r.dmg,limit=1,sort=nearest] remove lux.r.dmg
+
+        execute if entity @s[team=red] run execute if entity @e[tag=lux.r.hit,tag=lux.r.dmg,type=!#unvalid,team=!red] run function lc:champions/lux/skills/r.damage
+
+        ## BLUE
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=lux.r.hit,tag=has_health_bar,tag=lux.r.dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=lux.r.hit,tag=has_health_bar,tag=lux.r.dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=blue] run tag @e[team=!blue,tag=lux.r.hit,type=!#unvalid,tag=lux.r.dmg,limit=1,sort=nearest] remove lux.r.dmg
+
+        execute if entity @s[team=blue] run execute if entity @e[tag=lux.r.hit,tag=lux.r.dmg,type=!#unvalid,team=!blue] run function lc:champions/lux/skills/r.damage
+    }
+
+    function r.particle {
+        execute if entity @s[tag=lux.r,tag=can_remove] run tag @s remove do_not_clear
+
+        execute if entity @s[tag=lux.r,tag=!can_remove] run data modify entity @s transformation.scale set value [3.0,3.0,1.0]
+        execute if entity @s[tag=lux.r,tag=!can_remove] run data modify entity @s start_interpolation set value -1
+        execute if entity @s[tag=lux.r,tag=!can_remove] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:2,Tags:["cd","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[tag=lux.r,tag=!can_remove] run ride @e[tag=cd,tag=temp,limit=1,sort=nearest,type=area_effect_cloud] mount @s
+        execute if entity @s[tag=lux.r,tag=!can_remove] run tag @s add can_remove
+    }
+
+    function r.spawn {
+        execute if entity @s[tag=red] run scoreboard players set @p[tag=lux,team=red] status.weapon 1400101
+        execute if entity @s[tag=blue] run scoreboard players set @p[tag=lux,team=blue] status.weapon 1400101
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] as @e[tag=lux.r,tag=<%team%>] at @s run particle smoke ~ ~-0.5 ~ 0.5 0 0.5 0 20 force
+            execute if entity @s[tag=<%team%>] as @e[tag=lux.r,tag=<%team%>] at @s run particle end_rod ~ ~ ~ 1 1 1 0.01 1 force
+            execute if entity @s[tag=<%team%>] as @e[tag=lux.r,tag=<%team%>] at @s run particle flash{color:[1.0f,1.0f,1.0f,1.0f]} ~ ~ ~ 0 0 0 1 0 force
+            execute if entity @s[tag=<%team%>] as @e[tag=lux.r,tag=<%team%>] at @s positioned ~-1.5 ~-1.5 ~-1.5 run tag @e[team=!<%team%>,tag=!lux.r.hit,type=!#unvalid,tag=!unvalid,dx=2,dz=2,dy=2] add lux.r.hit
+            execute if entity @s[tag=<%team%>] run tag @e[tag=lux.r.hit,team=!<%team%>,scores={lux.passive=1..}] add temp_dmg
+            execute if entity @s[tag=<%team%>] if entity @e[tag=lux.r.hit,team=!<%team%>,scores={lux.passive=1..}] as @p[tag=lux,team=<%team%>] at @e[tag=lux.r.hit,team=!<%team%>,scores={lux.passive=1..}] run function lc:champions/lux/passive
+            execute if entity @s[tag=<%team%>] run tag @e[tag=lux.r.hit,tag=!lux.r.dmg,team=!<%team%>] add lux.r.dmg
+            execute if entity @s[tag=<%team%>] as @p[tag=lux] run function lc:champions/lux/skills/r.damage
+            execute if entity @s[tag=<%team%>] run tag @e[tag=lux.r.hit,team=!<%team%>] remove lux.r.hit
+            execute if entity @s[tag=<%team%>] run tag @p[tag=lux,team=<%team%>] remove r.animation
+        }
+    }
+
+    function w.animation {
+        tp @s[tag=!is_returning] ^ ^ ^2.4 ~ ~
+
+        execute if entity @s[tag=red,tag=is_returning] facing entity @p[tag=lux,team=red] eyes run tp @s ^ ^ ^2.4 ~ ~
+        execute if entity @s[tag=blue,tag=is_returning] facing entity @p[tag=lux,team=blue] eyes run tp @s ^ ^ ^2.4 ~ ~
+
+        particle minecraft:electric_spark ^ ^ ^0.5 0 0 0 0 1 force
+        particle minecraft:electric_spark ^ ^ ^0.75 0 0 0 0 1 force
+        particle minecraft:electric_spark ^ ^ ^1 0.05 0.05 0.05 0 2 force
+        particle minecraft:electric_spark ^ ^ ^1.25 0.05 0.05 0.05 0 2 force
+        particle minecraft:electric_spark ^ ^ ^1.5 0.1 0.1 0.1 0 3 force
+        particle minecraft:electric_spark ^ ^ ^1.75 0.05 0.05 0.05 0 2 force
+        particle minecraft:electric_spark ^ ^ ^2 0.05 0.05 0.05 0 2 force
+
+        execute as @s[tag=red] positioned ~-1 ~-1 ~-1 run tag @e[tag=champion,team=red,dx=1,dz=1,dy=1,type=!#unvalid,tag=!unvalid,tag=!lux.w.hit] add lux.w.hit
+        execute as @s[tag=red] as @e[team=red,tag=lux.w.hit,tag=!lux.w.shield] at @s run function lc:champions/lux/skills/w.shield
+
+        execute as @s[tag=red,tag=is_returning] positioned ~-1 ~-1 ~-1 if entity @e[team=red,dx=1,dz=1,dy=1,tag=lux] on passengers run kill @s[tag=cd]
+
+        execute as @s[tag=blue] positioned ~-1 ~-1 ~-1 run tag @e[tag=champion,team=blue,dx=1,dz=1,dy=1,type=!#unvalid,tag=!unvalid,tag=!lux.w.hit] add lux.w.hit
+        execute as @s[tag=blue] as @e[team=blue,tag=lux.w.hit,tag=!lux.w.shield] at @s run function lc:champions/lux/skills/w.shield
+
+        execute as @s[tag=blue,tag=is_returning] positioned ~-1 ~-1 ~-1 if entity @e[team=blue,dx=1,dz=1,dy=1,tag=lux] on passengers run kill @s[tag=cd]
+    }
+
+    function w.end {
+        tag @s remove do_not_clear
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] as @p[tag=lux,team=<%team%>] at @s run function lc:champions/lux/skills/w.shield
+            execute if entity @s[tag=<%team%>] run tag @e[tag=lux.w.shield,team=<%team%>] remove lux.w.shield
+        }
+    }
+
+    function w.particle {
+        tp @s ~ ~ ~ ~20 ~
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] positioned as @e[tag=lux.w,type=item_display,tag=<%team%>] run particle end_rod ^ ^ ^1 0 0 0 0 1 force
+            execute if entity @s[tag=<%team%>] positioned as @e[tag=lux.w,type=item_display,tag=<%team%>] run particle end_rod ^ ^ ^-1 0 0 0 0 1 force
+        }
+    }
+
+    function w.return {
+        tag @s add is_returning
+        tag @s add do_not_clear
+
+        execute if entity @s[tag=red] run tag @e[tag=lux.w.shield,team=red] remove lux.w.shield
+        execute if entity @s[tag=blue] run tag @e[tag=lux.w.shield,team=blue] remove lux.w.shield
+
+        summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:9999,Tags:["cd","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        ride @e[tag=cd,tag=temp,type=area_effect_cloud,limit=1,sort=nearest] mount @s
+    }
+
+    function w.shield {
+        tag @s add lux.w.shield
+        tag @s remove lux.w.hit
+        execute if entity @s[tag=has_display_bar] run tag @s add update.shield.lux
+        playsound lux.sfx.w.shield master @a ~ ~ ~
+        execute if entity @s[type=!player] on passengers as @s[tag=lux.w.shield] on passengers run kill @s
+        execute if entity @s[type=!player] on passengers as @s[tag=lux.w.shield] run kill @s
+        execute if entity @s[type=!player] run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1400211f]}}},Tags:["lux.w.shield","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[-22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1400211f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[22.5f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1400211f]}}}},{id:"item_display",interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[45.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1400211f]}}}},{id:"area_effect_cloud",WaitTime:0,Duration:50,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[type=!player] run ride @e[type=item_display,tag=temp,tag=lux.w.shield,limit=1,sort=nearest] mount @s
+        execute if entity @s[type=!player] on passengers run data merge entity @s[tag=lux.w.shield] {transformation:{translation:[0.0,-0.6,0.0]}}
+        execute if entity @s[type=!player] on passengers as @s[tag=lux.w.shield] on passengers run data merge entity @s {transformation:{translation:[0.0,-0.6,0.0]}}
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run scoreboard players operation temp shield.all = @p[tag=lux,team=<%team%>] ability_power
+            execute if entity @s[team=<%team%>] run scoreboard players operation temp shield.all *= 40 integer
+            execute if entity @s[team=<%team%>] run scoreboard players operation temp shield.all /= 100 integer
+        }
+
+        scoreboard players add temp shield.all 100
+
+        summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:999999,Tags:["lux.w","shield.all","new"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Tags:["cd"],Duration:50,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        data modify entity @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] Owner set from entity @s UUID
+        scoreboard players operation @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all = temp shield.all
+        scoreboard players operation @s shield.all += @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] shield.all
+        tag @e[type=area_effect_cloud,tag=shield.all,tag=new,limit=1,sort=nearest] remove new
+    }
+}

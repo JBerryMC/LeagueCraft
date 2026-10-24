@@ -4,9 +4,13 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 
+import org.bukkit.entity.Entity;
+
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 /**
@@ -63,6 +67,24 @@ final class DevLog {
                         format(shot.aimOrigin()), format(shot.aimPoint())));
     }
 
+    /** A melee basic attack: what it hit in its cone. */
+    void melee(Player player, String input, List<Entity> hits, double range) {
+        if (!on(player)) return;
+        StringJoiner names = new StringJoiner(", ");
+        for (Entity hit : hits) names.add(hit.getType().getKey().getKey());
+        send(player, "<dark_gray>[dev]</dark_gray> <white><input></white> <gray>→</gray> <gold><action></gold> "
+                        + "<gray><reason>",
+                input, "melee hit " + hits.size(), (hits.isEmpty() ? "nothing" : names.toString())
+                        + String.format(Locale.ROOT, " · range %.1f", range));
+    }
+
+    /** Ammo changed: a reload started or finished. */
+    void ammo(Player player, String what, int left, int max) {
+        if (!on(player)) return;
+        send(player, "<dark_gray>[dev]</dark_gray> <yellow>ammo</yellow> <gray>→ <action> <dark_gray>(<reason>)",
+                "", what, left + "/" + max);
+    }
+
     /** The animation a champion's model should be playing changed (see {@link MovementState}). */
     void animation(Player player, String from, String to, String detail) {
         if (!on(player)) return;
@@ -71,11 +93,15 @@ final class DevLog {
                 from, to, detail);
     }
 
-    /** Zoom started (with the camera distance and where it came from) or ended. */
-    void zoom(Player player, boolean in, double distance, String why) {
+    /** Zoom started (how much narrower the view gets, any slowdown, and where it came from) or ended. */
+    void zoom(Player player, boolean in, double view, double slow, String why) {
         if (!on(player)) return;
-        send(player, "<dark_gray>[dev]</dark_gray> <aqua><input></aqua> <gray>→ camera <action> <dark_gray>(<reason>)",
-                in ? "zoom in" : "zoom out", String.format(Locale.ROOT, "%.1f", distance), why);
+        String effect = in
+                ? String.format(Locale.ROOT, "view %.0f%% narrower", view * 100)
+                        + (slow > 0 ? String.format(Locale.ROOT, ", %.0f%% slower", slow * 100) : "")
+                : "normal view";
+        send(player, "<dark_gray>[dev]</dark_gray> <aqua><input></aqua> <gray>→ <action> <dark_gray>(<reason>)",
+                in ? "zoom in" : "zoom out", effect, why);
     }
 
     private static String format(Vec3 v) {

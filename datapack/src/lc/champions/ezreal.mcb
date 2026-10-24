@@ -1,0 +1,556 @@
+# lc:champions/ezreal/  (converted from the 1.20.2 LeagueCraft datapack)
+
+# What's special about picking ezreal; the stats are in settings.mcb.
+function pick {
+    execute if score .world lang matches 0 as @s run function lc:core/lang/champion/eng.ezreal
+    execute if score .world lang matches 1 as @s run function lc:core/lang/champion/vie.ezreal
+    tag @s add useMana
+    scoreboard players operation @s mana = @s mana.max
+    playsound minecraft:ezreal.select master @a ~ ~ ~
+    playsound minecraft:ezreal.sfx.select master @s ~ ~ ~
+    scoreboard players set @s ezreal.p.stack 0
+}
+
+function aa {
+    playsound ezreal.sfx.aa master @a ~ ~ ~
+
+    execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.ezreal","aa","homing","red","temp","block_by_windwall"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.ezreal","aa","homing","blue","temp","block_by_windwall"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+}
+
+function hud {
+    $title @s actionbar ["",{translate:"space.-60"},{text:"i",font:"minecraft:ezreal"},{translate:"space.16"},{score:{name:"@s",objective:"status.p"},font:"lol:ezreal/p"},{translate:"space.5"},{score:{name:"@s",objective:"status.q"},font:"lol:ezreal/q"},{translate:"space.6"},{score:{name:"@s",objective:"status.w"},font:"lol:ezreal/w"},{translate:"space.6"},{score:{name:"@s",objective:"status.e"},font:"lol:ezreal/e"},{translate:"space.6"},{score:{name:"@s",objective:"status.r"},font:"lol:ezreal/r"},{translate:"space.9"},{score:{name:"@s",objective:"status.spell.1"},font:"minecraft:lol"},{translate:"space.5"},{score:{name:"@s",objective:"status.spell.2"},font:"minecraft:lol"},{translate:"space.-253"},{text:"M",font:"minecraft:lol"},{translate:"space.-274"},{score:{name:"@s",objective:"status.hotbar"},font:"minecraft:hotbar"},{translate:"space.-207"},{storage:"lol:main",nbt:"hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:hp_display"},{translate:"space.-252"},{storage:"lol:main",nbt:"mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:mana_display"},{translate:"space.-183"},{score:{name:"@s",objective:"ezreal.p.stack"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.passive"},font:"space:default"},{score:{name:"@s",objective:"cd_q"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.q"},font:"space:default"},{score:{name:"@s",objective:"cd_w"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.w"},font:"space:default"},{score:{name:"@s",objective:"cd_e"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.e"},font:"space:default"},{score:{name:"@s",objective:"cd_r"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.r"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.1"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.1"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.2"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.2"},font:"space:default"},{translate:"space.-138"},{score:{name:"@s",objective:"space.hp1"},font:"space:default"},{score:{name:"@s",objective:"hp.left"},font:"minecraft:custom/hp"},{text:"/",font:"minecraft:custom/hp"},{score:{name:"@s",objective:"hp.max"},font:"minecraft:custom/hp"},{score:{name:"@s",objective:"space.hp2"},font:"space:default"},{translate:"space.-78"},{score:{name:"@s",objective:"space.mana1"},font:"space:default"},{score:{name:"@s",objective:"mana"},font:"minecraft:custom/mana"},{text:"/",font:"minecraft:custom/mana"},{score:{name:"@s",objective:"mana.max"},font:"minecraft:custom/mana"},{score:{name:"@s",objective:"space.mana2"},font:"space:default"},{translate:"space.-112"},{storage:"lol:main",nbt:"keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.24"},{storage:"lol:main",nbt:"keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.25"},{nbt:"keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",storage:"lol:main",interpret:true},{translate:"space.18"},{keybind:"key.swapOffhand",font:"minecraft:custom/keybind_small",bold:true,color:"#ffd821"},{storage:"lol:main",nbt:"crosshair.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true}]
+}
+
+function hud_display {
+    function lc:champion/hud
+
+    function lc:champions/ezreal/hud with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+}
+
+function loop {
+    execute as @p[tag=ezreal,team=red] if score @s ezreal.p.stack matches 1.. unless entity @e[tag=ezreal.p.stack.cd,tag=red,type=area_effect_cloud] run function lc:champions/ezreal/skills/passive.stack.lost
+    execute as @p[tag=ezreal,team=blue] if score @s ezreal.p.stack matches 1.. unless entity @e[tag=ezreal.p.stack.cd,tag=blue,type=area_effect_cloud] run function lc:champions/ezreal/skills/passive.stack.lost
+
+    execute as @e[tag=ezreal.q,type=area_effect_cloud] at @s run function lc:champions/ezreal/skills/q.animation
+
+    execute as @e[tag=ezreal.w,type=item_display] at @s run function lc:champions/ezreal/skills/w.animation
+
+    execute as @e[tag=ezreal.e.missile,type=area_effect_cloud] at @s run function lc:champions/ezreal/skills/e.missile
+
+    execute as @e[tag=ezreal.r,type=item_display] at @s run function lc:champions/ezreal/skills/r.animation
+    execute as @e[tag=ezreal.r.cast,type=area_effect_cloud] at @s run function lc:champions/ezreal/skills/r.cast
+    #execute as @e[tag=ezreal.r.stun.cd,type=area_effect_cloud] at @s run function lc:champions/ezreal/skills/r.stun
+}
+
+function main {
+    # Cooldown
+    function lc:champions/ezreal/hud_display
+
+    ## Item Handling
+    execute unless predicate lc:champion/slot/head run function lc:champions/ezreal/item/headwear
+    execute unless predicate lc:champion/slot/offhand run function lc:champions/ezreal/item/offhand
+
+    ## Re-use
+    execute if predicate lc:champion/hold_q if score @s use_ability matches 1.. run function lc:champion/abilities/use_q
+    execute if predicate lc:champion/hold_w if score @s use_ability matches 1.. run function lc:champion/abilities/use_w
+    execute if predicate lc:champion/hold_e if score @s use_ability matches 1.. run function lc:champion/abilities/use_e
+    execute if predicate lc:champion/hold_r if score @s use_ability matches 1.. run function lc:champion/abilities/use_r
+
+    ## First use
+    execute if predicate lc:champion/use_q run function lc:champion/abilities/use_q
+
+    execute if predicate lc:champion/use_w run function lc:champion/abilities/use_w
+
+    execute if predicate lc:champion/use_e run function lc:champion/abilities/use_e
+
+    execute if predicate lc:champion/use_r run function lc:champion/abilities/use_r
+}
+
+function passive {
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] run kill @e[tag=ezreal.p.stack.cd,tag=<%team%>]
+        execute if entity @s[team=<%team%>] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:120,Tags:["ezreal.p.stack.cd","<%team%>"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    }
+
+    execute if score @s ezreal.p.stack matches ..4 run scoreboard players add @s aa.spd 3
+    execute if score @s ezreal.p.stack matches ..4 run scoreboard players add @s ezreal.p.stack 1
+}
+
+function use_e {
+    #scoreboard players set @s cd_e 14
+    #coreboard players remove @s mana 90
+    function lc:champion/abilities/cooldown/e
+    scoreboard players add @s channeling 5
+    playsound minecraft:ezreal.sfx.e master @a ~ ~ ~
+
+    execute if entity @s[team=red] anchored eyes positioned ^ ^ ^8 run summon item_display ~ ~ ~ {Tags:["red","lol.auto_clear","ezreal.e"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:9999,Tags:["e.blink","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:5,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] anchored eyes positioned ^ ^ ^8 run summon item_display ~ ~ ~ {Tags:["blue","lol.auto_clear","ezreal.e"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:9999,Tags:["e.blink","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:5,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute anchored eyes positioned ^ ^ ^8 run data modify entity @e[tag=e.blink,type=area_effect_cloud,limit=1,sort=nearest,tag=temp] Owner set from entity @s UUID
+    execute anchored eyes positioned ^ ^ ^8 run tag @e[tag=e.blink,type=area_effect_cloud,limit=1,sort=nearest,tag=temp] remove temp
+}
+
+function use_q {
+    #scoreboard players set @s cd_q 4
+    #scoreboard players remove @s mana 40
+    function lc:champion/abilities/cooldown/q
+    scoreboard players set @s channeling 5
+    playsound ezreal.sfx.q master @a ~ ~ ~
+
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:20,Tags:["<%team%>","block_by_windwall","ezreal.q"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        # Fired at what the third-person crosshair points at (the plugin's lc.aim_target, from
+        # ShoulderCam's aim); without the plugin, the way Ezreal faces.
+        execute if entity @s[team=<%team%>] if entity @e[type=marker,tag=lc.aim_target] anchored eyes facing entity @e[type=marker,tag=lc.aim_target,limit=1] feet run tp @e[tag=<%team%>,tag=ezreal.q,limit=1,sort=nearest] ^ ^ ^ ~ ~
+        execute if entity @s[team=<%team%>] unless entity @e[type=marker,tag=lc.aim_target] anchored eyes run tp @e[tag=<%team%>,tag=ezreal.q,limit=1,sort=nearest] ^ ^ ^ ~ ~
+    }
+}
+
+function use_r {
+    #scoreboard players set @s cd_r 90
+    #scoreboard players remove @s mana 100
+    function lc:champion/abilities/cooldown/r
+    scoreboard players set @s channeling 20
+
+    scoreboard players set @s status.weapon 700102
+
+    playsound minecraft:ezreal.ultimate master @a ~ ~ ~
+    playsound minecraft:ezreal.sfx.r master @a ~ ~ ~
+
+    tag @s add r.animation
+    function lc:champions/ezreal/skills/r.clear
+
+    execute anchored eyes run summon item_display ^ ^ ^1 {teleport_duration:1,item_display:"head",item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[700401f]}}},Tags:["ezreal.r.anim","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:20,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute anchored eyes positioned ^ ^ ^1 run tp @e[tag=ezreal.r.anim,limit=1,sort=nearest] ~ ~ ~ ~ ~
+
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] run summon minecraft:area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:20,Tags:["ezreal.r.cast","<%team%>","mid"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[team=<%team%>] run summon minecraft:area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:20,Tags:["ezreal.r.cast","<%team%>","left"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[team=<%team%>] run summon minecraft:area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:20,Tags:["ezreal.r.cast","<%team%>","right"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[team=<%team%>] anchored eyes run tp @e[tag=<%team%>,tag=left,tag=ezreal.r.cast,limit=1,sort=nearest] ^ ^ ^ ~-90 ~
+        execute if entity @s[team=<%team%>] anchored eyes run tp @e[tag=<%team%>,tag=right,tag=ezreal.r.cast,limit=1,sort=nearest] ^ ^ ^ ~90 ~
+        execute if entity @s[team=<%team%>] anchored eyes run tp @e[tag=<%team%>,tag=mid,tag=ezreal.r.cast,limit=1,sort=nearest] ^ ^ ^ ~ ~
+    }
+}
+
+function use_w {
+    #scoreboard players set @s cd_w 12
+    #scoreboard players remove @s mana 50
+    function lc:champion/abilities/cooldown/w
+    scoreboard players set @s channeling 5
+    playsound minecraft:ezreal.sfx.w master @a ~ ~ ~
+
+    execute if entity @s[team=red] run tag @e[tag=ezreal.w.target,team=!red,tag=has_display_bar] add remove.mark.ezreal.w
+    execute if entity @s[team=red] as @e[tag=ezreal.w.target,team=!red,tag=!has_display_bar] on passengers as @s[tag=ezreal.w.mark] on passengers run kill @s
+    execute if entity @s[team=red] as @e[tag=ezreal.w.target,team=!red,tag=!has_display_bar] on passengers as @s[tag=ezreal.w.mark] run kill @s
+    execute if entity @s[team=red] run tag @e[tag=ezreal.w.target,team=!red,tag=!has_display_bar] remove ezreal.w.target
+    execute if entity @s[team=red] run tag @e[tag=ezreal.w.target,tag=lol.structure,tag=!red,tag=!has_display_bar] remove ezreal.w.target
+    execute if entity @s[team=red] run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"ground",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[700211f]}}},Tags:["red","ezreal.w","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:25,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=red] anchored eyes run tp @e[tag=red,tag=ezreal.w,limit=1,sort=nearest] ^ ^ ^ ~ ~
+
+    execute if entity @s[team=blue] run tag @e[tag=ezreal.w.target,team=!blue,tag=has_display_bar] add remove.mark.ezreal.w
+    execute if entity @s[team=blue] as @e[tag=ezreal.w.target,team=!blue,tag=!has_display_bar] on passengers as @s[tag=ezreal.w.mark] on passengers run kill @s
+    execute if entity @s[team=blue] as @e[tag=ezreal.w.target,tag=lol.structure,tag=!blue,tag=!has_display_bar] on passengers as @s[tag=ezreal.w.mark] run kill @s
+    execute if entity @s[team=blue] run tag @e[tag=ezreal.w.target,team=!blue,tag=!has_display_bar] remove ezreal.w.target
+    execute if entity @s[team=blue] run tag @e[tag=ezreal.w.target,team=!blue,tag=!has_display_bar] remove ezreal.w.target
+    execute if entity @s[team=blue] run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"ground",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[700211f]}}},Tags:["blue","ezreal.w","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:25,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] anchored eyes run tp @e[tag=blue,tag=ezreal.w,limit=1,sort=nearest] ^ ^ ^ ~ ~
+}
+
+# ---- item: lc:champions/ezreal/item/... ----------------------------------------------
+dir item {
+    function headwear {
+        clear @s iron_sword[minecraft:custom_data~{lol_item:1}]
+        execute if score .world lang matches 0 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[700001f]},minecraft:custom_name={text:"Ezreal",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+        execute if score .world lang matches 1 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[700001f]},minecraft:custom_name={text:"Ezreal",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+    }
+
+    function offhand {
+        clear @s carrot_on_a_stick[minecraft:custom_data~{lol_item:1}]
+        tag @s remove offhand_temp
+
+        item replace entity @s weapon.offhand with minecraft:carrot_on_a_stick[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[9999f]},minecraft:custom_name={text:".",color:"#1b0c1b"},minecraft:custom_data={lol_item:1,kill_item:1,offhand:1}]
+    }
+}
+
+# ---- skills: lc:champions/ezreal/skills/... ------------------------------------------
+dir skills {
+    function e.animation {
+        execute if block ~ ~ ~ #like_air on passengers as @s[tag=e.blink] on origin unless predicate lc:core/is_flying run function lc:core/motion/blink
+        execute if block ~ ~ ~ #like_air on passengers as @s[tag=e.blink] on origin if predicate lc:core/is_flying if data entity @s RootVehicle.Entity{Tags:["interrupt_by_blink"]} on vehicle on vehicle run function lc:animation/abilities/interrupt
+        execute if block ~ ~ ~ #like_air on passengers as @s[tag=e.blink] on origin if predicate lc:core/is_flying unless data entity @s RootVehicle.Entity{Tags:["interrupt_by_blink"]} on vehicle run function lc:champions/ezreal/skills/e.blink
+
+        execute if block ~ ~ ~ #like_air on passengers as @s[tag=e.blink] on origin unless data entity @s RootVehicle run function lc:champions/ezreal/skills/e.blink
+
+        execute unless block ~ ~ ~ #like_air positioned ~ ~1 ~ run function lc:champions/ezreal/skills/e.animation
+    }
+
+    function e.blink {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] positioned ~-3 ~-3 ~-3 if entity @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,dx=5,dz=5,dy=5,tag=ezreal.w.target] positioned ~3 ~3 ~3 run tag @e[team=!<%team%>,tag=ezreal.w.target,limit=1,sort=nearest] add ezreal.e.target
+            execute if entity @s[team=<%team%>] unless entity @e[team=!<%team%>,tag=ezreal.e.target] positioned ~-3 ~-3 ~-3 if entity @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,dx=5,dz=5,dy=5] positioned ~3 ~3 ~3 run tag @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest] add ezreal.e.target
+            execute if entity @s[team=<%team%>] if entity @e[team=!<%team%>,tag=ezreal.e.target] run function lc:champions/ezreal/skills/e.spawn
+        }
+
+        tp @s ~ ~0.5 ~
+        particle falling_dust{block_state:"gold_block"} ^ ^1 ^ 0.2 0.5 0.2 0.09 10 force
+        particle block{block_state:"gold_block"} ^ ^1 ^ 0.2 0.5 0.2 0.09 10 force
+        particle end_rod ^ ^1 ^ 0.2 0.2 0.2 0.09 10 force
+        particle wax_on ^ ^1 ^ 0.2 0.2 0.2 0.09 10 force
+    }
+
+    function e.damage {
+        execute if entity @s[team=red] run damage @e[team=!red,type=!#unvalid,tag=ezreal.e.target,limit=1,sort=nearest] 1 lc:core/dmg_magic by @s
+        execute if entity @s[team=blue] run damage @e[team=!blue,type=!#unvalid,tag=ezreal.e.target,limit=1,sort=nearest] 1 lc:core/dmg_magic by @s
+
+        scoreboard players operation temp attack_damage = @s attack_damage
+        scoreboard players operation temp attack_damage *= 50 integer
+        scoreboard players operation temp attack_damage /= 100 integer
+
+        scoreboard players operation temp ability_power = @s ability_power
+        scoreboard players operation temp ability_power *= 75 integer
+        scoreboard players operation temp ability_power /= 100 integer
+
+        scoreboard players operation temp attack_damage += temp ability_power
+        scoreboard players add temp attack_damage 280
+
+        scoreboard players operation @s dmg_magic.deal = temp attack_damage
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=has_health_bar,tag=ezreal.e.target,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=has_health_bar,tag=ezreal.e.target,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=red] run tag @e[team=!red,tag=has_health_bar,tag=ezreal.e.target,limit=1,sort=nearest] remove ezreal.e.target
+
+        ## BLUE
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=has_health_bar,tag=ezreal.e.target,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=has_health_bar,tag=ezreal.e.target,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=blue] run tag @e[team=!blue,type=!#unvalid,tag=ezreal.e.target,limit=1,sort=nearest] remove ezreal.e.target
+    }
+
+    function e.hit {
+        playsound ezreal.sfx.e.missile master @a ~ ~ ~
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run function lc:champions/ezreal/passive
+            execute if entity @s[team=<%team%>] if entity @e[tag=ezreal.e.target,team=!<%team%>,tag=ezreal.w.target] positioned as @e[tag=ezreal.e.target,team=!<%team%>,tag=ezreal.w.target,limit=1] run function lc:champions/ezreal/skills/w.detonate
+            execute if entity @s[team=<%team%>] if entity @e[tag=ezreal.e.target,team=!<%team%>] as @p[tag=ezreal,team=<%team%>] run function lc:champions/ezreal/skills/e.damage
+        }
+    }
+
+    function e.spawn {
+        execute if entity @s[team=red] run summon item_display ~ ~1 ~ {teleport_duration:1,Tags:["can_reveal","ezreal.e.missile","homing","red","temp"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[team=blue] run summon item_display ~ ~1 ~ {teleport_duration:1,Tags:["can_reveal","ezreal.e.missile","homing","blue","temp"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+        execute at @s run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:1,Tags:["temp_entity"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        data modify entity @e[tag=temp_entity,limit=1,sort=nearest,type=area_effect_cloud] Owner set from entity @s UUID
+
+        execute if entity @s[team=red] as @e[tag=ezreal.e.missile,tag=temp,tag=red,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=initial] Owner set from entity @e[type=area_effect_cloud,tag=temp_entity,limit=1,sort=nearest] Owner
+        execute if entity @s[team=blue] as @e[tag=ezreal.e.missile,tag=temp,tag=blue,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=initial] Owner set from entity @e[type=area_effect_cloud,tag=temp_entity,limit=1,sort=nearest] Owner
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] as @e[tag=ezreal.e.missile,tag=temp,tag=<%team%>,limit=1,sort=nearest] on passengers run data modify entity @s[type=area_effect_cloud,tag=target] Owner set from entity @e[team=!<%team%>,tag=ezreal.e.target,limit=1,sort=nearest] UUID
+            execute if entity @s[team=<%team%>] run tag @e[tag=ezreal.e.missile,tag=temp,tag=<%team%>,limit=1,sort=nearest] remove temp
+        }
+    }
+
+    function passive.stack.lost {
+        scoreboard players remove @s ezreal.p.stack 1
+        scoreboard players remove @s aa.spd 3
+        execute if score @s[team=red] ezreal.p.stack matches 1.. run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:20,Tags:["ezreal.p.stack.cd","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if score @s[team=blue] ezreal.p.stack matches 1.. run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:20,Tags:["ezreal.p.stack.cd","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    }
+
+    function q.animation {
+        tp @s ^ ^ ^2 ~ ~
+        particle minecraft:dust{color:[0.5,0.7,1],scale:1} ^ ^ ^0.5 0 0 0 0 1 force
+        particle minecraft:dust{color:[0.5,0.7,1],scale:1} ^ ^ ^0.75 0 0 0 0 1 force
+        particle minecraft:dust{color:[0.5,0.7,1],scale:1} ^ ^ ^1 0.05 0.05 0.05 0 2 force
+        particle minecraft:dust{color:[0.5,0.7,1],scale:1} ^ ^ ^1.25 0.05 0.05 0.05 0 2 force
+        particle minecraft:dust{color:[0.5,0.7,1],scale:1} ^ ^ ^1.5 0.1 0.1 0.1 0 3 force
+        particle minecraft:dust{color:[0.5,0.7,1],scale:1} ^ ^ ^1.75 0.05 0.05 0.05 0 2 force
+        particle minecraft:dust{color:[0.5,0.7,1],scale:1} ^ ^ ^2 0.05 0.05 0.05 0 2 force
+        particle minecraft:dust{color:[0.5,0.7,1],scale:1} ^ ^ ^2.25 0 0 0 0 1 force
+        particle minecraft:dust{color:[0.5,0.7,1],scale:1} ^ ^ ^2.5 0 0 0 0 1 force
+
+        particle end_rod 0.5 0.7 1 ^ ^ ^2.5 0.05 5 force
+
+        execute if entity @s[tag=red] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[team=!red,dx=0,type=!#unvalid,tag=!unvalid] run tag @e[team=!red,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest] add ezreal.q.hit
+        execute if entity @s[tag=red] unless entity @e[tag=ezreal.q.hit,team=!red] positioned ^ ^ ^-1 positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[team=!red,dx=0,type=!#unvalid,tag=!unvalid] run tag @e[team=!red,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest] add ezreal.q.hit
+
+        execute if entity @s[tag=red] if entity @e[tag=ezreal.q.hit,team=!red] run function lc:champions/ezreal/skills/q.hit
+
+        execute if entity @s[tag=blue] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[team=!blue,dx=0,type=!#unvalid,tag=!unvalid] run tag @e[team=!blue,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest] add ezreal.q.hit
+        execute if entity @s[tag=blue] unless entity @e[tag=ezreal.q.hit,team=!blue] positioned ^ ^ ^-1 positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[team=!blue,dx=0,type=!#unvalid,tag=!unvalid] run tag @e[team=!blue,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest] add ezreal.q.hit
+
+        execute if entity @s[tag=blue] if entity @e[tag=ezreal.q.hit,team=!blue] run function lc:champions/ezreal/skills/q.hit
+    }
+
+    function q.damage {
+        execute if entity @s[team=red] run damage @e[team=!red,type=!#unvalid,tag=ezreal.q.hit,limit=1,sort=nearest] 1 lc:core/dmg_physical by @s
+        execute if entity @s[team=blue] run damage @e[team=!blue,type=!#unvalid,tag=ezreal.q.hit,limit=1,sort=nearest] 1 lc:core/dmg_physical by @s
+
+        scoreboard players operation temp attack_damage = @s attack_damage
+        scoreboard players operation temp attack_damage *= 130 integer
+        scoreboard players operation temp attack_damage /= 100 integer
+
+        scoreboard players operation temp ability_power = @s ability_power
+        scoreboard players operation temp ability_power *= 15 integer
+        scoreboard players operation temp ability_power /= 100 integer
+
+        scoreboard players operation temp attack_damage += temp ability_power
+        scoreboard players add temp attack_damage 120
+
+        scoreboard players operation @s dmg_physical.deal = temp attack_damage
+        function lc:champion/aa/on_hit
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=has_health_bar,tag=ezreal.q.hit,limit=1,sort=nearest] armor.reduced = @s armor.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=has_health_bar,tag=ezreal.q.hit,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+        execute if entity @s[team=red] run tag @e[team=!red,tag=has_health_bar,tag=ezreal.q.hit,limit=1,sort=nearest] remove ezreal.q.hit
+
+        ## BLUE
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=has_health_bar,tag=ezreal.q.hit,limit=1,sort=nearest] armor.reduced = @s armor.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=has_health_bar,tag=ezreal.q.hit,limit=1,sort=nearest] dmg_physical.raw = @s dmg_physical.deal
+
+        execute if entity @s[team=blue] run tag @e[team=!blue,type=!#unvalid,tag=ezreal.q.hit,limit=1,sort=nearest] remove ezreal.q.hit
+    }
+
+    function q.hit {
+        playsound ezreal.sfx.q.hit master @a ~ ~ ~
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] as @p[tag=ezreal,team=<%team%>] run function lc:champions/ezreal/skills/q.passive
+            execute if entity @s[tag=<%team%>] as @p[tag=ezreal,team=<%team%>] run function lc:champions/ezreal/passive
+            execute if entity @s[tag=<%team%>] if entity @e[tag=ezreal.q.hit,team=!<%team%>,tag=ezreal.w.target] as @p[tag=ezreal,team=<%team%>] positioned as @e[tag=ezreal.q.hit,team=!<%team%>,tag=ezreal.w.target,limit=1] run function lc:champions/ezreal/skills/w.detonate
+            execute if entity @s[tag=<%team%>] if entity @e[tag=ezreal.q.hit,team=!<%team%>] as @p[tag=ezreal,team=<%team%>] run function lc:champions/ezreal/skills/q.damage
+        }
+
+        kill @s
+    }
+
+    function q.passive {
+        scoreboard players remove @s[scores={cd_q=1..}] cd_q 1
+        scoreboard players remove @s[scores={cd_w=1..}] cd_w 1
+        scoreboard players remove @s[scores={cd_e=1..}] cd_e 1
+        scoreboard players remove @s[scores={cd_r=1..}] cd_r 1
+    }
+
+    function r.animation {
+        tp @s ^ ^ ^2.5
+
+        particle minecraft:dust{color:[1,1,0],scale:0.5} ^ ^ ^ 0.7 0.5 0.7 1 150 force
+        particle minecraft:dust{color:[1,1,0],scale:0.5} ^1.5 ^ ^-1.5 0.2 0.1 0.2 1 100 force
+        particle minecraft:dust{color:[1,1,0],scale:0.5} ^-1.5 ^ ^-1.5 0.2 0.1 0.2 1 50 force
+        particle minecraft:dust{color:[1,1,0],scale:0.5} ^-1.5 ^ ^-2.25 0.1 0.1 0.1 1 10 force
+        particle minecraft:dust{color:[1,1,0],scale:0.5} ^1.5 ^ ^-2.25 0.1 0.1 0.1 1 5 force
+
+        particle minecraft:end_rod ^ ^ ^ 0.7 0.000001 0.7 0 50 force
+        particle minecraft:wax_on ^ ^ ^ 0.7 0.000001 0.7 0 100 force
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] positioned ~-1.5 ~-1 ~-1.5 if entity @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,tag=!ezreal.r.hit,dx=2,dz=2,dy=1] as @p[tag=ezreal,team=<%team%>] run function lc:champions/ezreal/passive
+            execute if entity @s[tag=<%team%>] positioned ~-1.5 ~-1 ~-1.5 run scoreboard players add @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,tag=!ezreal.r.hit,dx=2,dz=2,dy=1] fx.sight 10
+            execute if entity @s[tag=<%team%>] positioned ~-1.5 ~-1 ~-1.5 as @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,tag=!ezreal.r.hit,dx=2,dz=2,dy=1] at @s run playsound ezreal.sfx.r.hit master @a ~ ~ ~
+            execute if entity @s[tag=<%team%>] positioned ~-1.5 ~-1 ~-1.5 run tag @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,tag=!ezreal.r.hit,dx=2,dz=2,dy=1] add ezreal.r.hit
+            execute if entity @s[tag=<%team%>] if entity @e[tag=ezreal.r.hit,team=!<%team%>,tag=ezreal.w.target] as @p[tag=ezreal,team=<%team%>] positioned as @e[tag=ezreal.r.hit,team=!<%team%>,tag=ezreal.w.target,limit=1] run function lc:champions/ezreal/skills/w.detonate
+            execute if entity @s[tag=<%team%>] if entity @e[tag=ezreal.r.hit,team=!<%team%>] run tag @e[tag=ezreal.r.hit,team=!<%team%>,tag=!ezreal.r.damage] add r_temp_dmg
+            execute if entity @s[tag=<%team%>] if entity @e[tag=ezreal.r.hit,team=!<%team%>] as @p[tag=ezreal,team=<%team%>] run function lc:champions/ezreal/skills/r.damage
+            execute if entity @s[tag=<%team%>] if entity @e[tag=ezreal.r.hit,team=!<%team%>] run tag @e[tag=ezreal.r.hit,team=!<%team%>,tag=!ezreal.r.damage] add ezreal.r.damage
+            execute if entity @s[tag=<%team%>] if entity @e[tag=ezreal.r.hit,team=!<%team%>] run tag @e[tag=ezreal.r.hit,team=!<%team%>,tag=ezreal.r.damage] remove ezreal.r.hit
+        }
+    }
+
+    function r.cast {
+        #execute if entity @s[tag=mid] run particle minecraft:dust 1 1 0 1.5 ^ ^1 ^1 0 0 0 1 1 force
+        execute if entity @s[tag=left] run particle minecraft:dust{color:[1,1,0],scale:1} ^0.5 ^ ^1 0 0 0 1 1 force
+        execute if entity @s[tag=right] run particle minecraft:dust{color:[1,1,0],scale:1} ^-0.5 ^ ^1 0 0 0 1 1 force
+
+        execute if entity @s[tag=left] run tp @s ~ ~ ~ ~6 ~
+        execute if entity @s[tag=right] run tp @s ~ ~ ~ ~-6 ~
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[nbt={Age:19},tag=<%team%>,tag=mid] run scoreboard players set @p[tag=ezreal,team=<%team%>] status.weapon 700101
+            execute if entity @s[nbt={Age:19},tag=<%team%>,tag=mid] run tag @p[tag=ezreal,team=<%team%>] remove r.animation
+            execute if entity @s[nbt={Age:19},tag=<%team%>,tag=mid] run summon item_display ~ ~ ~ {teleport_duration:1,item_display:"head",item:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[700401f]}}},Tags:["ezreal.r","<%team%>","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:100,Tags:["cd","block_by_windwall"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+            execute if entity @s[nbt={Age:19},tag=<%team%>,tag=mid] run tp @e[tag=<%team%>,tag=ezreal.r,limit=1,sort=nearest] ~ ~ ~ ~ ~
+        }
+    }
+
+    function r.clear {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] run tag @e[tag=ezreal.r.damage,team=!<%team%>] remove ezreal.r.damage
+            execute if entity @s[team=<%team%>] run tag @e[tag=ezreal.r.damage,team=!<%team%>] remove ezreal.r.damage
+        }
+    }
+
+    function r.damage {
+        execute if entity @s[team=red] run damage @e[team=!red,type=!#unvalid,tag=r_temp_dmg,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+        execute if entity @s[team=blue] run damage @e[team=!blue,type=!#unvalid,tag=r_temp_dmg,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+
+        scoreboard players operation temp attack_damage = @s attack_damage
+
+        scoreboard players operation temp ability_power = @s ability_power
+        scoreboard players operation temp ability_power *= 90 integer
+        scoreboard players operation temp ability_power /= 100 integer
+
+        scoreboard players operation temp attack_damage += temp ability_power
+        scoreboard players add temp attack_damage 675
+
+        scoreboard players operation @s dmg_magic.deal = temp attack_damage
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=has_health_bar,tag=r_temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=has_health_bar,tag=r_temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+        execute if entity @s[team=red] run tag @e[team=!red,tag=has_health_bar,tag=r_temp_dmg,limit=1,sort=nearest] remove r_temp_dmg
+
+        ## BLUE
+
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=has_health_bar,tag=r_temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=has_health_bar,tag=r_temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+        execute if entity @s[team=blue] run tag @e[team=!blue,type=!#unvalid,tag=r_temp_dmg,limit=1,sort=nearest] remove r_temp_dmg
+    }
+
+    function w.animation {
+        tp @s ^ ^ ^1.75
+        particle minecraft:dust{color:[1,1,0],scale:1} ^ ^ ^ 0.5 0.1 0.5 1 10 force
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] positioned ~-1 ~-0.5 ~-1 as @e[tag=!<%team%>,dx=1,dz=1,dy=0,tag=lol.structure,limit=1,sort=nearest,tag=!is_destroyed] at @s run function lc:champions/ezreal/skills/w.mark
+            execute if entity @s[tag=<%team%>] if entity @e[tag=!<%team%>,tag=ezreal.w.target,tag=lol.structure,limit=1,sort=nearest] run kill @s
+        }
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] positioned ~-1 ~-0.5 ~-1 as @e[tag=champion,team=!<%team%>,dx=1,dz=1,dy=0,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest,tag=has_health_bar] at @s run function lc:champions/ezreal/skills/w.mark
+            execute if entity @s[tag=<%team%>] if entity @e[team=!<%team%>,tag=ezreal.w.target,type=!#unvalid,tag=!unvalid] as @p[team=<%team%>,tag=ezreal] run function lc:champions/ezreal/passive
+            execute if entity @s[tag=<%team%>] if entity @e[team=!<%team%>,tag=ezreal.w.target,type=!#unvalid,tag=!unvalid] run kill @s
+        }
+    }
+
+    function w.damage {
+        execute if entity @s[team=red] run damage @e[team=!red,type=!#unvalid,tag=w_temp_dmg,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+        execute if entity @s[team=blue] run damage @e[team=!blue,type=!#unvalid,tag=w_temp_dmg,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+
+        scoreboard players operation temp attack_damage = @s attack_damage
+
+        scoreboard players operation temp ability_power = @s ability_power
+        scoreboard players operation temp ability_power *= 90 integer
+        scoreboard players operation temp ability_power /= 100 integer
+
+        scoreboard players operation temp attack_damage += temp ability_power
+        scoreboard players add temp attack_damage 300
+
+        scoreboard players operation @s dmg_magic.deal = temp attack_damage
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+        execute if entity @s[team=red] as @e[team=!red,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] run function lc:champion/dmg/calc.magic
+        execute if entity @s[team=red] as @e[team=!red,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] run function lc:champion/dmg/taken/magic
+        execute if entity @s[team=red] run tag @e[team=!red,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] remove w_temp_dmg
+
+        ## BLUE
+
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+        execute if entity @s[team=blue] as @e[team=!blue,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] run function lc:champion/dmg/calc.magic
+        execute if entity @s[team=blue] as @e[team=!blue,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] run function lc:champion/dmg/taken/magic
+        execute if entity @s[team=blue] run tag @e[team=!blue,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] remove w_temp_dmg
+    }
+
+    function w.damage_structure {
+        execute if entity @s[team=red] run damage @e[tag=!red,type=!#unvalid,tag=w_temp_dmg,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+        execute if entity @s[team=blue] run damage @e[tag=!blue,type=!#unvalid,tag=w_temp_dmg,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+
+        particle firework ~ ~3 ~ 2 1 2 0.2 20 force
+        particle minecraft:dust{color:[1,1,0],scale:4.0} ^ ^3 ^ 2 1 2 1 50 force
+
+        scoreboard players operation temp attack_damage = @s attack_damage
+
+        scoreboard players operation temp ability_power = @s ability_power
+        scoreboard players operation temp ability_power *= 90 integer
+        scoreboard players operation temp ability_power /= 100 integer
+
+        scoreboard players operation temp attack_damage += temp ability_power
+        scoreboard players add temp attack_damage 300
+
+        scoreboard players operation @s dmg_magic.deal = temp attack_damage
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+
+        execute if entity @s[team=red] run scoreboard players operation @e[tag=!red,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[tag=!red,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+        execute if entity @s[team=red] run tag @e[tag=!red,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] remove w_temp_dmg
+
+        ## BLUE
+
+        execute if entity @s[team=blue] run scoreboard players operation @e[tag=!blue,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[tag=!blue,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+        execute if entity @s[team=blue] run tag @e[tag=!blue,tag=has_health_bar,tag=w_temp_dmg,limit=1,sort=nearest] remove w_temp_dmg
+    }
+
+    function w.detonate {
+        playsound ezreal.sfx.w.detonate master @a ~ ~ ~
+        particle firework ~ ~1 ~ 0 0 0 0.2 5 force
+        particle minecraft:dust{color:[1,1,0],scale:2} ^ ^1 ^ 0.5 0.1 0.5 1 20 force
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run tag @e[team=!<%team%>,tag=ezreal.w.target] add w_temp_dmg
+            execute if entity @s[team=<%team%>] run tag @e[tag=!<%team%>,tag=lol.structure,tag=ezreal.w.target] add w_temp_dmg
+        }
+        execute if entity @e[tag=w_temp_dmg,tag=!lol.structure] run function lc:champions/ezreal/skills/w.damage
+        execute if entity @e[tag=w_temp_dmg,tag=lol.structure] run function lc:champions/ezreal/skills/w.damage_structure
+
+        execute if entity @s[team=red] if entity @e[tag=ezreal.w.target,team=!red,tag=ezreal.q.hit] run scoreboard players add @s mana 100
+        execute if entity @s[team=red] if entity @e[tag=ezreal.w.target,team=!red,tag=ezreal.e.target] run scoreboard players add @s mana 130
+        execute if entity @s[team=red] if entity @e[tag=ezreal.w.target,team=!red,tag=ezreal.r.hit] run scoreboard players add @s mana 160
+
+        execute if entity @s[team=red] run tag @p[team=!red,tag=ezreal.w.target] add remove.mark.ezreal.w
+        execute if entity @s[team=red] as @e[team=!red,tag=ezreal.w.target,type=!player] on passengers as @s[tag=ezreal.w.mark] on passengers run kill @s
+        execute if entity @s[team=red] as @e[team=!red,tag=ezreal.w.target,type=!player] on passengers as @s[tag=ezreal.w.mark] run kill @s
+        execute if entity @s[team=red] as @e[tag=!red,tag=ezreal.w.target,type=interaction] on passengers as @s[tag=ezreal.w.mark] on passengers run kill @s
+        execute if entity @s[team=red] as @e[tag=!red,tag=ezreal.w.target,type=interaction] on passengers as @s[tag=ezreal.w.mark] run kill @s
+
+        execute if entity @s[team=red] run tag @e[team=!red,tag=ezreal.w.target] remove ezreal.w.target
+        execute if entity @s[team=red] run tag @e[tag=!red,tag=lol.structure,tag=ezreal.w.target] remove ezreal.w.target
+
+        execute if entity @s[team=blue] if entity @e[tag=ezreal.w.target,team=!blue,tag=ezreal.q.hit] run scoreboard players add @s mana 100
+        execute if entity @s[team=blue] if entity @e[tag=ezreal.w.target,team=!blue,tag=ezreal.e.target] run scoreboard players add @s mana 130
+        execute if entity @s[team=blue] if entity @e[tag=ezreal.w.target,team=!blue,tag=ezreal.r.hit] run scoreboard players add @s mana 160
+
+        execute if entity @s[team=blue] run tag @p[team=!blue,tag=ezreal.w.target] add remove.mark.ezreal.w
+        execute if entity @s[team=blue] as @e[team=!blue,tag=ezreal.w.target,type=!player] on passengers as @s[tag=ezreal.w.mark] on passengers run kill @s
+        execute if entity @s[team=blue] as @e[team=!blue,tag=ezreal.w.target,type=!player] on passengers as @s[tag=ezreal.w.mark] run kill @s
+        execute if entity @s[team=blue] as @e[tag=!blue,tag=ezreal.w.target,type=interaction] on passengers as @s[tag=ezreal.w.mark] on passengers run kill @s
+        execute if entity @s[team=blue] as @e[tag=!blue,tag=ezreal.w.target,type=interaction] on passengers as @s[tag=ezreal.w.mark] run kill @s
+
+        execute if entity @s[team=blue] run tag @e[team=!blue,tag=ezreal.w.target] remove ezreal.w.target
+        execute if entity @s[team=blue] run tag @e[tag=!blue,tag=lol.structure,tag=ezreal.w.target] remove ezreal.w.target
+    }
+
+    function w.end {
+        execute if entity @s[tag=red] run tag @e[tag=ezreal.w.target,team=!red] remove ezreal.w.target
+        execute if entity @s[tag=blue] run tag @e[tag=ezreal.w.target,team=!blue] remove ezreal.w.target
+    }
+
+    function w.mark {
+        playsound ezreal.sfx.w.hit master @a ~ ~ ~
+        tag @s add ezreal.w.target
+        execute if entity @s[tag=has_display_bar] run tag @s add update.mark.ezreal.w
+
+        execute if entity @s[type=!player] on passengers as @s[tag=ezreal.w.mark] on passengers run kill @s
+        execute if entity @s[type=!player] on passengers as @s[tag=ezreal.w.mark] run kill @s
+        execute if entity @s[type=!player] at @s run summon item_display ~ ~ ~ {interpolation_duration:10,teleport_duration:1,item_display:"head",Rotation:[0.0f,0.0f],item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[700211f]}}},Tags:["ezreal.w.mark","temp","lol.auto_clear","spin1"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:3,Tags:["spin1"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:80,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[type=!player] run ride @e[type=item_display,tag=temp,tag=ezreal.w.mark,limit=1,sort=nearest] mount @s
+        execute if entity @s[type=interaction] on passengers run data merge entity @s[tag=ezreal.w.mark] {transformation:{scale:[3.0,3.0,3.0],translation:[0.0,5.0,0.0]}}
+    }
+}

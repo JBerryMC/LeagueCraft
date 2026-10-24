@@ -1,0 +1,206 @@
+# lc:menu/stats/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function check_id {
+    execute if score @s champ_id matches 1 run function lc:menu/stats/champ/yasuo
+    execute if score @s champ_id matches 2 run function lc:menu/stats/champ/leesin
+    execute if score @s champ_id matches 3 run function lc:menu/stats/champ/zed
+    execute if score @s champ_id matches 4 run function lc:menu/stats/champ/yone
+    execute if score @s champ_id matches 5 run function lc:menu/stats/champ/ashe
+    execute if score @s champ_id matches 7 run function lc:menu/stats/champ/ezreal
+    execute if score @s champ_id matches 9 run function lc:menu/stats/champ/aatrox
+    execute if score @s champ_id matches 10 run function lc:menu/stats/champ/leona
+    execute if score @s champ_id matches 11 run function lc:menu/stats/champ/soraka
+    execute if score @s champ_id matches 12 run function lc:menu/stats/champ/garen
+    execute if score @s champ_id matches 13 run function lc:menu/stats/champ/malphite
+    execute if score @s champ_id matches 14 run function lc:menu/stats/champ/lux
+    execute if score @s champ_id matches 15 run function lc:menu/stats/champ/annie
+
+    execute if score @s spell.1 matches 1 run item modify entity @s inventory.4 lc:menu/spell/flash
+    execute if score @s spell.1 matches 2 run item modify entity @s inventory.4 lc:menu/spell/barrier
+    execute if score @s spell.1 matches 3 run item modify entity @s inventory.4 lc:menu/spell/cleanse
+    execute if score @s spell.1 matches 4 run item modify entity @s inventory.4 lc:menu/spell/exhaust
+    execute if score @s spell.1 matches 5 run item modify entity @s inventory.4 lc:menu/spell/smite
+    execute if score @s spell.1 matches 6 run item modify entity @s inventory.4 lc:menu/spell/ghost
+    execute if score @s spell.1 matches 7 run item modify entity @s inventory.4 lc:menu/spell/ignite
+    execute if score @s spell.1 matches 8 run item modify entity @s inventory.4 lc:menu/spell/heal
+
+    execute if score @s spell.2 matches 1 run item modify entity @s inventory.5 lc:menu/spell/flash
+    execute if score @s spell.2 matches 2 run item modify entity @s inventory.5 lc:menu/spell/barrier
+    execute if score @s spell.2 matches 3 run item modify entity @s inventory.5 lc:menu/spell/cleanse
+    execute if score @s spell.2 matches 4 run item modify entity @s inventory.5 lc:menu/spell/exhaust
+    execute if score @s spell.2 matches 5 run item modify entity @s inventory.5 lc:menu/spell/smite
+    execute if score @s spell.2 matches 6 run item modify entity @s inventory.5 lc:menu/spell/ghost
+    execute if score @s spell.2 matches 7 run item modify entity @s inventory.5 lc:menu/spell/ignite
+    execute if score @s spell.2 matches 8 run item modify entity @s inventory.5 lc:menu/spell/heal
+}
+
+dir champ {
+    function aatrox {
+        item modify entity @s inventory.1 lc:menu/champ/aatrox/icon
+        item modify entity @s inventory.2 lc:menu/champ/aatrox/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/aatrox/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/aatrox/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/aatrox/passive
+        item modify entity @s inventory.21 lc:menu/champ/aatrox/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/aatrox/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/aatrox/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/aatrox/skill_r
+    }
+
+    function annie {
+        item modify entity @s inventory.1 lc:menu/champ/annie/icon
+        item modify entity @s inventory.2 lc:menu/champ/annie/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/annie/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/annie/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/annie/passive
+        item modify entity @s inventory.21 lc:menu/champ/annie/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/annie/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/annie/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/annie/skill_r
+    }
+
+    function ashe {
+        item modify entity @s inventory.1 lc:menu/champ/ashe/icon
+        item modify entity @s inventory.2 lc:menu/champ/ashe/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/ashe/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/ashe/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/ashe/passive
+        item modify entity @s inventory.21 lc:menu/champ/ashe/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/ashe/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/ashe/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/ashe/skill_r
+    }
+
+    function ezreal {
+        item modify entity @s inventory.1 lc:menu/champ/ezreal/icon
+        item modify entity @s inventory.2 lc:menu/champ/ezreal/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/ezreal/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/ezreal/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/ezreal/passive
+        item modify entity @s inventory.21 lc:menu/champ/ezreal/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/ezreal/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/ezreal/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/ezreal/skill_r
+    }
+
+    function garen {
+        item modify entity @s inventory.1 lc:menu/champ/garen/icon
+        item modify entity @s inventory.2 lc:menu/champ/garen/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/garen/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/garen/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/garen/passive
+        item modify entity @s inventory.21 lc:menu/champ/garen/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/garen/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/garen/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/garen/skill_r
+    }
+
+    function leesin {
+        item modify entity @s inventory.1 lc:menu/champ/leesin/icon
+        item modify entity @s inventory.2 lc:menu/champ/leesin/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/leesin/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/leesin/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/leesin/passive
+        item modify entity @s inventory.21 lc:menu/champ/leesin/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/leesin/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/leesin/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/leesin/skill_r
+    }
+
+    function leona {
+        item modify entity @s inventory.1 lc:menu/champ/leona/icon
+        item modify entity @s inventory.2 lc:menu/champ/leona/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/leona/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/leona/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/leona/passive
+        item modify entity @s inventory.21 lc:menu/champ/leona/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/leona/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/leona/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/leona/skill_r
+    }
+
+    function lux {
+        item modify entity @s inventory.1 lc:menu/champ/lux/icon
+        item modify entity @s inventory.2 lc:menu/champ/lux/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/lux/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/lux/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/lux/passive
+        item modify entity @s inventory.21 lc:menu/champ/lux/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/lux/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/lux/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/lux/skill_r
+    }
+
+    function malphite {
+        item modify entity @s inventory.1 lc:menu/champ/malphite/icon
+        item modify entity @s inventory.2 lc:menu/champ/malphite/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/malphite/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/malphite/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/malphite/passive
+        item modify entity @s inventory.21 lc:menu/champ/malphite/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/malphite/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/malphite/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/malphite/skill_r
+    }
+
+    function soraka {
+        item modify entity @s inventory.1 lc:menu/champ/soraka/icon
+        item modify entity @s inventory.2 lc:menu/champ/soraka/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/soraka/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/soraka/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/soraka/passive
+        item modify entity @s inventory.21 lc:menu/champ/soraka/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/soraka/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/soraka/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/soraka/skill_r
+    }
+
+    function yasuo {
+        item modify entity @s inventory.1 lc:menu/champ/yasuo/icon
+        item modify entity @s inventory.2 lc:menu/champ/yasuo/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/yasuo/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/yasuo/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/yasuo/passive
+        item modify entity @s inventory.21 lc:menu/champ/yasuo/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/yasuo/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/yasuo/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/yasuo/skill_r
+    }
+
+    function yone {
+        item modify entity @s inventory.1 lc:menu/champ/yone/icon
+        item modify entity @s inventory.2 lc:menu/champ/yone/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/yone/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/yone/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/yone/passive
+        item modify entity @s inventory.21 lc:menu/champ/yone/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/yone/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/yone/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/yone/skill_r
+    }
+
+    function zed {
+        item modify entity @s inventory.1 lc:menu/champ/zed/icon
+        item modify entity @s inventory.2 lc:menu/champ/zed/icon_copy
+        item modify entity @s inventory.10 lc:menu/champ/zed/icon_copy
+        item modify entity @s inventory.11 lc:menu/champ/zed/icon_copy
+
+        item modify entity @s inventory.20 lc:menu/champ/zed/passive
+        item modify entity @s inventory.21 lc:menu/champ/zed/skill_q
+        item modify entity @s inventory.22 lc:menu/champ/zed/skill_w
+        item modify entity @s inventory.23 lc:menu/champ/zed/skill_e
+        item modify entity @s inventory.24 lc:menu/champ/zed/skill_r
+    }
+}

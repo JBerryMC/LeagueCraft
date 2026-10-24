@@ -1,0 +1,157 @@
+# lc:core/motion/  Moving players and mobs without mounting them on anything.
+#
+# A datapack can't set a player's velocity, so these leave a request for the LeagueCraft plugin:
+# the scores motion.x / motion.y / motion.z (thousandths of a block per tick), motion.ticks and the
+# tag lc.motion. At the end of the tick the plugin sets that velocity; with motion.ticks above 1 it
+# keeps setting it for that many ticks, so the entity flies straight (no gravity, no drag). The tag
+# lc.motion.stop cancels a held velocity.
+#
+# Dashes keep their dash entity (an item_display tagged "dash", with the timer cloud on it) and all
+# the logic that runs on it each tick, but the player follows it (lc:core/motion/follow) instead of
+# riding it. Which way a dash goes is which way its dash entity faces when it's summoned:
+#   Dash Looking: the way the camera looks (most dashes)
+#   Dash Moving:  the way the WASD keys point (lc:core/motion/face_moving)
+
+# lc:core/motion/push {x:<>, y:<>, z:<>, ticks:<>}: sets @s's velocity, in thousandths of a block
+# per tick. ticks 0 or 1 is one push; more holds it that many ticks.
+function push {
+    $scoreboard players set @s motion.x $(x)
+    $scoreboard players set @s motion.y $(y)
+    $scoreboard players set @s motion.z $(z)
+    $scoreboard players set @s motion.ticks $(ticks)
+    tag @s add lc.motion
+}
+
+# lc:core/motion/throw {speed:<>, ticks:<>}: run positioned and rotated; throws @s the way that
+# rotation faces, at speed thousandths of a block per tick.
+function throw {
+    summon marker ~ ~ ~ {Tags:["lc.motion.from"]}
+    summon marker ^ ^ ^1 {Tags:["lc.motion.to"]}
+    $execute store result score @s motion.x run data get entity @e[type=marker,tag=lc.motion.to,limit=1] Pos[0] $(speed)
+    $execute store result score @s motion.y run data get entity @e[type=marker,tag=lc.motion.to,limit=1] Pos[1] $(speed)
+    $execute store result score @s motion.z run data get entity @e[type=marker,tag=lc.motion.to,limit=1] Pos[2] $(speed)
+    $execute store result score #x motion.x run data get entity @e[type=marker,tag=lc.motion.from,limit=1] Pos[0] $(speed)
+    $execute store result score #y motion.y run data get entity @e[type=marker,tag=lc.motion.from,limit=1] Pos[1] $(speed)
+    $execute store result score #z motion.z run data get entity @e[type=marker,tag=lc.motion.from,limit=1] Pos[2] $(speed)
+    kill @e[type=marker,tag=lc.motion.from]
+    kill @e[type=marker,tag=lc.motion.to]
+    scoreboard players operation @s motion.x -= #x motion.x
+    scoreboard players operation @s motion.y -= #y motion.y
+    scoreboard players operation @s motion.z -= #z motion.z
+    $scoreboard players set @s motion.ticks $(ticks)
+    tag @s add lc.motion
+}
+
+# Run as an entity, positioned at its dash entity: makes it follow the dash. Dashes call this every
+# tick. The velocity is the dash entity's own step since last tick (the first tick: from where the
+# entity stands), never "the distance to the dash entity": velocities reach the client a tick or
+# more late, and steering by distance with that delay overshoots and swings. The first tick it
+# isn't called, the plugin stops the entity dead (motion.ticks -1 marks a follow) and removes
+# lc.following.
+function follow {
+    summon marker ~ ~ ~ {Tags:["lc.motion.to"]}
+    execute store result score #x motion.x run data get entity @e[type=marker,tag=lc.motion.to,limit=1] Pos[0] 1000
+    execute store result score #y motion.y run data get entity @e[type=marker,tag=lc.motion.to,limit=1] Pos[1] 1000
+    execute store result score #z motion.z run data get entity @e[type=marker,tag=lc.motion.to,limit=1] Pos[2] 1000
+    kill @e[type=marker,tag=lc.motion.to]
+    execute unless entity @s[tag=lc.following] store result score @s motion.px run data get entity @s Pos[0] 1000
+    execute unless entity @s[tag=lc.following] store result score @s motion.py run data get entity @s Pos[1] 1000
+    execute unless entity @s[tag=lc.following] store result score @s motion.pz run data get entity @s Pos[2] 1000
+    scoreboard players operation @s motion.x = #x motion.x
+    scoreboard players operation @s motion.y = #y motion.y
+    scoreboard players operation @s motion.z = #z motion.z
+    scoreboard players operation @s motion.x -= @s motion.px
+    scoreboard players operation @s motion.y -= @s motion.py
+    scoreboard players operation @s motion.z -= @s motion.pz
+    scoreboard players operation @s motion.px = #x motion.x
+    scoreboard players operation @s motion.py = #y motion.y
+    scoreboard players operation @s motion.pz = #z motion.z
+    scoreboard players set @s motion.ticks -1
+    tag @s add lc.following
+    tag @s add lc.motion
+}
+
+# Stops @s dead: cancels a held velocity and zeroes the current one.
+function halt {
+    tag @s add lc.motion.stop
+    function lc:core/motion/push {x:0,y:0,z:0,ticks:0}
+}
+
+# Run as a player: are they in a dash? (Their team's dash entity is right next to them.)
+function in_dash {
+    execute if entity @s[team=red] at @s if entity @e[type=item_display,tag=dash,tag=red,distance=..4] run return 1
+    execute if entity @s[team=blue] at @s if entity @e[type=item_display,tag=dash,tag=blue,distance=..4] run return 1
+    return 0
+}
+
+# lc:core/motion/tag_dash {tag:"<tag>"}: run as a player; adds a tag to the dash entity they're following.
+function tag_dash {
+    $execute if entity @s[team=red] at @s run tag @e[type=item_display,tag=dash,tag=red,distance=..4,limit=1,sort=nearest] add $(tag)
+    $execute if entity @s[team=blue] at @s run tag @e[type=item_display,tag=dash,tag=blue,distance=..4,limit=1,sort=nearest] add $(tag)
+}
+
+# Run as a player who's crowd controlled mid-dash: the dash ends on the spot (its dash entity is
+# removed, like dismounting used to do).
+function cancel_dash {
+    tag @s add lc.motion.stop
+    execute if entity @s[team=red] at @s run kill @e[type=item_display,tag=dash,tag=red,distance=..4,limit=1,sort=nearest]
+    execute if entity @s[team=blue] at @s run kill @e[type=item_display,tag=dash,tag=blue,distance=..4,limit=1,sort=nearest]
+}
+
+# Run as a player casting something that interrupts their dash (Lee Sin, Leona, Malphite recasts):
+# lc:animation/abilities/interrupt runs on the dash entity, if it's one that can be interrupted.
+function interrupt {
+    execute if entity @s[team=red] at @s as @e[type=item_display,tag=interrupt_by_blink,tag=red,distance=..4,limit=1,sort=nearest] run function lc:animation/abilities/interrupt
+    execute if entity @s[team=blue] at @s as @e[type=item_display,tag=interrupt_by_blink,tag=blue,distance=..4,limit=1,sort=nearest] run function lc:animation/abilities/interrupt
+}
+
+# Run as a player, positioned where they blink to (Flash, Ezreal E, Yasuo R), before they move:
+# a dash they're in goes on from there, or ends for the ones a blink interrupts.
+function blink {
+    summon marker ~ ~ ~ {Tags:["lc.blink_to"]}
+    execute if entity @s[team=red] at @s as @e[type=item_display,tag=dash,tag=red,distance=..4,limit=1,sort=nearest] at @e[type=marker,tag=lc.blink_to,limit=1] run function lc:core/motion/blink.dash
+    execute if entity @s[team=blue] at @s as @e[type=item_display,tag=dash,tag=blue,distance=..4,limit=1,sort=nearest] at @e[type=marker,tag=lc.blink_to,limit=1] run function lc:core/motion/blink.dash
+    kill @e[type=marker,tag=lc.blink_to]
+}
+
+function blink.dash {
+    execute if entity @s[tag=interrupt_by_blink] run return run function lc:animation/abilities/interrupt
+    tp @s ~ ~ ~
+}
+
+# Run as a player: turns the dash entity tagged temp (just summoned) the way their WASD keys
+# point, level (Dash Moving). With no keys, or opposite keys only, it faces where they look.
+function face_moving {
+    execute rotated ~ 0 run tp @e[type=item_display,tag=dash,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ ~
+    execute if predicate lc:core/motion/input_forward unless predicate lc:core/motion/input_back if predicate lc:core/motion/input_left unless predicate lc:core/motion/input_right rotated ~-45 0 run return run tp @e[type=item_display,tag=dash,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ ~
+    execute if predicate lc:core/motion/input_forward unless predicate lc:core/motion/input_back if predicate lc:core/motion/input_right unless predicate lc:core/motion/input_left rotated ~45 0 run return run tp @e[type=item_display,tag=dash,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ ~
+    execute if predicate lc:core/motion/input_back unless predicate lc:core/motion/input_forward if predicate lc:core/motion/input_left unless predicate lc:core/motion/input_right rotated ~-135 0 run return run tp @e[type=item_display,tag=dash,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ ~
+    execute if predicate lc:core/motion/input_back unless predicate lc:core/motion/input_forward if predicate lc:core/motion/input_right unless predicate lc:core/motion/input_left rotated ~135 0 run return run tp @e[type=item_display,tag=dash,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ ~
+    execute if predicate lc:core/motion/input_back unless predicate lc:core/motion/input_forward rotated ~180 0 run return run tp @e[type=item_display,tag=dash,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ ~
+    execute if predicate lc:core/motion/input_left unless predicate lc:core/motion/input_right rotated ~-90 0 run return run tp @e[type=item_display,tag=dash,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ ~
+    execute if predicate lc:core/motion/input_right unless predicate lc:core/motion/input_left rotated ~90 0 run return run tp @e[type=item_display,tag=dash,tag=temp,limit=1,sort=nearest] ~ ~0.5 ~ ~ ~
+}
+
+predicate input_forward {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {"minecraft:type_specific/player": {"input": {"forward": true}}}
+}
+
+predicate input_back {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {"minecraft:type_specific/player": {"input": {"backward": true}}}
+}
+
+predicate input_left {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {"minecraft:type_specific/player": {"input": {"left": true}}}
+}
+
+predicate input_right {
+    "type": "minecraft:entity_properties",
+    "entity": "this",
+    "predicate": {"minecraft:type_specific/player": {"input": {"right": true}}}
+}

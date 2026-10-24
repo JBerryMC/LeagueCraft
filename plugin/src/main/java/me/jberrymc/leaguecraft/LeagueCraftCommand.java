@@ -1,6 +1,7 @@
 package me.jberrymc.leaguecraft;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -10,7 +11,11 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-/** /lc (status), /lc keys, /lc dev, /lc rigtest, /lc reload, /lc debug on|off */
+/**
+ * /lc (status), /lc keys, /lc dev, /lc rigtest, /lc reload, /lc debug on|off, and the match
+ * controls: /lc queue join|leave|start|skip|end, /lc pick (champion), /lc team red|blue,
+ * /lc surrender, /lc dummy red|blue|clear.
+ */
 final class LeagueCraftCommand {
     private static final MiniMessage MM = MiniMessage.miniMessage();
 
@@ -81,7 +86,130 @@ final class LeagueCraftCommand {
                     })));
         }
 
+        registerGame(root, plugin);
         commands.register(root.build(), "LeagueCraft plugin status and controls", List.of("lc"));
+    }
+
+    static final List<String> CHAMPIONS = List.of("aatrox", "annie", "ashe", "ezreal", "garen", "jhin", "leesin",
+            "leona", "lux", "malphite", "soraka", "vayne", "yasuo", "yone", "zed");
+
+    /**
+     * Shortcuts to the datapack's own match controls: queue, champion pick, team, surrender and
+     * practice dummies. Each runs the same function the datapack's menu or book would.
+     */
+    private static void registerGame(LiteralArgumentBuilder<CommandSourceStack> root, LeagueCraftPlugin plugin) {
+        Datapack datapack = plugin.datapack();
+        var queue = Commands.literal("queue");
+        queue.then(Commands.literal("join").executes(ctx -> withPlayer(ctx, player -> {
+            if (datapack.matchRunning()) return fail(ctx, "A match is already running.");
+            if (player.getScoreboardTags().contains("is_in_queue")) return fail(ctx, "You are already in the queue.");
+            if (datapack.score("players", "queue", 0) >= datapack.score("max", "queue", 10)) return fail(ctx, "The queue is full.");
+            datapack.runAs(player, "lc:game/queue/join");
+            return Command.SINGLE_SUCCESS;
+        })));
+        queue.then(Commands.literal("leave").executes(ctx -> withPlayer(ctx, player -> {
+            if (!player.getScoreboardTags().contains("is_in_queue")) return fail(ctx, "You are not in the queue.");
+            datapack.runAs(player, "lc:game/queue/leave");
+            return Command.SINGLE_SUCCESS;
+        })));
+        queue.then(Commands.literal("start").requires(admin()).executes(ctx -> {
+            if (datapack.matchRunning()) return fail(ctx, "A match is already running.");
+            if (datapack.score("players", "queue", 0) <= 0) return fail(ctx, "Nobody is in the queue (/lc queue join).");
+            datapack.command("function lc:game/queue/start");
+            send(ctx, "<green>Queue started: champion select is open.");
+            return Command.SINGLE_SUCCESS;
+        }));
+        queue.then(Commands.literal("skip").requires(admin()).executes(ctx -> {
+            if (!datapack.matchRunning() || datapack.score("waittime", "queue", 0) <= 0) {
+                return fail(ctx, "Nothing to skip: champion select is not counting down.");
+            }
+            datapack.command("scoreboard players set waittime queue 0");
+            send(ctx, "<green>Skipped champion select; the match starts now.");
+            return Command.SINGLE_SUCCESS;
+        }));
+        queue.then(Commands.literal("end").requires(admin()).executes(ctx -> {
+            if (datapack.matchRunning()) {
+                datapack.command("function lc:game/game/end");
+                send(ctx, "<green>Match ended.");
+            } else {
+                datapack.command("execute as @a[tag=is_in_queue] run function lc:game/queue/leave");
+                send(ctx, "<green>Queue emptied.");
+            }
+            return Command.SINGLE_SUCCESS;
+        }));
+        root.then(queue);
+
+        root.then(Commands.literal("pick").then(Commands.argument("champion", StringArgumentType.word())
+                .suggests((ctx, builder) -> {
+                    CHAMPIONS.stream().filter(c -> c.startsWith(builder.getRemainingLowerCase())).forEach(builder::suggest);
+                    return builder.buildFuture();
+                })
+                .executes(ctx -> withPlayer(ctx, player -> {
+                    String champion = StringArgumentType.getString(ctx, "champion").toLowerCase(java.util.Locale.ROOT);
+                    if (!CHAMPIONS.contains(champion)) return fail(ctx, "No champion called " + champion + ".");
+                    boolean selecting = datapack.score(player, "settings.page", 0) == 100;
+                    if (!selecting && !ctx.getSource().getSender().hasPermission("leaguecraft.dev")) {
+                        return fail(ctx, "You can pick a champion during champion select.");
+                    }
+                    datapack.runAs(player, "lc:menu/champion/pick {name:\"" + champion + "\"}");
+                    if (!player.getScoreboardTags().contains(champion)) {
+                        return fail(ctx, "Could not pick " + champion + ": a teammate already has it.");
+                    }
+                    return Command.SINGLE_SUCCESS;
+                }))));
+
+        var team = Commands.literal("team");
+        for (String color : List.of("red", "blue")) {
+            team.then(Commands.literal(color).executes(ctx -> withPlayer(ctx, player -> {
+                if (player.getScoreboardTags().contains("champion") && datapack.matchRunning()) {
+                    return fail(ctx, "You can not change teams during a match.");
+                }
+                datapack.command("team join " + color + " " + player.getName());
+                send(ctx, "<green>You are on the " + color + " team.");
+                return Command.SINGLE_SUCCESS;
+            })));
+        }
+        root.then(team);
+
+        root.then(Commands.literal("surrender").executes(ctx -> withPlayer(ctx, player -> {
+            if (!datapack.matchRunning() || !player.getScoreboardTags().contains("champion")) {
+                return fail(ctx, "You can only surrender during a match.");
+            }
+            datapack.runAs(player, "lc:menu/move/surrender");
+            return Command.SINGLE_SUCCESS;
+        })));
+
+        var dummy = Commands.literal("dummy").requires(source -> source.getSender().hasPermission("leaguecraft.dev"));
+        for (String color : List.of("red", "blue")) {
+            dummy.then(Commands.literal(color).executes(ctx -> withPlayer(ctx, player -> {
+                datapack.runAs(player, "lc:core/dummy/spawn." + color);
+                send(ctx, "<green>Spawned a " + color + " practice dummy.");
+                return Command.SINGLE_SUCCESS;
+            })));
+        }
+        dummy.then(Commands.literal("clear").executes(ctx -> {
+            datapack.command("function lc:core/dummy/clear");
+            send(ctx, "<green>Practice dummies cleared.");
+            return Command.SINGLE_SUCCESS;
+        }));
+        root.then(dummy);
+    }
+
+    private static java.util.function.Predicate<CommandSourceStack> admin() {
+        return source -> source.getSender().hasPermission("leaguecraft.admin");
+    }
+
+    private static int withPlayer(CommandContext<CommandSourceStack> ctx, java.util.function.ToIntFunction<Player> action) {
+        if (!(ctx.getSource().getExecutor() instanceof Player player)) {
+            send(ctx, "<red>Run this as a player (or: execute as <player> run lc ...).");
+            return 0;
+        }
+        return action.applyAsInt(player);
+    }
+
+    private static int fail(CommandContext<CommandSourceStack> ctx, String message) {
+        send(ctx, "<red>" + message);
+        return 0;
     }
 
     private static int status(CommandContext<CommandSourceStack> ctx, LeagueCraftPlugin plugin) {
@@ -101,10 +229,14 @@ final class LeagueCraftCommand {
         CombatSettings c = plugin.combat();
         send(ctx, line("Third person (camera distance " + c.cameraDistance() + ", crosshair " + (c.crosshair() ? "on" : "off") + ")",
                 c.thirdPerson()));
-        send(ctx, line("Zoom on right click (melee " + c.zoomMelee() + ", ranged " + c.zoomRanged()
+        send(ctx, line("Zoom on right click (view narrower: melee " + Math.round(c.zoomMelee() * 100) + "%, ranged "
+                + Math.round(c.zoomRanged() * 100) + "%"
+                + "; slower: melee " + Math.round(c.zoomSlowMelee() * 100) + "%, ranged " + Math.round(c.zoomSlowRanged() * 100) + "%"
                 + (c.zoomChampions().isEmpty() ? "" : ", " + c.zoomChampions().size() + " champion overrides") + ")", c.zoom()));
         send(ctx, line("No sprinting", c.disableSprint()) + "  " + line("No crouching", c.disableSneak()));
-        send(ctx, "<gray>Basic attack: <white>hitscan</white> (melee " + c.meleeRange() + ", ranged " + c.rangedRange() + " blocks)");
+        send(ctx, "<gray>Basic attack: <white>melee cone " + Math.round(c.meleeAngle()) + "°, ranged hitscan</white>"
+                + " (range, attack speed and ammo from the stats chart) · reload key: <white>"
+                + c.reloadKey().name().toLowerCase(java.util.Locale.ROOT));
         return Command.SINGLE_SUCCESS;
     }
 

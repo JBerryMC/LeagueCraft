@@ -42,7 +42,7 @@ hud-labels:
 first-time-tip: true
 
 # Only handle input while a match is running (score "_ingame" in objective "game" is 1).
-# Turn off to test champions with /function _settings:champion/<name> outside a match.
+# Turn off to test champions with /function lc:menu/champion/<name> outside a match.
 require-match: true
 
 # Items the datapack uses for abilities (hotbar slots 1-4). They're never thrown while you play.
@@ -50,9 +50,9 @@ ability-items:
   - minecraft:phantom_membrane
 
 # Datapack functions. %s becomes q, w, e or r.
-cast-function: "_champion:abilities/use_%s"
-summoner-1-function: "_champion:spell/check"
-summoner-2-function: "_champion:spell/check_2"
+cast-function: "lc:champion/abilities/use_%s"
+summoner-1-function: "lc:champion/spell/check"
+summoner-2-function: "lc:champion/spell/check_2"
 
 # Over-the-shoulder view while playing a champion. Needs the ShoulderCam shaders, which are part
 # of the LeagueCraft resource pack, and players in F5 (third person). Servers can't switch
@@ -69,18 +69,30 @@ third-person:
   # Draw the crosshair at the end of the champion HUD (vanilla hides it in F5).
   crosshair: true
 
-# Hold right click to zoom: the camera moves in to this distance (blocks), then back out to
-# third-person.camera-distance about 0.3 s after you let go. A server can't change the field of
-# view, so zooming pulls the camera in instead. Champions the datapack tags "melee" use melee,
-# everyone else ranged; zoom.champions sets it for one champion by name (its datapack tag).
+# Hold right click to zoom: the view narrows smoothly, without slowing you (the plugin changes the
+# "walking speed" the client works the view out from, which nothing else uses). It ends about
+# 0.25 s after you let go. Players who turned FOV Effects down (Options > Accessibility) see less
+# zoom, or none at 0%.
+# The same trick keeps champions' view steady: speed changes from slows, roots, channeling an
+# ability or their faster base speed never move the camera.
 zoom:
   enabled: true
-  melee: 2.2
-  ranged: 1.2
-  champions: {}
-  # champions:
-  #   jhin: 0.8
-  #   garen: 2.6
+  # How much narrower the view gets (0.3 = 30% narrower), at most 0.49: the client can't narrow it
+  # by half or more. Champions the datapack tags "melee" use melee, everyone else ranged;
+  # champions sets it for one champion by name (a sniper could have 0.49).
+  view:
+    melee: 0.15
+    ranged: 0.3
+    champions: {}
+    # champions:
+    #   jhin: 0.49
+  # How much slower you walk while zoomed (0.2 = 20% slower), like aiming down sights. 0 = not at all.
+  slowdown:
+    melee: 0.2
+    ranged: 0.5
+    champions: {}
+    # champions:
+    #   jhin: 0.4
 
 # Champions can't sprint or crouch, so Sprint and Shift are free for abilities.
 # Sprinting is stopped by keeping hunger at 6 (Minecraft needs more to sprint; the resource pack
@@ -90,15 +102,29 @@ movement:
   disable-sprint: true
   disable-sneak: true
 
-# Left click fires instantly along the crosshair, at most once per click. Until the Animated Java
-# attack animations exist, the result ("Shot hit Zombie (enemy) 12.3m") is shown in chat and
-# nothing is damaged.
+# Left click is the basic attack, at most once per click, through the datapack's damage system
+# (with every on-hit effect). Melee champions hit every enemy in a cone in front; ranged champions
+# hit the first enemy on the crosshair. Allies are never hit and don't block shots.
+# Each champion's range, attack speed, ammo and reload time are stats in the datapack's stats chart
+# (datapack/src/settings.mcb). A reload also starts by itself when the ammo runs out. The scores
+# ammo.left and ammo.reloading (ticks left) are kept up to date for the HUD.
 basic-attack:
-  # Range in blocks from the player's eye. Champions the datapack tags "melee" punch; the rest shoot.
-  melee-range: 3.5
-  ranged-range: 48.0
-  # Minimum ticks between attacks (20 ticks = 1 second).
-  cooldown-ticks: 10
+  # How wide the melee cone is, in degrees.
+  melee-angle: 100
+  # Key that reloads early: sprint, sneak or none.
+  reload-key: sprint
+
+# Ground-targeted abilities (the aim table of the datapack's stats chart, like Leona R and Soraka E)
+# land where the crosshair meets the ground: never behind a wall or on a ceiling; past their range
+# they drop to the ground below the end of it. With no ground below, they aren't cast.
+abilities:
+  # confirm: the first press shows where the ability lands; press it again or left click to cast,
+  # Shift to cancel. quick: cast on the first press. Abilities you can't cast yet (cooldown, not
+  # enough mana) cast straight away, so the datapack can say why.
+  ground-cast: confirm
+  # Where abilities land, as circles only you see: aimed (only the one you're aiming) or always
+  # (every ready ground-targeted ability, all the time).
+  indicators: aimed
 
 # Log every cast and the datapack's command output to the console.
 debug: false

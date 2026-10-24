@@ -1,0 +1,135 @@
+# lc:game/lobby/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function respawn {
+    scoreboard players set @s left_game 0
+    execute if entity @s[team=red] run tellraw @a[team=red] [{selector:"@s"},{text:" has reconnected.",color:"yellow"}]
+    execute if entity @s[team=blue] run tellraw @a[team=blue] [{selector:"@s"},{text:" has reconnected.",color:"yellow"}]
+
+    execute unless predicate lc:core/is_flying run tp @s[team=red] 0 188 210 180 0
+    execute unless predicate lc:core/is_flying run tp @s[team=blue] 0 188 -210 0 0
+
+    execute if predicate lc:core/is_flying on vehicle run tp @s[team=red] 0 188 210 180 0
+    execute if predicate lc:core/is_flying on vehicle run tp @s[team=blue] 0 188 -210 0 0
+
+    tag @s remove has_display_bar
+    tag @s remove has_health_bar
+
+    # The HP/mana bar above the head is off for now (better visibility); this line summoned it.
+    execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[0.325,0.375,0.325]}}
+    execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=mana] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,0.0,0.0001]}}
+    execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=shield_all] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,0.0,0.0001]}}
+    execute if entity @s[tag=!has_display_bar] at @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] run data modify entity @e[tag=bar_owner,limit=1,sort=nearest,type=area_effect_cloud] Owner set from entity @s UUID
+    execute if entity @s[tag=!has_display_bar,team=red] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] add red
+    execute if entity @s[tag=!has_display_bar,team=blue] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] add blue
+    execute if entity @s[tag=!has_display_bar] if score .world settings.show_stats matches 0 as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+    execute if entity @s[tag=!has_display_bar] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] remove temp
+
+    tag @s add has_display_bar
+    tag @s add update.bar.mana
+    tag @s add update.bar.hp
+    tag @s add offhand_temp
+}
+
+function spawn {
+    tellraw @a {text:"\n",color:"gold"}
+    tellraw @a {text:"Welcome to LeagueCraft",color:"gold",bold:true}
+    tellraw @a {text:"Patch: BETA.2.0 | Map by JBerry367\n",color:"yellow"}
+    tellraw @a {text:"Recommended Settings: ",color:"gold"}
+    tellraw @a {text:"    Render Distance: 15",color:"yellow"}
+    tellraw @a {text:"    Simulation Distance: 20",color:"yellow"}
+    tellraw @a {text:"    POV Scale: 0",color:"yellow"}
+    tellraw @a {text:"    Particles: All",color:"yellow"}
+    tellraw @a {text:"\n",color:"gold"}
+
+    function lc:core/champion/_reset
+    gamemode adventure @s
+    tag @s remove admin
+
+    scoreboard players set @s channeling 0
+    function lc:core/effect/channeling
+
+    scoreboard players set @s queue 0
+    scoreboard players set @s settings.page -1
+    scoreboard players set @s left_game 0
+    clear @s
+
+    scoreboard players set @s hotbar_menu 0
+    execute store result score @s hotbar run data get entity @s SelectedItemSlot
+    scoreboard players operation @s hotbar_old = @s hotbar
+    function lc:game/hotbar/update_menu
+
+    effect give @s saturation infinite 127 true
+    effect give @s resistance infinite 127 true
+    tag @s add reloaded
+    tag @s remove is_ingame
+    tag @s remove is_in_queue
+    tag @s remove see_champ
+    tag @s remove see_settings
+
+    team leave @s
+    tp @s 0 187 0 -90 0
+    effect give @s blindness 2 0 true
+    title @s times 20 20 20
+    title @s title {text:"L",font:"minecraft:lol"}
+
+    ## CHUNK LOADING
+    forceload add 0 -14
+    forceload add 0 -13
+    forceload add 0 -12
+    forceload add 0 -11
+    forceload add 0 -10
+    forceload add 0 -9
+    forceload add 0 -8
+    forceload add 0 -7
+    forceload add 0 -6
+    forceload add 0 -5
+    forceload add 0 -4
+    forceload add 0 -3
+    forceload add 0 -2
+    forceload add 0 -1
+    forceload add 0 0
+    forceload add 0 1
+    forceload add 0 2
+    forceload add 0 3
+    forceload add 0 4
+    forceload add 0 5
+    forceload add 0 6
+    forceload add 0 7
+    forceload add 0 8
+    forceload add 0 9
+    forceload add 0 10
+    forceload add 0 11
+    forceload add 0 12
+    forceload add 0 13
+    forceload add 0 14
+
+    forceload add -1 -14
+    forceload add -1 -13
+    forceload add -1 -12
+    forceload add -1 -11
+    forceload add -1 -10
+    forceload add -1 -9
+    forceload add -1 -8
+    forceload add -1 -7
+    forceload add -1 -6
+    forceload add -1 -5
+    forceload add -1 -4
+    forceload add -1 -3
+    forceload add -1 -2
+    forceload add -1 -1
+    forceload add -1 -1
+    forceload add -1 1
+    forceload add -1 2
+    forceload add -1 3
+    forceload add -1 4
+    forceload add -1 5
+    forceload add -1 6
+    forceload add -1 7
+    forceload add -1 8
+    forceload add -1 9
+    forceload add -1 10
+    forceload add -1 11
+    forceload add -1 12
+    forceload add -1 13
+    forceload add -1 14
+}

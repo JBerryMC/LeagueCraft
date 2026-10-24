@@ -1,0 +1,152 @@
+# lc:menu/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function load {
+    say LeagueCraft Settings reloaded
+
+    scoreboard objectives add champ_id dummy
+}
+
+function main {
+    execute if score @s settings.page matches -1 unless data entity @s Inventory[{Slot:11b}] run function lc:menu/queue/team.1/slot.1
+    execute if score @s settings.page matches -1 unless data entity @s Inventory[{Slot:12b}] run function lc:menu/queue/team.1/slot.2
+    execute if score @s settings.page matches -1 unless data entity @s Inventory[{Slot:13b}] run function lc:menu/queue/team.1/slot.3
+    execute if score @s settings.page matches -1 unless data entity @s Inventory[{Slot:14b}] run function lc:menu/queue/team.1/slot.4
+    execute if score @s settings.page matches -1 unless data entity @s Inventory[{Slot:15b}] run function lc:menu/queue/team.1/slot.5
+
+    execute if score @s settings.page matches -1 unless data entity @s Inventory[{Slot:29b}] run function lc:menu/queue/team.2/slot.1
+    execute if score @s settings.page matches -1 unless data entity @s Inventory[{Slot:30b}] run function lc:menu/queue/team.2/slot.2
+    execute if score @s settings.page matches -1 unless data entity @s Inventory[{Slot:31b}] run function lc:menu/queue/team.2/slot.3
+    execute if score @s settings.page matches -1 unless data entity @s Inventory[{Slot:32b}] run function lc:menu/queue/team.2/slot.4
+    execute if score @s settings.page matches -1 unless data entity @s Inventory[{Slot:33b}] run function lc:menu/queue/team.2/slot.5
+
+    execute if score @s[tag=champion] settings.page matches 0 run item modify entity @s inventory.0 lc:menu/update_stats
+    execute if score @s[tag=champion] settings.page matches 0 unless data entity @s Inventory[{Slot:9b}] run function lc:menu/return
+    execute if score @s[tag=champion] settings.page matches 0 unless data entity @s Inventory[{Slot:10b}] run function lc:menu/return
+    execute if score @s[tag=champion] settings.page matches 0 unless data entity @s Inventory[{Slot:11b}] run function lc:menu/return
+    execute if score @s[tag=champion] settings.page matches 0 unless data entity @s Inventory[{Slot:12b}] run function lc:menu/return
+    execute if score @s[tag=champion] settings.page matches 0 unless data entity @s Inventory[{Slot:19b}] run function lc:menu/return
+    execute if score @s[tag=champion] settings.page matches 0 unless data entity @s Inventory[{Slot:20b}] run function lc:menu/return
+    execute if score @s[tag=champion] settings.page matches 0 unless data entity @s Inventory[{Slot:29b}] run function lc:menu/return
+    execute if score @s[tag=champion] settings.page matches 0 unless data entity @s Inventory[{Slot:30b}] run function lc:menu/return
+    execute if score @s[tag=champion] settings.page matches 0 unless data entity @s Inventory[{Slot:31b}] run function lc:menu/return
+    execute if score @s[tag=champion] settings.page matches 0 unless data entity @s Inventory[{Slot:32b}] run function lc:menu/return
+    execute if score @s[tag=champion] settings.page matches 0 unless data entity @s Inventory[{Slot:33b}] run function lc:menu/return
+    execute if score @s[tag=champion,tag=!see_champ] settings.page matches 0 unless data entity @s Inventory[{Slot:13b}] run function lc:menu/return
+    execute if score @s[tag=champion,tag=!see_champ] settings.page matches 0 unless data entity @s Inventory[{Slot:14b}] run function lc:menu/return
+    execute if score @s[tag=champion,tag=see_champ] settings.page matches 0 unless data entity @s Inventory[{Slot:13b}] run function lc:menu/move/summoner/spell.1
+    execute if score @s[tag=champion,tag=see_champ] settings.page matches 0 unless data entity @s Inventory[{Slot:14b}] run function lc:menu/move/summoner/spell.2
+    execute if score @s settings.page matches 0 unless data entity @s Inventory[{Slot:16b}] run function lc:menu/move/settings
+    execute if score @s settings.page matches 0 unless data entity @s Inventory[{Slot:17b}] run function lc:menu/move/surrender
+    execute if score @s[tag=admin] settings.page matches 0 unless data entity @s Inventory[{Slot:26b}] run function lc:menu/move/practice
+    execute if score @s[tag=see_champ] settings.page matches 0 unless data entity @s Inventory[{Slot:35b}] run function lc:menu/move/summoner/champion
+
+    execute if score @s settings.page matches 1 unless data entity @s Inventory[{Slot:21b}] run function lc:menu/move/support_me
+    execute if score @s settings.page matches 1 unless data entity @s Inventory[{Slot:23b}] run function lc:menu/move/uninstall
+
+    execute if score @s settings.page matches 10 unless data entity @s Inventory[{Slot:21b}] run function lc:menu/move/lang/eng
+    execute if score @s settings.page matches 10 unless data entity @s Inventory[{Slot:23b}] run function lc:menu/move/lang/vie
+
+    execute if score @s settings.page matches 20 unless data entity @s Inventory[{Slot:11b}] run function lc:menu/move/practice/reset_hp
+    execute if score @s settings.page matches 20 unless data entity @s Inventory[{Slot:20b}] run function lc:menu/move/practice/reset_mana
+    execute if score @s settings.page matches 20 unless data entity @s Inventory[{Slot:29b}] run function lc:menu/move/practice/reset_cd
+
+    execute if score @s settings.page matches 20 unless data entity @s Inventory[{Slot:13b}] run function lc:menu/move/practice/dummy.1
+    execute if score @s settings.page matches 20 unless data entity @s Inventory[{Slot:22b}] run function lc:menu/move/practice/dummy.2
+    execute if score @s settings.page matches 20 unless data entity @s Inventory[{Slot:31b}] run function lc:menu/move/practice/dummy.3
+
+    execute if score @s settings.page matches 20 unless data entity @s Inventory[{Slot:15b}] run function lc:menu/move/practice/show_stats
+    execute if score @s settings.page matches 20 unless data entity @s Inventory[{Slot:24b}] run function lc:menu/move/practice/show_dmg
+
+    execute if score @s settings.page matches 21 unless data entity @s Inventory[{Slot:11b}] run function lc:menu/move/structure/tower.1
+    execute if score @s settings.page matches 21 unless data entity @s Inventory[{Slot:20b}] run function lc:menu/move/structure/inhib.1
+    execute if score @s settings.page matches 21 unless data entity @s Inventory[{Slot:29b}] run function lc:menu/move/structure/nexus.1
+    execute if score @s settings.page matches 21 unless data entity @s Inventory[{Slot:13b}] run function lc:menu/move/structure/tower.2
+    execute if score @s settings.page matches 21 unless data entity @s Inventory[{Slot:22b}] run function lc:menu/move/structure/inhib.2
+    execute if score @s settings.page matches 21 unless data entity @s Inventory[{Slot:31b}] run function lc:menu/move/structure/nexus.2
+
+    execute if score @s settings.page matches 21 unless data entity @s Inventory[{Slot:15b}] run function lc:menu/move/structure/rotate
+
+    execute if score @s settings.page matches 22 unless data entity @s Inventory[{Slot:11b}] run function lc:menu/move/structure/destroy.1
+    execute if score @s settings.page matches 22 unless data entity @s Inventory[{Slot:13b}] run function lc:menu/move/structure/destroy.2
+    execute if score @s settings.page matches 22 unless data entity @s Inventory[{Slot:20b}] run function lc:menu/move/structure/rebuild.1
+    execute if score @s settings.page matches 22 unless data entity @s Inventory[{Slot:22b}] run function lc:menu/move/structure/rebuild.2
+    execute if score @s settings.page matches 22 unless data entity @s Inventory[{Slot:29b}] run function lc:menu/move/structure/remove.1
+    execute if score @s settings.page matches 22 unless data entity @s Inventory[{Slot:31b}] run function lc:menu/move/structure/remove.2
+
+    execute if score @s settings.page matches 30 unless data entity @s Inventory[{Slot:24b}] run function lc:menu/move/summoner/team
+    execute if score @s settings.page matches 30 unless data entity @s Inventory[{Slot:22b}] run function lc:menu/move/summoner/spell.1
+    execute if score @s settings.page matches 30 unless data entity @s Inventory[{Slot:23b}] run function lc:menu/move/summoner/spell.2
+    execute if score @s settings.page matches 30 unless data entity @s Inventory[{Slot:20b}] run function lc:menu/move/summoner/champion
+
+    execute if score @s settings.page matches 2..30 unless data entity @s Inventory[{Slot:9b}] run function lc:menu/return
+
+    execute if score @s settings.page matches 20..30 unless data entity @s Inventory[{Slot:18b}] run function lc:menu/previous_page
+    execute if score @s settings.page matches 20..30 unless data entity @s Inventory[{Slot:26b}] run function lc:menu/next_page
+
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:11b}] run function lc:menu/champion/_random
+
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:12b}] run function lc:menu/champion/pick {name:"yasuo"}
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:13b}] run function lc:menu/champion/pick {name:"leesin"}
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:14b}] run function lc:menu/champion/pick {name:"zed"}
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:15b}] run function lc:menu/champion/pick {name:"yone"}
+
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:20b}] run function lc:menu/champion/pick {name:"ashe"}
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:21b}] run function lc:menu/champion/pick {name:"ezreal"}
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:22b}] run function lc:menu/champion/pick {name:"leona"}
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:23b}] run function lc:menu/champion/pick {name:"soraka"}
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:24b}] run function lc:menu/champion/pick {name:"aatrox"}
+
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:29b}] run function lc:menu/champion/pick {name:"garen"}
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:30b}] run function lc:menu/champion/pick {name:"malphite"}
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:31b}] run function lc:menu/champion/pick {name:"lux"}
+    execute if score @s settings.page matches 100 unless data entity @s Inventory[{Slot:32b}] run function lc:menu/champion/pick {name:"annie"}
+}
+
+function next_page {
+    scoreboard players add @s settings.page 1
+    execute if score @s settings.page matches 2 run scoreboard players set @s settings.page 0
+    execute if score @s settings.page matches 11 run scoreboard players set @s settings.page 10
+    execute if score @s settings.page matches 23 run scoreboard players set @s settings.page 20
+    execute if score @s settings.page matches 31 run scoreboard players set @s settings.page 30
+    execute if score @s settings.page matches 101 run scoreboard players set @s settings.page 100
+
+    clear @s structure_void
+    function lc:menu/reset
+}
+
+function previous_page {
+    scoreboard players remove @s settings.page 1
+    execute if score @s settings.page matches -1 run scoreboard players set @s settings.page 1
+    execute if score @s settings.page matches 9 run scoreboard players set @s settings.page 10
+    execute if score @s settings.page matches 19 run scoreboard players set @s settings.page 22
+    execute if score @s settings.page matches 29 run scoreboard players set @s settings.page 30
+    execute if score @s settings.page matches 99 run scoreboard players set @s settings.page 100
+
+    clear @s structure_void
+    function lc:menu/reset
+}
+
+function reset {
+    execute if score @s settings.page matches -1 run function lc:menu/page/_1
+    execute if score @s settings.page matches 0 run function lc:menu/page/00
+    execute if score @s settings.page matches 1 run function lc:menu/page/01
+
+    execute if score @s settings.page matches 10 run function lc:menu/page/10
+    execute if score @s settings.page matches 20 run function lc:menu/page/20
+    execute if score @s settings.page matches 21 run function lc:menu/page/21
+    execute if score @s settings.page matches 22 run function lc:menu/page/22
+    execute if score @s settings.page matches 30 run function lc:menu/page/30
+
+    execute if score @s settings.page matches 100 run function lc:menu/page/100
+
+    item replace entity @s[scores={settings.page=20..30}] inventory.0 with structure_void[minecraft:custom_name={text:"Return",italic:false},minecraft:custom_model_data={floats:[100003f]},minecraft:custom_data={kill_item:1}]
+
+    item replace entity @s[scores={settings.page=20..30}] inventory.9 with structure_void[minecraft:custom_name={text:"<",italic:false},minecraft:custom_model_data={floats:[100001f]},minecraft:custom_data={kill_item:1}]
+    item replace entity @s[scores={settings.page=20..30}] inventory.17 with structure_void[minecraft:custom_name={text:">",italic:false},minecraft:custom_model_data={floats:[100002f]},minecraft:custom_data={kill_item:1}]
+}
+
+function return {
+    scoreboard players set @s settings.page 0
+    clear @s structure_void
+    function lc:menu/reset
+}

@@ -4,6 +4,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  * one of its functions as a player.
  */
 final class Datapack {
-    /** Objective the datapack creates in _lol:setup; used to tell whether the pack is installed. */
+    /** Objective the datapack creates in lc:core/setup; used to tell whether the pack is installed. */
     private static final String MARKER_OBJECTIVE = "use_ability";
 
     private final CommandSender silentSender;
@@ -54,6 +55,54 @@ final class Datapack {
     boolean runAs(Player player, String function) {
         return Bukkit.dispatchCommand(silentSender,
                 "execute as " + player.getUniqueId() + " at @s run function " + function);
+    }
+
+    /** Runs a command like the console does (quietly). Returns false if it failed. */
+    boolean command(String command) {
+        return Bukkit.dispatchCommand(silentSender, command);
+    }
+
+    /** A score of a fake player (like waittime in objective queue), or {@code fallback}. */
+    int score(String holder, String objective, int fallback) {
+        Objective o = scoreboard().getObjective(objective);
+        if (o == null) return fallback;
+        Score score = o.getScore(holder);
+        return score.isScoreSet() ? score.getScore() : fallback;
+    }
+
+    /** An entity's score, or {@code fallback} if the objective or the score isn't there. */
+    int score(Entity entity, String objective, int fallback) {
+        Objective o = scoreboard().getObjective(objective);
+        if (o == null) return fallback;
+        Score score = o.getScore(entity instanceof Player player ? player.getName() : entity.getUniqueId().toString());
+        return score.isScoreSet() ? score.getScore() : fallback;
+    }
+
+    /** Sets an entity's score, if the datapack made the objective and it isn't that already. */
+    void setScore(Entity entity, String objective, int value) {
+        Objective o = scoreboard().getObjective(objective);
+        if (o == null) return;
+        Score score = o.getScore(entity instanceof Player player ? player.getName() : entity.getUniqueId().toString());
+        if (!score.isScoreSet() || score.getScore() != value) score.setScore(value);
+    }
+
+    /** The attack sound (and Aatrox's attack animation), once per basic attack. */
+    void attack(Player attacker) {
+        runAs(attacker, "lc:champion/aa/plugin.attack");
+    }
+
+    /**
+     * Deals the attacker's basic attack to one target through the datapack's own damage system,
+     * with every on-hit effect. The datapack finds the target by the {@code temp_dmg} tag.
+     */
+    boolean hit(Player attacker, Entity target) {
+        target.addScoreboardTag("temp_dmg");
+        try {
+            return Bukkit.dispatchCommand(silentSender, "execute as " + attacker.getUniqueId() + " at "
+                    + target.getUniqueId() + " run function lc:champion/aa/plugin.hit");
+        } finally {
+            target.removeScoreboardTag("temp_dmg");
+        }
     }
 
     /**

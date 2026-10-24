@@ -1,0 +1,687 @@
+# lc:champions/leona/  (converted from the 1.20.2 LeagueCraft datapack)
+
+# What's special about picking leona; the stats are in settings.mcb.
+function pick {
+    execute if score .world lang matches 0 as @s run function lc:core/lang/champion/eng.leona
+    execute if score .world lang matches 1 as @s run function lc:core/lang/champion/vie.leona
+    tag @s add useMana
+    scoreboard players operation @s armor.base = @s armor
+    scoreboard players operation @s magic_resist.base = @s magic_resist
+    scoreboard players operation @s mana = @s mana.max
+    playsound minecraft:leona.select master @s ~ ~ ~
+    playsound minecraft:leona.sfx.select master @s ~ ~ ~
+}
+
+function aa {
+    execute if entity @s[tag=!leona.q] run playsound leona.sfx.aa master @a ~ ~ ~
+    execute if entity @s[tag=leona.q] run playsound leona.sfx.q.aa master @a ~ ~ ~
+}
+
+function hud {
+    $title @s actionbar ["",{translate:"space.-60"},{text:"i",font:"minecraft:leona"},{translate:"space.16"},{score:{name:"@s",objective:"status.p"},font:"lol:leona/p"},{translate:"space.5"},{score:{name:"@s",objective:"status.q"},font:"lol:leona/q"},{translate:"space.6"},{score:{name:"@s",objective:"status.w"},font:"lol:leona/w"},{translate:"space.6"},{score:{name:"@s",objective:"status.e"},font:"lol:leona/e"},{translate:"space.6"},{score:{name:"@s",objective:"status.r"},font:"lol:leona/r"},{translate:"space.9"},{score:{name:"@s",objective:"status.spell.1"},font:"minecraft:lol"},{translate:"space.5"},{score:{name:"@s",objective:"status.spell.2"},font:"minecraft:lol"},{translate:"space.-253"},{text:"M",font:"minecraft:lol"},{translate:"space.-274"},{score:{name:"@s",objective:"status.hotbar"},font:"minecraft:hotbar"},{translate:"space.-207"},{storage:"lol:main",nbt:"hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:hp_display"},{translate:"space.-252"},{storage:"lol:main",nbt:"mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:mana_display"},{translate:"space.-183"},{score:{name:"@s",objective:"cd_p"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.passive"},font:"space:default"},{score:{name:"@s",objective:"cd_q"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.q"},font:"space:default"},{score:{name:"@s",objective:"cd_w"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.w"},font:"space:default"},{score:{name:"@s",objective:"cd_e"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.e"},font:"space:default"},{score:{name:"@s",objective:"cd_r"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.r"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.1"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.1"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.2"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.2"},font:"space:default"},{translate:"space.-138"},{score:{name:"@s",objective:"space.hp1"},font:"space:default"},{score:{name:"@s",objective:"hp.left"},font:"minecraft:custom/hp"},{text:"/",font:"minecraft:custom/hp"},{score:{name:"@s",objective:"hp.max"},font:"minecraft:custom/hp"},{score:{name:"@s",objective:"space.hp2"},font:"space:default"},{translate:"space.-78"},{score:{name:"@s",objective:"space.mana1"},font:"space:default"},{score:{name:"@s",objective:"mana"},font:"minecraft:custom/mana"},{text:"/",font:"minecraft:custom/mana"},{score:{name:"@s",objective:"mana.max"},font:"minecraft:custom/mana"},{score:{name:"@s",objective:"space.mana2"},font:"space:default"},{translate:"space.-112"},{storage:"lol:main",nbt:"keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.24"},{storage:"lol:main",nbt:"keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.25"},{nbt:"keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",storage:"lol:main",interpret:true},{translate:"space.18"},{keybind:"key.swapOffhand",font:"minecraft:custom/keybind_small",bold:true,color:"#ffd821"},{storage:"lol:main",nbt:"crosshair.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true}]
+}
+
+function hud_display {
+    function lc:champion/hud
+
+    ## Q
+    execute if entity @s[tag=leona.q] run scoreboard players set @s status.q 9
+
+    ## W
+    execute if entity @s[tag=leona.w] run scoreboard players set @s status.w 9
+
+    function lc:champions/leona/hud with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+}
+
+function loop {
+    execute as @e[type=!#unvalid,tag=!unvalid,scores={leona.passive=1..2}] at @s anchored eyes run particle wax_on ^ ^-0.5 ^ 0.2 0.2 0.2 1 2 force
+
+    execute as @e[tag=leona.e,type=item_display] at @s run function lc:champions/leona/skills/e.animation
+    execute as @e[tag=leona.e2,type=item_display] at @s run function lc:champions/leona/skills/e.dash
+
+    execute as @e[tag=leona.r,type=item_display] at @s run function lc:champions/leona/skills/r.animation
+    execute as @e[tag=leona.r.cast,type=area_effect_cloud] at @s run function lc:champions/leona/skills/r.cast
+}
+
+function main {
+    ## HUD
+    function lc:champions/leona/hud_display
+
+    ## Item Handling
+    execute unless predicate lc:champion/slot/head run function lc:champions/leona/item/headwear
+    execute unless predicate lc:champion/slot/offhand run function lc:champions/leona/item/offhand
+
+    ## Re-use
+    execute if predicate lc:champion/hold_q if score @s use_ability matches 1.. run function lc:champion/abilities/use_q
+    execute if predicate lc:champion/hold_w if score @s use_ability matches 1.. run function lc:champion/abilities/use_w
+    execute if predicate lc:champion/hold_e if score @s use_ability matches 1.. run function lc:champion/abilities/use_e
+    execute if predicate lc:champion/hold_r if score @s use_ability matches 1.. run function lc:champion/abilities/use_r
+
+    ## First use
+    execute if predicate lc:champion/use_q run function lc:champion/abilities/use_q
+
+    execute if predicate lc:champion/use_w run function lc:champion/abilities/use_w
+
+    execute if predicate lc:champion/use_e run function lc:champion/abilities/use_e
+
+    execute if predicate lc:champion/use_r run function lc:champion/abilities/use_r
+
+    execute if entity @s[team=red,tag=leona.q] unless entity @e[tag=leona.q.cd,tag=red] run function lc:champions/leona/skills/q.end
+    execute if entity @s[team=blue,tag=leona.q] unless entity @e[tag=leona.q.cd,tag=blue] run function lc:champions/leona/skills/q.end
+}
+
+function passive {
+    ## EXECUTE AS TARGET
+    scoreboard players set @s leona.passive 0
+    scoreboard players add @s dmg_magic.raw 168
+    execute at @s anchored eyes run particle end_rod ^ ^-0.5 ^ 0.2 0.2 0.2 0.1 10 force
+}
+
+function use_e {
+    function lc:champion/abilities/cooldown/e
+    playsound leona.sfx.e master @a ~ ~ ~
+
+    scoreboard players set @s channeling 5
+    scoreboard players set @s status.weapon 9999
+
+    execute if entity @s[team=red] run summon minecraft:item_display ~ ~ ~ {teleport_duration:1,item_display:"head",item:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[1000101f]}}},Tags:["leona.e","red","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:7,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run summon minecraft:item_display ~ ~ ~ {teleport_duration:1,item_display:"head",item:{id:"phantom_membrane",count:1,components:{"minecraft:custom_model_data":{floats:[1000101f]}}},Tags:["leona.e","blue","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:7,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute anchored eyes run tp @e[tag=leona.e,limit=1,sort=nearest] ^ ^ ^ ~ ~
+}
+
+function use_e2 {
+    playsound leona.sfx.e.hit master @a ~ ~ ~
+    tag @s add e.dash
+
+    function lc:core/motion/interrupt
+
+    execute if entity @s[team=red] run summon item_display ~ ~0.5 ~ {teleport_duration:1,Tags:["dash","red","leona.e2","temp","interrupt_by_blink","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] run summon item_display ~ ~0.5 ~ {teleport_duration:1,Tags:["dash","blue","leona.e2","temp","interrupt_by_blink","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+    execute at @e[tag=leona.e2,tag=temp,limit=1,sort=nearest] run data modify entity @e[tag=cd,limit=1,sort=nearest] Owner set from entity @s UUID
+    tag @e[tag=leona.e2,tag=temp,limit=1,sort=nearest] remove temp
+}
+
+function use_q {
+    playsound leona.sfx.q master @a ~ ~ ~
+    scoreboard players set @s aa.cd 0
+    scoreboard players add @s aa.range 10
+
+    tag @s add leona.q
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:120,Tags:["leona.q.cd","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:120,Tags:["leona.q.cd","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+}
+
+function use_r {
+    function lc:champion/abilities/cooldown/r
+
+    playsound minecraft:leona.ultimate master @a ~ ~ ~ 2
+    playsound minecraft:leona.sfx.r master @a ~ ~ ~ 2
+
+    scoreboard players set @s channeling 5
+
+    execute anchored eyes run summon area_effect_cloud ^ ^-0.5 ^ {WaitTime:0,Duration:12,Tags:["leona.r.cast"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+
+    execute positioned as @e[type=marker,tag=lc.ground_target,limit=1] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:2,Tags:["leona.r.position"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute positioned as @e[type=marker,tag=lc.ground_target,limit=1] run data modify entity @e[tag=leona.r.position,type=area_effect_cloud,limit=1,sort=nearest] Owner set from entity @s UUID
+    execute positioned as @e[type=marker,tag=lc.ground_target,limit=1] as @e[tag=leona.r.position,type=area_effect_cloud,limit=1,sort=nearest] at @s run function lc:champions/leona/skills/r.position
+}
+
+function use_w {
+    function lc:champion/abilities/cooldown/w
+
+    playsound minecraft:leona.sfx.w master @a ~ ~ ~
+    tag @s add update.shield.leona
+    tag @s add leona.w
+
+    scoreboard players operation leona.w.armor temp = @s armor
+    scoreboard players operation leona.w.armor temp *= 20 integer
+    scoreboard players operation leona.w.armor temp /= 100 integer
+    scoreboard players add leona.w.armor temp 50
+
+    scoreboard players operation @s armor += leona.w.armor temp
+
+    scoreboard players operation leona.w.mr temp = @s magic_resist
+    scoreboard players operation leona.w.mr temp *= 20 integer
+    scoreboard players operation leona.w.mr temp /= 100 integer
+    scoreboard players add leona.w.mr temp 50
+
+    scoreboard players operation @s magic_resist += leona.w.mr temp
+
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] run scoreboard players operation <%team%>.leona.w.armor temp = leona.w.armor temp
+        execute if entity @s[team=<%team%>] run scoreboard players operation <%team%>.leona.w.mr temp = leona.w.mr temp
+        execute if entity @s[team=<%team%>] run summon item_display ~ ~ ~ {Tags:["<%team%>","leona.w","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:60,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    }
+}
+
+# ---- item: lc:champions/leona/item/... -----------------------------------------------
+dir item {
+    function headwear {
+        clear @s iron_sword[minecraft:custom_data~{lol_item:1}]
+        execute if score .world lang matches 0 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[1000001f]},minecraft:custom_name={text:"Leona",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+        execute if score .world lang matches 1 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[1000001f]},minecraft:custom_name={text:"Sừng Aatrox",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+    }
+
+    function offhand {
+        clear @s carrot_on_a_stick[minecraft:custom_data~{lol_item:1}]
+        tag @s remove offhand_temp
+
+        item replace entity @s weapon.offhand with minecraft:carrot_on_a_stick[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[1000001f]},minecraft:custom_name={text:".",color:"#1b0c1b"},minecraft:custom_data={lol_item:1,kill_item:1,offhand:1}]
+    }
+}
+
+# ---- skills: lc:champions/leona/skills/... -------------------------------------------
+dir skills {
+    function e.animation {
+        tp @s ^ ^ ^1.75
+        particle wax_on ~ ~ ~ 0 0.2 0 1 3 force
+
+        execute if entity @s[tag=red] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[team=!red,type=!#unvalid,tag=!unvalid,dx=0,tag=!leona.e.dmg] add leona.e.hit
+        execute if entity @s[tag=red] if entity @e[tag=leona.e.hit,team=!red] run tag @e[tag=leona.e.hit,team=!red,tag=!leona.e.dmg] add leona.e.temp_dmg
+        execute if entity @s[tag=red] if entity @e[tag=leona.e.hit,team=!red] as @p[tag=leona,team=red] run function lc:champions/leona/skills/e.damage
+
+        execute if entity @s[tag=red] if entity @e[tag=leona.e.hit,team=!red] run tag @e[tag=leona.e.hit,team=!red] add leona.e.dmg
+        execute if entity @s[tag=red] if entity @e[tag=leona.e.hit,team=!red] run tag @e[tag=leona.e.hit,team=!red] remove leona.e.hit
+
+        execute if entity @s[tag=blue] positioned ~-0.5 ~-0.5 ~-0.5 run tag @e[team=!blue,type=!#unvalid,tag=!unvalid,dx=0,tag=!leona.e.dmg] add leona.e.hit
+        execute if entity @s[tag=blue] if entity @e[tag=leona.e.hit,team=!blue] run tag @e[tag=leona.e.hit,team=!blue,tag=!leona.e.dmg] add leona.e.temp_dmg
+        execute if entity @s[tag=blue] if entity @e[tag=leona.e.hit,team=!blue] as @p[tag=leona,team=blue] run function lc:champions/leona/skills/e.damage
+
+        execute if entity @s[tag=blue] if entity @e[tag=leona.e.hit,team=!blue] run tag @e[tag=leona.e.hit,team=!blue] add leona.e.dmg
+        execute if entity @s[tag=blue] if entity @e[tag=leona.e.hit,team=!blue] run tag @e[tag=leona.e.hit,team=!blue] remove leona.e.hit
+    }
+
+    function e.damage {
+        execute if entity @s[team=red] run scoreboard players set @e[team=!red,type=!#unvalid,tag=leona.e.hit,tag=leona.e.temp_dmg,limit=1,sort=nearest] leona.passive 3
+        execute if entity @s[team=blue] run scoreboard players set @e[team=!blue,type=!#unvalid,tag=leona.e.hit,tag=leona.e.temp_dmg,limit=1,sort=nearest] leona.passive 3
+
+        execute if entity @s[team=red] run damage @e[tag=leona.e.hit,tag=leona.e.temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+        execute if entity @s[team=blue] run damage @e[tag=leona.e.hit,tag=leona.e.temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+
+        scoreboard players operation @s dmg_magic.deal = @s ability_power
+        scoreboard players operation @s dmg_magic.deal *= 40 integer
+        scoreboard players operation @s dmg_magic.deal /= 100 integer
+        scoreboard players add @s dmg_magic.deal 210
+
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=leona.e.hit,tag=has_health_bar,tag=leona.e.temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=leona.e.hit,tag=has_health_bar,tag=leona.e.temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=red] run tag @e[team=!red,tag=leona.e.hit,type=!#unvalid,tag=leona.e.temp_dmg,limit=1,sort=nearest] remove leona.e.temp_dmg
+
+        execute if entity @s[team=red] run execute if entity @e[tag=leona.e.hit,tag=leona.e.temp_dmg,type=!#unvalid,team=!red] run function lc:champions/leona/skills/e.damage
+
+        ## BLUE
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=leona.e.hit,tag=has_health_bar,tag=leona.e.temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=leona.e.hit,tag=has_health_bar,tag=leona.e.temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=blue] run tag @e[team=!blue,tag=leona.e.hit,type=!#unvalid,tag=leona.e.temp_dmg,limit=1,sort=nearest] remove leona.e.temp_dmg
+
+        execute if entity @s[team=blue] run execute if entity @e[tag=leona.e.hit,tag=leona.e.temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/leona/skills/e.damage
+    }
+
+    function e.dash {
+        execute if entity @s[tag=red] on passengers on vehicle facing entity @e[tag=leona.e.target,team=!red,limit=1,sort=nearest] feet rotated ~ ~-20 run tp @s ^ ^ ^1 ~ ~
+        execute if entity @s[tag=red] if score @p[team=red,tag=leona] channeling matches -1 at @s positioned ~ ~-0.5 ~ as @p[team=red,tag=leona] run function lc:core/motion/follow
+
+        execute if entity @s[tag=red] run scoreboard players set @e[tag=leona.e.target,team=!red] fx.sight 2
+
+        execute if entity @s[tag=red] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[tag=leona.e.target,team=!red,dx=0] positioned ~0.5 ~0.5 ~0.5 on passengers on vehicle run tp @s ^ ^ ^1.5
+        execute if entity @s[tag=red] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[tag=leona.e.target,team=!red,dx=0] run tag @p[tag=leona,team=red] remove e.dash
+        execute if entity @s[tag=red] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[tag=leona.e.target,team=!red,dx=0] on passengers run kill @s[tag=cd]
+        execute if entity @s[tag=red] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[tag=leona.e.target,team=!red,dx=0] run tag @e[tag=leona.e.target,team=!red] remove leona.e.target
+
+        execute if entity @s[tag=blue] on passengers on vehicle facing entity @e[tag=leona.e.target,team=!blue,limit=1,sort=nearest] feet rotated ~ ~-20 run tp @s ^ ^ ^1 ~ ~
+        execute if entity @s[tag=blue] if score @p[team=blue,tag=leona] channeling matches -1 at @s positioned ~ ~-0.5 ~ as @p[team=blue,tag=leona] run function lc:core/motion/follow
+
+        execute if entity @s[tag=blue] run scoreboard players set @e[tag=leona.e.target,team=!blue] fx.sight 2
+
+        execute if entity @s[tag=blue] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[tag=leona.e.target,team=!blue,dx=0] positioned ~0.5 ~0.5 ~0.5 on passengers on vehicle run tp @s ^ ^ ^1.5
+        execute if entity @s[tag=blue] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[tag=leona.e.target,team=!blue,dx=0] run tag @p[tag=leona,team=blue] remove e.dash
+        execute if entity @s[tag=blue] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[tag=leona.e.target,team=!blue,dx=0] on passengers run kill @s[tag=cd]
+        execute if entity @s[tag=blue] positioned ~-0.5 ~-0.5 ~-0.5 if entity @e[tag=leona.e.target,team=!blue,dx=0] run tag @e[tag=leona.e.target,team=!blue] remove leona.e.target
+    }
+
+    function e.dash_cancel {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] run tag @e[tag=leona.e.target,team=!<%team%>] remove leona.e.target
+            execute if entity @s[tag=<%team%>] as @e[tag=leona.q.mark.model,tag=<%team%>] on passengers run kill @s
+            execute if entity @s[tag=<%team%>] run tag @p[tag=leona,team=<%team%>] remove e.dash
+            execute if entity @s[tag=<%team%>] on passengers run data modify entity @s Age set value 2147483646
+        }
+    }
+
+    function e.end {
+        execute if entity @s[tag=red] run scoreboard players set @p[tag=leona,team=red] status.weapon 1000101
+        execute if entity @s[tag=red] if entity @e[tag=leona.e.dmg,team=!red] at @p[tag=leona,team=red] run tag @e[tag=champion,tag=leona.e.dmg,team=!red,limit=1,sort=furthest] add leona.e.target
+        execute if entity @s[tag=red] if entity @e[tag=leona.e.dmg,team=!red] run tag @e[tag=leona.e.dmg,team=!red] remove leona.e.dmg
+
+        execute if entity @s[tag=red] if entity @e[tag=leona.e.target,team=!red] run scoreboard players set @e[tag=leona.e.target,team=!red] cc.root 10
+        execute if entity @s[tag=red] if entity @e[tag=leona.e.target,team=!red] as @p[tag=leona,team=red] at @s run function lc:champions/leona/use_e2
+
+        execute if entity @s[tag=blue] if entity @e[tag=leona.e.dmg,team=!blue] at @p[tag=leona,team=blue] run tag @e[tag=champion,tag=leona.e.dmg,team=!blue,limit=1,sort=furthest] add leona.e.target
+        execute if entity @s[tag=blue] if entity @e[tag=leona.e.dmg,team=!blue] run tag @e[tag=leona.e.dmg,team=!blue] remove leona.e.dmg
+
+        execute if entity @s[tag=blue] if entity @e[tag=leona.e.target,team=!blue] run scoreboard players set @e[tag=leona.e.target,team=!blue] cc.root 10
+        execute if entity @s[tag=blue] if entity @e[tag=leona.e.target,team=!blue] as @p[tag=leona,team=blue] at @s run function lc:champions/leona/use_e2
+    }
+
+    function q.damage {
+        function lc:champions/leona/skills/q.end
+        execute if entity @s[team=red] run scoreboard players set @e[team=!red,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] leona.passive 3
+        execute if entity @s[team=blue] run scoreboard players set @e[team=!blue,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] leona.passive 3
+
+        execute if entity @s[team=red] run scoreboard players add @e[team=!red,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] cc.stun 20
+        execute if entity @s[team=blue] run scoreboard players add @e[team=!blue,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] cc.stun 20
+
+        scoreboard players operation leona.q.temp_dmg attack_damage = @s ability_power
+        scoreboard players operation leona.q.temp_dmg attack_damage *= 30 integer
+        scoreboard players operation leona.q.temp_dmg attack_damage /= 100 integer
+        scoreboard players add leona.q.temp_dmg attack_damage 110
+
+        scoreboard players operation @s dmg_magic.deal = leona.q.temp_dmg attack_damage
+    }
+
+    function q.end {
+        function lc:champion/abilities/cooldown/q
+        stopsound @a master leona.sfx.q
+        scoreboard players remove @s aa.range 10
+        execute if entity @s[team=red] run kill @e[tag=leona.q.cd,tag=red]
+        execute if entity @s[team=blue] run kill @e[tag=leona.q.cd,tag=blue]
+        tag @s remove leona.q
+    }
+
+    function r.animation {
+        tp @s ~ ~ ~ ~15 0
+
+        execute rotated ~ ~ run particle wax_on ^ ^ ^5 0 0 0 0 1 force
+        execute rotated ~-3 ~ run particle wax_on ^ ^ ^5 0 0 0 0 1 force
+        execute rotated ~-6 ~ run particle wax_on ^ ^ ^5 0 0 0 0 1 force
+        execute rotated ~-9 ~ run particle wax_on ^ ^ ^5 0 0 0 0 1 force
+        execute rotated ~-12 ~ run particle wax_on ^ ^ ^5 0 0 0 0 1 force
+
+        execute rotated ~ ~ run particle wax_on ^ ^ ^-5 0 0 0 0 1 force
+        execute rotated ~ ~ run particle wax_on ^ ^ ^-5 0 0 0 0 1 force
+        execute rotated ~-3 ~ run particle wax_on ^ ^ ^-5 0 0 0 0 1 force
+        execute rotated ~-6 ~ run particle wax_on ^ ^ ^-5 0 0 0 0 1 force
+        execute rotated ~-9 ~ run particle wax_on ^ ^ ^-5 0 0 0 0 1 force
+        execute rotated ~-12 ~ run particle wax_on ^ ^ ^-5 0 0 0 0 1 force
+    }
+
+    function r.cast {
+        execute rotated ~ ~ run particle wax_on ^ ^ ^1 0 0 0 0 1 force @a
+        execute rotated ~-40 ~ run particle wax_on ^ ^-0.16 ^1 0 0 0 0 1 force @a
+        execute rotated ~-30 ~ run particle wax_on ^ ^-0.12 ^1 0 0 0 0 1 force @a
+        execute rotated ~-20 ~ run particle wax_on ^ ^-0.08 ^1 0 0 0 0 1 force @a
+        execute rotated ~-10 ~ run particle wax_on ^ ^-0.04 ^1 0 0 0 0 1 force @a
+
+        tp @s ~ ~0.2 ~ ~45 ~
+    }
+
+    function r.cast.particle {
+        execute if entity @s[tag=leona.r,tag=can_remove] run tag @s remove do_not_clear
+
+        execute if entity @s[tag=leona.r,tag=!can_remove] run data modify entity @s transformation.scale set value [0.0,1000.0,0.0]
+        execute if entity @s[tag=leona.r,tag=!can_remove] run data modify entity @s start_interpolation set value -1
+        execute if entity @s[tag=leona.r,tag=!can_remove] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:10,Tags:["cd","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[tag=leona.r,tag=!can_remove] run ride @e[tag=cd,tag=temp,limit=1,sort=nearest,type=area_effect_cloud] mount @s
+        execute if entity @s[tag=leona.r,tag=!can_remove] run tag @s add can_remove
+    }
+
+    function r.damage {
+        execute if entity @s[team=red] run scoreboard players set @e[team=!red,type=!#unvalid,tag=leona.r.hit,tag=leona.r.temp_dmg,limit=1,sort=nearest] leona.passive 3
+        execute if entity @s[team=blue] run scoreboard players set @e[team=!blue,type=!#unvalid,tag=leona.r.hit,tag=leona.r.temp_dmg,limit=1,sort=nearest] leona.passive 3
+
+        execute if entity @s[team=red] run damage @e[tag=leona.r.hit,tag=leona.r.temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+        execute if entity @s[team=blue] run damage @e[tag=leona.r.hit,tag=leona.r.temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+
+        scoreboard players operation @s dmg_magic.deal = @s ability_power
+        scoreboard players operation @s dmg_magic.deal *= 80 integer
+        scoreboard players operation @s dmg_magic.deal /= 100 integer
+        scoreboard players add @s dmg_magic.deal 300
+
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=leona.r.hit,tag=has_health_bar,tag=leona.r.temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=leona.r.hit,tag=has_health_bar,tag=leona.r.temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=red] run tag @e[team=!red,tag=leona.r.hit,type=!#unvalid,tag=leona.r.temp_dmg,limit=1,sort=nearest] remove leona.r.temp_dmg
+
+        execute if entity @s[team=red] run execute if entity @e[tag=leona.r.hit,tag=leona.r.temp_dmg,type=!#unvalid,team=!red] run function lc:champions/leona/skills/r.damage
+
+        ## BLUE
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=leona.r.hit,tag=has_health_bar,tag=leona.r.temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=leona.r.hit,tag=has_health_bar,tag=leona.r.temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=blue] run tag @e[team=!blue,tag=leona.r.hit,type=!#unvalid,tag=leona.r.temp_dmg,limit=1,sort=nearest] remove leona.r.temp_dmg
+
+        execute if entity @s[team=blue] run execute if entity @e[tag=leona.r.hit,tag=leona.r.temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/leona/skills/r.damage
+    }
+
+    function r.particle {
+        ### Particle Image Function
+        ### Version: 1.0.4
+        ### Width: 20
+        ### Height: 20
+        ### ParticleType: dust
+
+        ### This file was generated by Kemo431's Particle-Converter.
+        ### Download Link: https://github.com/kemo14331/Particle-Converter
+        particle wax_on ^ ^ ^ 2 0 2 1 100 force @a
+
+        particle campfire_cosy_smoke ^2.5 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.5 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.5 ^0 ^0 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.5 ^0 ^0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.5 ^0 ^0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^-1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^0 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2.25 ^0 ^1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^-1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^0 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^2 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^0 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.75 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.5 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1.25 ^0 ^2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^1 ^0 ^2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.75 ^0 ^2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^-2.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.5 ^0 ^2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^-2.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0.25 ^0 ^2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^-2.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^0 ^0 ^2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^-2.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.25 ^0 ^2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^-2.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.5 ^0 ^2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-0.75 ^0 ^2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^-2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1 ^0 ^2.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^-1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.25 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.5 ^0 ^2 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^0 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-1.75 ^0 ^1.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^-1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^-1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^0 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2 ^0 ^1.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^-1.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^-1 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^-0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^-0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^-0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^0 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^0.25 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^0.5 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^0.75 0 0 0 0 1 force @a
+        particle campfire_cosy_smoke ^-2.25 ^0 ^1 0 0 0 0 1 force @a
+    }
+
+    function r.position {
+        execute if block ~ ~ ~ #like_air unless block ~ ~-1 ~ #like_air on origin if entity @s[team=red] run summon item_display ~ ~ ~ {interpolation_duration:10,brightness:{sky:15,block:15},transformation:{scale:[7.0f,1000.0f,7.0f],translation:[0.0f,20.0f,0.0f],right_rotation:[0.0f,0.0f,0.0f,1.0f],left_rotation:[0.0f,0.0f,0.0f,1.0f]},item_display:"head",item:{id:"ochre_froglight",count:1},Tags:["do_not_clear","lol.auto_clear","red","leona.r"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if block ~ ~ ~ #like_air unless block ~ ~-1 ~ #like_air on origin if entity @s[team=blue] run summon item_display ~ ~ ~ {interpolation_duration:10,brightness:{sky:15,block:15},transformation:{scale:[7.0f,1000.0f,7.0f],translation:[0.0f,20.0f,0.0f],right_rotation:[0.0f,0.0f,0.0f,1.0f],left_rotation:[0.0f,0.0f,0.0f,1.0f]},item_display:"head",item:{id:"ochre_froglight",count:1},Tags:["do_not_clear","lol.auto_clear","blue","leona.r"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+        execute if block ~ ~ ~ #like_air if block ~ ~-1 ~ #like_air positioned ~ ~-1 ~ run function lc:champions/leona/skills/r.position
+
+        execute unless block ~ ~ ~ #like_air positioned ~ ~1 ~ run function lc:champions/leona/skills/r.position
+    }
+
+    function r.spawn {
+        particle flash{color:[1.0f,1.0f,1.0f,1.0f]} ~ ~ ~ 0 0 0 1 10 force
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] run function lc:champions/leona/skills/r.particle
+            execute if entity @s[tag=<%team%>] run function lc:champions/leona/skills/w.particle
+            execute if entity @s[tag=<%team%>] positioned ~-3.5 ~-1 ~-3.5 run tag @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,dx=6,dz=6,dy=100] add leona.r.hit
+            execute if entity @s[tag=<%team%>] run scoreboard players set @e[tag=leona.r.hit,team=!<%team%>] fx.sight 60
+            execute if entity @s[tag=<%team%>] positioned ~-1.5 ~-1 ~-1.5 run scoreboard players set @e[tag=leona.r.hit,team=!<%team%>,dx=2,dz=2,dy=100] cc.stun 40
+            execute if entity @s[tag=<%team%>] run effect give @e[tag=leona.r.hit,team=!<%team%>] slowness 2 5 false
+            execute if entity @s[tag=<%team%>] run tag @e[tag=leona.r.hit,team=!<%team%>] add leona.r.temp_dmg
+            execute if entity @s[tag=<%team%>] if entity @e[tag=leona.r.hit,team=!<%team%>] as @p[tag=leona,team=<%team%>] run function lc:champions/leona/skills/r.damage
+            execute if entity @s[tag=<%team%>] run tag @e[tag=leona.r.hit,team=!<%team%>] remove leona.r.hit
+        }
+    }
+
+    function w.damage {
+        execute if entity @s[team=red] run scoreboard players set @e[team=!red,type=!#unvalid,tag=leona.w.hit,tag=temp_dmg,limit=1,sort=nearest] leona.passive 3
+        execute if entity @s[team=blue] run scoreboard players set @e[team=!blue,type=!#unvalid,tag=leona.w.hit,tag=temp_dmg,limit=1,sort=nearest] leona.passive 3
+
+        execute if entity @s[team=red] run damage @e[tag=leona.w.hit,tag=temp_dmg,type=!#unvalid,team=!red,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+        execute if entity @s[team=blue] run damage @e[tag=leona.w.hit,tag=temp_dmg,type=!#unvalid,team=!blue,limit=1,sort=nearest] 3 lc:core/dmg_physical by @s
+
+        scoreboard players operation @s dmg_magic.deal = @s ability_power
+        scoreboard players operation @s dmg_magic.deal *= 40 integer
+        scoreboard players operation @s dmg_magic.deal /= 100 integer
+        scoreboard players add @s dmg_magic.deal 195
+
+        function lc:champion/dmg/calc.debuff
+
+        ## RED
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=leona.w.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=red] run scoreboard players operation @e[team=!red,tag=leona.w.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=red] run tag @e[team=!red,tag=leona.w.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+        execute if entity @s[team=red] run execute if entity @e[tag=leona.w.hit,tag=temp_dmg,type=!#unvalid,team=!red] run function lc:champions/leona/skills/w.damage
+
+        ## BLUE
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=leona.w.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] magic_resist.reduced = @s magic_resist.pen
+        execute if entity @s[team=blue] run scoreboard players operation @e[team=!blue,tag=leona.w.hit,tag=has_health_bar,tag=temp_dmg,limit=1,sort=nearest] dmg_magic.raw = @s dmg_magic.deal
+
+        execute if entity @s[team=blue] run tag @e[team=!blue,tag=leona.w.hit,type=!#unvalid,tag=temp_dmg,limit=1,sort=nearest] remove temp_dmg
+
+        execute if entity @s[team=blue] run execute if entity @e[tag=leona.w.hit,tag=temp_dmg,type=!#unvalid,team=!blue] run function lc:champions/leona/skills/w.damage
+    }
+
+    function w.end {
+        execute if entity @s[tag=red,tag=!no_dmg] as @p[tag=leona,team=red] at @s rotated ~ 0 positioned ~ ~0.2 ~ run function lc:champions/leona/skills/w.particle
+
+        execute if entity @s[tag=red,tag=!no_dmg] at @p[tag=leona,team=red] run tag @e[team=!red,distance=..3,type=!#unvalid,tag=!unvalid] add leona.w.hit
+        execute if entity @s[tag=red] run tag @e[team=!red,tag=leona.w.hit] add temp_dmg
+        execute if entity @s[tag=red] if entity @e[team=!red,tag=leona.w.hit] run tag @p[tag=leona,team=red] add update.shield.leona
+        execute if entity @s[tag=red] if entity @e[team=!red,tag=leona.w.hit] run summon item_display ~ ~ ~ {Tags:["no_dmg","red","leona.w","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:60,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[tag=red] if entity @e[team=!red,tag=leona.w.hit] as @p[tag=leona,team=red] run function lc:champions/leona/skills/w.damage
+
+        execute if entity @s[tag=red] unless entity @e[team=!red,tag=leona.w.hit] run scoreboard players operation @p[tag=leona,team=red] armor -= red.leona.w.armor temp
+        execute if entity @s[tag=red] unless entity @e[team=!red,tag=leona.w.hit] run scoreboard players operation @p[tag=leona,team=red] magic_resist -= red.leona.w.mr temp
+        execute if entity @s[tag=red] unless entity @e[team=!red,tag=leona.w.hit] run tag @p[tag=leona,team=red] remove leona.w
+
+        execute if entity @s[tag=red] run tag @e[team=!red,tag=leona.w.hit] remove leona.w.hit
+
+        execute if entity @s[tag=blue,tag=!no_dmg] as @p[tag=leona,team=blue] at @s rotated ~ 0 positioned ~ ~0.2 ~ run function lc:champions/leona/skills/w.particle
+
+        execute if entity @s[tag=blue,tag=!no_dmg] at @p[tag=leona,team=blue] run tag @e[team=!blue,distance=..3,type=!#unvalid,tag=!unvalid] add leona.w.hit
+        execute if entity @s[tag=blue] run tag @e[team=!blue,tag=leona.w.hit] add temp_dmg
+        execute if entity @s[tag=blue] if entity @e[team=!blue,tag=leona.w.hit] run tag @p[tag=leona,team=blue] add update.shield.leona
+        execute if entity @s[tag=blue] if entity @e[team=!blue,tag=leona.w.hit] run summon item_display ~ ~ ~ {Tags:["no_dmg","blue","leona.w","lol.auto_clear"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:60,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+        execute if entity @s[tag=blue] if entity @e[team=!blue,tag=leona.w.hit] as @p[tag=leona,team=blue] run function lc:champions/leona/skills/w.damage
+
+        execute if entity @s[tag=blue] unless entity @e[team=!blue,tag=leona.w.hit] run scoreboard players operation @p[tag=leona,team=blue] armor -= blue.leona.w.armor temp
+        execute if entity @s[tag=blue] unless entity @e[team=!blue,tag=leona.w.hit] run scoreboard players operation @p[tag=leona,team=blue] magic_resist -= blue.leona.w.mr temp
+        execute if entity @s[tag=blue] unless entity @e[team=!blue,tag=leona.w.hit] run tag @p[tag=leona,team=blue] remove leona.w
+
+        execute if entity @s[tag=blue] run tag @e[team=!blue,tag=leona.w.hit] remove leona.w.hit
+    }
+
+    function w.particle {
+        execute if entity @s[tag=!leona.w.fx] run summon item_display ~ ~ ~ {start_interpolation:0,interpolation_duration:3,brightness:{sky:15,block:15},transformation:{scale:[0.0f,0.0f,0.0f],translation:[0.0f,0.0f,0.0f],right_rotation:[0.0f,0.0f,0.0f,1.0f],left_rotation:[0.0f,0.0f,0.0f,1.0f]},item_display:"ground",item:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[1000201f]}}},Tags:["do_not_clear","leona.w.fx","lol.auto_clear","temp"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:1,Tags:["cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+
+        execute if entity @s[tag=leona.w.fx,tag=can_remove] run tag @s remove do_not_clear
+
+        execute if entity @s[tag=leona.w.fx,tag=!can_remove] run data modify entity @s transformation.scale set value [3.0,3.0,3.0]
+        execute if entity @s[tag=leona.w.fx,tag=!can_remove] run data modify entity @s start_interpolation set value -1
+        execute if entity @s[tag=leona.w.fx,tag=!can_remove] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:10,Tags:["cd","temp"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[tag=leona.w.fx,tag=!can_remove] run ride @e[tag=cd,tag=temp,limit=1,sort=nearest,type=area_effect_cloud] mount @s
+        execute if entity @s[tag=leona.w.fx,tag=!can_remove] run tag @s add can_remove
+    }
+
+    function w.reduction {
+        scoreboard players operation leona.w.reduction temp = @s dmg_physical.taken
+        scoreboard players operation leona.w.reduction temp /= 2 integer
+        execute if score leona.w.reduction temp matches 24.. run scoreboard players remove @s dmg_physical.taken 24
+
+        scoreboard players operation leona.w.reduction temp = @s dmg_magic.taken
+        scoreboard players operation leona.w.reduction temp /= 2 integer
+        execute if score leona.w.reduction temp matches 24.. run scoreboard players remove @s dmg_magic.taken 24
+    }
+}

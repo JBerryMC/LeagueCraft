@@ -1,0 +1,218 @@
+# lc:core/lang/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function eng.choose {
+    scoreboard players set .world lang 0
+    reload
+}
+
+function eng.load {
+    tellraw @a {text:"\n\n",color:"gold"}
+    tellraw @a {text:"LeagueCraft",color:"gold",bold:true}
+    tellraw @a {text:"Version: 6.1.2 | by Chè Rí Minecraft\n",color:"gold"}
+    tellraw @a [{text:"If you are an ADMIN click ",color:"yellow"},{text:"[ THIS ]",color:"yellow",bold:true,click_event:{action:"run_command",command:"/tag @s add admin"}}]
+    tellraw @a {text:"\n",color:"gold"}
+}
+
+function eng.settings {
+    give @s written_book[minecraft:written_book_content={title:Settings,author:JBerry367,pages:[{raw:["",{text:"League of Legends Datapack v5.1.1",bold:true,color:"dark_gray"},{text:"\n"},{text:"Made by @JBerry367",color:"dark_green"},{text:"\n"},{text:"YouTube: Chè Rí",bold:true,underlined:true,color:"dark_green",click_event:{action:"open_url",url:"https://www.youtube.com/jberry367"},hover_event:{action:"show_text",value:"Visit my YouTube channel!"}},{text:"\n\n"},{text:"General:",bold:true,color:"dark_gray"},{text:"\n"},{text:"[Reload]",color:"blue",click_event:{action:"run_command",command:"/reload"}},{text:" "},{text:"[Uninstall]",color:"red",click_event:{action:"run_command",command:"/function lc:core/uninstall"}},{text:"\n\n"},{text:"Language:",bold:true,color:"dark_gray"},{text:"\n"},{text:"►[English]",color:"blue"},{text:"\n"},{text:"►",color:"gray"},{text:"[Tiếng Việt]",color:"gray",click_event:{action:"run_command",command:"/function lc:core/lang/vie.choose"}}]},{raw:["",{text:"Spawn",bold:true,color:"dark_gray"},{text:"\n"},{text:"[Red Dummy]",color:"red",click_event:{action:"run_command",command:"/trigger st.dummy set 1"}},{text:"\n"},{text:"[Blue Dummy]",color:"blue",click_event:{action:"run_command",command:"/trigger st.dummy set 2"}},{text:"\n"},{text:"[Clear]",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.dummy set 3"}},{text:"\n\n"},{text:"Skill",bold:true},{text:"\n"},{text:"[Reset]",color:"dark_red",click_event:{action:"run_command",command:"/trigger st.set set 1"}},{text:"\n"},{text:"[Infinite Mana]",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.set set 2"}},{text:"\n"},{text:"[No Cooldown]",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.set set 3"}},{text:"\n "}]},{raw:["",{text:"Team Select",bold:true,color:"dark_gray"},{text:"\n"},{text:"[Red]",color:"red",click_event:{action:"run_command",command:"/trigger st.team set 1"}},{text:" ",color:"dark_gray"},{text:"[Blue]",color:"blue",click_event:{action:"run_command",command:"/trigger st.team set 2"}},{text:"\n\n"},{text:"Champion Select",bold:true,color:"dark_gray"},{text:"\n"},{text:"► [Reset]",color:"dark_red",click_event:{action:"run_command",command:"/trigger st.champ set -1"}},{text:"\n"},{text:"► Ashe",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 5"}},{text:"\n"},{text:"► Ezreal",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 7"}},{text:"\n"},{text:"► Jhin",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 8"}},{text:"\n"},{text:"► Lee Sin",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 2"}},{text:"\n"},{text:"► Vayne",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 6"}},{text:"\n"},{text:"► Yasuo",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 1"}},{text:"\n"},{text:"► Yone",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 4"}},{text:"\n"},{text:"► Zed",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 3"}}]}]},minecraft:custom_data={settings:1}]
+}
+
+function vie.choose {
+    scoreboard players set .world lang 1
+    reload
+}
+
+function vie.load {
+    tellraw @a {text:"\n\n",color:"gold"}
+    tellraw @a {text:"LeagueCraft",color:"gold",bold:true}
+    tellraw @a {text:"Version: 6.0.2 | by Chè Rí Minecraft\n",color:"gold"}
+    tellraw @a [{text:"If you are an ADMIN click ",color:"yellow"},{text:"[ THIS ]",color:"yellow",bold:true,click_event:{action:"run_command",command:"/tag @s add admin"}}]
+    tellraw @a {text:"\n",color:"gold"}
+}
+
+function vie.settings {
+    give @s written_book[minecraft:written_book_content={title:"Cài Đặt",author:JBerry367,pages:[{raw:["",{text:"Datapack Liên Minh Huyền Thoại v5.1.1",bold:true,color:"dark_gray"},{text:"\n"},{text:"Tác Giả @JBerry367",color:"dark_green"},{text:"\n"},{text:"YouTube: Chè Rí",bold:true,underlined:true,color:"dark_green",click_event:{action:"open_url",url:"https://www.youtube.com/jberry367"},hover_event:{action:"show_text",value:"Xem kênh YouTube của mình!"}},{text:"\n\n"},{text:"Chung:",bold:true,color:"dark_gray"},{text:"\n"},{text:"[Nạp Lại]",color:"blue",click_event:{action:"run_command",command:"/reload"}},{text:" "},{text:"[Gỡ Cài Đặt]",color:"red",click_event:{action:"run_command",command:"/function lc:core/uninstall"}},{text:"\n\n"},{text:"Ng",bold:true},{text:"ôn Ngữ",bold:true,color:"dark_gray"},{text:":",color:"dark_gray"},{text:"\n"},{text:"►[English]",color:"gray",click_event:{action:"run_command",command:"/function lc:core/lang/eng.choose"}},{text:"\n"},{text:"►[Tiếng Việt]",color:"blue"}]},{raw:["",{text:"Triệu hồi",bold:true,color:"dark_gray"},{text:"\n"},{text:"[Hình nộm Đỏ]",color:"red",click_event:{action:"run_command",command:"/trigger st.dummy set 1"}},{text:"\n"},{text:"[Hình nộm Xanh]",color:"blue",click_event:{action:"run_command",command:"/trigger st.dummy set 2"}},{text:"\n"},{text:"[Dọn]",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.dummy set 3"}},{text:"\n\n"},{text:"Chiêu thức",bold:true,color:"dark_gray"},{text:"\n"},{text:"[Làm mới]",color:"dark_red",click_event:{action:"run_command",command:"/trigger st.set set 1"}},{text:"\n"},{text:"[Tự nạp năng lượng]",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.set set 2"}},{text:"\n",color:"dark_aqua"},{text:"[Không hồi chiêu]",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.set set 3"}}]},{raw:["",{text:"Chọn Đội",bold:true,color:"dark_gray"},{text:"\n"},{text:"[Đỏ]",color:"red",click_event:{action:"run_command",command:"/trigger st.team set 1"}},{text:" ",color:"dark_gray"},{text:"[Xanh]",color:"blue",click_event:{action:"run_command",command:"/trigger st.team set 2"}},{text:"\n\n"},{text:"Chọn Tướng",bold:true,color:"dark_gray"},{text:"\n"},{text:"►[Bỏ Chọn]",color:"dark_red",click_event:{action:"run_command",command:"/trigger st.champ set -1"}},{text:"\n"},{text:"► Ashe",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 5"}},{text:"\n"},{text:"► Ezreal",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 7"}},{text:"\n"},{text:"► Jhin",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 8"}},{text:"\n"},{text:"► Lee Sin",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 2"}},{text:"\n"},{text:"► Vayne",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 6"}},{text:"\n"},{text:"► Yasuo",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 1"}},{text:"\n"},{text:"► Yone",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 3"}},{text:"\n"},{text:"► Zed",color:"dark_aqua",click_event:{action:"run_command",command:"/trigger st.champ set 3"}}]}]},minecraft:custom_data={settings:1}]
+}
+
+dir champion {
+    function eng.aatrox {
+        title @s reset
+        title @s title {text:"Aatrox",color:"dark_red"}
+        title @s subtitle {text:"The Darkin Blade",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Aatrox - The Darkin Blade\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Aatrox - The Darkin Blade\n",color:"gold"}]
+    }
+
+    function eng.annie {
+        title @s reset
+        title @s title {text:"Annie",color:"aqua"}
+        title @s subtitle {text:"The Dark Child",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Annie - The Dark Child\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Annie - The Dark Child\n",color:"gold"}]
+    }
+
+    function eng.ashe {
+        title @s reset
+        title @s title {text:"Ashe",color:"aqua"}
+        title @s subtitle {text:"The Frost Archer",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Ashe - The Frost Archer\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Ashe - The Frost Archer\n",color:"gold"}]
+    }
+
+    function eng.ezreal {
+        title @s reset
+        title @s title {text:"Ezreal",color:"yellow"}
+        title @s subtitle {text:"The Prodigal Explorer",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Ezreal - The Prodigal Explorer\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Ezreal - The Prodigal Explorer\n",color:"gold"}]
+    }
+
+    function eng.garen {
+        title @s reset
+        title @s title {text:"Garen",color:"gold"}
+        title @s subtitle {text:"The Might of Demacia",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Garen - The Might of Demacia\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Garen - The Might of Demacia\n",color:"gold"}]
+    }
+
+    function eng.jhin {
+        title @s reset
+        title @s title {text:"Jhin",color:"#710BD8"}
+        title @s subtitle {text:"The Virtuoso",italic:false}
+        tellraw @a ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Jhin - The Virtuoso\n",color:"gold"}]
+    }
+
+    function eng.leesin {
+        title @s reset
+        title @s title {text:"Lee Sin",color:"#FF8C00"}
+        title @s subtitle {text:"The Blind Monk",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Lee Sin - The Blind Monk\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Lee Sin - The Blind Monk\n",color:"gold"}]
+    }
+
+    function eng.leona {
+        title @s reset
+        title @s title {text:"Leona",color:"gold"}
+        title @s subtitle {text:"The Radiant Dawn",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Leona - The Radiant Dawn\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Leona - The Radiant Dawn\n",color:"gold"}]
+    }
+
+    function eng.lux {
+        title @s reset
+        title @s title {text:"Lux",color:"yellow"}
+        title @s subtitle {text:"The Lady of Luminosity",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Lux - The Lady of Luminosity\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Lux - The Lady of Luminosity\n",color:"gold"}]
+    }
+
+    function eng.malphite {
+        title @s reset
+        title @s title {text:"Malphite",color:"#FF8C00"}
+        title @s subtitle {text:"Shard of the Monolith",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Malphite - Shard of the Monolith\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Malphite - Shard of the Monolith\n",color:"gold"}]
+    }
+
+    function eng.soraka {
+        title @s reset
+        title @s title {text:"Soraka",color:"light_purple"}
+        title @s subtitle {text:"The Starchild",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Soraka - The Starchild\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Soraka - The Starchild\n",color:"gold"}]
+    }
+
+    function eng.vayne {
+        title @s reset
+        title @s title {text:"Vayne",color:"dark_red"}
+        title @s subtitle {text:"The Night Hunter",italic:false}
+        tellraw @a ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Vayne - The Night Hunter\n",color:"gold"}]
+    }
+
+    function eng.yasuo {
+        title @s reset
+        title @s title {text:"Yasuo",color:"blue"}
+        title @s subtitle {text:"The Unforgiven",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Yasuo - The Unforgiven\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Yasuo - The Unforgiven\n",color:"gold"}]
+    }
+
+    function eng.yone {
+        title @s reset
+        title @s title {text:"Yone",color:"red"}
+        title @s subtitle {text:"The Unforgotten",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Yone - The Unforgotten\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Yone - The Unforgotten\n",color:"gold"}]
+    }
+
+    function eng.zed {
+        title @s reset
+        title @s title {text:"Zed",color:"dark_red"}
+        title @s subtitle {text:"The Master of Shadows",italic:false}
+        execute if entity @s[team=red] run tellraw @a[team=red] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Zed - The Master of Shadows\n",color:"gold"}]
+        execute if entity @s[team=blue] run tellraw @a[team=blue] ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Zed - The Master of Shadows\n",color:"gold"}]
+    }
+
+    function vie.aatrox {
+        title @s reset
+        title @s title {text:"Aatrox",color:"dark_red"}
+        title @s subtitle {text:"The Darkin Blade",italic:false}
+        tellraw @a ["\n",{selector:"@s",color:"yellow"},{text:" has picked the champion: Aatrox - The Darkin Blade\n",color:"gold"}]
+    }
+
+    function vie.ashe {
+        title @s reset
+        title @s title {text:"Ashe",color:"aqua"}
+        title @s subtitle {text:"Cung Băng",italic:false}
+        tellraw @a ["\n",{selector:"@s",color:"yellow"},{text:" đã chọn vị tướng: Ashe - Cung Băng\n",color:"gold"}]
+    }
+
+    function vie.ezreal {
+        title @s reset
+        title @s title {text:"Ezreal",color:"yellow"}
+        title @s subtitle {text:"Nhà Thám Hiểm",italic:false}
+        tellraw @a ["\n",{selector:"@s",color:"yellow"},{text:" đã chọn vị tướng: Ezreal - Nhà Thám Hiểm\n",color:"gold"}]
+    }
+
+    function vie.jhin {
+        title @s reset
+        title @s title {text:"Jhin",color:"#710BD8"}
+        title @s subtitle {text:"Nghệ Sĩ Tử Thần",italic:false}
+        tellraw @a ["\n",{selector:"@s",color:"yellow"},{text:" đã chọn vị tướng: Jhin - Nghệ Sĩ Tử Thần\n",color:"gold"}]
+    }
+
+    function vie.leesin {
+        title @s reset
+        title @s title {text:"Lee Sin",color:"#FF8C00"}
+        title @s subtitle {text:"Thầy Tu Mù",italic:false}
+        tellraw @a ["\n",{selector:"@s",color:"yellow"},{text:" đã chọn vị tướng: Lee Sin - Thầy Tu Mù\n",color:"gold"}]
+    }
+
+    function vie.vayne {
+        title @s reset
+        title @s title {text:"Vayne",color:"dark_red"}
+        title @s subtitle {text:"Thợ Săn Bóng Đêm",italic:false}
+        tellraw @a ["\n",{selector:"@s",color:"yellow"},{text:" đã chọn vị tướng: Vayne - Thợ Săn Bóng Đêm\n",color:"gold"}]
+    }
+
+    function vie.yasuo {
+        title @s reset
+        title @s title {text:"Yasuo",color:"blue"}
+        title @s subtitle {text:"Kẻ Bất Dung Thứ",italic:false}
+        tellraw @a ["\n",{selector:"@s",color:"yellow"},{text:" đã chọn vị tướng: Yasuo - Kẻ Bất Dung Thứ\n",color:"gold"}]
+    }
+
+    function vie.yone {
+        title @s reset
+        title @s title {text:"Yone",color:"red"}
+        title @s subtitle {text:"Kẻ Trở Về Từ Cõi Chết",italic:false}
+        tellraw @a ["\n",{selector:"@s",color:"yellow"},{text:" đã chọn vị tướng: Yone - Kẻ Trở Về Từ Cõi Chết\n",color:"gold"}]
+    }
+
+    function vie.zed {
+        title @s reset
+        title @s title {text:"Zed",color:"dark_red"}
+        title @s subtitle {text:"Chúa Tể Bóng Tối",italic:false}
+        tellraw @a ["\n",{selector:"@s",color:"yellow"},{text:" đã chọn vị tướng: Zed - Chúa Tể Bóng Tối\n",color:"gold"}]
+    }
+}

@@ -1,0 +1,253 @@
+# lc:champion/mana/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function macro {
+    $execute if score @s mana.percentage matches 0 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.0
+    $execute if score @s mana.percentage matches 1 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.1
+    $execute if score @s mana.percentage matches 2 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.2
+    $execute if score @s mana.percentage matches 3 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.3
+    $execute if score @s mana.percentage matches 4 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.4
+    $execute if score @s mana.percentage matches 5 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.5
+    $execute if score @s mana.percentage matches 6 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.6
+    $execute if score @s mana.percentage matches 7 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.7
+    $execute if score @s mana.percentage matches 8 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.8
+    $execute if score @s mana.percentage matches 9 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.9
+
+    $execute if score @s mana.percentage matches 10 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.10
+    $execute if score @s mana.percentage matches 11 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.11
+    $execute if score @s mana.percentage matches 12 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.12
+    $execute if score @s mana.percentage matches 13 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.13
+    $execute if score @s mana.percentage matches 14 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.14
+    $execute if score @s mana.percentage matches 15 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.15
+    $execute if score @s mana.percentage matches 16 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.16
+    $execute if score @s mana.percentage matches 17 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.17
+    $execute if score @s mana.percentage matches 18 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.18
+    $execute if score @s mana.percentage matches 19 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.19
+
+    $execute if score @s mana.percentage matches 20 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.20
+    $execute if score @s mana.percentage matches 21 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.21
+    $execute if score @s mana.percentage matches 22 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.22
+    $execute if score @s mana.percentage matches 23 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.23
+    $execute if score @s mana.percentage matches 24 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.24
+    $execute if score @s mana.percentage matches 25 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.25
+    $execute if score @s mana.percentage matches 26 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.26
+    $execute if score @s mana.percentage matches 27 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.27
+    $execute if score @s mana.percentage matches 28 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.28
+    $execute if score @s mana.percentage matches 29 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.29
+
+    $execute if score @s mana.percentage matches 30 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.30
+    $execute if score @s mana.percentage matches 31 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.31
+    $execute if score @s mana.percentage matches 32 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.32
+    $execute if score @s mana.percentage matches 33 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.33
+    $execute if score @s mana.percentage matches 34 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.34
+    $execute if score @s mana.percentage matches 35 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.35
+    $execute if score @s mana.percentage matches 36 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.36
+    $execute if score @s mana.percentage matches 37 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.37
+    $execute if score @s mana.percentage matches 38 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.38
+    $execute if score @s mana.percentage matches 39 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.39
+
+    $execute if score @s mana.percentage matches 40 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.40
+    $execute if score @s mana.percentage matches 41 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.41
+    $execute if score @s mana.percentage matches 42 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.42
+    $execute if score @s mana.percentage matches 43 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.43
+    $execute if score @s mana.percentage matches 44 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.44
+    $execute if score @s mana.percentage matches 45 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.45
+    $execute if score @s mana.percentage matches 46 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.46
+    $execute if score @s mana.percentage matches 47 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.47
+    $execute if score @s mana.percentage matches 48 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.48
+    $execute if score @s mana.percentage matches 49 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.49
+
+    $execute if score @s mana.percentage matches 50 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.50
+    $execute if score @s mana.percentage matches 51 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.51
+    $execute if score @s mana.percentage matches 52 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.52
+    $execute if score @s mana.percentage matches 53 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.53
+    $execute if score @s mana.percentage matches 54 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.54
+    $execute if score @s mana.percentage matches 55 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.55
+    $execute if score @s mana.percentage matches 56 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.56
+    $execute if score @s mana.percentage matches 57 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.57
+    $execute if score @s mana.percentage matches 58 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.58
+    $execute if score @s mana.percentage matches 59 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.59
+
+    $execute if score @s mana.percentage matches 60 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.60
+    $execute if score @s mana.percentage matches 61 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.61
+    $execute if score @s mana.percentage matches 62 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.62
+    $execute if score @s mana.percentage matches 63 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.63
+    $execute if score @s mana.percentage matches 64 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.64
+    $execute if score @s mana.percentage matches 65 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.65
+    $execute if score @s mana.percentage matches 66 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.66
+    $execute if score @s mana.percentage matches 67 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.67
+    $execute if score @s mana.percentage matches 68 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.68
+    $execute if score @s mana.percentage matches 69 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.69
+
+    $execute if score @s mana.percentage matches 70 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.70
+    $execute if score @s mana.percentage matches 71 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.71
+    $execute if score @s mana.percentage matches 72 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.72
+    $execute if score @s mana.percentage matches 73 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.73
+    $execute if score @s mana.percentage matches 74 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.74
+    $execute if score @s mana.percentage matches 75 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.75
+    $execute if score @s mana.percentage matches 76 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.76
+    $execute if score @s mana.percentage matches 77 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.77
+    $execute if score @s mana.percentage matches 78 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.78
+    $execute if score @s mana.percentage matches 79 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.79
+
+    $execute if score @s mana.percentage matches 80 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.80
+    $execute if score @s mana.percentage matches 81 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.81
+    $execute if score @s mana.percentage matches 82 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.82
+    $execute if score @s mana.percentage matches 83 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.83
+    $execute if score @s mana.percentage matches 84 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.84
+    $execute if score @s mana.percentage matches 85 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.85
+    $execute if score @s mana.percentage matches 86 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.86
+    $execute if score @s mana.percentage matches 87 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.87
+    $execute if score @s mana.percentage matches 88 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.88
+    $execute if score @s mana.percentage matches 89 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.89
+
+    $execute if score @s mana.percentage matches 90 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.90
+    $execute if score @s mana.percentage matches 91 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.91
+    $execute if score @s mana.percentage matches 92 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.92
+    $execute if score @s mana.percentage matches 93 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.93
+    $execute if score @s mana.percentage matches 94 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.94
+    $execute if score @s mana.percentage matches 95 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.95
+    $execute if score @s mana.percentage matches 96 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.96
+    $execute if score @s mana.percentage matches 97 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.97
+    $execute if score @s mana.percentage matches 98 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.98
+    $execute if score @s mana.percentage matches 99 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.99
+
+    $execute if score @s mana.percentage matches 100 run data modify storage lol:main mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.100
+}
+
+function macro_dummy {
+    execute store result score @s mana.percentage on passengers as @s[tag=bar_owner] on origin run scoreboard players get @s mana.percentage
+
+    execute if score @s mana.percentage matches 0 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.0",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 1 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.1",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 2 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.2",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 3 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.3",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 4 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.4",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 5 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.5",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 6 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.6",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 7 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.7",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 8 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.8",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 9 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.9",interpret:true,font:"minecraft:mana_champ"}
+
+    execute if score @s mana.percentage matches 10 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.10",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 11 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.11",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 12 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.12",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 13 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.13",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 14 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.14",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 15 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.15",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 16 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.16",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 17 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.17",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 18 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.18",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 19 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.19",interpret:true,font:"minecraft:mana_champ"}
+
+    execute if score @s mana.percentage matches 20 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.20",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 21 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.21",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 22 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.22",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 23 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.23",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 24 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.24",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 25 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.25",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 26 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.26",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 27 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.27",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 28 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.28",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 29 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.29",interpret:true,font:"minecraft:mana_champ"}
+
+    execute if score @s mana.percentage matches 30 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.30",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 31 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.31",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 32 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.32",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 33 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.33",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 34 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.34",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 35 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.35",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 36 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.36",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 37 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.37",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 38 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.38",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 39 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.39",interpret:true,font:"minecraft:mana_champ"}
+
+    execute if score @s mana.percentage matches 40 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.40",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 41 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.41",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 42 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.42",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 43 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.43",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 44 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.44",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 45 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.45",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 46 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.46",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 47 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.47",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 48 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.48",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 49 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.49",interpret:true,font:"minecraft:mana_champ"}
+
+    execute if score @s mana.percentage matches 50 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.50",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 51 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.51",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 52 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.52",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 53 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.53",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 54 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.54",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 55 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.55",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 56 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.56",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 57 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.57",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 58 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.58",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 59 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.59",interpret:true,font:"minecraft:mana_champ"}
+
+    execute if score @s mana.percentage matches 60 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.60",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 61 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.61",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 62 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.62",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 63 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.63",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 64 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.64",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 65 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.65",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 66 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.66",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 67 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.67",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 68 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.68",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 69 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.69",interpret:true,font:"minecraft:mana_champ"}
+
+    execute if score @s mana.percentage matches 70 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.70",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 71 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.71",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 72 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.72",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 73 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.73",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 74 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.74",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 75 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.75",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 76 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.76",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 77 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.77",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 78 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.78",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 79 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.79",interpret:true,font:"minecraft:mana_champ"}
+
+    execute if score @s mana.percentage matches 80 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.80",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 81 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.81",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 82 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.82",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 83 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.83",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 84 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.84",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 85 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.85",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 86 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.86",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 87 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.87",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 88 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.88",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 89 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.89",interpret:true,font:"minecraft:mana_champ"}
+
+    execute if score @s mana.percentage matches 90 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.90",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 91 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.91",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 92 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.92",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 93 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.93",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 94 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.94",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 95 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.95",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 96 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.96",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 97 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.97",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 98 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.98",interpret:true,font:"minecraft:mana_champ"}
+    execute if score @s mana.percentage matches 99 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.99",interpret:true,font:"minecraft:mana_champ"}
+
+    execute if score @s mana.percentage matches 100 on passengers as @s[tag=mana] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.100",interpret:true,font:"minecraft:mana_champ"}
+}
+
+function percentage {
+    scoreboard players operation temp mana = @s mana
+    scoreboard players operation temp mana *= 100 integer
+
+    scoreboard players operation temp mana /= @s mana.max
+    scoreboard players operation @s mana.percentage = temp mana
+
+    execute if score @s mana = @s mana.max run scoreboard players set @s mana.percentage 100
+    execute if score @s mana.percentage matches 0 if score @s mana matches 1.. run scoreboard players set @s mana.percentage 1
+    execute if score @s mana matches 0 run scoreboard players set @s mana.percentage 0
+    execute unless score @s mana.percentage = @s mana.percentage_old run function lc:champion/mana/update
+}
+
+function update {
+    execute as @s[type=player] run function lc:champion/mana/macro with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+    tag @s add update.bar.mana
+
+    execute as @s[type=!player] run function lc:champion/mana/macro_dummy
+
+    scoreboard players operation @s mana.percentage_old = @s mana.percentage
+}

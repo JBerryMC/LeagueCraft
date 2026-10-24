@@ -1,0 +1,109 @@
+# lc:game/queue/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function join {
+    scoreboard players set @s use_button 0
+    clear @s structure_void
+    effect give @s invisibility infinite 0 true
+    tp @s 0 210 200 180 0
+
+    playsound music.queue master @s 0 0 0 1 1 1
+    playsound sfx.queue.join master @a 0 0 0 1 1 1
+
+    execute unless entity @a[tag=is_in_queue] run summon item_display 0 210 200 {teleport_duration:1,Tags:["map_tour"]}
+    execute unless entity @a[tag=is_in_queue] run scoreboard players set _inqueue game 1
+    execute unless entity @a[tag=is_in_queue] run scoreboard players set waittime queue 1500
+    execute unless entity @a[tag=is_in_queue] run bossbar set queue max 1500
+    execute unless entity @a[tag=is_in_queue] run bossbar set queue visible true
+
+    tag @s add is_in_queue
+
+    execute if score @s queue matches 0 unless entity @a[tag=is_in_queue,scores={queue=1}] run function lc:menu/queue/team.1/slot.1
+    execute if score @s queue matches 0 unless entity @a[tag=is_in_queue,scores={queue=2}] run function lc:menu/queue/team.1/slot.2
+    execute if score @s queue matches 0 unless entity @a[tag=is_in_queue,scores={queue=3}] run function lc:menu/queue/team.1/slot.3
+    execute if score @s queue matches 0 unless entity @a[tag=is_in_queue,scores={queue=4}] run function lc:menu/queue/team.1/slot.4
+    execute if score @s queue matches 0 unless entity @a[tag=is_in_queue,scores={queue=5}] run function lc:menu/queue/team.1/slot.5
+
+    execute if score @s queue matches 0 unless entity @a[tag=is_in_queue,scores={queue=6}] run function lc:menu/queue/team.2/slot.1
+    execute if score @s queue matches 0 unless entity @a[tag=is_in_queue,scores={queue=7}] run function lc:menu/queue/team.2/slot.2
+    execute if score @s queue matches 0 unless entity @a[tag=is_in_queue,scores={queue=8}] run function lc:menu/queue/team.2/slot.3
+    execute if score @s queue matches 0 unless entity @a[tag=is_in_queue,scores={queue=9}] run function lc:menu/queue/team.2/slot.4
+    execute if score @s queue matches 0 unless entity @a[tag=is_in_queue,scores={queue=10}] run function lc:menu/queue/team.2/slot.5
+
+    scoreboard players set @s settings.page -1
+    tag @s add see_settings
+    function lc:menu/reset
+
+    title @s times 0 10 20
+    title @s title {text:"B",font:"minecraft:lol"}
+
+    scoreboard players add players queue 1
+    tellraw @a [{selector:"@s",color:"aqua",bold:true},{text:" has joined the queue. "},{text:"("},{score:{name:"players",objective:"queue"}},{text:"/"},{score:{name:"max",objective:"queue"}},{text:")"}]
+}
+
+function leave {
+    tp @s 0 187 0 -90 0
+    scoreboard players set @s use_button 0
+    scoreboard players set @s queue 0
+    effect clear @s invisibility
+
+    stopsound @s master music.queue
+    playsound sfx.queue.leave master @a 0 0 0 1 1 1
+
+    team leave @s
+    tag @s remove see_settings
+    clear @s structure_void
+
+    tag @s remove is_in_queue
+    execute unless entity @a[tag=is_in_queue] run kill @e[tag=map_tour,type=item_display]
+    execute unless entity @a[tag=is_in_queue] run scoreboard players set waittime queue -1
+    execute unless entity @a[tag=is_in_queue] run scoreboard players set _inqueue game 0
+    execute unless entity @a[tag=is_in_queue] run bossbar set queue visible false
+
+    title @s times 0 5 5
+    title @s title {text:"B",font:"minecraft:lol"}
+    scoreboard players remove players queue 1
+    tellraw @a [{selector:"@s",color:"dark_aqua",bold:true},{text:" has left the queue. "},{text:"("},{score:{name:"players",objective:"queue"}},{text:"/"},{score:{name:"max",objective:"queue"}},{text:")"}]
+}
+
+function start {
+    scoreboard players set players queue 0
+    scoreboard players set waittime queue 3000
+    scoreboard players set _ingame game 1
+    scoreboard players set _inqueue game 0
+
+    stopsound @a master music.queue
+    playsound music.champion master @a 0 0 0 1 1 1
+
+    kill @e[tag=map_tour,type=item_display]
+    scoreboard players set @a[tag=is_in_queue] settings.page 100
+    tag @a[tag=is_in_queue] add see_champ
+    tag @a[tag=is_in_queue] add see_settings
+    tag @a[tag=is_in_queue] add is_ingame
+    clear @a[tag=is_in_queue]
+    execute as @a[tag=is_in_queue] run function lc:menu/reset
+
+    tag @a remove is_in_queue
+    scoreboard players set @a queue 0
+
+    effect clear @a[tag=is_ingame] invisibility
+
+    title @a[tag=is_ingame] actionbar " "
+
+    bossbar set queue max 3000
+    bossbar set queue color yellow
+    bossbar set queue name {text:"Choose your champion!",color:"yellow",bold:true}
+
+    tellraw @a {text:"Open Inventory and choose your champions!",color:"yellow",bold:true}
+
+    function lc:menu/move/practice/show_stats
+
+    tp @a[team=red] 0 188 210 180 0
+    spawnpoint @a[team=red] 0 188 210 180 0
+    execute if entity @a[team=red] positioned 2 188 200 run function lc:core/dummy/spawn.blue
+    execute if entity @a[team=red] positioned -2 188 200 run function lc:core/dummy/spawn.red
+
+    tp @a[team=blue] 0 188 -210 0 0
+    spawnpoint @a[team=blue] 0 188 -210 0 0
+    execute if entity @a[team=blue] positioned 2 188 -200 run function lc:core/dummy/spawn.red
+    execute if entity @a[team=blue] positioned -2 188 -200 run function lc:core/dummy/spawn.blue
+}

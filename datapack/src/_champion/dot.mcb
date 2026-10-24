@@ -1,7 +1,0 @@
-# _champion:dot/  (converted from the 1.20.2 LeagueCraft datapack)
-
-function tick {
-    scoreboard players add @s dot.tick 1
-
-    execute if entity @s[tag=dot.ignite] run function _lol:spell/ignite
-}

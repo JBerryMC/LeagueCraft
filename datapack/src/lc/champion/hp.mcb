@@ -1,0 +1,861 @@
+# lc:champion/hp/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function macro {
+    $execute if score @s hp.percentage matches 0 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.0
+    $execute if score @s hp.percentage matches 1 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.1
+    $execute if score @s hp.percentage matches 2 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.2
+    $execute if score @s hp.percentage matches 3 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.3
+    $execute if score @s hp.percentage matches 4 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.4
+    $execute if score @s hp.percentage matches 5 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.5
+    $execute if score @s hp.percentage matches 6 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.6
+    $execute if score @s hp.percentage matches 7 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.7
+    $execute if score @s hp.percentage matches 8 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.8
+    $execute if score @s hp.percentage matches 9 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.9
+
+    $execute if score @s hp.percentage matches 10 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.10
+    $execute if score @s hp.percentage matches 11 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.11
+    $execute if score @s hp.percentage matches 12 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.12
+    $execute if score @s hp.percentage matches 13 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.13
+    $execute if score @s hp.percentage matches 14 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.14
+    $execute if score @s hp.percentage matches 15 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.15
+    $execute if score @s hp.percentage matches 16 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.16
+    $execute if score @s hp.percentage matches 17 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.17
+    $execute if score @s hp.percentage matches 18 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.18
+    $execute if score @s hp.percentage matches 19 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.19
+
+    $execute if score @s hp.percentage matches 20 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.20
+    $execute if score @s hp.percentage matches 21 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.21
+    $execute if score @s hp.percentage matches 22 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.22
+    $execute if score @s hp.percentage matches 23 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.23
+    $execute if score @s hp.percentage matches 24 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.24
+    $execute if score @s hp.percentage matches 25 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.25
+    $execute if score @s hp.percentage matches 26 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.26
+    $execute if score @s hp.percentage matches 27 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.27
+    $execute if score @s hp.percentage matches 28 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.28
+    $execute if score @s hp.percentage matches 29 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.29
+
+    $execute if score @s hp.percentage matches 30 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.30
+    $execute if score @s hp.percentage matches 31 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.31
+    $execute if score @s hp.percentage matches 32 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.32
+    $execute if score @s hp.percentage matches 33 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.33
+    $execute if score @s hp.percentage matches 34 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.34
+    $execute if score @s hp.percentage matches 35 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.35
+    $execute if score @s hp.percentage matches 36 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.36
+    $execute if score @s hp.percentage matches 37 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.37
+    $execute if score @s hp.percentage matches 38 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.38
+    $execute if score @s hp.percentage matches 39 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.39
+
+    $execute if score @s hp.percentage matches 40 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.40
+    $execute if score @s hp.percentage matches 41 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.41
+    $execute if score @s hp.percentage matches 42 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.42
+    $execute if score @s hp.percentage matches 43 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.43
+    $execute if score @s hp.percentage matches 44 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.44
+    $execute if score @s hp.percentage matches 45 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.45
+    $execute if score @s hp.percentage matches 46 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.46
+    $execute if score @s hp.percentage matches 47 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.47
+    $execute if score @s hp.percentage matches 48 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.48
+    $execute if score @s hp.percentage matches 49 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.49
+
+    $execute if score @s hp.percentage matches 50 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.50
+    $execute if score @s hp.percentage matches 51 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.51
+    $execute if score @s hp.percentage matches 52 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.52
+    $execute if score @s hp.percentage matches 53 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.53
+    $execute if score @s hp.percentage matches 54 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.54
+    $execute if score @s hp.percentage matches 55 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.55
+    $execute if score @s hp.percentage matches 56 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.56
+    $execute if score @s hp.percentage matches 57 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.57
+    $execute if score @s hp.percentage matches 58 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.58
+    $execute if score @s hp.percentage matches 59 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.59
+
+    $execute if score @s hp.percentage matches 60 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.60
+    $execute if score @s hp.percentage matches 61 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.61
+    $execute if score @s hp.percentage matches 62 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.62
+    $execute if score @s hp.percentage matches 63 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.63
+    $execute if score @s hp.percentage matches 64 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.64
+    $execute if score @s hp.percentage matches 65 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.65
+    $execute if score @s hp.percentage matches 66 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.66
+    $execute if score @s hp.percentage matches 67 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.67
+    $execute if score @s hp.percentage matches 68 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.68
+    $execute if score @s hp.percentage matches 69 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.69
+
+    $execute if score @s hp.percentage matches 70 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.70
+    $execute if score @s hp.percentage matches 71 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.71
+    $execute if score @s hp.percentage matches 72 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.72
+    $execute if score @s hp.percentage matches 73 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.73
+    $execute if score @s hp.percentage matches 74 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.74
+    $execute if score @s hp.percentage matches 75 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.75
+    $execute if score @s hp.percentage matches 76 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.76
+    $execute if score @s hp.percentage matches 77 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.77
+    $execute if score @s hp.percentage matches 78 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.78
+    $execute if score @s hp.percentage matches 79 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.79
+
+    $execute if score @s hp.percentage matches 80 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.80
+    $execute if score @s hp.percentage matches 81 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.81
+    $execute if score @s hp.percentage matches 82 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.82
+    $execute if score @s hp.percentage matches 83 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.83
+    $execute if score @s hp.percentage matches 84 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.84
+    $execute if score @s hp.percentage matches 85 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.85
+    $execute if score @s hp.percentage matches 86 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.86
+    $execute if score @s hp.percentage matches 87 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.87
+    $execute if score @s hp.percentage matches 88 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.88
+    $execute if score @s hp.percentage matches 89 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.89
+
+    $execute if score @s hp.percentage matches 90 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.90
+    $execute if score @s hp.percentage matches 91 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.91
+    $execute if score @s hp.percentage matches 92 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.92
+    $execute if score @s hp.percentage matches 93 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.93
+    $execute if score @s hp.percentage matches 94 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.94
+    $execute if score @s hp.percentage matches 95 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.95
+    $execute if score @s hp.percentage matches 96 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.96
+    $execute if score @s hp.percentage matches 97 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.97
+    $execute if score @s hp.percentage matches 98 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.98
+    $execute if score @s hp.percentage matches 99 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.99
+
+    $execute if score @s hp.percentage matches 100 run data modify storage lol:main hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set from storage lol:main hp.100
+}
+
+function macro_bar_blue {
+    execute if score @s hp.percentage matches 0 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.0",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 1 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.1",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 2 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.2",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 3 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.3",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 4 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.4",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 5 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.5",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 6 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.6",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 7 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.7",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 8 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.8",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 9 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.9",interpret:true,font:"minecraft:hp_bar_blue"}
+
+    execute if score @s hp.percentage matches 10 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.10",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 11 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.11",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 12 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.12",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 13 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.13",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 14 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.14",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 15 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.15",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 16 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.16",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 17 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.17",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 18 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.18",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 19 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.19",interpret:true,font:"minecraft:hp_bar_blue"}
+
+    execute if score @s hp.percentage matches 20 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.20",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 21 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.21",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 22 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.22",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 23 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.23",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 24 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.24",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 25 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.25",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 26 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.26",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 27 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.27",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 28 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.28",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 29 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.29",interpret:true,font:"minecraft:hp_bar_blue"}
+
+    execute if score @s hp.percentage matches 30 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.30",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 31 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.31",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 32 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.32",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 33 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.33",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 34 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.34",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 35 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.35",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 36 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.36",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 37 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.37",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 38 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.38",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 39 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.39",interpret:true,font:"minecraft:hp_bar_blue"}
+
+    execute if score @s hp.percentage matches 40 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.40",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 41 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.41",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 42 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.42",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 43 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.43",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 44 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.44",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 45 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.45",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 46 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.46",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 47 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.47",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 48 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.48",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 49 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.49",interpret:true,font:"minecraft:hp_bar_blue"}
+
+    execute if score @s hp.percentage matches 50 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.50",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 51 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.51",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 52 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.52",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 53 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.53",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 54 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.54",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 55 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.55",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 56 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.56",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 57 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.57",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 58 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.58",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 59 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.59",interpret:true,font:"minecraft:hp_bar_blue"}
+
+    execute if score @s hp.percentage matches 60 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.60",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 61 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.61",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 62 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.62",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 63 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.63",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 64 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.64",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 65 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.65",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 66 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.66",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 67 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.67",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 68 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.68",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 69 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.69",interpret:true,font:"minecraft:hp_bar_blue"}
+
+    execute if score @s hp.percentage matches 70 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.70",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 71 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.71",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 72 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.72",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 73 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.73",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 74 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.74",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 75 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.75",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 76 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.76",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 77 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.77",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 78 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.78",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 79 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.79",interpret:true,font:"minecraft:hp_bar_blue"}
+
+    execute if score @s hp.percentage matches 80 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.80",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 81 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.81",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 82 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.82",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 83 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.83",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 84 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.84",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 85 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.85",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 86 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.86",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 87 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.87",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 88 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.88",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 89 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.89",interpret:true,font:"minecraft:hp_bar_blue"}
+
+    execute if score @s hp.percentage matches 90 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.90",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 91 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.91",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 92 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.92",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 93 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.93",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 94 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.94",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 95 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.95",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 96 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.96",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 97 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.97",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 98 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.98",interpret:true,font:"minecraft:hp_bar_blue"}
+    execute if score @s hp.percentage matches 99 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.99",interpret:true,font:"minecraft:hp_bar_blue"}
+
+    execute if score @s hp.percentage matches 100 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.100",interpret:true,font:"minecraft:hp_bar_blue"}
+}
+
+function macro_bar_red {
+    execute if score @s hp.percentage matches 0 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.0",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 1 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.1",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 2 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.2",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 3 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.3",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 4 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.4",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 5 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.5",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 6 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.6",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 7 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.7",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 8 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.8",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 9 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.9",interpret:true,font:"minecraft:hp_bar_red"}
+
+    execute if score @s hp.percentage matches 10 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.10",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 11 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.11",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 12 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.12",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 13 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.13",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 14 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.14",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 15 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.15",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 16 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.16",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 17 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.17",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 18 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.18",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 19 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.19",interpret:true,font:"minecraft:hp_bar_red"}
+
+    execute if score @s hp.percentage matches 20 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.20",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 21 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.21",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 22 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.22",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 23 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.23",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 24 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.24",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 25 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.25",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 26 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.26",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 27 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.27",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 28 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.28",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 29 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.29",interpret:true,font:"minecraft:hp_bar_red"}
+
+    execute if score @s hp.percentage matches 30 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.30",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 31 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.31",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 32 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.32",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 33 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.33",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 34 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.34",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 35 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.35",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 36 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.36",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 37 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.37",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 38 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.38",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 39 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.39",interpret:true,font:"minecraft:hp_bar_red"}
+
+    execute if score @s hp.percentage matches 40 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.40",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 41 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.41",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 42 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.42",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 43 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.43",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 44 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.44",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 45 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.45",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 46 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.46",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 47 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.47",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 48 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.48",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 49 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.49",interpret:true,font:"minecraft:hp_bar_red"}
+
+    execute if score @s hp.percentage matches 50 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.50",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 51 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.51",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 52 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.52",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 53 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.53",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 54 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.54",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 55 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.55",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 56 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.56",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 57 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.57",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 58 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.58",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 59 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.59",interpret:true,font:"minecraft:hp_bar_red"}
+
+    execute if score @s hp.percentage matches 60 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.60",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 61 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.61",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 62 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.62",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 63 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.63",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 64 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.64",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 65 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.65",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 66 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.66",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 67 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.67",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 68 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.68",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 69 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.69",interpret:true,font:"minecraft:hp_bar_red"}
+
+    execute if score @s hp.percentage matches 70 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.70",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 71 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.71",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 72 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.72",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 73 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.73",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 74 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.74",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 75 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.75",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 76 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.76",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 77 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.77",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 78 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.78",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 79 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.79",interpret:true,font:"minecraft:hp_bar_red"}
+
+    execute if score @s hp.percentage matches 80 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.80",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 81 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.81",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 82 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.82",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 83 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.83",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 84 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.84",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 85 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.85",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 86 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.86",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 87 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.87",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 88 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.88",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 89 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.89",interpret:true,font:"minecraft:hp_bar_red"}
+
+    execute if score @s hp.percentage matches 90 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.90",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 91 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.91",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 92 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.92",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 93 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.93",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 94 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.94",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 95 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.95",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 96 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.96",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 97 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.97",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 98 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.98",interpret:true,font:"minecraft:hp_bar_red"}
+    execute if score @s hp.percentage matches 99 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.99",interpret:true,font:"minecraft:hp_bar_red"}
+
+    execute if score @s hp.percentage matches 100 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.100",interpret:true,font:"minecraft:hp_bar_red"}
+}
+
+function macro_dummy_blue {
+    execute store result score @s hp.percentage on passengers as @s[tag=bar_owner] on origin run scoreboard players get @s hp.percentage
+
+    execute if score @s hp.percentage matches 0 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.0",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 1 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.1",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 2 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.2",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 3 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.3",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 4 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.4",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 5 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.5",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 6 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.6",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 7 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.7",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 8 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.8",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 9 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.9",interpret:true,font:"minecraft:hp_champ_blue"}
+
+    execute if score @s hp.percentage matches 10 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.10",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 11 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.11",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 12 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.12",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 13 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.13",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 14 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.14",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 15 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.15",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 16 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.16",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 17 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.17",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 18 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.18",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 19 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.19",interpret:true,font:"minecraft:hp_champ_blue"}
+
+    execute if score @s hp.percentage matches 20 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.20",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 21 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.21",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 22 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.22",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 23 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.23",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 24 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.24",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 25 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.25",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 26 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.26",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 27 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.27",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 28 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.28",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 29 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.29",interpret:true,font:"minecraft:hp_champ_blue"}
+
+    execute if score @s hp.percentage matches 30 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.30",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 31 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.31",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 32 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.32",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 33 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.33",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 34 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.34",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 35 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.35",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 36 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.36",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 37 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.37",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 38 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.38",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 39 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.39",interpret:true,font:"minecraft:hp_champ_blue"}
+
+    execute if score @s hp.percentage matches 40 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.40",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 41 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.41",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 42 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.42",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 43 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.43",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 44 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.44",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 45 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.45",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 46 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.46",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 47 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.47",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 48 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.48",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 49 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.49",interpret:true,font:"minecraft:hp_champ_blue"}
+
+    execute if score @s hp.percentage matches 50 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.50",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 51 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.51",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 52 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.52",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 53 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.53",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 54 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.54",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 55 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.55",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 56 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.56",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 57 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.57",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 58 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.58",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 59 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.59",interpret:true,font:"minecraft:hp_champ_blue"}
+
+    execute if score @s hp.percentage matches 60 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.60",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 61 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.61",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 62 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.62",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 63 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.63",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 64 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.64",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 65 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.65",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 66 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.66",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 67 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.67",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 68 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.68",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 69 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.69",interpret:true,font:"minecraft:hp_champ_blue"}
+
+    execute if score @s hp.percentage matches 70 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.70",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 71 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.71",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 72 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.72",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 73 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.73",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 74 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.74",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 75 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.75",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 76 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.76",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 77 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.77",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 78 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.78",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 79 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.79",interpret:true,font:"minecraft:hp_champ_blue"}
+
+    execute if score @s hp.percentage matches 80 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.80",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 81 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.81",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 82 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.82",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 83 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.83",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 84 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.84",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 85 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.85",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 86 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.86",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 87 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.87",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 88 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.88",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 89 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.89",interpret:true,font:"minecraft:hp_champ_blue"}
+
+    execute if score @s hp.percentage matches 90 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.90",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 91 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.91",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 92 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.92",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 93 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.93",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 94 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.94",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 95 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.95",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 96 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.96",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 97 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.97",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 98 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.98",interpret:true,font:"minecraft:hp_champ_blue"}
+    execute if score @s hp.percentage matches 99 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.99",interpret:true,font:"minecraft:hp_champ_blue"}
+
+    execute if score @s hp.percentage matches 100 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.100",interpret:true,font:"minecraft:hp_champ_blue"}
+}
+
+function macro_dummy_red {
+    execute store result score @s hp.percentage on passengers as @s[tag=bar_owner] on origin run scoreboard players get @s hp.percentage
+
+    execute if score @s hp.percentage matches 0 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.0",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 1 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.1",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 2 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.2",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 3 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.3",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 4 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.4",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 5 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.5",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 6 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.6",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 7 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.7",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 8 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.8",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 9 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.9",interpret:true,font:"minecraft:hp_champ_red"}
+
+    execute if score @s hp.percentage matches 10 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.10",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 11 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.11",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 12 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.12",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 13 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.13",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 14 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.14",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 15 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.15",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 16 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.16",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 17 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.17",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 18 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.18",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 19 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.19",interpret:true,font:"minecraft:hp_champ_red"}
+
+    execute if score @s hp.percentage matches 20 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.20",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 21 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.21",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 22 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.22",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 23 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.23",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 24 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.24",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 25 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.25",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 26 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.26",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 27 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.27",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 28 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.28",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 29 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.29",interpret:true,font:"minecraft:hp_champ_red"}
+
+    execute if score @s hp.percentage matches 30 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.30",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 31 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.31",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 32 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.32",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 33 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.33",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 34 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.34",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 35 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.35",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 36 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.36",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 37 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.37",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 38 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.38",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 39 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.39",interpret:true,font:"minecraft:hp_champ_red"}
+
+    execute if score @s hp.percentage matches 40 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.40",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 41 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.41",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 42 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.42",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 43 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.43",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 44 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.44",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 45 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.45",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 46 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.46",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 47 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.47",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 48 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.48",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 49 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.49",interpret:true,font:"minecraft:hp_champ_red"}
+
+    execute if score @s hp.percentage matches 50 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.50",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 51 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.51",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 52 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.52",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 53 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.53",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 54 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.54",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 55 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.55",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 56 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.56",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 57 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.57",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 58 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.58",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 59 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.59",interpret:true,font:"minecraft:hp_champ_red"}
+
+    execute if score @s hp.percentage matches 60 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.60",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 61 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.61",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 62 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.62",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 63 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.63",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 64 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.64",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 65 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.65",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 66 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.66",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 67 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.67",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 68 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.68",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 69 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.69",interpret:true,font:"minecraft:hp_champ_red"}
+
+    execute if score @s hp.percentage matches 70 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.70",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 71 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.71",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 72 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.72",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 73 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.73",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 74 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.74",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 75 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.75",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 76 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.76",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 77 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.77",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 78 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.78",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 79 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.79",interpret:true,font:"minecraft:hp_champ_red"}
+
+    execute if score @s hp.percentage matches 80 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.80",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 81 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.81",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 82 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.82",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 83 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.83",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 84 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.84",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 85 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.85",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 86 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.86",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 87 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.87",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 88 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.88",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 89 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.89",interpret:true,font:"minecraft:hp_champ_red"}
+
+    execute if score @s hp.percentage matches 90 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.90",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 91 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.91",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 92 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.92",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 93 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.93",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 94 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.94",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 95 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.95",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 96 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.96",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 97 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.97",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 98 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.98",interpret:true,font:"minecraft:hp_champ_red"}
+    execute if score @s hp.percentage matches 99 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.99",interpret:true,font:"minecraft:hp_champ_red"}
+
+    execute if score @s hp.percentage matches 100 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.100",interpret:true,font:"minecraft:hp_champ_red"}
+}
+
+function macro_mob {
+    execute if score @s hp.percentage matches 0 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.0",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 1 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.1",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 2 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.2",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 3 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.3",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 4 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.4",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 5 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.5",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 6 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.6",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 7 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.7",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 8 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.8",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 9 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.9",interpret:true,font:"minecraft:hp_mob"}
+
+    execute if score @s hp.percentage matches 10 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.10",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 11 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.11",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 12 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.12",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 13 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.13",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 14 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.14",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 15 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.15",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 16 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.16",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 17 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.17",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 18 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.18",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 19 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.19",interpret:true,font:"minecraft:hp_mob"}
+
+    execute if score @s hp.percentage matches 20 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.20",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 21 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.21",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 22 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.22",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 23 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.23",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 24 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.24",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 25 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.25",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 26 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.26",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 27 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.27",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 28 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.28",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 29 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.29",interpret:true,font:"minecraft:hp_mob"}
+
+    execute if score @s hp.percentage matches 30 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.30",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 31 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.31",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 32 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.32",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 33 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.33",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 34 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.34",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 35 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.35",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 36 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.36",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 37 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.37",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 38 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.38",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 39 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.39",interpret:true,font:"minecraft:hp_mob"}
+
+    execute if score @s hp.percentage matches 40 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.40",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 41 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.41",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 42 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.42",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 43 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.43",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 44 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.44",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 45 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.45",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 46 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.46",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 47 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.47",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 48 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.48",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 49 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.49",interpret:true,font:"minecraft:hp_mob"}
+
+    execute if score @s hp.percentage matches 50 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.50",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 51 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.51",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 52 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.52",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 53 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.53",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 54 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.54",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 55 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.55",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 56 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.56",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 57 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.57",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 58 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.58",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 59 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.59",interpret:true,font:"minecraft:hp_mob"}
+
+    execute if score @s hp.percentage matches 60 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.60",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 61 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.61",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 62 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.62",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 63 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.63",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 64 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.64",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 65 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.65",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 66 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.66",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 67 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.67",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 68 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.68",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 69 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.69",interpret:true,font:"minecraft:hp_mob"}
+
+    execute if score @s hp.percentage matches 70 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.70",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 71 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.71",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 72 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.72",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 73 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.73",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 74 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.74",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 75 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.75",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 76 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.76",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 77 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.77",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 78 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.78",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 79 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.79",interpret:true,font:"minecraft:hp_mob"}
+
+    execute if score @s hp.percentage matches 80 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.80",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 81 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.81",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 82 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.82",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 83 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.83",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 84 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.84",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 85 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.85",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 86 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.86",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 87 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.87",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 88 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.88",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 89 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.89",interpret:true,font:"minecraft:hp_mob"}
+
+    execute if score @s hp.percentage matches 90 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.90",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 91 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.91",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 92 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.92",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 93 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.93",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 94 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.94",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 95 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.95",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 96 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.96",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 97 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.97",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 98 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.98",interpret:true,font:"minecraft:hp_mob"}
+    execute if score @s hp.percentage matches 99 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.99",interpret:true,font:"minecraft:hp_mob"}
+
+    execute if score @s hp.percentage matches 100 on passengers as @s[tag=hp] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.100",interpret:true,font:"minecraft:hp_mob"}
+}
+
+function macro_shield_all {
+    execute store result score @s shield_all.percentage on passengers as @s[tag=bar_owner] on origin run scoreboard players get @s shield_all.percentage
+
+    execute if score @s shield_all.percentage matches 0 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.0",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 1 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.1",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 2 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.2",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 3 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.3",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 4 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.4",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 5 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.5",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 6 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.6",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 7 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.7",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 8 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.8",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 9 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.9",interpret:true,font:"minecraft:shield_all"}
+
+    execute if score @s shield_all.percentage matches 10 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.10",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 11 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.11",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 12 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.12",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 13 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.13",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 14 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.14",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 15 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.15",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 16 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.16",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 17 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.17",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 18 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.18",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 19 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.19",interpret:true,font:"minecraft:shield_all"}
+
+    execute if score @s shield_all.percentage matches 20 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.20",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 21 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.21",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 22 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.22",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 23 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.23",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 24 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.24",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 25 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.25",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 26 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.26",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 27 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.27",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 28 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.28",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 29 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.29",interpret:true,font:"minecraft:shield_all"}
+
+    execute if score @s shield_all.percentage matches 30 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.30",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 31 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.31",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 32 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.32",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 33 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.33",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 34 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.34",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 35 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.35",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 36 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.36",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 37 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.37",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 38 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.38",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 39 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.39",interpret:true,font:"minecraft:shield_all"}
+
+    execute if score @s shield_all.percentage matches 40 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.40",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 41 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.41",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 42 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.42",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 43 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.43",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 44 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.44",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 45 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.45",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 46 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.46",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 47 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.47",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 48 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.48",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 49 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.49",interpret:true,font:"minecraft:shield_all"}
+
+    execute if score @s shield_all.percentage matches 50 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.50",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 51 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.51",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 52 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.52",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 53 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.53",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 54 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.54",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 55 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.55",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 56 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.56",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 57 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.57",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 58 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.58",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 59 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.59",interpret:true,font:"minecraft:shield_all"}
+
+    execute if score @s shield_all.percentage matches 60 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.60",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 61 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.61",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 62 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.62",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 63 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.63",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 64 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.64",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 65 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.65",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 66 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.66",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 67 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.67",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 68 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.68",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 69 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.69",interpret:true,font:"minecraft:shield_all"}
+
+    execute if score @s shield_all.percentage matches 70 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.70",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 71 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.71",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 72 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.72",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 73 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.73",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 74 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.74",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 75 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.75",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 76 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.76",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 77 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.77",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 78 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.78",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 79 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.79",interpret:true,font:"minecraft:shield_all"}
+
+    execute if score @s shield_all.percentage matches 80 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.80",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 81 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.81",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 82 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.82",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 83 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.83",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 84 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.84",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 85 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.85",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 86 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.86",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 87 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.87",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 88 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.88",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 89 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.89",interpret:true,font:"minecraft:shield_all"}
+
+    execute if score @s shield_all.percentage matches 90 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.90",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 91 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.91",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 92 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.92",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 93 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.93",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 94 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.94",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 95 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.95",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 96 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.96",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 97 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.97",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 98 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.98",interpret:true,font:"minecraft:shield_all"}
+    execute if score @s shield_all.percentage matches 99 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.99",interpret:true,font:"minecraft:shield_all"}
+
+    execute if score @s shield_all.percentage matches 100 on passengers as @s[tag=shield_all] run data modify entity @s text set value {storage:"lol:main",nbt:"hp.100",interpret:true,font:"minecraft:shield_all"}
+}
+
+function percentage {
+    scoreboard players operation temp hp.left = @s hp.left
+    scoreboard players operation temp hp.left *= 100 integer
+
+    scoreboard players operation temp hp.left /= @s hp.max
+    scoreboard players operation @s hp.percentage = temp hp.left
+
+    execute if score @s hp.left = @s hp.max run scoreboard players set @s hp.percentage 100
+    execute if score @s hp.percentage matches 0 if score @s hp.left matches 1.. run scoreboard players set @s hp.percentage 1
+    execute if score @s hp.left matches ..-1 run scoreboard players set @s hp.left 0
+
+    execute if score @s hp.percentage matches 41.. run tag @s remove is_low_hp
+    execute if score @s hp.percentage matches ..40 run tag @s add is_low_hp
+
+    execute if score @s[tag=lol.structure.tower] hp.left matches 0 run function lc:core/structure/tower/destroy
+    execute if score @s[tag=lol.structure.inhib] hp.left matches 0 run function lc:core/structure/inhib/destroy
+    execute if score @s[tag=lol.structure.nexus] hp.left matches 0 run function lc:core/structure/nexus/destroy
+    execute if score @s[type=!#unvalid,type=!player,tag=!dummy,tag=!champion,tag=!dead] hp.left matches 0 run function lc:mobs/dead
+    execute if score @s[type=!#unvalid,tag=champion,tag=!dead] hp.left matches 0 run function lc:champion/dead
+
+    scoreboard players operation 100 integer -= @s hp.percentage
+    scoreboard players operation @s hp.percentage_lost = 100 integer
+    scoreboard players set 100 integer 100
+
+    execute unless score @s hp.percentage = @s hp.percentage_old run function lc:champion/hp/update
+}
+
+function percentage_shield_all {
+    scoreboard players operation temp shield.all = @s shield.all
+    scoreboard players operation temp shield.all *= 100 integer
+
+    scoreboard players operation temp shield.all /= @s hp.max
+    scoreboard players operation @s shield_all.percentage = temp shield.all
+
+    execute if score @s shield.all > @s hp.max run scoreboard players set @s shield_all.percentage 100
+    execute if score @s shield_all.percentage matches 0 if score @s shield.all matches 1.. run scoreboard players set @s shield_all.percentage 1
+
+    execute unless score @s shield_all.percentage = @s shield_all.percentage_old run tag @s[type=player] add update.shield_all
+    execute unless score @s shield_all.percentage = @s shield_all.percentage_old as @s[type=!player] run function lc:champion/hp/macro_shield_all
+    execute unless score @s shield_all.percentage = @s shield_all.percentage_old run scoreboard players operation @s shield_all.percentage_old = @s shield_all.percentage
+}
+
+function update {
+    execute as @s[type=player] run function lc:champion/hp/macro with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+    tag @s[type=player] add update.bar.hp
+
+    execute as @s[tag=champion,team=blue,type=!player] run function lc:champion/hp/macro_dummy_blue
+    execute as @s[tag=champion,team=red,type=!player] run function lc:champion/hp/macro_dummy_red
+    execute as @s[type=!#unvalid,team=!red,team=!blue,type=!player] run function lc:champion/hp/macro_mob
+
+    execute as @s[tag=blue,type=!player] run function lc:champion/hp/macro_bar_blue
+    execute as @s[tag=red,type=!player] run function lc:champion/hp/macro_bar_red
+
+    scoreboard players operation @s hp.percentage_old = @s hp.percentage
+}

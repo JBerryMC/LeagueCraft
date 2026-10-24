@@ -1,0 +1,451 @@
+# lc:core/champion/  (converted from the 1.20.2 LeagueCraft datapack)
+
+function _choose {
+    # The HP/mana bar above the head is off for now (better visibility); this line summoned it.
+    execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=hp] {transformation:{scale:[0.325,0.375,0.325]}}
+    execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=mana] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,0.0,0.0001]}}
+    execute if entity @s[tag=!has_display_bar] as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data merge entity @s[tag=shield_all] {transformation:{scale:[0.325,0.375,0.325],translation:[0.0,0.0,0.0001]}}
+    execute if entity @s[tag=!has_display_bar] at @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] run data modify entity @e[tag=bar_owner,limit=1,sort=nearest,type=area_effect_cloud] Owner set from entity @s UUID
+    execute if entity @s[tag=!has_display_bar,team=red] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] add red
+    execute if entity @s[tag=!has_display_bar,team=blue] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] add blue
+    execute if entity @s[tag=!has_display_bar] if score .world settings.show_stats matches 0 as @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] on passengers run data modify entity @s[tag=stats_bar] view_range set value 0.0
+    execute if entity @s[tag=!has_display_bar] run tag @e[tag=lol.bar_display,tag=temp,limit=1,sort=nearest] remove temp
+
+    tag @s add has_display_bar
+    tag @s add update.bar.mana
+    tag @s add update.bar.hp
+    tag @s add offhand_temp
+
+    tag @s add remove.shield
+    execute as @e[type=area_effect_cloud,tag=shield.all] run function lc:champion/dmg/shield/check_origin
+
+    tag @s add update.shield_all
+    scoreboard players set @s shield.all 0
+    scoreboard players set @s shield.physical 0
+    scoreboard players set @s shield.magic 0
+    function lc:champion/hp/percentage_shield_all
+
+    tag @s remove champion
+    tag @s remove melee
+    tag @s remove ranged
+
+    tag @s remove has_health_bar
+
+    scoreboard players set @s healnshield_power 0
+
+    scoreboard players set @s wound 0
+    scoreboard players set @s dmg_magic.deal 0
+    scoreboard players set @s dmg_physical.deal 0
+    scoreboard players set @s dmg_true.deal 0
+
+    #Yasuo & Yone
+    tag @s remove yasuo
+    tag @s remove yone
+    tag @s remove full_p
+    tag @s remove full_q
+    scoreboard players set @s stack_q 0
+
+    #LeeSin
+    tag @s remove leesin
+    scoreboard players set @s stack_p 0
+
+    ## Zed
+    execute if entity @s[tag=zed,team=red] as @e[tag=!red,tag=zed.r.mark] at @s run function lc:champions/zed/skills/r.end
+    execute if entity @s[tag=zed,team=blue] as @e[tag=!blue,tag=zed.r.mark] at @s run function lc:champions/zed/skills/r.end
+    execute if entity @s[tag=zed,team=red] run kill @e[tag=zed.shadow,tag=red]
+    execute if entity @s[tag=zed,team=red] as @e[tag=zed.shadow.model,team=red] at @s run function lc:champions/zed/skills/shadow.model
+    execute if entity @s[tag=zed,team=blue] run kill @e[tag=zed.shadow,tag=blue]
+    execute if entity @s[tag=zed,team=blue] as @e[tag=zed.shadow.model,team=blue] at @s run function lc:champions/zed/skills/shadow.model
+    tag @s remove zed
+
+    #Pyke
+    tag @s remove pyke
+
+    #Ashe
+    tag @s remove ashe
+    scoreboard players set @s ashe.q.stack 0
+
+    #Vayne
+    execute if entity @s[tag=vayne,team=red] run kill @e[team=red,tag=vayne.w.passive,type=armor_stand]
+    execute if entity @s[tag=vayne,team=blue] run kill @e[team=blue,tag=vayne.w.passive,type=armor_stand]
+    tag @s remove vayne
+    scoreboard players set @s vayne.w.stack 0
+
+    #Ezreal
+    tag @s remove ezreal
+
+    #Jhin
+    execute if entity @s[tag=jhin,team=red] run kill @e[tag=red,tag=jhin.r.limit,type=area_effect_cloud]
+    execute if entity @s[tag=jhin,team=red] run bossbar remove red.jhin.r
+    execute if entity @s[tag=jhin,team=red] run kill @e[team=red,tag=jhin.trap,type=armor_stand]
+    execute if entity @s[tag=jhin,team=red] run kill @e[team=red,tag=jhin.r.dummy,type=armor_stand]
+    execute if entity @s[tag=jhin,team=blue] run kill @e[tag=blue,tag=jhin.r.limit,type=area_effect_cloud]
+    execute if entity @s[tag=jhin,team=blue] run bossbar remove blue.jhin.r
+    execute if entity @s[tag=jhin,team=blue] run kill @e[team=blue,tag=jhin.trap,type=armor_stand]
+    execute if entity @s[tag=jhin,team=blue] run kill @e[team=blue,tag=jhin.r.dummy,type=armor_stand]
+    tag @s remove jhin
+    scoreboard players set @s jhin.aa.count 1
+
+    ## Aatrox
+    execute if entity @s[tag=aatrox.r] run function lc:champions/aatrox/skills/r.end
+    tag @s remove aatrox
+    scoreboard players set @s stack_q 0
+
+    tag @s remove leona
+    tag @s remove leona.q
+    tag @s remove leona.w
+
+    tag @s remove soraka
+
+    tag @s remove garen
+    tag @s remove garen.q
+    tag @s remove garen.w
+
+    tag @s remove malphite
+    tag @s remove malphite.passive
+    tag @s remove malphite.w
+
+    execute if entity @s[tag=lux,team=red] as @e[tag=lux.e.area,tag=red,type=item_display] at @s run function lc:champions/lux/skills/e.end
+    execute if entity @s[tag=lux,team=blue] as @e[tag=lux.e.area,tag=blue,type=item_display] at @s run function lc:champions/lux/skills/e.end
+    tag @s remove lux
+
+    ## Annie
+    execute if entity @s[tag=annie,team=red] as @e[tag=annie.r,team=red,type=#can_aggro] at @s run function lc:champions/annie/skills/r.end
+    execute if entity @s[tag=annie,team=blue] as @e[tag=annie.r,team=blue,type=#can_aggro] at @s run function lc:champions/annie/skills/r.end
+    tag @s remove annie
+
+    tag @s remove useEnergy
+    tag @s remove useMana
+
+    tag @s remove r.animation
+    tag @s remove w.animation
+
+    clear @s iron_sword[minecraft:custom_data~{kill_item:1}]
+    clear @s minecraft:carrot_on_a_stick[minecraft:custom_data~{kill_item:1}]
+    clear @s phantom_membrane[minecraft:custom_data~{kill_item:1}]
+
+    title @s clear
+    title @s actionbar ""
+    effect clear @s
+
+    scoreboard players set @s channeling -1
+
+    scoreboard players set @s aa.range.count 0
+    scoreboard players set @s spell.1 1
+    scoreboard players set @s spell.2 2
+
+    scoreboard players set @s attack_damage 0
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s dmg_reduction 0
+    scoreboard players set @s dmg_debuff 0
+    scoreboard players set @s armor 0
+    scoreboard players set @s magic_resist 0
+
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s cd_p 0
+    scoreboard players set @s cd_q 0
+    scoreboard players set @s cd_w 0
+    scoreboard players set @s cd_e 0
+    scoreboard players set @s cd_r 0
+
+    scoreboard players set @s cd_spell.1 0
+    scoreboard players set @s cd_spell.2 0
+
+    scoreboard players set @s status.p 0
+    scoreboard players set @s status.q 0
+    scoreboard players set @s status.w 0
+    scoreboard players set @s status.e 0
+    scoreboard players set @s status.r 0
+
+    scoreboard players set @s status.spell.1 1
+    scoreboard players set @s status.spell.2 1
+
+    scoreboard players set @s mana 0
+    scoreboard players set @s hp.left 0
+
+    scoreboard players set @s rclick 0
+    scoreboard players set @s use_sword 0
+    scoreboard players set @s use_ability 0
+    scoreboard players set @s shift 0
+
+    scoreboard players set @s sneak 0
+    scoreboard players set @s walk 0
+    scoreboard players set @s run 0
+}
+
+function _reset {
+    tag @s[tag=has_display_bar] add remove.bar
+    tag @s remove has_display_bar
+
+    attribute @s minecraft:movement_speed base set 0.1
+    attribute @s minecraft:jump_strength base reset
+
+    effect clear @s resistance
+    effect clear @s saturation
+
+    tag @s add remove.shield
+    execute as @e[type=area_effect_cloud,tag=shield.all] run function lc:champion/dmg/shield/check_origin
+
+    tag @s remove champion
+    tag @s remove melee
+    tag @s remove ranged
+
+    tag @s remove has_health_bar
+
+    scoreboard players set @s healnshield_power 0
+
+    scoreboard players set @s wound 0
+    scoreboard players set @s dmg_magic.deal 0
+    scoreboard players set @s dmg_physical.deal 0
+    scoreboard players set @s dmg_true.deal 0
+
+    #Yasuo & Yone
+    tag @s remove yasuo
+    tag @s remove yone
+    tag @s remove full_p
+    tag @s remove full_q
+    scoreboard players set @s stack_q 0
+
+    #LeeSin
+    tag @s remove leesin
+    scoreboard players set @s stack_p 0
+
+    ## Zed
+    execute if entity @s[tag=zed,team=red] as @e[tag=!red,tag=zed.r.mark] at @s run function lc:champions/zed/skills/r.end
+    execute if entity @s[tag=zed,team=blue] as @e[tag=!blue,tag=zed.r.mark] at @s run function lc:champions/zed/skills/r.end
+    execute if entity @s[tag=zed,team=red] run kill @e[tag=zed.shadow,tag=red]
+    execute if entity @s[tag=zed,team=red] as @e[tag=zed.shadow.model,team=red] at @s run function lc:champions/zed/skills/shadow.model
+    execute if entity @s[tag=zed,team=blue] run kill @e[tag=zed.shadow,tag=blue]
+    execute if entity @s[tag=zed,team=blue] as @e[tag=zed.shadow.model,team=blue] at @s run function lc:champions/zed/skills/shadow.model
+    tag @s remove zed
+
+    #Pyke
+    tag @s remove pyke
+
+    #Ashe
+    execute if entity @s[tag=ashe,team=red] run kill @e[team=red,tag=ashe.e,type=item_display]
+    execute if entity @s[tag=ashe,team=blue] run kill @e[team=blue,tag=ashe.e,type=item_display]
+    tag @s remove ashe
+    scoreboard players set @s ashe.q.stack 0
+
+    #Vayne
+    execute if entity @s[tag=vayne,team=red] run kill @e[team=red,tag=vayne.w.passive,type=armor_stand]
+    execute if entity @s[tag=vayne,team=blue] run kill @e[team=blue,tag=vayne.w.passive,type=armor_stand]
+    tag @s remove vayne
+    scoreboard players set @s vayne.w.stack 0
+
+    #Ezreal
+    execute if entity @s[tag=ezreal,team=red] run tag @e[tag=ezreal.w.target] remove ezreal.w.target
+    tag @s remove ezreal
+
+    #Jhin
+    execute if entity @s[tag=jhin,team=red] run kill @e[tag=red,tag=jhin.r.limit,type=area_effect_cloud]
+    execute if entity @s[tag=jhin,team=red] run bossbar remove red.jhin.r
+    execute if entity @s[tag=jhin,team=red] run kill @e[team=red,tag=jhin.trap,type=armor_stand]
+    execute if entity @s[tag=jhin,team=red] run kill @e[team=red,tag=jhin.r.dummy,type=armor_stand]
+    execute if entity @s[tag=jhin,team=blue] run kill @e[tag=blue,tag=jhin.r.limit,type=area_effect_cloud]
+    execute if entity @s[tag=jhin,team=blue] run bossbar remove blue.jhin.r
+    execute if entity @s[tag=jhin,team=blue] run kill @e[team=blue,tag=jhin.trap,type=armor_stand]
+    execute if entity @s[tag=jhin,team=blue] run kill @e[team=blue,tag=jhin.r.dummy,type=armor_stand]
+    tag @s remove jhin
+    scoreboard players set @s jhin.aa.count 1
+
+    ## Aatrox
+    execute if entity @s[tag=aatrox.r] run function lc:champions/aatrox/skills/r.end
+    tag @s remove aatrox
+
+    execute if entity @s[tag=leona.q] at @s run function lc:champions/leona/skills/q.end
+    execute if entity @s[tag=leona.w] at @s run function lc:champions/leona/skills/w.end
+    tag @s remove leona
+    tag @s remove leona.q
+    tag @s remove leona.w
+
+    tag @s remove soraka
+
+    execute if entity @s[tag=garen.q] at @s run function lc:champions/garen/skills/q.end
+    execute if entity @s[tag=garen.w] at @s run function lc:champions/garen/skills/w.end
+    tag @s remove garen
+    tag @s remove garen.q
+    tag @s remove garen.w
+
+    execute if entity @s[tag=malphite.w] at @s run function lc:champions/malphite/skills/w.end
+    tag @s remove malphite
+    tag @s remove malphite.passive
+    tag @s remove malphite.w
+
+    execute if entity @s[tag=lux,team=red] as @e[tag=lux.e.area,tag=red,type=item_display] at @s run function lc:champions/lux/skills/e.end
+    execute if entity @s[tag=lux,team=blue] as @e[tag=lux.e.area,tag=blue,type=item_display] at @s run function lc:champions/lux/skills/e.end
+    tag @s remove lux
+
+    ## Annie
+    execute if entity @s[tag=annie,team=red] as @e[tag=annie.r,team=red,type=#can_aggro] at @s run function lc:champions/annie/skills/r.end
+    execute if entity @s[tag=annie,team=blue] as @e[tag=annie.r,team=blue,type=#can_aggro] at @s run function lc:champions/annie/skills/r.end
+    scoreboard players set @s annie.passive 4
+    tag @s remove annie
+
+    tag @s remove useEnergy
+    tag @s remove useMana
+
+    tag @s remove r.animation
+    tag @s remove w.animation
+
+    clear @s iron_sword[minecraft:custom_data~{kill_item:1}]
+    clear @s minecraft:carrot_on_a_stick[minecraft:custom_data~{kill_item:1}]
+    clear @s phantom_membrane[minecraft:custom_data~{kill_item:1}]
+
+    title @s clear
+    title @s actionbar ""
+    effect clear @s
+
+    scoreboard players set @s aa.range.count 0
+    scoreboard players set @s spell.1 1
+
+    scoreboard players set @s attack_damage 0
+    scoreboard players set @s ability_power 0
+    scoreboard players set @s dmg_reduction 0
+    scoreboard players set @s dmg_debuff 0
+    scoreboard players set @s armor 0
+    scoreboard players set @s magic_resist 0
+
+    scoreboard players set @s armor.pen 0
+    scoreboard players set @s magic_resist.pen 0
+
+    scoreboard players set @s cd_p 0
+    scoreboard players set @s cd_q 0
+    scoreboard players set @s cd_w 0
+    scoreboard players set @s cd_e 0
+    scoreboard players set @s cd_r 0
+
+    scoreboard players set @s cd_spell.1 0
+    scoreboard players set @s cd_spell.2 0
+
+    scoreboard players set @s status.p 0
+    scoreboard players set @s status.q 0
+    scoreboard players set @s status.w 0
+    scoreboard players set @s status.e 0
+    scoreboard players set @s status.r 0
+
+    scoreboard players set @s status.spell.1 1
+    scoreboard players set @s status.spell.2 1
+
+    scoreboard players set @s mana 0
+    scoreboard players set @s hp.left 0
+
+    scoreboard players set @s rclick 0
+    scoreboard players set @s use_sword 0
+    scoreboard players set @s use_ability 0
+    scoreboard players set @s shift 0
+
+    scoreboard players set @s sneak 0
+    scoreboard players set @s walk 0
+    scoreboard players set @s run 0
+}
+
+# lc:core/champion/setup {name:"<champion>"}: makes @s that champion, with its stats from settings.mcb.
+# What's special about each champion is in lc:champions/<name>/pick.
+function setup {
+    function lc:core/champion/_choose
+    $tag @s add $(name)
+    tag @s add champion
+    tag @s add has_health_bar
+    $function lc:core/champion/stats/apply {name:"$(name)"}
+    scoreboard players operation @s hp.left = @s hp.max
+    scoreboard players set @s mana 0
+    scoreboard players set @s aa.cd 0
+    scoreboard players set @s mana.percentage_old -1
+    scoreboard players set @s hp.percentage_old -1
+    $function lc:champions/$(name)/pick
+    effect give @s minecraft:instant_health 1 10 true
+    effect give @s resistance infinite 127 true
+}
+
+# The stats chart in settings.mcb, applied to players.
+dir stats {
+    # lc:core/champion/stats/apply {name:"<champion>"}: sets @s's stats from that champion's rows.
+    function apply {
+        $function lc:core/champion/stats/health with storage lc:stats health[{name:"$(name)"}]
+        $function lc:core/champion/stats/offense with storage lc:stats offense[{name:"$(name)"}]
+        $function lc:core/champion/stats/abilities with storage lc:stats abilities[{name:"$(name)"}]
+        $function lc:core/champion/stats/attack with storage lc:stats attack[{name:"$(name)"}]
+        $function lc:core/champion/stats/aim with storage lc:stats aim[{name:"$(name)"}]
+    }
+
+    function health {
+        $scoreboard players set @s champ_id $(id)
+        $scoreboard players set @s hp.max $(hp)
+        $scoreboard players set @s hp.regen $(hp_regen)
+        $scoreboard players set @s mana.max $(mana)
+        $scoreboard players set @s mana.regen $(mana_regen)
+        $scoreboard players set @s armor $(armor)
+        $scoreboard players set @s magic_resist $(mr)
+    }
+
+    function offense {
+        $scoreboard players set @s attack_damage $(ad)
+        $scoreboard players set @s ability_power $(ap)
+        $scoreboard players set @s armor.pen $(armor_pen)
+        $scoreboard players set @s magic_resist.pen $(mr_pen)
+        $scoreboard players set @s omnivamp $(omnivamp)
+        $scoreboard players set @s haste $(haste)
+        $attribute @s minecraft:movement_speed base set $(speed)
+        $attribute @s minecraft:jump_strength base set $(jump)
+    }
+
+    function abilities {
+        $scoreboard players set @s mana_q $(cost_q)
+        $scoreboard players set @s mana_w $(cost_w)
+        $scoreboard players set @s mana_e $(cost_e)
+        $scoreboard players set @s mana_r $(cost_r)
+        $scoreboard players set @s base_cd.q $(cd_q)
+        $scoreboard players set @s base_cd.w $(cd_w)
+        $scoreboard players set @s base_cd.e $(cd_e)
+        $scoreboard players set @s base_cd.r $(cd_r)
+        $scoreboard players set @s status.weapon $(weapon)
+    }
+
+    # The plugin reads aa.spd, aa.range, ammo.max and ammo.reload for the basic attack.
+    function attack {
+        tag @s remove melee
+        tag @s remove ranged
+        $tag @s add $(type)
+        $execute store result score @s aa.spd run data get storage lc:stats attack[{name:"$(name)"}].attack_speed 10
+        $execute store result score @s aa.range run data get storage lc:stats attack[{name:"$(name)"}].range 10
+        $scoreboard players set @s ammo.max $(ammo)
+        $execute store result score @s ammo.reload run data get storage lc:stats attack[{name:"$(name)"}].reload 20
+    }
+
+    # The plugin reads aim.<key> (ground-target range) and aim.<key>.radius, in tenths of a block.
+    function aim {
+        $execute store result score @s aim.q run data get storage lc:stats aim[{name:"$(name)"}].q 10
+        $execute store result score @s aim.q.radius run data get storage lc:stats aim[{name:"$(name)"}].q_radius 10
+        $execute store result score @s aim.w run data get storage lc:stats aim[{name:"$(name)"}].w 10
+        $execute store result score @s aim.w.radius run data get storage lc:stats aim[{name:"$(name)"}].w_radius 10
+        $execute store result score @s aim.e run data get storage lc:stats aim[{name:"$(name)"}].e 10
+        $execute store result score @s aim.e.radius run data get storage lc:stats aim[{name:"$(name)"}].e_radius 10
+        $execute store result score @s aim.r run data get storage lc:stats aim[{name:"$(name)"}].r 10
+        $execute store result score @s aim.r.radius run data get storage lc:stats aim[{name:"$(name)"}].r_radius 10
+    }
+
+    # After /reload: applies the chart again to everyone already playing a champion.
+    function reapply {
+        data modify storage lc:temp stats_rows set from storage lc:stats health
+        function lc:core/champion/stats/reapply_next
+    }
+
+    function reapply_next {
+        execute unless data storage lc:temp stats_rows[0] run return 0
+        function lc:core/champion/stats/reapply_row with storage lc:temp stats_rows[0]
+        data remove storage lc:temp stats_rows[0]
+        function lc:core/champion/stats/reapply_next
+    }
+
+    function reapply_row {
+        $execute as @a[tag=champion,tag=$(name)] run function lc:core/champion/stats/apply {name:"$(name)"}
+        $execute as @a[tag=champion,tag=$(name)] if score @s hp.left > @s hp.max run scoreboard players operation @s hp.left = @s hp.max
+        $execute as @a[tag=champion,tag=$(name)] if score @s mana > @s mana.max run scoreboard players operation @s mana = @s mana.max
+        $tag @a[tag=champion,tag=$(name)] add update.bar.hp
+        $tag @a[tag=champion,tag=$(name)] add update.bar.mana
+    }
+}

@@ -1,0 +1,545 @@
+# lc:champions/jhin/  (converted from the 1.20.2 LeagueCraft datapack)
+
+# What's special about picking jhin; the stats are in settings.mcb.
+function pick {
+    execute if score .world lang matches 0 as @s run function lc:core/lang/champion/eng.jhin
+    execute if score .world lang matches 1 as @s run function lc:core/lang/champion/vie.jhin
+    tag @s add useMana
+    scoreboard players operation @s mana = @s mana.max
+    scoreboard players set @s jhin.aa.count 4
+    scoreboard players set @s jhin.r.count 0
+    playsound minecraft:jhin.select master @a ~ ~ ~
+}
+
+function aa {
+    playsound jhin.sfx.aa master @a ~ ~ ~
+
+    execute if entity @s[team=red] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.jhin","aa","homing","red","temp"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+    execute if entity @s[team=blue] at @s anchored eyes run summon item_display ^ ^ ^ {teleport_duration:1,Tags:["aa.jhin","aa","homing","blue","temp"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["initial"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}},{id:"area_effect_cloud",WaitTime:0,Duration:2147483647,Tags:["target"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}]}
+}
+
+function hud {
+    $title @s actionbar ["",{translate:"space.-60"},{text:"i",font:"minecraft:jhin"},{translate:"space.16"},{score:{name:"@s",objective:"status.p"},font:"lol:jhin/p"},{translate:"space.5"},{score:{name:"@s",objective:"status.q"},font:"lol:jhin/q"},{translate:"space.6"},{score:{name:"@s",objective:"status.w"},font:"lol:jhin/w"},{translate:"space.6"},{score:{name:"@s",objective:"status.e"},font:"lol:jhin/e"},{translate:"space.6"},{score:{name:"@s",objective:"status.r"},font:"lol:jhin/r"},{translate:"space.9"},{score:{name:"@s",objective:"status.spell.1"},font:"minecraft:lol"},{translate:"space.5"},{score:{name:"@s",objective:"status.spell.2"},font:"minecraft:lol"},{translate:"space.-253"},{text:"M",font:"minecraft:lol"},{translate:"space.-274"},{score:{name:"@s",objective:"status.hotbar"},font:"minecraft:hotbar"},{translate:"space.-207"},{storage:"lol:main",nbt:"hp.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:hp_display"},{translate:"space.-252"},{storage:"lol:main",nbt:"mana.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:mana_display"},{translate:"space.-183"},{score:{name:"@s",objective:"cd_p"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.passive"},font:"space:default"},{score:{name:"@s",objective:"cd_q"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.q"},font:"space:default"},{score:{name:"@s",objective:"cd_w"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.w"},font:"space:default"},{score:{name:"@s",objective:"cd_e"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.e"},font:"space:default"},{score:{name:"@s",objective:"cd_r"},font:"minecraft:custom/cd"},{score:{name:"@s",objective:"space.r"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.1"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.1"},font:"space:default"},{score:{name:"@s",objective:"cd_spell.2"},font:"minecraft:custom/passive"},{score:{name:"@s",objective:"space.spell.2"},font:"space:default"},{translate:"space.-138"},{score:{name:"@s",objective:"space.hp1"},font:"space:default"},{score:{name:"@s",objective:"hp.left"},font:"minecraft:custom/hp"},{text:"/",font:"minecraft:custom/hp"},{score:{name:"@s",objective:"hp.max"},font:"minecraft:custom/hp"},{score:{name:"@s",objective:"space.hp2"},font:"space:default"},{translate:"space.-78"},{score:{name:"@s",objective:"space.mana1"},font:"space:default"},{score:{name:"@s",objective:"mana"},font:"minecraft:custom/mana"},{text:"/",font:"minecraft:custom/mana"},{score:{name:"@s",objective:"mana.max"},font:"minecraft:custom/mana"},{score:{name:"@s",objective:"space.mana2"},font:"space:default"},{translate:"space.-112"},{storage:"lol:main",nbt:"keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.24"},{storage:"lol:main",nbt:"keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.22"},{storage:"lol:main",nbt:"keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true,font:"minecraft:custom/keybind",bold:true,color:"#ffd821"},{translate:"space.25"},{nbt:"keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",storage:"lol:main",interpret:true},{translate:"space.18"},{keybind:"key.swapOffhand",font:"minecraft:custom/keybind_small",bold:true,color:"#ffd821"},{storage:"lol:main",nbt:"crosshair.$(uuid1).$(uuid2).$(uuid3).$(uuid4)",interpret:true}]
+}
+
+function hud_display {
+    function lc:champion/hud
+    function lc:champions/jhin/hud with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
+}
+
+function loop {
+    execute as @e[tag=jhin.aa,tag=!motion_checked,type=arrow] at @s run function lc:champions/jhin/skills/aa
+    execute as @e[tag=jhin.aa,type=armor_stand] at @s run function lc:champions/jhin/skills/aa.animation
+    #execute as @e[tag=jhin.aa,tag=!jhin.q.aa,type=armor_stand] at @s run function lc:champions/jhin/skills/aa
+    #execute as @e[tag=jhin.q.aa,type=armor_stand] at @s run function lc:champions/jhin/skills/aa.q.active
+
+    execute as @e[tag=jhin.q,type=armor_stand] at @s run function lc:champions/jhin/skills/q.animation
+
+    execute as @e[tag=jhin.w.cast,type=area_effect_cloud] at @s run function lc:champions/jhin/skills/w.cast
+    execute as @e[tag=jhin.w.root.cd,type=area_effect_cloud] at @s run function lc:champions/jhin/skills/w.root
+
+    execute as @e[tag=jhin.trap.homing,type=armor_stand] at @s unless block ~ ~-0.1 ~ #like_air run function lc:champions/jhin/skills/e.trap
+    execute as @e[tag=jhin.trap,type=armor_stand,team=red] at @s if entity @e[team=!red,type=!#unvalid,distance=..1.5] run function lc:champions/jhin/skills/trap.triggered
+    execute as @e[tag=jhin.trap,type=armor_stand,team=blue] at @s if entity @e[team=!blue,type=!#unvalid,distance=..1.5] run function lc:champions/jhin/skills/trap.triggered
+    execute as @e[tag=jhin.trap.animation,type=armor_stand] at @s run function lc:champions/jhin/skills/trap.animation
+
+    execute as @e[tag=jhin.r.cast,type=area_effect_cloud] at @s run function lc:champions/jhin/skills/r.cast
+    execute as @e[tag=jhin.r.dummy,type=armor_stand] at @s run function lc:champions/jhin/skills/r.animation
+    execute as @e[tag=jhin.r.shot,type=area_effect_cloud] at @s run function lc:champions/jhin/skills/r.shot.animation
+    execute as @e[tag=jhin.r.limit,type=area_effect_cloud] at @s run function lc:champions/jhin/skills/r.limit
+}
+
+function main {
+    # Cooldown
+    function lc:champions/jhin/hud_display
+
+    ## Item Handling
+    execute unless predicate lc:champion/slot/head run function lc:champions/jhin/item/headwear
+    execute unless predicate lc:champion/slot/offhand run function lc:champions/jhin/item/offhand
+
+    ## Re-use
+    execute if predicate lc:champion/hold_q if score @s use_ability matches 1.. run function lc:champion/abilities/use_q
+    execute if predicate lc:champion/hold_w if score @s use_ability matches 1.. run function lc:champion/abilities/use_w
+    execute if predicate lc:champion/hold_e if score @s use_ability matches 1.. run function lc:champion/abilities/use_e
+    execute if predicate lc:champion/hold_r if score @s use_ability matches 1.. run function lc:champion/abilities/use_r
+
+    ## First use
+    execute if predicate lc:champion/use_q run function lc:champion/abilities/use_q
+
+    execute if predicate lc:champion/use_w run function lc:champion/abilities/use_w
+
+    execute if predicate lc:champion/use_e run function lc:champion/abilities/use_e
+
+    execute if predicate lc:champion/use_r run function lc:champion/abilities/use_r
+}
+
+function passive {
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] if score @s jhin.aa.count matches ..3 unless entity @e[tag=jhin.aa.cd,tag=<%team%>] run function lc:champions/jhin/skills/aa.reload
+        execute if entity @s[team=<%team%>] if entity @e[tag=jhin.aa.reload,tag=<%team%>,nbt={Age:50}] run scoreboard players set @s jhin.aa.count 4
+    }
+}
+
+function use_e {
+    scoreboard players set @s cd_e 7
+    scoreboard players remove @s mana 30
+
+    playsound minecraft:jhin.sfx.e master @a ~ ~ ~
+
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] run summon armor_stand ~ ~0.6 ~ {Invisible:1,Small:1,Invulnerable:1,Team:"<%team%>",Tags:["jhin.trap.homing"],equipment:{head:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800301f]}}}}}
+        execute if entity @s[team=<%team%>] as @e[team=<%team%>,tag=jhin.trap.homing,type=armor_stand,limit=1,sort=nearest] at @s run function lc:champions/jhin/skills/e.cast
+    }
+}
+
+function use_q {
+    scoreboard players set @s cd_q 5
+    scoreboard players remove @s mana 60
+    playsound minecraft:jhin.sfx.q master @a ~ ~ ~
+
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] rotated ~ 0 positioned ^ ^1 ^3 run tag @e[team=!<%team%>,distance=..3,type=!#unvalid,tag=!unvalid,limit=1,sort=nearest] add jhin.q.target
+        execute if entity @s[team=<%team%>] run summon armor_stand ~ ~1.2 ~ {Invisible:1,Marker:1,Tags:["jhin.q","block_by_windwall","unvalid"],Team:"<%team%>",equipment:{head:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800101f]}}}}}
+    }
+}
+
+function use_r {
+    scoreboard players set @s cd_r 60
+    scoreboard players remove @s mana 100
+    scoreboard players set @s rclick 0
+    scoreboard players set @s jhin.r.channel 220
+    scoreboard players set @s jhin.r.count 4
+    playsound minecraft:jhin.ultimate master @a ~ ~ ~
+    playsound minecraft:jhin.sfx.r master @a ~ ~ ~
+    playsound minecraft:jhin.sfx.r.channel master @a ~ ~ ~ 0.3
+
+    effect give @s speed 12 5 true
+    effect give @s resistance 12 127 true
+    attribute @s minecraft:gravity modifier add lol:jhin_hover -1 add_multiplied_total
+    effect give @s slow_falling 12 0 true
+    effect give @s invisibility 12 127 true
+
+    tag @s add r.animation
+    item replace entity @s armor.head with minecraft:air
+    item replace entity @s weapon.offhand with minecraft:air
+
+    execute if entity @s[team=red] if score .world lang matches 0 run bossbar add red.jhin.r {text:"Curtain Call"}
+    execute if entity @s[team=red] if score .world lang matches 1 run bossbar add red.jhin.r {text:"Sân Khấu Tử Thần"}
+    execute if entity @s[team=red] run bossbar set red.jhin.r max 220
+    execute if entity @s[team=red] run bossbar set red.jhin.r value 220
+    execute if entity @s[team=red] run bossbar set red.jhin.r players @s
+    execute if entity @s[team=red] run bossbar set red.jhin.r visible true
+
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:21,Tags:["red","jhin.r.cast","up"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:220,Tags:["red","jhin.r.cast","left"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:220,Tags:["red","jhin.r.cast","right"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=red] run tp @e[tag=jhin.r.cast,tag=red,tag=up] ~ ~ ~ ~ 0
+    execute if entity @s[team=red] run tp @e[tag=jhin.r.cast,tag=red,tag=left] ^0.5 ^ ^ ~ 0
+    execute if entity @s[team=red] run tp @e[tag=jhin.r.cast,tag=red,tag=right] ^-0.5 ^ ^ ~ 0
+
+    execute if entity @s[team=red] run summon armor_stand ~ ~ ~ {Tags:["jhin.r.dummy"],Invisible:1,Marker:1,Team:"red",Pose:{LeftArm:[10.0f,0.0f,0.0f]},Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:220,Tags:["jhin.r.cd","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],equipment:{offhand:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800021f]}}},head:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[800401f]}}}}}
+    execute if entity @s[team=red] run data modify entity @e[tag=jhin.r.dummy,team=red,limit=1] Rotation[0] set from entity @s Rotation[0]
+    execute if entity @s[team=red] run data modify entity @e[tag=jhin.r.cd,tag=red,limit=1] Rotation[0] set from entity @s Rotation[0]
+
+    execute if entity @s[team=red] as @e[tag=jhin.r.dummy,team=red,limit=1] store result score @s rot.x run data get entity @s Rotation[0]
+
+    execute if entity @s[team=blue] if score .world lang matches 0 run bossbar add blue.jhin.r {text:"Curtain Call"}
+    execute if entity @s[team=blue] if score .world lang matches 1 run bossbar add blue.jhin.r {text:"Sân Khấu Tử Thần"}
+    execute if entity @s[team=blue] run bossbar set blue.jhin.r max 220
+    execute if entity @s[team=blue] run bossbar set blue.jhin.r value 220
+    execute if entity @s[team=blue] run bossbar set blue.jhin.r players @s
+    execute if entity @s[team=blue] run bossbar set blue.jhin.r visible true
+
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:21,Tags:["blue","jhin.r.cast","up"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:220,Tags:["blue","jhin.r.cast","left"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:220,Tags:["blue","jhin.r.cast","right"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+    execute if entity @s[team=blue] run tp @e[tag=jhin.r.cast,tag=blue,tag=up] ~ ~ ~ ~ 0
+    execute if entity @s[team=blue] run tp @e[tag=jhin.r.cast,tag=blue,tag=left] ^0.5 ^ ^ ~ 0
+    execute if entity @s[team=blue] run tp @e[tag=jhin.r.cast,tag=blue,tag=right] ^-0.5 ^ ^ ~ 0
+
+    execute if entity @s[team=blue] run summon armor_stand ~ ~ ~ {Tags:["jhin.r.dummy"],Invisible:1,Marker:1,Team:"blue",Pose:{LeftArm:[10.0f,0.0f,0.0f]},Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:220,Tags:["jhin.r.cd","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],equipment:{offhand:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800021f]}}},head:{id:"iron_sword",count:1,components:{"minecraft:custom_model_data":{floats:[800401f]}}}}}
+    execute if entity @s[team=blue] run data modify entity @e[tag=jhin.r.dummy,team=blue,limit=1] Rotation[0] set from entity @s Rotation[0]
+    execute if entity @s[team=blue] run data modify entity @e[tag=jhin.r.cd,tag=blue,limit=1] Rotation[0] set from entity @s Rotation[0]
+
+    execute if entity @s[team=blue] as @e[tag=jhin.r.dummy,team=blue,limit=1] store result score @s rot.x run data get entity @s Rotation[0]
+}
+
+function use_w {
+    scoreboard players set @s cd_w 12
+    scoreboard players remove @s mana 70
+    tag @s add w.animation
+
+    playsound minecraft:jhin.sfx.w master @a ~ ~ ~
+
+    REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+        execute if entity @s[team=<%team%>] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:16,Tags:["<%team%>","jhin.w.cast","mid"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[team=<%team%>] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:15,Tags:["<%team%>","jhin.w.cast","left"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[team=<%team%>] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:15,Tags:["<%team%>","jhin.w.cast","right"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[team=<%team%>] run tp @e[tag=jhin.w.cast,tag=<%team%>] ~ ~ ~ ~ 0
+        execute if entity @s[team=<%team%>] run tp @e[tag=jhin.w.cast,tag=left,tag=<%team%>] ^-0.3 ^ ^ ~ 0
+        execute if entity @s[team=<%team%>] run tp @e[tag=jhin.w.cast,tag=right,tag=<%team%>] ^0.3 ^ ^ ~ 0
+    }
+}
+
+# ---- item: lc:champions/jhin/item/... ------------------------------------------------
+dir item {
+    function headwear {
+        clear @s iron_sword[minecraft:custom_data~{lol_item:1}]
+        execute if score .world lang matches 0 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[800001f]},minecraft:custom_name={text:"Jhin",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+        execute if score .world lang matches 1 run item replace entity @s armor.head with minecraft:iron_sword[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[800001f]},minecraft:custom_name={text:"Jhin",italic:false},minecraft:custom_data={lol_item:1,kill_item:1}]
+    }
+
+    function offhand {
+        clear @s carrot_on_a_stick[minecraft:custom_data~{lol_item:1}]
+        tag @s remove offhand_temp
+
+        item replace entity @s weapon.offhand with minecraft:carrot_on_a_stick[minecraft:tooltip_display={hidden_components:["minecraft:enchantments","minecraft:attribute_modifiers","minecraft:unbreakable","minecraft:can_break","minecraft:can_place_on","minecraft:stored_enchantments"]},minecraft:unbreakable={},minecraft:custom_model_data={floats:[9999f]},minecraft:custom_name={text:".",color:"#1b0c1b"},minecraft:custom_data={lol_item:1,kill_item:1,offhand:1}]
+    }
+}
+
+# ---- skills: lc:champions/jhin/skills/... --------------------------------------------
+dir skills {
+    function aa {
+        summon area_effect_cloud ~ ~ ~ {WaitTime:0,Tags:["motion_check"],Duration:1,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute rotated as @p run tp @e[tag=motion_check,limit=1] ~ ~ ~ ~ 0
+        execute store result score @s pos_x1 run data get entity @e[tag=motion_check,limit=1] Pos[0] 1000
+        execute store result score @s pos_y1 run data get entity @e[tag=motion_check,limit=1] Pos[1] 1000
+        execute store result score @s pos_z1 run data get entity @e[tag=motion_check,limit=1] Pos[2] 1000
+
+        execute rotated as @p rotated ~ 0 run tp @e[tag=motion_check,limit=1] ^ ^ ^0.1
+
+        execute store result score @s pos_x2 run data get entity @e[tag=motion_check,limit=1] Pos[0] 1000
+        execute store result score @s pos_y2 run data get entity @e[tag=motion_check,limit=1] Pos[1] 1000
+        execute store result score @s pos_z2 run data get entity @e[tag=motion_check,limit=1] Pos[2] 1000
+
+        execute store result entity @e[tag=jhin.aa,limit=1,tag=!motion_checked] Motion[0] double 0.025 run scoreboard players operation @s pos_x2 -= @s pos_x1
+        execute store result entity @e[tag=jhin.aa,limit=1,tag=!motion_checked] Motion[1] double 0.025 run scoreboard players operation @s pos_y2 -= @s pos_y1
+        execute store result entity @e[tag=jhin.aa,limit=1,tag=!motion_checked] Motion[2] double 0.025 run scoreboard players operation @s pos_z2 -= @s pos_z1
+
+        data modify entity @e[tag=jhin.aa,tag=!motion_checked,limit=1] Owner set from entity @p[tag=jhin] UUID
+        data modify entity @e[tag=jhin.aa,tag=!motion_checked,limit=1] LeftOwner set value 1
+        tag @e[tag=jhin.aa,limit=1,tag=!motion_checked] add motion_checked
+    }
+
+    function aa.4.effect {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] positioned as @e[type=!#unvalid,tag=!unvalid,team=!<%team%>,sort=nearest,limit=1] run particle item{item:"redstone_block"} ~ ~1 ~ 0 0 0 0.1 100 force
+            execute if entity @s[team=<%team%>] as @p[tag=jhin,team=<%team%>] run function lc:champions/jhin/skills/aa.reload
+            execute if entity @s[team=<%team%>] run effect give @p[tag=jhin,team=<%team%>] speed 2 1 false
+        }
+    }
+
+    function aa.animation {
+        execute if entity @s[tag=!aa.4] run particle dust{color:[0.79,0.6,0.99],scale:1} ~ ~-0.4 ~ 0 0 0 0 1 force
+        execute if entity @s[tag=aa.4] run particle dust{color:[0.7,0.15,0.34],scale:1} ~ ~-0.4 ~ 0 0 0 0 1 force
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute unless entity @e[tag=jhin.aa,type=arrow,distance=..0.5] if entity @s[team=<%team%>] positioned ~ ~-0.25 ~ if entity @e[type=!#unvalid,tag=!jhin,distance=..2,tag=!unvalid,team=!<%team%>] run function lc:champions/jhin/skills/aa.count
+            execute unless entity @e[tag=jhin.aa,type=arrow,distance=..0.5] if entity @s[team=<%team%>,tag=aa.4] positioned ~ ~-0.25 ~ if entity @e[type=!#unvalid,tag=!jhin,distance=..2,tag=!unvalid,team=!<%team%>] run function lc:champions/jhin/skills/aa.4.effect
+        }
+
+        execute if entity @e[tag=jhin.aa,nbt={inGround:1b},type=arrow,distance=..0.5] run kill @e[tag=jhin.aa,type=arrow,limit=1,sort=nearest,nbt={inGround:1b}]
+        execute unless entity @e[tag=aa.cd,type=area_effect_cloud,distance=..0.01] run kill @e[type=arrow,tag=jhin.aa,distance=..0.5,limit=1,sort=nearest]
+        execute unless entity @e[tag=jhin.aa,type=arrow,distance=..0.5] run kill @s
+    }
+
+    function aa.count {
+        execute if entity @s[team=red] if score @p[tag=jhin,team=red] jhin.aa.count matches 4 at @p[tag=jhin,team=red] run playsound minecraft:jhin.sfx.aa1 master @a ~ ~ ~
+        execute if entity @s[team=red] if score @p[tag=jhin,team=red] jhin.aa.count matches 3 at @p[tag=jhin,team=red] run playsound minecraft:jhin.sfx.aa2 master @a ~ ~ ~
+        execute if entity @s[team=red] if score @p[tag=jhin,team=red] jhin.aa.count matches 2 at @p[tag=jhin,team=red] run playsound minecraft:jhin.sfx.aa3 master @a ~ ~ ~
+        execute if entity @s[team=red] if score @p[tag=jhin,team=red] jhin.aa.count matches 1 at @p[tag=jhin,team=red] run playsound minecraft:jhin.sfx.aa4 master @a ~ ~ ~
+        execute if entity @s[team=red] if score @p[tag=jhin,team=red] jhin.aa.count matches 2 at @p[tag=jhin,team=red] run playsound minecraft:jhin.sfx.aa4.load master @a ~ ~ ~ 0.3
+        execute if entity @s[team=red] if score @p[tag=jhin,team=red] jhin.aa.count matches 1 at @p[tag=jhin,team=red] run stopsound @p[tag=jhin,team=red] master minecraft:jhin.sfx.aa4.load
+
+        execute if entity @s[team=red] run kill @e[tag=jhin.aa.cd,tag=red]
+        execute if entity @s[team=red] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:200,Tags:["jhin.aa.cd","red"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[team=red] run scoreboard players remove @p[tag=jhin,team=red,scores={jhin.aa.count=2..4}] jhin.aa.count 1
+
+        execute if entity @s[team=blue] if score @p[tag=jhin,team=blue] jhin.aa.count matches 4 at @p[tag=jhin,team=blue] run playsound minecraft:jhin.sfx.aa1 master @a ~ ~ ~
+        execute if entity @s[team=blue] if score @p[tag=jhin,team=blue] jhin.aa.count matches 3 at @p[tag=jhin,team=blue] run playsound minecraft:jhin.sfx.aa2 master @a ~ ~ ~
+        execute if entity @s[team=blue] if score @p[tag=jhin,team=blue] jhin.aa.count matches 2 at @p[tag=jhin,team=blue] run playsound minecraft:jhin.sfx.aa3 master @a ~ ~ ~
+        execute if entity @s[team=blue] if score @p[tag=jhin,team=blue] jhin.aa.count matches 1 at @p[tag=jhin,team=blue] run playsound minecraft:jhin.sfx.aa4 master @a ~ ~ ~
+        execute if entity @s[team=blue] if score @p[tag=jhin,team=blue] jhin.aa.count matches 2 at @p[tag=jhin,team=blue] run playsound minecraft:jhin.sfx.aa4.load master @a ~ ~ ~ 0.3
+        execute if entity @s[team=blue] if score @p[tag=jhin,team=blue] jhin.aa.count matches 1 at @p[tag=jhin,team=blue] run stopsound @p[tag=jhin,team=blue] master minecraft:jhin.sfx.aa4.load
+
+        execute if entity @s[team=blue] run kill @e[tag=jhin.aa.cd,tag=blue]
+        execute if entity @s[team=blue] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:200,Tags:["jhin.aa.cd","blue"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        execute if entity @s[team=blue] run scoreboard players remove @p[tag=jhin,team=blue,scores={jhin.aa.count=2..4}] jhin.aa.count 1
+    }
+
+    function aa.reload {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:51,Tags:["jhin.aa.reload","<%team%>"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+            execute if entity @s[team=<%team%>] run scoreboard players set @p[tag=jhin,team=<%team%>] jhin.aa.count 0
+            execute if entity @s[team=<%team%>] run stopsound @p[tag=jhin,team=<%team%>] master minecraft:jhin.sfx.aa4.load
+        }
+    }
+
+    function e.cast {
+        execute store result score @s pos_x1 run data get entity @s Pos[0] 1000
+        execute store result score @s pos_y1 run data get entity @s Pos[1] 1000
+        execute store result score @s pos_z1 run data get entity @s Pos[2] 1000
+
+        execute if entity @s[team=red] rotated as @p[tag=jhin,team=red] rotated ~ -30 run tp @s ^ ^ ^0.1
+        execute if entity @s[team=blue] rotated as @p[tag=jhin,team=blue] rotated ~ -30 run tp @s ^ ^ ^0.1
+
+        execute store result score @s pos_x2 run data get entity @s Pos[0] 1000
+        execute store result score @s pos_y2 run data get entity @s Pos[1] 1000
+        execute store result score @s pos_z2 run data get entity @s Pos[2] 1000
+
+        execute store result entity @s Motion[0] double 0.01 run scoreboard players operation @s pos_x2 -= @s pos_x1
+        execute store result entity @s Motion[1] double 0.01 run scoreboard players operation @s pos_y2 -= @s pos_y1
+        execute store result entity @s Motion[2] double 0.01 run scoreboard players operation @s pos_z2 -= @s pos_z1
+    }
+
+    function e.trap {
+        execute if entity @s[team=red] run summon armor_stand ~ ~ ~ {Invisible:1,Marker:1,Team:"red",Tags:["jhin.trap"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:360,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],equipment:{head:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800301f]}}}}}
+        execute if entity @s[team=blue] run summon armor_stand ~ ~ ~ {Invisible:1,Marker:1,Team:"blue",Tags:["jhin.trap"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:360,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],equipment:{head:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800301f]}}}}}
+
+        kill @s
+    }
+
+    function q.animation {
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^ ^ ^ 0 0 0 1 3 force
+
+        execute if entity @s[team=red] facing entity @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!red,type=!#unvalid,limit=1] eyes run tp @s ^ ^ ^0.4
+        execute if entity @s[team=red] as @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!red,type=!#unvalid,limit=1,sort=nearest] at @s anchored eyes if entity @e[tag=jhin.q,team=red,type=armor_stand,distance=..1.75] run playsound jhin.sfx.q.hit master @a ~ ~ ~
+        execute if entity @s[team=red] as @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!red,type=!#unvalid,limit=1,sort=nearest] at @s anchored eyes if entity @e[tag=jhin.q,team=red,type=armor_stand,distance=..1.75] run scoreboard players add @e[tag=jhin.q,team=red,type=armor_stand,limit=1,sort=nearest] jhin.q.count 1
+        execute if entity @s[team=red] as @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!red,type=!#unvalid,limit=1,sort=nearest] at @s anchored eyes if entity @e[tag=jhin.q,team=red,type=armor_stand,distance=..1.75] run effect give @s[type=!#undead] instant_damage 1 0 true
+        execute if entity @s[team=red] as @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!red,type=!#unvalid,limit=1,sort=nearest] at @s anchored eyes if entity @e[tag=jhin.q,team=red,type=armor_stand,distance=..1.75] run effect give @s[type=#undead] instant_health 1 0 true
+        execute if entity @s[team=red] as @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!red,type=!#unvalid,limit=1,sort=nearest] at @s anchored eyes if entity @e[tag=jhin.q,team=red,type=armor_stand,distance=..1.75] anchored feet run tag @e[tag=!jhin.q.target,team=!red,type=!#unvalid,distance=..4,limit=1,sort=nearest] add jhin.q.target
+        execute if entity @s[team=red] as @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!red,type=!#unvalid,limit=1,sort=nearest] at @s anchored eyes if entity @e[tag=jhin.q,team=red,type=armor_stand,distance=..1.75] run tag @s add jhin.q.target.old
+
+        execute if entity @s[team=red] unless entity @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!red,type=!#unvalid] run tag @e[tag=jhin.q.target.old,team=!red,type=!#unvalid] remove jhin.q.target
+        execute if entity @s[team=red] unless entity @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!red,type=!#unvalid] run tag @e[tag=jhin.q.target.old,team=!red,type=!#unvalid] remove jhin.q.target.old
+        execute if entity @s[team=red] unless entity @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!red,type=!#unvalid] run kill @s
+        execute if entity @s[team=red] if score @s jhin.q.count matches 4 run tag @e[tag=jhin.q.target,team=!red,type=!#unvalid] remove jhin.q.target
+        execute if entity @s[team=red] if score @s jhin.q.count matches 4 run tag @e[tag=jhin.q.target.old,team=!red,type=!#unvalid] remove jhin.q.target.old
+
+        execute if entity @s[team=blue] facing entity @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!blue,type=!#unvalid,limit=1] eyes run tp @s ^ ^ ^0.4
+        execute if entity @s[team=blue] as @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!blue,type=!#unvalid,limit=1,sort=nearest] at @s anchored eyes if entity @e[tag=jhin.q,team=blue,type=armor_stand,distance=..1.75] run playsound jhin.sfx.q.hit master @a ~ ~ ~
+        execute if entity @s[team=blue] as @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!blue,type=!#unvalid,limit=1,sort=nearest] at @s anchored eyes if entity @e[tag=jhin.q,team=blue,type=armor_stand,distance=..1.75] run scoreboard players add @e[tag=jhin.q,team=blue,type=armor_stand,limit=1,sort=nearest] jhin.q.count 1
+        execute if entity @s[team=blue] as @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!blue,type=!#unvalid,limit=1,sort=nearest] at @s anchored eyes if entity @e[tag=jhin.q,team=blue,type=armor_stand,distance=..1.75] run effect give @s[type=!#undead] instant_damage 1 0 true
+        execute if entity @s[team=blue] as @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!blue,type=!#unvalid,limit=1,sort=nearest] at @s anchored eyes if entity @e[tag=jhin.q,team=blue,type=armor_stand,distance=..1.75] run effect give @s[type=#undead] instant_health 1 0 true
+        execute if entity @s[team=blue] as @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!blue,type=!#unvalid,limit=1,sort=nearest] at @s anchored eyes if entity @e[tag=jhin.q,team=blue,type=armor_stand,distance=..1.75] anchored feet run tag @e[tag=!jhin.q.target,team=!blue,type=!#unvalid,distance=..4,limit=1,sort=nearest] add jhin.q.target
+        execute if entity @s[team=blue] as @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!blue,type=!#unvalid,limit=1,sort=nearest] at @s anchored eyes if entity @e[tag=jhin.q,team=blue,type=armor_stand,distance=..1.75] run tag @s add jhin.q.target.old
+
+        execute if entity @s[team=blue] unless entity @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!blue,type=!#unvalid] run tag @e[tag=jhin.q.target.old,team=!blue,type=!#unvalid] remove jhin.q.target
+        execute if entity @s[team=blue] unless entity @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!blue,type=!#unvalid] run tag @e[tag=jhin.q.target.old,team=!blue,type=!#unvalid] remove jhin.q.target.old
+        execute if entity @s[team=blue] unless entity @e[tag=jhin.q.target,tag=!jhin.q.target.old,team=!blue,type=!#unvalid] run kill @s
+        execute if entity @s[team=blue] if score @s jhin.q.count matches 4 run tag @e[tag=jhin.q.target,team=!blue,type=!#unvalid] remove jhin.q.target
+        execute if entity @s[team=blue] if score @s jhin.q.count matches 4 run tag @e[tag=jhin.q.target.old,team=!blue,type=!#unvalid] remove jhin.q.target.old
+
+        execute if score @s jhin.q.count matches 4 run kill @s
+    }
+
+    function r.animation {
+        execute if entity @s[team=red] run scoreboard players remove @p[scores={jhin.r.channel=1..}] jhin.r.channel 1
+        execute if entity @s[team=red] store result bossbar red.jhin.r value run scoreboard players get @p[tag=jhin,team=red] jhin.r.channel
+
+        execute if entity @s[team=red] if entity @e[tag=jhin.r.cd,type=minecraft:area_effect_cloud,distance=..1] unless entity @e[tag=jhin.r.cast,tag=up,tag=red] run tp @p[tag=jhin,team=red] ~ ~8 ~
+        #execute if entity @s[team=red] run data modify entity @s Rotation[0] set from entity @p[tag=jhin,team=red] Rotation[0]
+        execute if entity @s[team=red] as @p[tag=jhin,team=red] store result score @s rot.x run data get entity @s Rotation[0]
+        execute if entity @s[team=red] run scoreboard players operation @e[tag=jhin.r.cd,tag=red,limit=1] rot.x = @p[tag=jhin,team=red] rot.x
+        execute if entity @s[team=red] run scoreboard players operation @e[tag=jhin.r.cd,tag=red,limit=1] rot.x -= @s rot.x
+        execute if entity @s[team=red] if score @e[tag=jhin.r.cd,tag=red,limit=1] rot.x matches -34..34 run data modify entity @s Rotation[0] set from entity @p[tag=jhin,team=red] Rotation[0]
+        execute if entity @s[team=red] if score @e[tag=jhin.r.cd,tag=red,limit=1] rot.x matches 35.. rotated as @e[tag=jhin.r.cd,tag=red,type=area_effect_cloud,limit=1,sort=nearest] run tp @s ~ ~ ~ ~34 0
+        execute if entity @s[team=red] if score @e[tag=jhin.r.cd,tag=red,limit=1] rot.x matches ..-35 rotated as @e[tag=jhin.r.cd,tag=red,type=area_effect_cloud,limit=1,sort=nearest] run tp @s ~ ~ ~ ~-34 0
+        execute if entity @s[team=red] unless entity @e[tag=jhin.r.cd,type=minecraft:area_effect_cloud,distance=..1] as @p[tag=jhin,team=red] at @s run function lc:champions/jhin/skills/r.end
+
+        execute if entity @s[team=blue] run scoreboard players remove @p[scores={jhin.r.channel=1..}] jhin.r.channel 1
+        execute if entity @s[team=blue] store result bossbar blue.jhin.r value run scoreboard players get @p[tag=jhin,team=blue] jhin.r.channel
+
+        execute if entity @s[team=blue] if entity @e[tag=jhin.r.cd,type=minecraft:area_effect_cloud,distance=..1] unless entity @e[tag=jhin.r.cast,tag=up,tag=blue] run tp @p[tag=jhin,team=blue] ~ ~8 ~
+        #execute if entity @s[team=blue] run data modify entity @s Rotation[0] set from entity @p[tag=jhin,team=blue] Rotation[0]
+        execute if entity @s[team=blue] as @p[tag=jhin,team=blue] store result score @s rot.x run data get entity @s Rotation[0]
+        execute if entity @s[team=blue] run scoreboard players operation @e[tag=jhin.r.cd,tag=blue,limit=1] rot.x = @p[tag=jhin,team=blue] rot.x
+        execute if entity @s[team=blue] run scoreboard players operation @e[tag=jhin.r.cd,tag=blue,limit=1] rot.x -= @s rot.x
+        execute if entity @s[team=blue] if score @e[tag=jhin.r.cd,tag=blue,limit=1] rot.x matches -34..34 run data modify entity @s Rotation[0] set from entity @p[tag=jhin,team=blue] Rotation[0]
+        execute if entity @s[team=blue] if score @e[tag=jhin.r.cd,tag=blue,limit=1] rot.x matches 35.. rotated as @e[tag=jhin.r.cd,tag=blue,type=area_effect_cloud,limit=1,sort=nearest] run tp @s ~ ~ ~ ~34 0
+        execute if entity @s[team=blue] if score @e[tag=jhin.r.cd,tag=blue,limit=1] rot.x matches ..-35 rotated as @e[tag=jhin.r.cd,tag=blue,type=area_effect_cloud,limit=1,sort=nearest] run tp @s ~ ~ ~ ~-34 0
+        execute if entity @s[team=blue] unless entity @e[tag=jhin.r.cd,type=minecraft:area_effect_cloud,distance=..1] as @p[tag=jhin,team=blue] at @s run function lc:champions/jhin/skills/r.end
+    }
+
+    function r.cast {
+        execute if entity @s[tag=up] run tp @s ~ ~0.4 ~
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=up] as @e[tag=left,limit=1,sort=nearest,tag=jhin.r.cast,tag=<%team%>] at @s run tp @s ~ ~ ~ ~-1.65 0
+            execute if entity @s[tag=up] as @e[tag=right,limit=1,sort=nearest,tag=jhin.r.cast,tag=<%team%>] at @s run tp @s ~ ~ ~ ~1.65 0
+            execute if entity @s[tag=up] as @e[tag=right,limit=1,sort=nearest,tag=jhin.r.cast,tag=<%team%>] at @s run summon area_effect_cloud ^ ^ ^60 {WaitTime:0,Tags:["jhin.r.limit","<%team%>"],Duration:999999,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+            execute if entity @s[tag=up] as @e[tag=left,limit=1,sort=nearest,tag=jhin.r.cast,tag=<%team%>] at @s run summon area_effect_cloud ^ ^ ^60 {WaitTime:0,Tags:["jhin.r.limit","<%team%>"],Duration:999999,custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+            execute if entity @s[tag=up,tag=<%team%>] run tp @p[tag=jhin,team=<%team%>] ~ ~ ~
+        }
+
+        execute if entity @s[tag=!up] run function lc:champions/jhin/skills/r.edge
+    }
+
+    function r.edge {
+        particle dust{color:[0.79,0.6,0.99],scale:1.5} ^ ^1 ^ 0 0 0 1 1 force
+        execute if entity @s[tag=red] if entity @e[tag=jhin.r.dummy,team=red,distance=..60] positioned ^ ^ ^0.75 run function lc:champions/jhin/skills/r.edge
+        execute if entity @s[tag=blue] if entity @e[tag=jhin.r.dummy,team=blue,distance=..60] positioned ^ ^ ^0.75 run function lc:champions/jhin/skills/r.edge
+    }
+
+    function r.end {
+        scoreboard players set @s jhin.r.count 0
+
+        execute if entity @s[team=red] run bossbar remove red.jhin.r
+        execute if entity @s[team=red] run kill @e[tag=jhin.r.limit,tag=red]
+        execute if entity @s[team=red] run kill @e[tag=jhin.r.cast,tag=red]
+        execute if entity @s[team=red] facing entity @e[tag=jhin.r.dummy,team=red,limit=1] feet run tp @s ^ ^ ^0.4
+
+        execute if entity @s[team=red] if entity @e[tag=jhin.r.dummy,team=red,distance=..1] run stopsound @s master minecraft:jhin.sfx.r.channel
+        execute if entity @s[team=red] if entity @e[tag=jhin.r.dummy,team=red,distance=..1] run tag @s remove r.animation
+        execute if entity @s[team=red] if entity @e[tag=jhin.r.dummy,team=red,distance=..1] run effect clear @s levitation
+        execute if entity @s[team=red] if entity @e[tag=jhin.r.dummy,team=red,distance=..1] run attribute @s minecraft:gravity modifier remove lol:jhin_hover
+        execute if entity @s[team=red] if entity @e[tag=jhin.r.dummy,team=red,distance=..1] run effect clear @s speed
+        execute if entity @s[team=red] if entity @e[tag=jhin.r.dummy,team=red,distance=..1] run effect clear @s resistance
+        execute if entity @s[team=red] if entity @e[tag=jhin.r.dummy,team=red,distance=..1] run effect clear @s invisibility
+        execute if entity @s[team=red] if entity @e[tag=jhin.r.dummy,team=red,distance=..1] run item replace entity @s weapon.offhand with air
+        execute if entity @s[team=red] if entity @e[tag=jhin.r.dummy,team=red,distance=..1] run kill @e[tag=jhin.r.dummy,team=red,distance=..1]
+
+        execute if entity @s[team=blue] run bossbar remove blue.jhin.r
+        execute if entity @s[team=blue] run kill @e[tag=jhin.r.limit,tag=blue]
+        execute if entity @s[team=blue] run kill @e[tag=jhin.r.cast,tag=blue]
+        execute if entity @s[team=blue] facing entity @e[tag=jhin.r.dummy,team=blue,limit=1] feet run tp @s ^ ^ ^0.4
+
+        execute if entity @s[team=blue] if entity @e[tag=jhin.r.dummy,team=blue,distance=..1] run stopsound @s master minecraft:jhin.sfx.r.channel
+        execute if entity @s[team=blue] if entity @e[tag=jhin.r.dummy,team=blue,distance=..1] run tag @s remove r.animation
+        execute if entity @s[team=blue] if entity @e[tag=jhin.r.dummy,team=blue,distance=..1] run effect clear @s levitation
+        execute if entity @s[team=blue] if entity @e[tag=jhin.r.dummy,team=blue,distance=..1] run attribute @s minecraft:gravity modifier remove lol:jhin_hover
+        execute if entity @s[team=blue] if entity @e[tag=jhin.r.dummy,team=blue,distance=..1] run effect clear @s speed
+        execute if entity @s[team=blue] if entity @e[tag=jhin.r.dummy,team=blue,distance=..1] run effect clear @s resistance
+        execute if entity @s[team=blue] if entity @e[tag=jhin.r.dummy,team=blue,distance=..1] run effect clear @s invisibility
+        execute if entity @s[team=blue] if entity @e[tag=jhin.r.dummy,team=blue,distance=..1] run item replace entity @s weapon.offhand with air
+        execute if entity @s[team=blue] if entity @e[tag=jhin.r.dummy,team=blue,distance=..1] run kill @e[tag=jhin.r.dummy,team=blue,distance=..1]
+    }
+
+    function r.limit {
+        execute rotated as @e[tag=jhin.r.cast,limit=1,sort=nearest] run particle dust{color:[0.79,0.6,0.99],scale:1.5} ^ ^1 ^ 0 0 0 1 1 force
+        execute rotated as @e[tag=jhin.r.cast,limit=1,sort=nearest] run particle dust{color:[0.79,0.6,0.99],scale:1.5} ^0.5 ^1 ^ 0 0 0 1 1 force
+        execute rotated as @e[tag=jhin.r.cast,limit=1,sort=nearest] run particle dust{color:[0.79,0.6,0.99],scale:1.5} ^-0.5 ^1 ^ 0 0 0 1 1 force
+    }
+
+    function r.shot {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:20,Tags:["jhin.r.shot.cd","<%team%>"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+            execute if entity @s[team=<%team%>] if score @s jhin.r.count matches 2.. run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:999999,Tags:["jhin.r.shot","<%team%>"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+            execute if entity @s[team=<%team%>] if score @s jhin.r.count matches 1 run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:999999,Tags:["jhin.r.shot","4","<%team%>"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+            execute if entity @s[team=<%team%>] as @e[tag=jhin.r.dummy,team=<%team%>,limit=1] at @s run tp @e[tag=jhin.r.shot,limit=1,sort=nearest] ~ ~ ~ ~ 0
+        }
+
+        playsound minecraft:jhin.sfx.r.shot master @a ~ ~ ~
+        scoreboard players remove @s jhin.r.count 1
+
+        execute if entity @s[team=red] if score @s jhin.r.count matches 0 as @e[tag=jhin.r.dummy,team=red] at @s run kill @e[tag=jhin.r.cd,limit=1,sort=nearest]
+        execute if entity @s[team=blue] if score @s jhin.r.count matches 0 as @e[tag=jhin.r.dummy,team=blue] at @s run kill @e[tag=jhin.r.cd,limit=1,sort=nearest]
+    }
+
+    function r.shot.animation {
+        tp @s ^ ^ ^2.5
+        execute if entity @s[tag=!4] run particle dust{color:[0.79,0.6,0.99],scale:4} ^ ^1 ^ 0.2 0.2 0.2 1 3 force
+        execute if entity @s[tag=4] run particle dust{color:[0.7,0.15,0.34],scale:4} ^ ^1 ^ 0.2 0.2 0.2 1 3 force
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>] unless entity @e[tag=jhin.r.dummy,team=<%team%>,distance=..60] run kill @s
+            execute if entity @s[tag=<%team%>,tag=!4] if entity @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,distance=..1.5] run effect give @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,distance=..1.5,limit=1,sort=nearest] instant_damage 1 0 true
+            execute if entity @s[tag=<%team%>,tag=4] if entity @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,distance=..1.5] run effect give @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,distance=..1.5,limit=1,sort=nearest] instant_damage 1 1 true
+            execute if entity @s[tag=<%team%>,tag=4] if entity @e[team=!<%team%>,type=#unit.huge,tag=!unvalid,distance=..1.5] run particle item{item:"redstone_block"} ~ ~1 ~ 0 0 0 0.1 100 force
+            execute if entity @s[tag=<%team%>] if entity @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,distance=..1.5] run effect give @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,distance=..1.5,limit=1,sort=nearest] slowness 1 4 true
+            execute if entity @s[tag=<%team%>] if entity @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,distance=..1.5] run effect give @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,distance=..1.5,limit=1,sort=nearest] glowing 1 0 true
+            execute if entity @s[tag=<%team%>] if entity @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,distance=..1.5] run playsound jhin.sfx.r.hit master @a ~ ~ ~
+            execute if entity @s[tag=<%team%>] if entity @e[team=!<%team%>,type=#unit.huge,tag=!unvalid,distance=..1.5] run kill @s
+        }
+    }
+
+    function trap.animation {
+        tp @s ~ ~ ~ ~4 ~
+
+        execute if entity @e[tag=jhin.trap.cd,type=minecraft:area_effect_cloud,distance=..1,nbt={Age:10}] run playsound jhin.sfx.bloom master @a ~ ~ ~
+
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^ ^.1 ^2.5 0 0 0 1 1 force
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^ ^.1 ^-2.5 0 0 0 1 1 force
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^2.5 ^.1 ^ 0 0 0 1 1 force
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^-2.5 ^.1 ^ 0 0 0 1 1 force
+
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^ ^.1 ^2 0 0 0 1 1 force
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^ ^.1 ^-2 0 0 0 1 1 force
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^2 ^.1 ^ 0 0 0 1 1 force
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^-2 ^.1 ^ 0 0 0 1 1 force
+
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^ ^.1 ^1.5 0 0 0 1 1 force
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^ ^.1 ^-1.5 0 0 0 1 1 force
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^1.5 ^.1 ^ 0 0 0 1 1 force
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^-1.5 ^.1 ^ 0 0 0 1 1 force
+
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^ ^.1 ^1 0 0 0 1 1 force
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^ ^.1 ^-1 0 0 0 1 1 force
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^1 ^.1 ^ 0 0 0 1 1 force
+        particle dust{color:[0.79,0.6,0.99],scale:1} ^-1 ^.1 ^ 0 0 0 1 1 force
+
+        execute unless entity @e[tag=jhin.trap.cd,type=minecraft:area_effect_cloud,distance=..1] at @s run function lc:champions/jhin/skills/trap.explode
+        execute unless entity @e[tag=jhin.trap.cd,type=minecraft:area_effect_cloud,distance=..1] run kill @s
+    }
+
+    function trap.explode {
+        particle end_rod ~ ~ ~ 0 0 0 0.2 100 force
+        particle witch ~ ~ ~ 0 0 0 1 100 force
+        particle crimson_spore ~ ~0.2 ~ 0 0 0 0.5 100 force
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run effect give @e[team=!<%team%>,distance=..2.5,type=!#unvalid,tag=!unvalid] instant_damage 1 0 true
+            execute if entity @s[team=<%team%>] run effect give @e[team=!<%team%>,distance=..2.5,type=#undead,tag=!unvalid] instant_health 1 0 true
+        }
+    }
+
+    function trap.triggered {
+        kill @s[tag=jhin.trap]
+        playsound jhin.sfx.e.trigger master @a ~ ~ ~
+
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[team=<%team%>] run effect give @e[team=!<%team%>,distance=..2.5] slowness 2 1 false
+            execute if entity @s[team=<%team%>] run effect give @e[team=!<%team%>,distance=..2.5] glowing 4 1 false
+            execute if entity @s[team=<%team%>] run summon armor_stand ~ ~ ~ {Invisible:1,Marker:1,Team:"<%team%>",Tags:["jhin.trap.animation","unvalid"],Passengers:[{id:"area_effect_cloud",WaitTime:0,Duration:40,Tags:["jhin.trap.cd"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}],equipment:{head:{id:"carrot_on_a_stick",count:1,components:{"minecraft:custom_model_data":{floats:[800301f]}}}}}
+        }
+    }
+
+    function w.animation {
+        execute if entity @s[tag=left] run particle dust{color:[0.79,0.6,0.99],scale:0.5} ^ ^1 ^ 0 0 0 1 1 force
+        execute if entity @s[tag=red,tag=left] if entity @p[tag=jhin,team=red,distance=..45] positioned ^ ^ ^1 run function lc:champions/jhin/skills/w.animation
+        execute if entity @s[tag=blue,tag=left] if entity @p[tag=jhin,team=blue,distance=..45] positioned ^ ^ ^1 run function lc:champions/jhin/skills/w.animation
+
+        execute if entity @s[tag=right] run particle dust{color:[0.79,0.6,0.99],scale:0.5} ^ ^1 ^ 0 0 0 1 1 force
+        execute if entity @s[tag=red,tag=right] if entity @p[tag=jhin,team=red,distance=..45] positioned ^ ^ ^1 run function lc:champions/jhin/skills/w.animation
+        execute if entity @s[tag=blue,tag=right] if entity @p[tag=jhin,team=blue,distance=..45] positioned ^ ^ ^1 run function lc:champions/jhin/skills/w.animation
+
+        execute if entity @s[tag=mid] run particle dust{color:[0.79,0.6,0.99],scale:1} ^ ^1 ^ 0 0 0 1 1 force
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>,tag=mid] run tag @p[tag=jhin,team=<%team%>] remove w.animation
+            execute if entity @s[tag=<%team%>,tag=mid] if entity @p[tag=jhin,team=<%team%>,distance=..45] unless entity @e[team=!<%team%>,type=#unit.huge,tag=!unvalid,distance=..1] positioned ^ ^ ^1 run function lc:champions/jhin/skills/w.animation
+            execute if entity @s[tag=<%team%>,tag=mid] if entity @e[team=!<%team%>,type=#unit.huge,tag=!unvalid,distance=..1,limit=1,sort=nearest] run effect give @p[tag=jhin,team=<%team%>] speed 2 1 false
+            execute if entity @s[tag=<%team%>,tag=mid] run effect give @e[team=!<%team%>,type=!#unvalid,tag=!unvalid,distance=..1,sort=nearest] wither 1 1 true
+            execute if entity @s[tag=<%team%>,tag=mid] run tag @e[team=!<%team%>,type=#unit.huge,tag=!unvalid,distance=..1,limit=1,sort=nearest] add jhin.w.root
+            execute if entity @s[tag=<%team%>,tag=mid] run tag @e[team=!<%team%>,tag=jhin.w.root] add root
+            execute if entity @s[tag=<%team%>,tag=mid] run summon area_effect_cloud ~ ~ ~ {WaitTime:0,Duration:46,Tags:["jhin.w.root.cd","<%team%>"],custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}}
+        }
+    }
+
+    function w.cast {
+        execute if entity @s[tag=red,tag=mid] run tp @p[tag=jhin,team=red] ~ ~ ~ ~ ~
+        execute if entity @s[tag=blue,tag=mid] run tp @p[tag=jhin,team=blue] ~ ~ ~ ~ ~
+
+        execute if entity @s[tag=left] run function lc:champions/jhin/skills/w.animation
+        execute if entity @s[tag=left] run tp @s ^0.02 ^ ^
+        execute if entity @s[tag=right] run function lc:champions/jhin/skills/w.animation
+        execute if entity @s[tag=right] run tp @s ^-0.02 ^ ^
+
+        execute if entity @s[nbt={Age:15},tag=mid] run function lc:champions/jhin/skills/w.animation
+    }
+
+    function w.root {
+        REPEAT([["red","blue"],["blue","red"]]) as team, enemy {
+            execute if entity @s[tag=<%team%>,nbt={Age:45}] positioned as @e[team=!<%team%>,tag=jhin.w.root,limit=1,sort=nearest] run kill @e[tag=particle.root,limit=1,sort=nearest]
+            execute if entity @s[tag=<%team%>,nbt={Age:45}] run tag @e[team=!<%team%>,tag=jhin.w.root] remove root
+            execute if entity @s[tag=<%team%>,nbt={Age:45}] run tag @e[team=!<%team%>,tag=jhin.w.root] remove jhin.w.root
+        }
+    }
+}
