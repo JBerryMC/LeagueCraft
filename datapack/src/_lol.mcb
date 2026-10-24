@@ -212,9 +212,6 @@ function main {
 
 function main_10t {
     schedule function _lol:main_10t 10t replace
-    execute as @a[tag=champion,gamemode=!spectator] at @s unless predicate _lol:is_flying unless data entity @s RootVehicle anchored eyes unless block ^ ^ ^ #like_air run function _lol:effect/stuck
-    execute as @a[tag=champion,gamemode=!spectator] at @s unless predicate _lol:is_flying unless data entity @s RootVehicle anchored feet unless block ^ ^ ^ #like_air run function _lol:effect/stuck
-    execute as @a[tag=champion,gamemode=!spectator] at @s if predicate _lol:is_flying anchored eyes unless block ^ ^ ^ #like_air on vehicle as @s[tag=lol.is_flying] run function _lol:effect/stuck
 }
 
 function main_20t {

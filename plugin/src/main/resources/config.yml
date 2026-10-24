@@ -28,6 +28,8 @@ keys:
 # Key labels under the HUD icons. "key.<control>" shows whatever key the player bound to that
 # Minecraft control (key.hotbar.1 shows "1", or whatever they rebound Hotbar Slot 1 to). Anything else is shown as
 # written; there's room for 1-2 characters. summoner-1 is the label under summoner spell 1.
+# These defaults are what the datapack shows by itself, so nothing is written for them. A
+# different label is written when someone becomes a champion and after each cast.
 # Leave a label empty ("") to keep the datapack's own label.
 hud-labels:
   q: "key.hotbar.1"

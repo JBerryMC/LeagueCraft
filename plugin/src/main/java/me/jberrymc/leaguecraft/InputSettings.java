@@ -31,6 +31,13 @@ record InputSettings(
      */
     static final int REST_SLOT = 7;
 
+    /**
+     * The labels the datapack itself shows (_champion:abilities/keybind/default). A label set to
+     * one of these needs no writing.
+     */
+    static final Map<String, String> DATAPACK_LABELS = Map.of(
+            "q", "key.hotbar.1", "w", "key.hotbar.2", "e", "key.hotbar.3", "r", "key.hotbar.4", "d", "key.drop");
+
     static boolean reserved(int slot) {
         return slot >= REST_SLOT - 1 && slot <= REST_SLOT + 1;
     }
@@ -71,15 +78,20 @@ record InputSettings(
         }
 
         // HUD storage slot -> label. q/w/e/r sit under the ability icons, d under summoner spell 1.
+        // Only labels that differ from the datapack's own are kept, since only those need writing.
         Map<String, String> labels = new LinkedHashMap<>();
         ConfigurationSection labelSection = config.getConfigurationSection("hud-labels");
         if (labelSection != null) {
             for (Ability ability : Ability.values()) {
                 String label = labelSection.getString(ability.id());
-                if (label != null && !label.isEmpty()) labels.put(ability.id(), label);
+                if (label != null && !label.isEmpty() && !label.equals(DATAPACK_LABELS.get(ability.id()))) {
+                    labels.put(ability.id(), label);
+                }
             }
             String summoner = labelSection.getString("summoner-1");
-            if (summoner != null && !summoner.isEmpty()) labels.put("d", summoner);
+            if (summoner != null && !summoner.isEmpty() && !summoner.equals(DATAPACK_LABELS.get("d"))) {
+                labels.put("d", summoner);
+            }
         }
 
         String function = config.getString("cast-function", "_champion:abilities/use_%s");

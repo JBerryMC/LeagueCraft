@@ -28,7 +28,6 @@ function reload {
 function use_e {
     function _champion:abilities/reload
 
-    function _champion:abilities/keybind/use_e with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
 
     item modify entity @s hotbar.0 _champion:use_ability
     item modify entity @s hotbar.1 _champion:use_ability
@@ -42,7 +41,6 @@ function use_e {
 function use_q {
     function _champion:abilities/reload
 
-    function _champion:abilities/keybind/use_q with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
     item modify entity @s hotbar.0 _champion:used_ability
     item modify entity @s hotbar.1 _champion:use_ability
     item modify entity @s hotbar.2 _champion:use_ability
@@ -54,7 +52,6 @@ function use_q {
 function use_r {
     function _champion:abilities/reload
 
-    function _champion:abilities/keybind/use_r with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
 
     item modify entity @s hotbar.0 _champion:use_ability
     item modify entity @s hotbar.1 _champion:use_ability
@@ -67,7 +64,6 @@ function use_r {
 function use_w {
     function _champion:abilities/reload
 
-    function _champion:abilities/keybind/use_w with entity @s Inventory[{Slot:4b}].components."minecraft:custom_data"
 
     item modify entity @s hotbar.0 _champion:use_ability
     item modify entity @s hotbar.1 _champion:used_ability
@@ -171,48 +167,14 @@ dir cooldown {
 
 dir keybind {
     function default {
-        $data modify storage lol:main keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.drop"}]
-        $data modify storage lol:main keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.drop"}]
-        $data modify storage lol:main keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.drop"}]
-        $data modify storage lol:main keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.drop"}]
-
-        # [26.3] summoner 1 label default (right-click icon), read by every champion HUD
-        $data modify storage lol:main keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{text:"",font:"minecraft:lol"}]
-    }
-
-    function reset {
+        # Key labels under the HUD icons, for the plugin's controls: hotbar keys 1-4 cast Q/W/E/R
+        # and drop casts summoner 1. Keybind components show each player's own binds. The plugin
+        # only writes these when its config asks for different labels.
         $data modify storage lol:main keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.1"}]
         $data modify storage lol:main keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.2"}]
         $data modify storage lol:main keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.3"}]
         $data modify storage lol:main keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.4"}]
-    }
-
-    function use_e {
-        $data modify storage lol:main keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.1"}]
-        $data modify storage lol:main keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.2"}]
-        $data modify storage lol:main keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.drop"}]
-        $data modify storage lol:main keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.4"}]
-    }
-
-    function use_q {
-        $data modify storage lol:main keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.drop"}]
-        $data modify storage lol:main keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.2"}]
-        $data modify storage lol:main keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.3"}]
-        $data modify storage lol:main keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.4"}]
-    }
-
-    function use_r {
-        $data modify storage lol:main keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.1"}]
-        $data modify storage lol:main keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.2"}]
-        $data modify storage lol:main keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.3"}]
-        $data modify storage lol:main keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.drop"}]
-    }
-
-    function use_w {
-        $data modify storage lol:main keybind.q.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.1"}]
-        $data modify storage lol:main keybind.w.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.drop"}]
-        $data modify storage lol:main keybind.e.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.3"}]
-        $data modify storage lol:main keybind.r.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.hotbar.4"}]
+        $data modify storage lol:main keybind.d.$(uuid1).$(uuid2).$(uuid3).$(uuid4) set value [{keybind:"key.drop",font:"minecraft:custom/keybind_small",bold:true,color:"#ffd821"}]
     }
 }
 

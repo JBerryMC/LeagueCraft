@@ -4,7 +4,7 @@ This plugin is a server-side helper for the LeagueCraft datapack. The datapack s
 
 ## Install
 
-1. Put `LeagueCraft-0.6.2.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version. An existing `plugins/LeagueCraft/config.yml` is kept; settings older versions used (the right click/Shift keys and their M2/SH labels) are updated automatically, and the server log says what changed. New settings use their defaults until you add them, or delete the file to get a fresh one with every option.
+1. Put `LeagueCraft-0.6.3.jar` in your Paper 26.3 server's `plugins/` folder. It replaces any older version. An existing `plugins/LeagueCraft/config.yml` is kept; settings older versions used (the right click/Shift keys and their M2/SH labels) are updated automatically, and the server log says what changed. New settings use their defaults until you add them, or delete the file to get a fresh one with every option.
 2. Use the LeagueCraft 26.3 datapack and resource pack from the same commit. The HUD has the summoner-spell label and the crosshair slot the plugin writes to, and the resource pack carries the ShoulderCam shaders. The datapack now needs the plugin: champions' basic attack and summoner spell 1 come from it.
 3. Start the server. Run `/lc` to check that it shows **Datapack detected: yes**.
 
@@ -46,9 +46,9 @@ A server can't switch a player's perspective, so players press **F5** themselves
 
 ## Zoom (right click)
 
-Holding right click pulls the camera in, like aiming down sights in a third-person shooter. A server can't change the field of view, so zoom moves the camera instead (the `camera_distance` attribute), easing in and out over a few ticks. The hitscan aims the same zoomed or not: the crosshair ray doesn't depend on camera distance.
+Holding right click pulls the camera in, like aiming down sights in a third-person shooter. A server can't change the field of view, so zoom moves the camera instead (the `camera_distance` attribute). The hitscan aims the same zoomed or not: the crosshair ray doesn't depend on camera distance.
 
-How far each champion zooms is a stat in `zoom:` in the config: `melee` (2.2 blocks) for champions the datapack tags `melee`, `ranged` (1.2) for the rest, and `zoom.champions.<name>` for any one champion. Holding right click makes the client send a click every 4 ticks; the zoom ends about 0.3 s after the last one. `/lc dev` shows zoom in/out with the distance and where it came from.
+How far each champion zooms is a stat in `zoom:` in the config: `melee` (2.2 blocks) for champions the datapack tags `melee`, `ranged` (1.2) for the rest, and `zoom.champions.<name>` for any one champion. Holding right click makes the client send a click every 4 ticks: the first one sets the zoomed distance, and about 0.3 s after the last one the normal distance is set back. That's one change each way, nothing while the zoom is held. `/lc dev` shows zoom in/out with the distance and where it came from.
 
 ## No sprinting or crouching
 
@@ -162,7 +162,7 @@ Controls (0.3.x) were tested on Paper 26.3 build 214 with the LeagueCraft 26.3 d
 ## Building from source
 
 ```
-mvn package          # needs JDK 25; runs the tests; output: target/LeagueCraft-0.6.2.jar
+mvn package          # needs JDK 25; runs the tests; output: target/LeagueCraft-0.6.3.jar
 ```
 
 ## Where this goes next

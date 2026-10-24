@@ -62,10 +62,10 @@ final class MovementLock implements Listener {
         }
         locked.add(player.getUniqueId());
         if (config.disableSprint()) {
-            player.removePotionEffect(PotionEffectType.SATURATION);
+            if (player.hasPotionEffect(PotionEffectType.SATURATION)) player.removePotionEffect(PotionEffectType.SATURATION);
             if (player.getFoodLevel() != NO_SPRINT_FOOD) player.setFoodLevel(NO_SPRINT_FOOD);
-            player.setSaturation(0);
-            player.setExhaustion(0);
+            if (player.getSaturation() != 0) player.setSaturation(0);
+            if (player.getExhaustion() != 0) player.setExhaustion(0);
             if (player.isSprinting()) player.setSprinting(false);
         }
         AttributeInstance speed = sneakingSpeed == null ? null : player.getAttribute(sneakingSpeed);
