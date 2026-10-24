@@ -86,11 +86,15 @@ mcb build        # or: mcb watch
 
 **Drop key casting.** In 1.20.2, pressing drop while holding an ability item re-cast it. That only worked because of an engine quirk: the dropped stack stayed in your hand with 0 items and still carried its NBT, so `_champion:hold_<x>` kept matching. From 1.20.5, empty stacks carry no data, so the drop key silently stopped casting. `_lol:loop` now starts with one extra line that puts the ability items back before the champion checks run. The drop key casts exactly as it did in 1.20.2; this was tested on both versions with real key presses.
 
-**Summoner spell 1 key label.** The HUD used to draw a fixed right-click icon under summoner spell 1. That label now comes from storage (`lol:main keybind.d.<uuid>`), the same way the Q/W/E/R labels always have, and `_champion:abilities/keybind/default` sets it to the same icon. On its own nothing looks different. The plugin writes its own key there.
+## Changes for the plugin
 
-**Crosshair slot.** Every champion HUD ends with `lol:main crosshair.<uuid>`, which is empty unless the plugin writes ShoulderCam's crosshair glyph there (zero width, so the HUD doesn't move). Without the plugin nothing changes.
+Apart from the version update, these changes were made so the datapack works with the LeagueCraft plugin (`plugin/`), which it now needs:
 
-These two are the only changes that aren't part of the version update.
+- **Key labels.** The summoner spell 1 label comes from storage (`lol:main keybind.d.<uuid>`) like the Q/W/E/R labels, instead of a fixed right-click icon. `_champion:abilities/keybind/default` sets all five to the plugin's controls (hotbar 1–4 and the drop key, as keybind components that show each player's binds). The old drop-to-cast labels, rewritten on every cast by `keybind/use_q`…`use_r`, are gone.
+- **Crosshair slot.** Every champion HUD ends with `lol:main crosshair.<uuid>`, which the plugin fills with ShoulderCam's crosshair glyph (zero width, so the HUD doesn't move).
+- **Basic attack.** The invisible "attack" interaction entity re-summoned in front of every champion each tick is gone, with the `_champion:aa` and `_champion:spell` advancements and the `_champion:aa` predicate. The plugin's hitscan is the basic attack, and the drop key casts summoner 1. `_champion:aa/check` stays for minions.
+- **No Saturation for champions.** The plugin keeps champions' hunger at 6 so they can't sprint.
+- **No suffocation check.** `_lol:main_10t` no longer pushes champions whose eyes or feet are inside a block upwards (`_lol:effect/stuck` is gone).
 
 **Area-effect-cloud timers.** 157 summon commands create area-effect clouds as timers and cooldowns. 1.20.2 drew no visible particles for them, but 26.3 gives potion-less clouds blue swirls. They now get `custom_particle:{type:"minecraft:block",block_state:"minecraft:air"}`, which spawns nothing. `Radius` is left at its default because some `dx/dy/dz` selectors test against the cloud's hitbox.
 

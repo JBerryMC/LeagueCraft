@@ -164,12 +164,6 @@ function silence {
     execute if score @s cc.silence matches 0 run tag @s remove cced
 }
 
-function stuck {
-    execute anchored eyes positioned ^ ^ ^1 if block ~ ~ ~ #like_air run tp @s ~ ~1 ~
-
-    execute anchored eyes positioned ^ ^ ^1 unless block ~ ~ ~ #like_air run function _lol:effect/stuck
-}
-
 function stun {
     tag @s add cced
     execute unless predicate _lol:is_flying run attribute @s minecraft:movement_speed modifier add lol:stun -1 add_multiplied_total
