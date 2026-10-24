@@ -70,13 +70,6 @@ record InputSettings(
             }
         }
 
-        for (String removed : new String[] {"keys.right-click", "keys.sneak"}) {
-            if (config.isSet(removed)) {
-                log.warning(removed + " is no longer supported (abilities are on hotbar keys 1-4); "
-                        + "remove it, and set hud-labels q/w to key.hotbar.1/key.hotbar.2");
-            }
-        }
-
         // HUD storage slot -> label. q/w/e/r sit under the ability icons, d under summoner spell 1.
         Map<String, String> labels = new LinkedHashMap<>();
         ConfigurationSection labelSection = config.getConfigurationSection("hud-labels");

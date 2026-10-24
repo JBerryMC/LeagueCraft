@@ -4,11 +4,14 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * LeagueCraft's server-side helper. The datapack stays the source of truth for champion logic;
@@ -23,7 +26,7 @@ public final class LeagueCraftPlugin extends JavaPlugin {
 
     static final String KEY_SETUP_TIP =
             "<gold><bold>LeagueCraft controls</bold></gold>\n"
-            + "<gray>Press <white>F5</white> for the over-the-shoulder view. Aim with the crosshair.\n"
+            + "<gray>Press <white>F5</white> for the over-the-shoulder view. Aim with the crosshair; hold <white>right click</white> to zoom.\n"
             + "<gray>Left click <white>attack</white> · <white>1 2 3 4</white> abilities Q W E R · "
             + "Q <white>summoner 1</white> · F <white>summoner 2</white>\n"
             + "<gray>Abilities follow your <white>Hotbar Slot 1-4</white> binds, so you can move them to other keys in "
@@ -34,6 +37,7 @@ public final class LeagueCraftPlugin extends JavaPlugin {
     private Datapack datapack;
     private WeaponDisplay weapon;
     private ThirdPerson thirdPerson;
+    private MovementLock movementLock;
     private RigTest rigTest;
     private final DevLog dev = new DevLog();
     private AbilityInputListener input;
@@ -43,11 +47,13 @@ public final class LeagueCraftPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        migrateConfig();
         settings = InputSettings.from(getConfig(), getLogger());
         combat = CombatSettings.from(getConfig(), getLogger());
         datapack = new Datapack(getLogger(), () -> settings.debug());
         weapon = new WeaponDisplay(this);
-        thirdPerson = new ThirdPerson(datapack, getLogger());
+        thirdPerson = new ThirdPerson(datapack, dev, () -> combat, getLogger());
+        movementLock = new MovementLock(() -> combat, getLogger());
         tipShown = new NamespacedKey(this, "key_tip_shown");
 
         input = new AbilityInputListener(datapack, weapon, dev, () -> settings, getLogger());
@@ -55,6 +61,8 @@ public final class LeagueCraftPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(
                 new BasicAttackListener(input, dev, () -> settings, () -> combat), this);
         getServer().getPluginManager().registerEvents(thirdPerson, this);
+        getServer().getPluginManager().registerEvents(movementLock, this);
+        Bukkit.getScheduler().runTaskTimer(this, thirdPerson::tick, 1, 1);
         try {
             rigTest = new RigTest(Rig.load(this, "aatrox"), dev);
             getServer().getPluginManager().registerEvents(rigTest, this);
@@ -83,6 +91,7 @@ public final class LeagueCraftPlugin extends JavaPlugin {
         for (Player player : Bukkit.getOnlinePlayers()) {
             weapon.remove(player);
             thirdPerson.remove(player);
+            movementLock.remove(player);
         }
         if (rigTest != null) rigTest.removeAll();
     }
@@ -110,8 +119,37 @@ public final class LeagueCraftPlugin extends JavaPlugin {
 
     void reload() {
         reloadConfig();
+        migrateConfig();
         settings = InputSettings.from(getConfig(), getLogger());
         combat = CombatSettings.from(getConfig(), getLogger());
+    }
+
+    /**
+     * Paper only writes config.yml when there isn't one, so a server that updated keeps old
+     * settings. Rewrites the ones later versions dropped and saves the file.
+     */
+    private void migrateConfig() {
+        FileConfiguration config = getConfig();
+        List<String> changes = new ArrayList<>();
+        // 0.5.0: right click and shift no longer cast; abilities are on hotbar keys 1-4.
+        for (String removed : List.of("keys.right-click", "keys.sneak", "basic-attack.hitscan")) {
+            if (config.isSet(removed)) {
+                config.set(removed, null);
+                changes.add("removed " + removed);
+            }
+        }
+        // The old default labels for right click and shift.
+        if ("M2".equals(config.getString("hud-labels.q"))) {
+            config.set("hud-labels.q", "key.hotbar.1");
+            changes.add("hud-labels.q M2 -> key.hotbar.1");
+        }
+        if ("SH".equals(config.getString("hud-labels.w"))) {
+            config.set("hud-labels.w", "key.hotbar.2");
+            changes.add("hud-labels.w SH -> key.hotbar.2");
+        }
+        if (changes.isEmpty()) return;
+        saveConfig();
+        getLogger().info("Updated config.yml from an older version: " + String.join(", ", changes));
     }
 
     void setDebug(boolean debug) {
@@ -128,10 +166,12 @@ public final class LeagueCraftPlugin extends JavaPlugin {
             if (!input.canCast(player, config)) {
                 weapon.remove(player);
                 thirdPerson.remove(player);
+                movementLock.remove(player);
                 continue;
             }
             weapon.apply(player);
             thirdPerson.apply(player, combatConfig, labels);
+            movementLock.apply(player, combatConfig);
             if (labels) datapack.writeLabels(player, config.hudLabels());
             if (config.firstTimeTip() && !player.getPersistentDataContainer().has(tipShown)) {
                 player.getPersistentDataContainer().set(tipShown, PersistentDataType.BYTE, (byte) 1);
